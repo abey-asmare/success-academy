@@ -1,0 +1,30 @@
+.marqueeWrapper {
+    overflow: hidden;
+    width: 100%;
+    background: #fff;
+  }
+  
+  .marquee {
+    display: flex;
+    white-space: nowrap;
+  }
+  
+  .track {
+    display: flex;
+    animation: scroll-left 30s linear infinite;
+  }
+  
+  .imageWrapper {
+    flex: 0 0 auto;
+    padding: 0 1rem;
+  }
+  
+  @keyframes scroll-left {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+  

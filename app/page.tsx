@@ -1,103 +1,152 @@
+'use client'
+import { Card } from "@/components/ui/card";
 import Image from "next/image";
+import Link from "next/link";
+import 'react-multi-carousel/lib/styles.css';
+import InfiniteScroll from "./InfiniteScroll";
+import TestimonialSlider from "@/components/TestimonialSlider";
+import FeatureSection from "@/components/FeatureSection";
 
-export default function Home() {
+function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="">
+      <Nav />
+      <HeroSection />
+      <InfiniteScroll />
+      <div className="learn-anyting text-white bg-primary-700 space-y-16 py-16">
+        <p className="text-center font-semibold text-2xl">Learn Anything, Anytime, Anywhere</p>
+        {/* <div className="images"> */}
+      <div className="flex gap-8"
+      >
+        <div className="relative w-1/2">
+          <Image src='/images/getting-started-2.jpg' width={600} height={900} alt="student sitting comfortably" className="absolute top-0 left-1/4 w-[200px] rounded-2xl" />
+          <Image src='/images/getting-started-1.jpg' width={626} height={417} alt="student sitting comfortably" className="absolute top-1/2 right-[30px] w-[200px] rounded-2xl" />
+          <Image src='/images/getting-started-3.jpg' width={626} height={417} alt="student sitting comfortably" className="absolute bottom-[20px] left-[20px] w-[200px] rounded-2xl" />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        <div className="right space-y-8">
+          <LearningDirections number={1} title="Go at your own pace" description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti ipsum cupiditate soluta voluptatem magni earum mollitia neque reiciendis est, dolorum, iure voluptatum quaerat! Natus mollitia dolores fugiat commodi itaque optio." />
+          <LearningDirections number={2} title="Learn From Experts" description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti ipsum cupiditate soluta voluptatem magni earum mollitia neque reiciendis est, dolorum, iure voluptatum quaerat! Natus mollitia dolores fugiat commodi itaque optio." />
+          <LearningDirections number={3} title="Find Videos and Resources for your need." description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti ipsum cupiditate soluta voluptatem magni earum mollitia neque reiciendis est, dolorum, iure voluptatum quaerat! Natus mollitia dolores fugiat commodi itaque optio." last/>
+        </div>
+      </div>
+        </div>
+
+        <div className="course-list py-6 space-y-8">
+          <p className="text-center  text-4xl font-semibold">Our Popular Courses</p>
+          <div className="courses flex gap-4 flex-wrap">
+          <Card className="p-4 border-2 border-gray-200 w-fit transition-all duration-300 hover:shadow-lg hover:border-gray-300 hover:-translate-y-1">
+              <div className="wrapper rounded-md overflow-hidden w-[260px]">
+                <Image src="/images/getting-started-1.jpg" alt="Course 1" width={500} height={500} className="w-full h-full" />
+              </div>
+              <div className="description space-y-4">
+                <h3 className="font-semibold">Freshman</h3>
+                <p className="text-gray-500">12 Chapters. 4 Tests. 30+ resources</p>
+                <button className="enroll-in px-4 py-2 font-semibold bg-primary-500 rounded-md text-white">Enroll</button>
+              </div>
+            </Card>
+          <Card className="p-4 border-2 border-gray-200 w-fit transition-all duration-300 hover:shadow-lg hover:border-gray-300 hover:-translate-y-1">
+              <div className="wrapper rounded-md overflow-hidden w-[260px]">
+                <Image src="/images/getting-started-1.jpg" alt="Course 1" width={500} height={500} className="w-full h-full" />
+              </div>
+              <div className="description space-y-4">
+                <h3 className="font-semibold">Freshman</h3>
+                <p className="text-gray-500">12 Chapters. 4 Tests. 30+ resources</p>
+                <button className="enroll-in px-4 py-2 font-semibold bg-primary-500 rounded-md text-white">Enroll</button>
+              </div>
+            </Card>
+          <Card className="p-4 border-2 border-gray-200 w-fit transition-all duration-300 hover:shadow-lg hover:border-gray-300 hover:-translate-y-1">
+              <div className="wrapper rounded-md overflow-hidden w-[260px]">
+                <Image src="/images/getting-started-1.jpg" alt="Course 1" width={500} height={500} className="w-full h-full" />
+              </div>
+              <div className="description space-y-4">
+                <h3 className="font-semibold">Freshman</h3>
+                <p className="text-gray-500">12 Chapters. 4 Tests. 30+ resources</p>
+                <button className="enroll-in px-4 py-2 font-semibold bg-primary-500 rounded-md text-white">Enroll</button>
+              </div>
+            </Card>
+          <Card className="p-4 border-2 border-gray-200 w-fit transition-all duration-300 hover:shadow-lg hover:border-gray-300 hover:-translate-y-1">
+              <div className="wrapper rounded-md overflow-hidden w-[260px]">
+                <Image src="/images/getting-started-1.jpg" alt="Course 1" width={500} height={500} className="w-full h-full" />
+              </div>
+              <div className="description space-y-4">
+                <h3 className="font-semibold">Freshman</h3>
+                <p className="text-gray-500">12 Chapters. 4 Tests. 30+ resources</p>
+                <button className="enroll-in px-4 py-2 font-semibold bg-primary-500 rounded-md text-white">Enroll</button>
+              </div>
+            </Card>
+          </div>
+        </div>
+
+        <TestimonialSlider />
+
+        <FeatureSection />
+
+      {/* </div> */}
     </div>
   );
 }
+
+
+function LearningDirections({number, title, description, last=false}: {number: number, title: string, description: string, last?: boolean}) {
+    return (
+      <div className="card flex gap-4">
+      <div className="text-2xl font-semibold flex flex-col gap-2 items-center">
+        <span className="">{number}</span>
+        {!last && <span className="h-[110px] border-1 rounded-full ms-0.5" />}
+      </div>
+      <div>
+        <p className="text-xl font-semibold">{title}</p>
+        <p className="w-[60ch]">{description}</p>
+      </div>
+    </div>
+    )
+}
+export default Home;
+function HeroSection() {
+  return (
+    <div className="bg-primary-700 text-white flex gap-8 hero-section items-center">
+      <div className="left-hero-section">
+        <h1 className="text-5xl font-bold leading-snug">
+          Leading Education Platform Available In Ethiopia.
+        </h1>
+        <p className="text-2xl text-gray-300 max-w-md">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex.
+        </p>
+        <button className="px-4 py-2 bg-secondary-500 font-semibold rounded-md text-white">
+          Get Started
+        </button>
+      </div>
+      <div className="right-hero-section">
+        <Image
+          src="/images/hero-image.png"
+          alt="Hero Image"
+          width={600}
+          height={600}
+          className="rounded-xl"
+        />
+      </div>
+    </div>
+  );
+}
+
+function Nav() {
+  return <nav className="flex justify-between items-center sticky top-0 bg-white">
+    <div className="w-14 h-14">
+      <Image
+        src="/images/success_academy-logo.png"
+        alt="Success Academy Logo"
+        width={1024}
+        height={1024} />
+    </div>
+    <div className="flex gap-8 items-center">
+      <Link href="#" className="font-semibold hover:underline">Home</Link>
+      <Link href="#" className="font-semibold hover:underline">Courses</Link>
+      <Link href="#" className="font-semibold hover:underline">Blog</Link>
+      <Link href="#" className="font-semibold hover:underline">About us</Link>
+    </div>
+    <button className="px-4 py-2 bg-primary-500 font-semibold rounded-md text-white">
+      Sign Up
+    </button>
+  </nav>;
+}
+
