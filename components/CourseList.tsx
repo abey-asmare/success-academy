@@ -1,7 +1,30 @@
 import Image from "next/image"
 import { Card } from "./ui/card"
 
-export function CourseCard(){
+
+
+
+function CourseList({className}: {className: string}) {
+  return (
+          <div className={className}>
+        <div className="course-list py-8 md:py-12 space-y-6 md:space-y-8 px-4 md:px-10">
+        <p className="text-center text-2xl md:text-3xl lg:text-4xl font-semibold">
+          Our Popular Courses
+        </p>
+        <div className="courses grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 justify-items-center">
+
+          <CourseCard/>
+          <CourseCard/>
+          <CourseCard/>
+          <CourseCard/>
+          </div>
+      </div>
+        </div>
+  )
+}
+
+
+ function CourseCard(){
 return (
 <Card className="p-4 border-2 border-gray-200 w-full max-w-[280px] transition-all duration-300 hover:shadow-lg hover:border-gray-300 hover:-translate-y-1">
 <div className="wrapper rounded-md overflow-hidden w-full">
@@ -26,3 +49,6 @@ return (
 )
 }
 
+
+
+export default CourseList;
