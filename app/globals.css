@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
@@ -127,4 +126,16 @@
     --color-primary-500: #0C5CC0; 
   --color-primary-700: #083A79; 
   --color-secondary-500: #C56502; 
+}
+
+
+ 
+@theme inline {
+  --animate-scroll: scroll 80s linear infinite;
+ 
+  @keyframes scroll {
+    to {
+      transform: translate(calc(-50% - 40px));
+    }
+  }
 }

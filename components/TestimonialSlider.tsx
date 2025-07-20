@@ -57,7 +57,7 @@ const testimonials: Testimonial[] = [
 
 export default function TestimonialSlider() {
   return (
-    <div className="bg-gradient-to-br from-blue-50 to-purple-50 py-16 px-4">
+    <div className="bg-gradient-to-br from-blue-50 to-purple-50 py-16 px-4 md:px-10">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
@@ -71,6 +71,7 @@ export default function TestimonialSlider() {
           opts={{
             align: "start",
             loop: true,
+            
           }}
           className="w-full max-w-6xl mx-auto"
         >
@@ -122,8 +123,8 @@ export default function TestimonialSlider() {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="-left-12 bg-white shadow-lg hover:shadow-xl" />
-          <CarouselNext className="-right-12 bg-white shadow-lg hover:shadow-xl" />
+          <CarouselPrevious className="hidden md:block md:-left-12 bg-white shadow-lg hover:shadow-xl" />
+          <CarouselNext className="hidden md:block md:-right-12 bg-white shadow-lg hover:shadow-xl" />
         </Carousel>
       </div>
     </div>
