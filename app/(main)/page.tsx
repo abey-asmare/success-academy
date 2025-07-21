@@ -4,7 +4,7 @@ import FeatureSection from "@/components/FeatureSection";
 import Footer from "@/components/Footer";
 import TestimonialSlider from "@/components/TestimonialSlider";
 import "react-multi-carousel/lib/styles.css";
-import InfiniteMovingCards from "./InfiniteMovingCards";
+import InfiniteMovingCards from "./components/InfiniteMovingCards";
 import HeroSection from "./components/HeroSection";
 import LearnAnything from "./components/LearnAnything";
 

@@ -125,6 +125,9 @@
 @theme{
     --color-primary-500: #0C5CC0; 
   --color-primary-700: #083A79; 
+  --color-primary-200: #85A9D6; 
+  --color-primary-100: #E8EFF7; 
+  --color-primary-50: #F6FAFE; 
   --color-secondary-500: #C56502; 
 }
 

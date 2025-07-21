@@ -1,0 +1,34 @@
+import { GalleryVerticalEnd } from "lucide-react"
+import { RegisterForm } from "@/app/(auth)/register/register-form"
+import Image from "next/image"
+import Link from "next/link"
+
+export default function RegisterPage() {
+  return (
+    <div className="grid min-h-svh lg:grid-cols-2">
+      <div className="flex flex-col gap-4 p-6 md:p-10">
+        <div className="flex justify-center gap-2 md:justify-start">
+          <Link href="#" className="flex items-center gap-2 font-medium">
+                <Image src="/images/success_academy-logo.png" width={1024 } height={1024 } alt="Success Academy Logo" className="size-12" />
+    
+            Success Academy
+          </Link>
+        </div>
+        <div className="flex flex-1 items-center justify-center">
+          <div className="w-full max-w-xs">
+            <RegisterForm />
+          </div>
+        </div>
+      </div>
+      <div className="relative hidden lg:block">
+        <Image
+          src="/images/auth/login.jpg"
+          width={1920}
+          height={2876}
+          alt="Image"
+          className="absolute inset-0 h-full w-full object-cover "
+        />
+      </div>
+    </div>
+  )
+}
