@@ -7,7 +7,7 @@ import Link from "next/link"
 import { FcGoogle } from 'react-icons/fc'
 import {useForm} from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod"
-import { registerSchema, type RegisterFormData } from "@/schemas/authSchemas"
+import { registerSchema, type RegisterFormData } from "@/schemas/validationSchemas"
 
 export function RegisterForm({
   className,

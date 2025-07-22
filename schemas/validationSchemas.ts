@@ -53,3 +53,22 @@ export const loginSchema = z.object({
 // Type definitions
 export type RegisterFormData = z.infer<typeof registerSchema>
 export type LoginFormData = z.infer<typeof loginSchema>
+
+
+export interface Course {
+    id: string;
+    title: string;
+    description: string;
+    duration: string;
+    level: string;
+    price: number;
+    features: string[];
+    curriculum: string[];
+}
+export interface PaymentAccount {
+    id: string;
+    name: string;
+    accountNumber: string;
+    bankName: string;
+    type: 'bank' | 'mobile' | 'crypto';
+}

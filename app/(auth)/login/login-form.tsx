@@ -7,7 +7,7 @@ import Link from "next/link"
 import { FcGoogle } from 'react-icons/fc'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod"
-import { loginSchema, type LoginFormData } from "@/schemas/authSchemas"
+import { loginSchema, type LoginFormData } from "@/schemas/validationSchemas"
 
 export function LoginForm({
   className,
