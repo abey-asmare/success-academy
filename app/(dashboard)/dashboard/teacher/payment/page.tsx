@@ -1,10 +1,9 @@
 import { redirect } from 'next/navigation';
 import React from 'react'
-import { DataTable } from '../users/components/data-table';
+import { DataTable } from './components/data-table';
 import { auth, clerkClient } from '@clerk/nextjs/server';
-import { columns } from '../users/components/columns';
+import { columns } from './components/columns';
 import { db } from '@/lib/db';
-
 
 export default async function PaymentPage() {
 
@@ -12,6 +11,7 @@ export default async function PaymentPage() {
       if (!userId) {
           return redirect("/");
       }
+        
 
 
       const client = await clerkClient()
@@ -43,8 +43,8 @@ export default async function PaymentPage() {
 
 
       return (
-          <div className="p-6">
-              {/* <DataTable columns={columns} data={data} /> */}
+ <div className="p-6">
+              <DataTable columns={columns} data={data} />
           </div>
       );
 }

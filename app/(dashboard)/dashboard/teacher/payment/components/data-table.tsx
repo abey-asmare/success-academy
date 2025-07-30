@@ -4,6 +4,7 @@ import * as React from "react"
 import {
     ColumnDef,
     ColumnFiltersState,
+    PaginationState,
     SortingState,
     flexRender,
     getCoreRowModel,
@@ -36,8 +37,10 @@ export function DataTable<TData, TValue>({
 
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
-
-
+  const [pagination, setPagination] = React.useState<PaginationState>({
+    pageIndex: 0,
+  pageSize: 100,
+  });
 
   const table = useReactTable({
     data,
@@ -51,17 +54,19 @@ export function DataTable<TData, TValue>({
     state: {
       sorting,
       columnFilters,
+      pagination
     },
+    onPaginationChange: setPagination,
   })
 
   return (
     (<div>
       <div className="flex items-center py-4 justify-between">
         <Input
-          placeholder="Filter a User..."
+          placeholder="Filter a payment..."
           value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
+              table.getColumn("email")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />

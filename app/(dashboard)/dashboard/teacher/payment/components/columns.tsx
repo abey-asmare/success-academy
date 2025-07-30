@@ -8,8 +8,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import Link from "next/link";
+import toast from "react-hot-toast";
+import { approvePayment, cancelPayment } from "../actions";
+import { cn } from "@/lib/utils";
 
 // 6:47:00 in Build a Course & LMS Platform:
 // https://youtu.be/Big_aFLmekI?t=24446
@@ -34,6 +38,13 @@ export const columns: ColumnDef<{
         </Button>
       );
     },
+    cell: ({row}) => {
+      return (
+        <div className="max-w-[20ch] break-words whitespace-normal ">
+          {row.getValue("id")}
+        </div>
+      )
+    }
   },
   {
     accessorKey: "email",
@@ -108,6 +119,22 @@ export const columns: ColumnDef<{
         </Button>
       );
     },
+    cell: ({ row }) => {
+      return (
+        <div className="flex items-center gap-2">
+          <Badge
+            variant={row.getValue("approved") ? "default" : "destructive"}
+            className={cn('', 
+              row.getValue("approved") ? "bg-sky-500" : ""
+            )}
+            >
+            {row.getValue("approved") ? "Approved" : "Not Approved"}
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          
+          </Badge>
+        </div>
+      );
+    },
   },
 
   {
@@ -138,13 +165,18 @@ export const columns: ColumnDef<{
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            {row.getValue("role") === "admin" ? (
+            {row.getValue("approved") ? (
               <DropdownMenuItem>
                 <Button
                   className="text-red-700 w-fit h-fit bg-transparent hover:bg-transparent hover:text-red-700 h-4"
                   type="submit"
+                  onClick={async() => {
+                    const res = await cancelPayment(row.original.id)
+                    if(res.status !== 200) return toast.error('error while canceling payment')
+                    toast.success("successfully cancel payment.")
+                  }}
                 >
-                  revoke Admin
+                  cancel payment
                 </Button>
               </DropdownMenuItem>
             ) : (
@@ -152,8 +184,13 @@ export const columns: ColumnDef<{
                 <Button
                   className="text-sky-700 w-fit h-fit bg-transparent hover:bg-transparent hover:text-sky-700 h-4"
                   type="submit"
+                  onClick={async() => {
+                    const res = await approvePayment(row.original.id)
+                    if(res.status !== 200) return toast.error('error while approving payment')
+                    toast.success("successfully approved payment.")
+                  }}
                 >
-                  make Admin
+                  approve payment
                 </Button>
               </DropdownMenuItem>
             )}
