@@ -4,6 +4,7 @@ import {
     FormControl,
     FormField,
     FormItem,
+    FormLabel,
     FormMessage
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,7 +14,6 @@ import { z } from "zod";
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { EditIcon, Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -41,7 +41,7 @@ export default function TitleForm({initialData, courseId}: TitleFormProps) {
 
     const onSubmit=  async (values: z.infer<typeof formSchema>) => {
         try{
-            const response = await axios.patch(`/api/courses/${courseId}`, values)
+            await axios.patch(`/api/courses/${courseId}`, values)
             toast.success("Course created successfully")
             setIsEditing(!isEditing)
             router.refresh()
@@ -53,26 +53,7 @@ export default function TitleForm({initialData, courseId}: TitleFormProps) {
 
 
   return (      
-    <div className="mt-6 border bg-slate-100 rounded-md p-4">
-        <div className="font-medium flex items-center justify-between">
-            Course title 
-            <Button variant='ghost' onClick={()=> setIsEditing((prev)=> !prev)}>
-                {
-                    isEditing ? 'cancel': 
-                    <>
-                <Pencil className="h-4 w-4 mr-2"/>
-                Edit title
-                </>
-            }
-            </Button>
-            
-        </div>
-        {
-            !EditIcon && (
-                <p className="text-sm mt-2">{initialData.title}</p>
-            )
-        }
-        {isEditing && (
+    <div className="mt-6 ">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mt-8">
                     <FormField
@@ -80,8 +61,9 @@ export default function TitleForm({initialData, courseId}: TitleFormProps) {
                         name='title'
                         render={({field}) => (
                             <FormItem
-                                
+                            
                             >
+                                <FormLabel>Course title</FormLabel>
                                 <FormControl>
                                     <Input {...field}/>
                                 </FormControl>
@@ -99,7 +81,6 @@ export default function TitleForm({initialData, courseId}: TitleFormProps) {
                     </div>
                 </form> 
             </Form>
-        )}
     </div>
   )
 }

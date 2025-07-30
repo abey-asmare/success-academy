@@ -1,6 +1,6 @@
 'use client'
  import React from 'react'
-import { BarChart, Compass, Layout, List } from 'lucide-react'
+import { BarChart, Compass, DollarSign, Layout, List, User, WalletCards } from 'lucide-react'
 import SidebarItem from './sidebar-item';
 import { usePathname } from 'next/navigation';
 
@@ -8,30 +8,41 @@ const guestRoutes = [
     {
         icon: Layout,
         label: 'Dashboard',
-        href: '/',
+        href: '/dashboard',
     }, 
     {
         icon: Compass,
         label: 'Browse',
-        href: '/search',
+        href: '/dashboard/search',
     }, 
 ]
-const teacherRotues = [
+const teacherRotues = [ 
     {
         icon: List,
         label: 'Courses',
-        href: '/teacher/courses',
+        href: '/dashboard/teacher/courses',
     }, 
     {
         icon: BarChart,
         label: 'Analytics',
-        href: '/teacher/analytics',
+        href: '/dashboard/teacher/analytics',
     }, 
+    {
+        icon: User,
+        label: 'Users',
+        href: '/dashboard/teacher/users',
+    },
+    {
+        icon: WalletCards,
+        label: 'Payments',
+        href: '/dashboard/teacher/payment',
+    },
+
 ]
 
 export default function SideBarRoutes() {
     let routes = guestRoutes;
-    const isTeacher = usePathname().startsWith('/teacher');
+    const isTeacher = usePathname().startsWith('/dashboard/teacher');
     if(isTeacher) {
         routes = teacherRotues;
     }

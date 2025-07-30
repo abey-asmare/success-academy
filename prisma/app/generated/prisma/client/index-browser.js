@@ -182,14 +182,33 @@ exports.Prisma.PurchaseScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   courseId: 'courseId',
+  imageUrl: 'imageUrl',
+  approved: 'approved',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.StripeCustomerScalarFieldEnum = {
+exports.Prisma.ExamScalarFieldEnum = {
   id: 'id',
-  userId: 'userId',
-  stripeCustomerId: 'stripeCustomerId',
+  name: 'name',
+  description: 'description',
+  chapterId: 'chapterId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.QuestionScalarFieldEnum = {
+  id: 'id',
+  question: 'question',
+  examId: 'examId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.AnswerScalarFieldEnum = {
+  id: 'id',
+  text: 'text',
+  isCorrect: 'isCorrect',
+  questionId: 'questionId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -218,7 +237,9 @@ exports.Prisma.ModelName = {
   MuxData: 'MuxData',
   UserProgress: 'UserProgress',
   Purchase: 'Purchase',
-  StripeCustomer: 'StripeCustomer'
+  Exam: 'Exam',
+  Question: 'Question',
+  Answer: 'Answer'
 };
 
 /**

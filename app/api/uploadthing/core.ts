@@ -1,13 +1,13 @@
 import { auth } from "@clerk/nextjs/server";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 
-import { isTeacher } from "@/lib/teacher";
+import { isAdmin } from "@/utils/roles";
 
 const f = createUploadthing();
 
 const handleAuth = async () => {
     const {userId} = await auth()
-    const isAuthorized = isTeacher(userId)
+    const isAuthorized = isAdmin()
     if(!userId || !isAuthorized) throw new Error("Unauthorized")
     return {userId}
 } 
@@ -20,7 +20,20 @@ export const ourFileRouter = {
       console.log("file url", file.ufsUrl);
       return { uploadedBy: metadata.userId };
     }),
-    courseAttachment: f(['text', 'image', 'video', 'audio', 'pdf'])
+    purchaseImage: f({image: {maxFileSize: '4MB', maxFileCount: 1}})
+        .middleware(handleAuth)
+        .onUploadComplete(async ({ metadata, file }) => {
+      console.log("Upload complete for userId:", metadata.userId);
+      console.log("file url", file.ufsUrl);
+      return { uploadedBy: metadata.userId };
+    }),
+    courseAttachment: f({
+      text: { maxFileCount: 10 },
+      image: { maxFileCount: 10 },
+      video: { maxFileCount: 10, maxFileSize: '1GB' },
+      audio: { maxFileCount: 10 },
+      pdf: { maxFileCount: 10 }
+    })
     .middleware(handleAuth)
     .onUploadComplete(async ({ metadata, file }) => {
       console.log("Upload complete for userId:", metadata.userId);

@@ -4,6 +4,7 @@ import {
     FormControl,
     FormField,
     FormItem,
+    FormLabel,
     FormMessage
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,9 +14,7 @@ import { z } from "zod";
 
 import { Button } from '@/components/ui/button';
 import { Combobox } from "@/components/ui/combobox";
-import { Course } from "@/lib/generated/prisma";
-import { cn } from "@/lib/utils";
-import { Pencil } from "lucide-react";
+import { Course } from "@/prisma/app/generated/prisma/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -58,26 +57,7 @@ export default function CategoryForm({initialData, courseId, options}: CategoryF
 
 
   return (      
-    <div className="mt-6 border bg-slate-100 rounded-md p-4">
-        <div className="font-medium flex items-center justify-between">
-            Course category 
-            <Button variant='ghost' onClick={()=> setIsEditing((prev)=> !prev)}>
-                {
-                    isEditing ? 'cancel': 
-                    <>
-                <Pencil className="h-4 w-4 mr-2"/>
-                Edit category
-                </>
-            }
-            </Button>
-            
-        </div>
-        {
-            !isEditing && (
-                <p className={cn("text-sm mt-2", !initialData.categoryId && "italic")}>{selectedOption?.label || 'No category'}</p>
-            )
-        }
-        {isEditing && (
+    <div className="mt-6">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mt-8">
                     <FormField
@@ -85,8 +65,9 @@ export default function CategoryForm({initialData, courseId, options}: CategoryF
                         name='categoryId'
                         render={({field}) => (
                             <FormItem
-                                
+                            
                             >
+                                <FormLabel>Course category </FormLabel>
                                 <FormControl>
                                     <Combobox  options={options} onChange={field.onChange} value={field.value} />
                                     
@@ -105,7 +86,6 @@ export default function CategoryForm({initialData, courseId, options}: CategoryF
                     </div>
                 </form> 
             </Form>
-        )}
     </div>
   )
 }

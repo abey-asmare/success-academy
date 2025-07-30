@@ -1,8 +1,7 @@
-import Mux from "@mux/mux-node";
-import { auth } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
-import { isTeacher } from "@/lib/teacher";
 import { db } from "@/lib/db";
+import { auth } from "@clerk/nextjs/server";
+import Mux from "@mux/mux-node";
+import { NextResponse } from "next/server";
 
 const mux = new Mux(
 {
@@ -20,7 +19,7 @@ export async function DELETE(
   try {
     const { userId } = await auth();
 
-    if (!userId || !isTeacher(userId)) {
+    if (!userId || !isAdmin()) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -104,7 +103,7 @@ export async function PATCH(
     const { userId } = await auth();
     const { isPublished, ...values } = await req.json();
 
-    if (!userId || !isTeacher(userId)) {
+    if (!userId || !isAdmin()) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 

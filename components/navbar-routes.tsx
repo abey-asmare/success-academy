@@ -1,13 +1,11 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { UserButton } from "@clerk/nextjs";
+import useRole from "@/utils/useRole";
+import { useAuth, UserButton } from "@clerk/nextjs";
 import { LogOut } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { SearchInput } from "./search-input";
-import { useAuth } from "@clerk/nextjs";
-import { isTeacher } from "@/lib/teacher";
 
 // interface NavbarRoutesProps  {
 //   currentProfile?: SafeProfile | null
@@ -15,32 +13,30 @@ import { isTeacher } from "@/lib/teacher";
 
 export default function NavbarRoutes() {
   const pathname = usePathname();
-  const isTeacherPage = pathname?.startsWith("/teacher");
-  const isPlayerPage = pathname?.includes("/chapters");
-  const isSearchPage = pathname === "/search";
+  const isTeacherPage = pathname?.startsWith("/dashboard/teacher");
+  const isPlayerPage = pathname?.includes("/dashboard/courses");
+  const isSearchPage = pathname === "/dashboard/search";
 
   // check the user if he is the teacher / admin
   const {userId} = useAuth()
   console.log(userId)
+  const isAdmin = useRole() === 'admin'
+
+  console.log('chcking if it is admin', useRole(), isAdmin)
 
   return (<>
-    {isSearchPage && (
-      <div className="hidden md:block">
-        <SearchInput />
-      </div>
-    )}
-    <div className="flex gap-x-2 ml-auto">
+    <div className="flex gap-x-2 ml-auto">  
       {isTeacherPage || isPlayerPage ? (
-        <Link href="/" >
+        <Link href="/dashboard" >
           <Button size="sm" variant="ghost">
             <LogOut className="h-4 w-4 mr-2" />
             Exit
           </Button>
         </Link>
-      ) : isTeacher(userId) ?   (
-        <Link href="/teacher/courses" >
+      ) : isAdmin ?   (
+        <Link href="/dashboard/teacher/courses" >
           <Button size="sm" variant="ghost">
-            Teacher Mode
+            Admin Site
           </Button>
         </Link>
       ) : null}

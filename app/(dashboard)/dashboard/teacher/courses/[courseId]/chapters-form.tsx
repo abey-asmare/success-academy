@@ -4,6 +4,7 @@ import {
     FormControl,
     FormField,
     FormItem,
+    FormLabel,
     FormMessage,
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,7 +15,6 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Course, Chapter } from "@/prisma/app/generated/prisma/client";
-import { Loader2, PlusCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -71,30 +71,11 @@ export default function ChaptersForm({
   }
 
   const onEdit = (id: string) => {
-    router.push(`/teacher/courses/${courseId}/chapters/${id}`)
+    router.push(`/dashboard/teacher/courses/${courseId}/chapters/${id}`)
   }
 
   return (
-    <div className="relative mt-6 border bg-slate-100 rounded-md p-4">
-      {isUpdating && (
-        <div className="absolute h-full w-full bg-slate-500/20 top-0 right-0 rounded-md flex items-center justify-center">
-          <Loader2 className="animate-spin h-6 w-6 text-sky-700" />
-        </div>
-      )}
-      <div className="font-medium flex items-center justify-between">
-        Course chapters
-        <Button variant="ghost" onClick={() => setIsCreating((prev) => !prev)}>
-          {isCreating ? (
-            "cancel"
-          ) : (
-            <>
-              <PlusCircle className="h-4 w-4 mr-2" />
-              Add a chapters
-            </>
-          )}
-        </Button>
-      </div>
-      {isCreating && (
+    <div className="mt-6">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -105,6 +86,7 @@ export default function ChaptersForm({
               name="title"
               render={({ field }) => (
                 <FormItem>
+                    <FormLabel>Course chapters</FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="Introduction to a course" />
                   </FormControl>
@@ -117,19 +99,15 @@ export default function ChaptersForm({
             </Button>
           </form>
         </Form>
-      )}
-
-      {!isCreating && <div className={cn('text-sm mt-2', !initialData.chapters.length && 'text-slate-500 italic' )}>
+       <div className={cn('text-sm mt-2', !initialData.chapters.length && 'text-slate-500 italic' )}>
         {!initialData.chapters.length && "No chapters"}
-        {/* add a list of chapters */}
         <ChaptersList
         onEdit ={onEdit}
         onReorder = {onReorder}
         items = {initialData.chapters}
         />
-        </div>}
+        </div>
 
-      {!isCreating && <p className="text-xs text-muted-foreground mt-4">No chapters</p>}
     </div>
   );
 }

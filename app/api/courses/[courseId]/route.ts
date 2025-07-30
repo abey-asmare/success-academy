@@ -1,8 +1,7 @@
-import Mux from "@mux/mux-node"
-import { auth } from "@clerk/nextjs/server"
-import { NextResponse } from "next/server"
 import { db } from "@/lib/db"
-import { isTeacher } from "@/lib/teacher"
+import { auth } from "@clerk/nextjs/server"
+import Mux from "@mux/mux-node"
+import { NextResponse } from "next/server"
 
 const {video: Video}= new Mux({
     tokenId: process.env.MUX_TOKEN_ID!,
@@ -14,7 +13,7 @@ export async function DELETE(req: Request, {params}: {params: {courseId: string}
     const {courseId} = params
     try{
         const {userId} = await auth()
-        if(!userId || !isTeacher(userId))
+        if(!userId || !isAdmin())
             return new NextResponse("Unauthorized", {status: 401})
 
         // find unique and including mux data
@@ -62,7 +61,7 @@ export async function PATCH(req: Request, {params}: {params: {courseId: string}}
     const {title, description, imageUrl, price, categoryId} = await req.json()
     try{
         const {userId} = await auth()
-        if(!userId || !isTeacher(userId))
+        if(!userId || !isAdmin())
             return new NextResponse("Unauthorized", {status: 401})
 
         const course = await db.course.update({

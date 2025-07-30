@@ -38,7 +38,7 @@ export default function Page() {
     const onSubmit=  async (values: formSchemaType) => {
         try{
             const response = await axios.post('/api/courses', values)
-            router.push(`/teacher/courses/${response.data.id}`)
+            router.push(`/dashboard/teacher/courses/${response.data.id}`)
             toast.success("Course created successfully")
         }   catch{
             toast.error("Something went wrong")
@@ -72,7 +72,7 @@ export default function Page() {
                         )}
                     />
                   <div className="flex items-center gap-x-2">
-                  <Link href='/'>
+                  <Link href='/dashboard'>
                         <Button
                             type='button'
                             variant='ghost'

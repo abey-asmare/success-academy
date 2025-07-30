@@ -1,16 +1,17 @@
-import React from 'react'
-import { auth } from '@clerk/nextjs/server';
-import { redirect } from 'next/navigation';
+import Banner from '@/components/banner';
+import IconBadge from '@/components/icon-badge';
+import { Button } from '@/components/ui/button';
 import { db } from '@/lib/db';
+import { auth } from '@clerk/nextjs/server';
 import { ArrowLeft, Eye, LayoutDashboard, Video } from 'lucide-react';
 import Link from 'next/link';
-import IconBadge from '@/components/icon-badge';
-import ChapterTitleForm from './components/chapter-title-form';
-import ChapterDescriptionForm from './components/chapter-description-form';
+import { redirect } from 'next/navigation';
 import ChapterAccessForm from './components/chapter-access-form';
-import ChapterVideoForm from './components/chapter-video-form';
-import Banner from '@/components/banner';
 import ChapterActions from './components/chapter-actions';
+import ChapterDescriptionForm from './components/chapter-description-form';
+import ChapterTitleForm from './components/chapter-title-form';
+import ChapterVideoForm from './components/chapter-video-form';
+import DeleteExamButton from './exam/components/DeleteExamButton';
 
 export default async function ChpaterDetails({params}: {params: {chapterId: string, courseId: string}}) {
     const {chapterId, courseId} = params
@@ -27,7 +28,8 @@ export default async function ChpaterDetails({params}: {params: {chapterId: stri
         }, 
         include: {
             muxData: true,
-        }
+            exams: true,
+        }, 
     })
     if(!chapter){
         return redirect('/')
@@ -55,7 +57,7 @@ export default async function ChpaterDetails({params}: {params: {chapterId: stri
 <div className='p-6'>
         <div className="flex items-center justify-between">
             <div className="w-full">
-                <Link href={`/teacher/courses/${courseId}`} className='flex items-center text-sm hover:opacity-75 transition mb-6'>
+                <Link href={`/dashboard/teacher/courses/${courseId}`} className='flex items-center text-sm hover:opacity-75 transition mb-6'>
                 <ArrowLeft className='w-4 h-4 mr-2'/>
                 Back to course 
                 </Link>
@@ -106,6 +108,28 @@ export default async function ChpaterDetails({params}: {params: {chapterId: stri
                 </div>
             </div>
     </div>
+    {chapter.exams.length > 0 && (
+        <div className="mt-4">
+            <h2 className="text-xl font-semibold">Exams</h2>
+            <div className="mt-4">
+                {chapter.exams.map((exam) => (
+                    <div key={exam.id} className="flex items-center justify-between">
+                        <span className="font-medium">{exam.name}</span>
+                        <Link href={`/dashboard/teacher/courses/${courseId}/chapters/${chapterId}/exam/${exam.id}`} className="text-blue-500 hover:underline">
+                            View Exam
+                        </Link>
+                        <DeleteExamButton courseId={courseId} chapterId={chapterId} examId={exam.id}/>
+                    </div>
+                ))}
+            </div>
+        </div>
+    )}
+    <div className="mt-4">
+            <Button variant='ghost'>
+            <Link className="text-sky-500" href={`/dashboard/teacher/courses/${courseId}/chapters/${chapterId}/exam/`}>Create an Exam</Link>
+              
+            </Button>
+          </div>
 </>
   )
 }

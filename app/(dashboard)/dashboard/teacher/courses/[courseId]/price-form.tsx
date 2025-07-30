@@ -4,6 +4,7 @@ import {
     FormControl,
     FormField,
     FormItem,
+    FormLabel,
     FormMessage
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,7 +15,7 @@ import { z } from "zod";
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { formatPrice } from "@/lib/format";
-import { Course } from "@/lib/generated/prisma";
+import { Course } from "@/prisma/app/generated/prisma/client";
 import { cn } from "@/lib/utils";
 import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -42,10 +43,10 @@ export default function PriceForm({initialData, courseId}: PriceFormProps) {
 
     const {isSubmitting, isValid} = form.formState;
 
-    const onSubmit=  async (values: z.infer<typeof formSchema>) => {
+    const onSubmit= async (values: z.infer<typeof formSchema>) => {
         try{
             await axios.patch(`/api/courses/${courseId}`, values)
-            toast.success("Course created successfully")
+            toast.success("Course price updated successfully")
             setIsEditing(!isEditing)
             router.refresh()
         }   catch{
@@ -56,26 +57,7 @@ export default function PriceForm({initialData, courseId}: PriceFormProps) {
 
 
   return (      
-    <div className="mt-6 border bg-slate-100 rounded-md p-4">
-        <div className="font-medium flex items-center justify-between">
-            Course Price
-            <Button variant='ghost' onClick={()=> setIsEditing((prev)=> !prev)}>
-                {
-                    isEditing ? 'cancel': 
-                    <>
-                <Pencil className="h-4 w-4 mr-2"/>
-                Edit Price
-                </>
-            }
-            </Button>
-            
-        </div>
-        {
-            !isEditing && (
-                <p className={cn("text-sm mt-2", !initialData.price && "italic")}>{initialData.price ? formatPrice(initialData.price) : 'No price'}</p>
-            ) 
-        }
-        {isEditing && (
+    <div className="mt-6">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mt-8">
                     <FormField
@@ -83,10 +65,11 @@ export default function PriceForm({initialData, courseId}: PriceFormProps) {
                         name='price'
                         render={({field}) => (
                             <FormItem
-                                
+                            
                             >
+                                <FormLabel>Course price</FormLabel>
                                 <FormControl>
-                                    <Input type="number" {...field} step={0.01}/>
+                            <Input type="number" {...field} step={0.01}/>
                                     
                                 </FormControl>
                                 <FormMessage/>
@@ -103,7 +86,6 @@ export default function PriceForm({initialData, courseId}: PriceFormProps) {
                     </div>
                 </form> 
             </Form>
-        )}
     </div>
   )
 }

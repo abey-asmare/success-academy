@@ -50,7 +50,7 @@ const onDelete = async () => {
       await axios.delete(`/api/courses/${courseId}/chapters/${chapterId}`);
       toast.success("Chapter deleted");
       router.refresh();
-      router.push(`/teacher/courses/${courseId}`);
+      router.push(`/dashboard/teacher/courses/${courseId}`);
 
   } catch {
       toast.error("Something went wrong");

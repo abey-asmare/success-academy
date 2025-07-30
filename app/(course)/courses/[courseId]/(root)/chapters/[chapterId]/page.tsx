@@ -1,6 +1,6 @@
 import { auth } from "@clerk/nextjs/server";;
 import { redirect } from "next/navigation";
-import { File } from "lucide-react";
+import { File} from "lucide-react";
 
 import { getChapter } from "@/actions/get-chapter";
 import { Preview } from "@/components/preview";
@@ -9,6 +9,8 @@ import { Separator } from "@radix-ui/react-dropdown-menu";
 import CourseEnrollButton from "./components/course-enroll-button";
 import { CourseProgressButton } from "./components/course-progress-button";
 import { VideoPlayer } from "./components/video-player";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const ChapterIdPage = async ({
   params
@@ -39,8 +41,7 @@ const ChapterIdPage = async ({
     return redirect("/")
   }
 
-
-  const isLocked = !chapter.isFree && !purchase;
+ const isLocked = !chapter.isFree && (!purchase || purchase?.approved === false)
   const completeOnEnd = !!purchase && !userProgress?.isCompleted;
 
   return (
@@ -75,17 +76,24 @@ const ChapterIdPage = async ({
               {chapter.title}
             </h2>
             {purchase ? (
-              <CourseProgressButton
-                chapterId={params.chapterId}
-                courseId={params.courseId}
-                nextChapterId={nextChapter?.id}
-                isCompleted={!!userProgress?.isCompleted}
-              />
+              <div className="flex items-center gap-2">
+                <Button className="mr-2 bg-sky-500 text-white hover:bg-sky-600 transition-colors duration-200">
+                  <Link href={`/courses/${params.courseId}/chapters/${params.chapterId}/exams/${chapter.exams[0].id}`}>
+                    take exam
+                  </Link>
+                </Button>
+                <CourseProgressButton
+                  chapterId={params.chapterId}
+                  courseId={params.courseId}
+                  nextChapterId={nextChapter?.id}
+                  isCompleted={!!userProgress?.isCompleted}
+                />
+              </div>
             ) : (
-              <CourseEnrollButton
-                courseId={params.courseId}
-                price={course.price!}
-              />
+                <CourseEnrollButton
+                  courseId={params.courseId}
+                  price={course.price!}
+                />
             )}
           </div>
           <Separator />
@@ -95,19 +103,19 @@ const ChapterIdPage = async ({
           {!!attachments.length && (
             <>
               <Separator />
-              <div className="p-4">
+              <div className="p-4 space-y-2 ">
                 {attachments.map((attachment) => (
-                  <a
+                  <Link
                     href={attachment.url}
                     target="_blank"
                     key={attachment.id}
-                    className='flex items-center p3 w-full bg-sky-200 dark:bg-sky-800 text-sky-700 dark:text-sky-300 hover:underline'
+                    className='flex items-center p-3 rounded-sm w-full bg-sky-200 text-sky-700 hover:underline'
                   >
                     <File />
                     <p className="line-clamp-1">
                       {attachment.name}
                     </p>
-                  </a>
+                  </Link>
                 ))}
               </div>
             </>

@@ -2,8 +2,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { useAuth, UserButton } from "@clerk/nextjs";
 function Nav() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const auth = useAuth()
+  console.log(auth)
 
   return (
     <nav className="px-4 md:px-10 flex justify-between items-center sticky top-0 z-50 bg-white shadow-sm">
@@ -23,21 +27,25 @@ function Nav() {
         <Link href="#" className="font-semibold hover:underline transition-all">
           Home
         </Link>
-        <Link href="#" className="font-semibold hover:underline transition-all">
+        <Link href="/dashboard/search" className="font-semibold hover:underline transition-all">
           Courses
         </Link>
         <Link href="#" className="font-semibold hover:underline transition-all">
           Blog
-        </Link>
+        </Link> 
         <Link href="#" className="font-semibold hover:underline transition-all">
           About us
         </Link>
       </div>
 
       {/* Desktop Sign Up Button */}
-      <button className="hidden md:block px-4 py-2 bg-primary-500 font-semibold rounded-md text-white hover:bg-primary-600 transition-colors">
-        Sign Up
-      </button>
+      {auth.sessionId ? (
+             <UserButton/>
+      ) : (
+        <Link href="/sign-in" className="hidden md:block px-4 py-2 bg-primary-500 font-semibold rounded-md text-white hover:bg-primary-600 transition-colors">
+          Sign In
+        </Link>
+      )}
 
       {/* Mobile Hamburger Button */}
       <button
@@ -62,7 +70,7 @@ function Nav() {
               Home
             </Link>
             <Link 
-              href="#" 
+              href="/dashboard/search" 
               className="font-semibold hover:text-primary-500 transition-colors py-2"
               onClick={() => setIsMenuOpen(false)}
             >
@@ -82,9 +90,13 @@ function Nav() {
             >
               About us
             </Link>
-            <button className="px-4 py-2 bg-primary-500 font-semibold rounded-md text-white hover:bg-primary-600 transition-colors mt-2">
-              Sign Up
-            </button>
+            {auth.sessionId ? (
+             <UserButton/>
+            ) : (
+              <Link href='/sign-in' className="px-4 py-2 bg-primary-500 font-semibold rounded-md text-white hover:bg-primary-600 transition-colors mt-2">
+                Sign In
+              </Link>
+            )}
           </div>
         </div>
       )}
