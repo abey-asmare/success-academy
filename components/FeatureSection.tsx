@@ -14,6 +14,30 @@ export default function FeatureSection() {
     <div className="py-12 md:py-16 bg-gray-50 px-4 md:px-10">
         <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[400px] lg:h-[600px]">
+         
+         
+
+                   {/* Right Image */}
+                   <div className="relative order-first lg:order-last">
+            <div className="relative bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl md:rounded-3xl px-4 md:px-8 py-4 md:py-6">
+              <div className="relative z-10">
+                <Image
+                  src="/images/hero-image.png"
+                  alt="Student working on laptop"
+                  width={600}
+                  height={400}
+                  className="w-[600px] h-[600px] object-cover rounded-xl md:rounded-2xl object-top"
+                  priority
+                />
+              </div>
+              {/* Background decoration */}
+              <div className="absolute top-2 md:top-4 right-2 md:right-4 w-12 h-12 md:w-20 md:h-20 bg-blue-300 rounded-full opacity-50"></div>
+              <div className="absolute bottom-4 md:bottom-8 left-4 md:left-8 w-8 h-8 md:w-12 md:h-12 bg-blue-400 rounded-full opacity-60"></div>
+            </div>
+          </div>
+
+          
+         
           {/* Left Content */}
           <div className="space-y-6 md:space-y-8">
             <div className="space-y-3 md:space-y-4">
@@ -47,25 +71,6 @@ export default function FeatureSection() {
               >
                 Get Started
               </Button>
-            </div>
-          </div>
-
-          {/* Right Image */}
-          <div className="relative order-first lg:order-last">
-            <div className="relative bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl md:rounded-3xl px-4 md:px-8 py-4 md:py-6">
-              <div className="relative z-10">
-                <Image
-                  src="/images/hero-image.png"
-                  alt="Student working on laptop"
-                  width={600}
-                  height={400}
-                  className="w-[600px] h-[600px] object-cover rounded-xl md:rounded-2xl object-top"
-                  priority
-                />
-              </div>
-              {/* Background decoration */}
-              <div className="absolute top-2 md:top-4 right-2 md:right-4 w-12 h-12 md:w-20 md:h-20 bg-blue-300 rounded-full opacity-50"></div>
-              <div className="absolute bottom-4 md:bottom-8 left-4 md:left-8 w-8 h-8 md:w-12 md:h-12 bg-blue-400 rounded-full opacity-60"></div>
             </div>
           </div>
         </div>

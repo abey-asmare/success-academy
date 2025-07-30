@@ -62,29 +62,28 @@ export default clerkMiddleware(async (auth, req) => {
   
 // Max one session per device type (mobile & desktop)
 if (userId && sessionId) {
-  const sessions = await client.sessions.getSessionList({ userId, status: "active" })
+  try {
+    const sessions = await client.sessions.getSessionList({ userId, status: "active" })
+    const currentSession = sessions.data.find((s) => s.id === sessionId)
 
-  const currentSession = sessions.data.find((s) => s.id === sessionId)
-  if (!currentSession) return NextResponse.next()
+    if (!currentSession) return NextResponse.next()
 
-  const isMobile = currentSession.latestActivity?.isMobile
+    const isMobile = currentSession.latestActivity?.isMobile
+    const sameTypeSessions = sessions.data.filter(
+      (s) => s.id !== sessionId && s.latestActivity?.isMobile === isMobile
+    )
 
-  // Find other sessions of the same type
-  const sameTypeSessions = sessions.data.filter(
-    (s) => s.id !== sessionId && s.latestActivity?.isMobile === isMobile
-  )
+    if (sameTypeSessions.length >= 1) {
+      await client.sessions.revokeSession(sessionId)
+      return NextResponse.redirect(new URL("/too-many-devices", req.url))
+    }
 
-  if (sameTypeSessions.length >= 1) {
-    // Kick out the last logged in of the same type
-    await client.sessions.revokeSession(sessionId)
-    return NextResponse.redirect(new URL("/too-many-devices", req.url))
+  } catch (error) {
+    console.error("Error fetching sessions:", error)
+    return NextResponse.next()
   }
 }
 
-  
-
-
-  return NextResponse.next()
 })
 
 
