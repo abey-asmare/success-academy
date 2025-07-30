@@ -53,4 +53,8 @@ export const sampleCourse: Course = {
       type: 'mobile'
     }
   ];
+
+
   
+
+  export const MAX_ALLOWED_DEVICES = 2
