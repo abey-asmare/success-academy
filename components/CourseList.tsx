@@ -12,9 +12,10 @@ export default function CourseList({ className}: {className: string}) {
   // revalidate in 2 hours, there wont be many course creations after all
   const { data, isLoading, error } = useQuery<CourseMinimized[], Error, CourseMinimized[]>({
     queryKey: ['courses'],
-    queryFn: ()=> axios.get('/api/courses').then(res => res.data),
+    queryFn: ()=> axios.get('http://localhost:3000/api/courses').then(res => res.data),
     staleTime: 60 * 60 * 2 * 1000,
   });
+  
 
   if (error) return <p>Error loading courses</p>;
 

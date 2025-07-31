@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
 
-    <html lang="en" className="croll-smooth md:scroll-auto">
+    <html lang="en" className="scroll-smooth md:scroll-auto">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased `}
       >

@@ -135,7 +135,7 @@ function Nav() {
             ) : (
               <Link
                 href="/sign-in"
-                className="px-4 py-2 bg-primary-500 font-semibold rounded-md text-white hover:bg-primary-600 transition-colors mt-2"
+                className="px-4 py-2 bg-primary-500 font-semibold rounded-md text-white hover:bg-primary-600 transition-colors mt-2 w-fit"
               >
                 Sign In
               </Link>
