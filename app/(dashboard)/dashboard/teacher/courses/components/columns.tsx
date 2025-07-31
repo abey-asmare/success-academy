@@ -15,8 +15,6 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Course } from "@/prisma/app/generated/prisma/client";
 
-// 6:47:00 in Build a Course & LMS Platform:
-// https://youtu.be/Big_aFLmekI?t=24446
 export const columns: ColumnDef<Course>[] = [
   {
     accessorKey: "title",

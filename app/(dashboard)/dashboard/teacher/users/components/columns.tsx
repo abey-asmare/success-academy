@@ -19,8 +19,6 @@ type User = {
   lastName: string;
   role: 'admin' | 'moderator' | 'User';
 };
-// 6:47:00 in Build a Course & LMS Platform:
-// https://youtu.be/Big_aFLmekI?t=24446
 
 async function setRole_(id: string){
   try{

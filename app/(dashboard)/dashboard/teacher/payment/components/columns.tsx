@@ -15,8 +15,6 @@ import toast from "react-hot-toast";
 import { approvePayment, cancelPayment } from "../actions";
 import { cn } from "@/lib/utils";
 
-// 6:47:00 in Build a Course & LMS Platform:
-// https://youtu.be/Big_aFLmekI?t=24446
 export const columns: ColumnDef<{
   id: string;
   email: string;

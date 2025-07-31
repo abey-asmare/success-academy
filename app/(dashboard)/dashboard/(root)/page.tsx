@@ -20,16 +20,6 @@ export default async function Dashboard() {
 
   return (
     <div className="p-6 space-y-4"> 
-      {/* <div className="grid grid-cols-1 gap-4">
-        <BannerCard
-          icon={InfoIcon}
-          label="Welcome to the dashboard"
-          description={`This is where you can see your progress 
-            and continue your courses. This is a demonstration LMS and as such, all courses are free and Stripe is in test
-             mode. To enroll in a course, enter dummy data in the Stripe form. Contact me 
-             folio.kendev.co to obtain admin access`}
-        />
-      </div> */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <InfoCard
           icon={Clock}
