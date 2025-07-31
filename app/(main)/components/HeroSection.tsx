@@ -12,7 +12,7 @@ function HeroSection({ className }: { className: string }) {
         <div className="left-hero-section flex-1 text-center lg:text-left space-y-8">
           {/* Main Heading */}
           <h1 className="text-4xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight text-gray-900">
-            Your shortcur to
+            Your shortcut to
             <span className="block text-primary-600">Academic Success</span>
           </h1>
 
