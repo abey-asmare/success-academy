@@ -22,7 +22,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 
 const formSchema = z.object({
-    isFree: z.boolean().default(false), 
+    isFree: z.boolean(), 
 
 })
 
@@ -46,7 +46,7 @@ export default function ChapterAccessForm({initialData, courseId, chapterId}: Ch
 
     const onSubmit=  async (values: z.infer<typeof formSchema>) => {
         try{
-            const response = await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}`, values)
+             await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}`, values)
             toast.success("Chapter updated successfully")
             setIsEditing(!isEditing)
             router.refresh()

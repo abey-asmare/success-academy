@@ -1,13 +1,10 @@
 'use client'
-import React, { useState } from "react";
-import Image from "next/image";
-import {accounts} from '@/lib/constants'  
-import { useParams } from "next/navigation";
 import { FileUpload } from "@/components/file-upload";
+import { accounts } from '@/lib/constants';
 import axios from "axios";
+import Image from "next/image";
+import { useParams, useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import * as z from "zod";
-import { useRouter } from "next/navigation";
 
 
 

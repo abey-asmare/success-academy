@@ -42,7 +42,7 @@ export default function ChapterTitleForm({initialData, courseId, chapterId}: Cha
 
     const onSubmit=  async (values: z.infer<typeof formSchema>) => {
         try{
-            const response = await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}`, values)
+            await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}`, values)
             toast.success("Chapter  updated successfully")
             setIsEditing(!isEditing)
             router.refresh()

@@ -1,14 +1,13 @@
 import React from 'react'
 import { db } from '@/lib/db';
 import { redirect } from 'next/navigation';
-import Link from 'next/link';
 import { cn } from '@/lib/utils';
 
 
 const alphabets = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
-export default async function ExamDeatilPage({params}: {params: {examId: string}}) {
-    const {examId} = params;
+export default async function ExamDeatilPage({params}: {params: Promise<{examId: string}>}) {
+    const {examId} = await params;
     const exam = await db.exam.findUnique({
         where: {
             id: examId,

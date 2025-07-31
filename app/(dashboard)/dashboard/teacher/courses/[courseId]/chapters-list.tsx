@@ -24,7 +24,7 @@ export default function ChaptersList({items, onEdit, onReorder}: ChaptersListPro
         if(isMounted){
             setChapters(items)
         }
-    }, [items]) 
+    }, [items, isMounted]) 
 
 
     const onDragEnd = (result: DropResult) => {
@@ -40,7 +40,7 @@ export default function ChaptersList({items, onEdit, onReorder}: ChaptersListPro
         const updatedChapters = items.slice(StartIndex, EndIndex + 1)
         setChapters(items)
 
-        const bulkUpdateData = updatedChapters.map((chapter, index) => ({
+        const bulkUpdateData = updatedChapters.map((chapter) => ({
             id: chapter.id,
             position: items.findIndex(item => item.id === chapter.id)
         }))

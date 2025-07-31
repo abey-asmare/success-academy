@@ -72,3 +72,25 @@ export interface PaymentAccount {
     bankName: string;
     type: 'bank' | 'mobile' | 'crypto';
 }
+
+
+
+export const answerSchema = z.object({
+  text: z.string().min(1, "Answer text is required"),
+  isCorrect: z.boolean()
+});
+
+export const questionSchema = z.object({
+  question: z.string().min(1, "Question text is required"),
+  answers: z.array(answerSchema).min(2, "At least 2 answers are required").refine(
+    (answers) => answers.some(answer => answer.isCorrect),
+    "At least one answer must be marked as correct"
+  ),
+});
+
+export const examSchema = z.object({
+  name: z.string().min(1, "Exam name is required"),
+  description: z.string().optional(),
+  questions: z.array(questionSchema).min(1, "At least one question is required"),
+});
+

@@ -154,8 +154,6 @@ export const columns: ColumnDef<{
   {
     id: "actions",
     cell: ({ row }) => {
-      const { id } = row.original;
-
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

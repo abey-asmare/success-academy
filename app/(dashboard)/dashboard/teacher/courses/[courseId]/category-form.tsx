@@ -53,7 +53,7 @@ export default function CategoryForm({initialData, courseId, options}: CategoryF
     }
 
 
-    const selectedOption = options.find(option => option.value === initialData.categoryId  )
+    // const selectedOption = options.find(option => option.value === initialData.categoryId  )
 
 
   return (      

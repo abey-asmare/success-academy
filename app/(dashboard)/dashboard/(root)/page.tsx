@@ -1,6 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { CheckCircle, Clock, InfoIcon } from "lucide-react";
+import { CheckCircle, Clock} from "lucide-react";
 
 import { CoursesList } from "@/components/courses-list";
 import { getDashboardCourses } from "@/actions/get-dashboard-courses";

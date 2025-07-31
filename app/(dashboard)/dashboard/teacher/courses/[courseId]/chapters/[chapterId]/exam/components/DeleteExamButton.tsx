@@ -19,7 +19,7 @@ export default function DeleteExamButton({
          setIsLoading(true)
          await axios.delete(`/api/courses/${courseId}/chapters/${chapterId}/exams/${examId}`)
          toast.success("Exam deleted")
-        } catch (error) {
+        } catch {
             toast.error("Something went wrong")
         } finally {
             setIsLoading(false)

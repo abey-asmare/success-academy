@@ -52,7 +52,7 @@ export function DataTable<TData, TValue>({
     }
     params.set("page", "1"); // reset to page 1 on search
     router.replace(`?${params.toString()}`);
-  }, [debouncedSearch]);
+  },[debouncedSearch, router, searchParams]);
 
   const goToPage = (page: number) => {
     const params = new URLSearchParams(searchParams.toString());

@@ -11,7 +11,7 @@ export type User = {
   role: "admin" | "moderator" | "User";
 };
 
-export async function getAllUserDetails({
+async function getAllUserDetails({
   search,
   limit = 10,
   offset = 0,

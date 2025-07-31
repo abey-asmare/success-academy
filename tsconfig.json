@@ -13,17 +13,16 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "baseUrl": ".", // ✅ needed for path aliases
+    "paths": {
+      "@/*": ["./*"],
+      "crypto": ["node_modules/crypto-js"]
+    },
     "plugins": [
       {
         "name": "next"
       }
-    ],
-    "paths": {
-      "@/*": ["./*"], 
-      "crypto": [
-      "node_modules/crypto-js"
     ]
-    }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]

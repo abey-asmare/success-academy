@@ -15,7 +15,6 @@ export default function NavbarRoutes() {
   const pathname = usePathname();
   const isTeacherPage = pathname?.startsWith("/dashboard/teacher");
   const isPlayerPage = pathname?.includes("/dashboard/courses");
-  const isSearchPage = pathname === "/dashboard/search";
 
   // check the user if he is the teacher / admin
   const {userId} = useAuth()

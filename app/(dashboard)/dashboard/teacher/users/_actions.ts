@@ -1,9 +1,7 @@
 "use server";
 
-import { db } from "@/lib/db";
 import { checkRole } from "@/utils/roles";
 import { clerkClient } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
 
 export async function setRole(id: string) {
   const client = await clerkClient();

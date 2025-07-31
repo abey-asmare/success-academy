@@ -1,9 +1,10 @@
 import React from 'react'
 
-export default function QuestionDetailPage({ params }: { params: { questionId: string } }) {
+export default async function QuestionDetailPage({ params }: { params: Promise<{ questionId: string }> }) {
+    const {questionId} = await params
   return (
     <div>
-      {params.questionId}
+      {questionId}
     </div>
   )
 }

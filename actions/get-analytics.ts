@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { Course, Purchase } from "@prisma/client";
+import { Purchase, Course } from "@/prisma/app/generated/prisma/client";
 
 type PurchaseWithCourse = Purchase & {
   course: Course;

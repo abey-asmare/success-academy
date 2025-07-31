@@ -1,11 +1,12 @@
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 
-export default async function CourseDetail({params}: {params: {courseId: string}}) {
+export default async function CourseDetail({params}: {params: Promise<{courseId: string}>}) {
   // fetch unique course
+  const {courseId} = await params
   const course = await db.course.findUnique({
     where: {
-      id: params.courseId,
+      id: courseId,
     },
     include: {
       chapters: {

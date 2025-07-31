@@ -1,3 +1,5 @@
+import { Category, Course } from "./prisma/app/generated/prisma/client";
+
 export type CourseMinimized = {
     id: string;
     title: string;
@@ -5,4 +7,12 @@ export type CourseMinimized = {
     description: string | ""
     price: number;
     createdAt: Date;
+};
+
+
+
+export type CourseWithProgressWithCategory = Course & {
+    category: Category | null;
+    chapters: { id: string }[];
+    progress: number | null;
 };

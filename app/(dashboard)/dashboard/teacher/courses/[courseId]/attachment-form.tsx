@@ -1,21 +1,16 @@
 "use client";
 
 import axios from "axios";
-import { z } from "zod";
 
 import { FileUpload } from "@/components/file-upload";
-import { Button } from "@/components/ui/button";
 import { Attachment, Course } from "@/prisma/app/generated/prisma/client";
-import { File, Loader2, PlusCircle, X } from "lucide-react";
+import { File, Loader2, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { db } from "@/lib/db";
 
 // Validation schema
-const formSchema = z.object({
-  url: z.string().min(1, { message: "URL is required" }),
-});
+type formSchemaType = {url: string}
 
 interface AttachmentFormProps {
   initialData: Course & { attachments: Attachment[] };
@@ -26,15 +21,15 @@ export default function AttachmentForm({
   initialData,
   courseId,
 }: AttachmentFormProps) {
-  const [isEditing, setIsEditing] = useState(false);
+  // const [isEditing, setIsEditing] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const router = useRouter();
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: formSchemaType) => {
     try {
       await axios.post(`/api/courses/${courseId}/attachments`, values);
       toast.success("Attachment added");
-      setIsEditing(false);
+      // setIsEditing(false);
       router.refresh();
     } catch {
       toast.error("Something went wrong");

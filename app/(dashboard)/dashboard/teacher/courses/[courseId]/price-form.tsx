@@ -14,16 +14,13 @@ import { z } from "zod";
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { formatPrice } from "@/lib/format";
 import { Course } from "@/prisma/app/generated/prisma/client";
-import { cn } from "@/lib/utils";
-import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
 const formSchema = z.object({
-    price: z.coerce.number().min(1, {message: "price is required"})
+    price: z.number().min(1, {message: "price is required"})
 })
 
 
@@ -38,7 +35,7 @@ export default function PriceForm({initialData, courseId}: PriceFormProps) {
     const router = useRouter()
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        defaultValues: {price: Number(initialData?.price) || 0}
+        defaultValues: {price: initialData.price || 0}
     })
 
     const {isSubmitting, isValid} = form.formState;

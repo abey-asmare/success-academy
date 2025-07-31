@@ -1,12 +1,13 @@
 import { auth } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 import { db } from "@/lib/db";
 
 export async function PATCH(
-  req: Request,
-  { params }: { params: { courseId: string } }
+  req: NextRequest,
+  { params }: { params: Promise<{ courseId: string }> }
 ) {
+  const { courseId } = await params
   try {
     const { userId } = await auth();
 
@@ -16,7 +17,7 @@ export async function PATCH(
 
     const course = await db.course.findUnique({
       where: {
-        id: params.courseId,
+        id: courseId,
         userId,
       },
     });
@@ -27,7 +28,7 @@ export async function PATCH(
 
     const unpublishedCourse = await db.course.update({
       where: {
-        id: params.courseId,
+        id: courseId,
         userId,
       },
       data: {         

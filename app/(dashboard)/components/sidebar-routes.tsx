@@ -1,8 +1,7 @@
 'use client'
- import React from 'react'
-import { BarChart, Compass, DollarSign, Layout, List, User, WalletCards } from 'lucide-react'
-import SidebarItem from './sidebar-item';
+ import { BarChart, Compass, Layout, List, User, WalletCards } from 'lucide-react';
 import { usePathname } from 'next/navigation';
+import SidebarItem from './sidebar-item';
 
 const guestRoutes = [
     {

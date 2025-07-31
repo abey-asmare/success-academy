@@ -1,19 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server"
 import { db } from "@/lib/db";
+import { Answer } from "@/prisma/app/generated/prisma/client";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { courseId: string; chapterId: string } }
+  { params }: { params: Promise<{ courseId: string; chapterId: string }> }
 ) {
+    const {courseId, chapterId} = await params
   try {
     const { userId } = await auth();
     
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
-
-    const { courseId, chapterId } = params;
     const body = await req.json();
     const { name, description, questions } = body;
 
@@ -104,7 +104,7 @@ export async function POST(
         processedQuestions.push({
           question: questionData.question,
           answers: {
-            create: questionData.answers.map((answerData: any) => ({
+            create: questionData.answers.map((answerData: Answer) => ({
               text: answerData.text,
               isCorrect: answerData.isCorrect,
             })),
@@ -141,16 +141,16 @@ export async function POST(
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { courseId: string; chapterId: string } }
+  { params }: { params: Promise<{ courseId: string; chapterId: string }> }
 ) {
+    const {courseId, chapterId} = await params
   try {
-    const { userId } = auth();
+    const { userId } = await auth();
     
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const { courseId, chapterId } = params;
 
     // Check if user owns the course
     const course = await db.course.findUnique({

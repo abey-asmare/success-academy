@@ -31,7 +31,7 @@ export async function POST(req: Request){
 
 
 // fetch all courses if needed
-export async function GET(req: Request){
+export async function GET(){
     try{
         const courses = await db.course.findMany({
             where: {

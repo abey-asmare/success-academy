@@ -1,11 +1,12 @@
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE(
-  req: Request,
-  { params }: { params: { courseId: string; chapterId: string; examId: string } }
+  req: NextRequest, 
+  { params }: { params: Promise<{ courseId: string; chapterId: string; examId: string }> }
 ) {
+    const {courseId, chapterId, examId} = await params
   try {
     const { userId } = await auth();
 
@@ -16,7 +17,7 @@ export async function DELETE(
     const ownCourse = await auth()
      db.course.findUnique({
       where: {
-        id: params.courseId,
+        id: courseId,
         userId,
       },
     });
@@ -27,8 +28,8 @@ export async function DELETE(
 
     const chapter = await db.chapter.findUnique({
       where: {
-        id: params.chapterId,
-        courseId: params.courseId,
+        id: chapterId,
+        courseId: courseId,
       },
     });
 
@@ -38,8 +39,8 @@ export async function DELETE(
 
     const exam = await db.exam.findUnique({
       where: {
-        id: params.examId,
-        chapterId: params.chapterId,
+        id: examId,
+        chapterId: chapterId,
       },
     });
 
@@ -47,7 +48,7 @@ export async function DELETE(
       return new NextResponse("Not Found", { status: 404 });
     }
 
-    await db.exam.delete({ where: { id: params.examId } });
+    await db.exam.delete({ where: { id: examId } });
 
     return new NextResponse("OK", { status: 200 });
   } catch (error) {

@@ -1,7 +1,8 @@
 import { db } from "@/lib/db"
+import { isAdmin } from "@/utils/roles"
 import { auth } from "@clerk/nextjs/server"
 import Mux from "@mux/mux-node"
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 
 const {video: Video}= new Mux({
     tokenId: process.env.MUX_TOKEN_ID!,
@@ -9,8 +10,8 @@ const {video: Video}= new Mux({
 })
 
 
-export async function DELETE(req: Request, {params}: {params: {courseId: string}}) {
-    const {courseId} = params
+export async function DELETE(req: NextRequest, {params}: {params: Promise<{courseId: string}>}) {
+    const {courseId} = await params
     try{
         const {userId} = await auth()
         if(!userId || !isAdmin())
@@ -56,8 +57,8 @@ export async function DELETE(req: Request, {params}: {params: {courseId: string}
     }    
 }
 
-export async function PATCH(req: Request, {params}: {params: {courseId: string}}) {
-    const {courseId} = params
+export async function PATCH(req: NextRequest, {params}: {params: Promise<{courseId: string}>}) {
+    const {courseId} = await params
     const {title, description, imageUrl, price, categoryId} = await req.json()
     try{
         const {userId} = await auth()

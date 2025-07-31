@@ -25,21 +25,22 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import Link from "next/link"
+import { LucideIcon } from "lucide-react"
 
-export function NavDocuments({
+export function NavAdmin({
   items,
 }: {
   items: {
     title: string
     url: string
-    icon: Icon
+    icon: Icon | LucideIcon
   }[]
 }) {
   const { isMobile } = useSidebar()
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel>Documents</SidebarGroupLabel>
+      <SidebarGroupLabel>Admin</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
           <SidebarMenuItem key={item.title}>

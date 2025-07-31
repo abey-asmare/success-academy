@@ -3,8 +3,8 @@ import { isAdmin } from "@/utils/roles"
 import { auth } from "@clerk/nextjs/server"
 import { NextResponse } from "next/server"
 
-export async function POST(req: Request, {params}: {params: {courseId: string}}) {
-    const {courseId} = params
+export async function POST(req: Request, {params}: {params: Promise<{courseId: string}>}) {
+    const {courseId} = await params
     const {imageUrl} = await req.json()
     try{
         const {userId} = await auth()

@@ -15,9 +15,10 @@ import Link from "next/link";
 const ChapterIdPage = async ({
   params
 }: {
-  params: { courseId: string; chapterId: string }
+  params: Promise<{ courseId: string; chapterId: string }>
 }) => {
   const { userId } = await auth();
+  const {courseId, chapterId} = await params
 
   if (!userId) {
     return redirect("/");
@@ -33,8 +34,8 @@ const ChapterIdPage = async ({
     purchase,
   } = await getChapter({
     userId,
-    chapterId: params.chapterId,
-    courseId: params.courseId,
+    chapterId,
+    courseId,
   });
 
   if (!chapter || !course) {
@@ -61,9 +62,9 @@ const ChapterIdPage = async ({
       <div className="flex flex-col max-w-4xl mx-auto pb-20">
         <div className="p-4">
           <VideoPlayer
-            chapterId={params.chapterId}
+            chapterId={chapterId}
             title={chapter.title}
-            courseId={params.courseId}
+            courseId={courseId}
             nextChapterId={nextChapter?.id}
             playbackId={muxData?.playbackId}
             isLocked={isLocked}
@@ -78,20 +79,20 @@ const ChapterIdPage = async ({
             {purchase ? (
               <div className="flex items-center gap-2">
                 <Button className="mr-2 bg-sky-500 text-white hover:bg-sky-600 transition-colors duration-200">
-                  <Link href={`/courses/${params.courseId}/chapters/${params.chapterId}/exams/${chapter.exams[0].id}`}>
+                  <Link href={`/courses/${courseId}/chapters/${chapterId}/exams/${chapter.exams[0].id}`}>
                     take exam
                   </Link>
                 </Button>
                 <CourseProgressButton
-                  chapterId={params.chapterId}
-                  courseId={params.courseId}
+                  chapterId={chapterId}
+                  courseId={courseId}
                   nextChapterId={nextChapter?.id}
                   isCompleted={!!userProgress?.isCompleted}
                 />
               </div>
             ) : (
                 <CourseEnrollButton
-                  courseId={params.courseId}
+                  courseId={courseId}
                   price={course.price!}
                 />
             )}

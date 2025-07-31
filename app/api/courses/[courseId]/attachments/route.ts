@@ -1,19 +1,20 @@
 import { auth } from "@clerk/nextjs/server"
 import { NextResponse } from "next/server"
 import { db } from "@/lib/db"
-import { isTeacher } from "@/lib/teacher"
+import { isAdmin } from "@/utils/roles"
 
-export async function POST(req: Request, {params}: {params: {courseId: string}}){
+export async function POST(req: Request, {params}: {params: Promise<{courseId: string}>}){
+    const { courseId } = await params
     try{
         const {userId} = await auth()
         const { url } = await req.json()   
-        if(!userId || !isTeacher(userId)){
+        if(!userId || !isAdmin()){
             return NextResponse.json({error: "Unauthorized"}, {status: 401})
         }
 
         const courseOwner = await db.course.findUnique({
             where: {
-                id: params.courseId,
+                id: courseId,
                 userId
             }
         })
@@ -23,7 +24,7 @@ export async function POST(req: Request, {params}: {params: {courseId: string}})
         
         const attachment = await db.attachment.create({
             data: {
-                courseId: params.courseId,
+                courseId: courseId,
                 url, 
                 name: url.split('/').pop() || '',
             }

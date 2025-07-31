@@ -1,23 +1,22 @@
-import { auth } from "@clerk/nextjs/server";;
-import { redirect } from "next/navigation";
-import { db } from "@/lib/db";
 import Banner from "@/components/banner";
+import { db } from "@/lib/db";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 import AttachmentForm from "./attachment-form";
 import CategoryForm from "./category-form";
 import ChaptersForm from "./chapters-form";
 import Actions from "./chapters/actions";
 import DescriptionForm from "./description-form";
+import { ImageForm } from "./image-form";
 import PriceForm from "./price-form";
 import TitleForm from "./title-form";
-import { ImageForm } from "./image-form";
-import Link  from "next/link";
-import { Button } from "@/components/ui/button";
+;
 
 
 const CourseIdPage = async ({
   params
 }: {
-  params: { courseId: string }
+  params: Promise<{ courseId: string }>
 }) => {
   const { userId } = await auth();
 
@@ -25,9 +24,10 @@ const CourseIdPage = async ({
     return redirect("/");
   }
 
+  const {courseId} = await params
   const course = await db.course.findUnique({
     where: {
-      id: params.courseId,  
+      id: courseId,  
       userId
     },
     include: {
@@ -88,7 +88,7 @@ const CourseIdPage = async ({
           </div>
           <Actions
             disabled={!isComplete}
-            courseId={params.courseId}
+            courseId={courseId}
             isPublished={course.isPublished}
           />
         </div>

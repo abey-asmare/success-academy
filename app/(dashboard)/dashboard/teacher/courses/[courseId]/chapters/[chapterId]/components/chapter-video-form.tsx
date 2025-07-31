@@ -1,7 +1,6 @@
 
 'use client';
 import axios from "axios";
-import { z } from "zod";
 import { FileUpload } from "@/components/file-upload";
 import { Button } from '@/components/ui/button';
 import { Chapter, MuxData } from "@/prisma/app/generated/prisma/client";
@@ -11,9 +10,9 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import MuxPlayer from '@mux/mux-player-react'
 
-const formSchema = z.object({
-    videoUrl: z.string()
-})
+// const formSchema = z.object({
+//     videoUrl: z.string()
+// })
 
 
 interface ChapterVideoFormProps {
@@ -21,12 +20,12 @@ interface ChapterVideoFormProps {
     courseId: string, 
     chapterId: string
 }
-
+type formSchemaType= {videoUrl: string}
 
 export default function ChapterVideoForm({initialData, courseId, chapterId}: ChapterVideoFormProps) {
     const [isEditing, setIsEditing] = useState(false)
     const router = useRouter()  
-    const onSubmit=  async (values: z.infer<typeof formSchema>) => {
+    const onSubmit=  async (values: formSchemaType) => {
         try{
              await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}`, values)
             toast.success("Chapter video updated successfully")

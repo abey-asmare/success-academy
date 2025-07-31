@@ -1,7 +1,5 @@
 'use client';
-import { useRef } from "react";
-import { sampleCourse, paymentAccounts } from "../constants";
-import { paymeentFormType } from "./page";
+import { paymentAccounts, sampleCourse } from "../constants";
 
 
 export default function DescriptionPage() {
@@ -13,20 +11,20 @@ export default function DescriptionPage() {
         }).format(price);
     };
 
-    const dialogCloseRef = useRef<HTMLButtonElement | null>(null);
+    // const dialogCloseRef = useRef<HTMLButtonElement | null>(null);
 
-    const onSubmit = async (data: paymeentFormType) => {
-        try {
-            console.log("Payment data:", data);
-            if (dialogCloseRef.current) {
-                dialogCloseRef.current.click();
-            }
-        } catch (error) {
+    // const onSubmit = async (data: paymeentFormType) => {
+    //     try {
+    //         console.log("Payment data:", data);
+    //         if (dialogCloseRef.current) {
+    //             dialogCloseRef.current.click();
+    //         }
+    //     } catch (error) {
 
-            console.error("Submission failed:", error);
+    //         console.error("Submission failed:", error);
 
-        }
-    };
+    //     }
+    // };
 
 
     return (

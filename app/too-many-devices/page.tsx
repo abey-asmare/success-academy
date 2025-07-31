@@ -1,6 +1,6 @@
-import { AlertTriangle, Smartphone, Laptop, Tablet, Monitor } from "lucide-react"
+import { AlertTriangle } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import Link from "next/link"
 import { MAX_ALLOWED_DEVICES } from "../constants"

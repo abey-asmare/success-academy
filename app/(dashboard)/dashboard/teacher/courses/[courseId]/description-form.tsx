@@ -13,14 +13,11 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import {Textarea} from '@/components/ui/textarea'
-import { Pencil } from "lucide-react";
+import { Textarea } from '@/components/ui/textarea';
+import { Course } from "@/prisma/app/generated/prisma/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { cn } from "@/lib/utils";
-import { Course } from "@/prisma/app/generated/prisma/client";
 
 const formSchema = z.object({
     description: z.string().min(1, {message: "description is required"})
@@ -45,7 +42,7 @@ export default function DescriptionForm({initialData, courseId}: DescriptionForm
 
     const onSubmit=  async (values: z.infer<typeof formSchema>) => {
         try{
-            const response = await axios.patch(`/api/courses/${courseId}`, values)
+            await axios.patch(`/api/courses/${courseId}`, values)
             toast.success("Course created successfully")
             setIsEditing(!isEditing)
             router.refresh()

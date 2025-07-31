@@ -1,6 +1,6 @@
-import React, { PropsWithChildren } from 'react'
+import React, {  ReactNode } from 'react'
 
-export default function QuestionsLayout({ children }: { children:PropsWithChildren}) {
+export default function QuestionsLayout({ children }: { children:ReactNode}) {
   return (
 
     <div>{children}</div>

@@ -16,10 +16,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Course, Chapter } from "@/prisma/app/generated/prisma/client";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import toast from "react-hot-toast";
-import { cn } from "@/lib/utils";
 import ChaptersList from "./chapters-list";
+import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
   title: z.string().min(1),
@@ -34,8 +33,8 @@ export default function ChaptersForm({
   initialData,
   courseId,
 }: ChaptersFormProps) {
-  const [isCreating, setIsCreating] = useState(false);
-  const [isUpdating, setIsUpdating] = useState(false);
+  // const [isCreating, setIsCreating] = useState(false);
+  // const [isUpdating, setIsUpdating] = useState(false);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -46,12 +45,12 @@ export default function ChaptersForm({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await axios.post(
+      await axios.post(
         `/api/courses/${courseId}/chapters`,
         values
       );
       toast.success("chapter created successfully");
-      setIsCreating((current) => !current);
+      // setIsCreating((current) => !current);
       router.refresh();
     } catch {
       toast.error("Something went wrong");
@@ -60,13 +59,13 @@ export default function ChaptersForm({
 
   const onReorder = async(updateData: {id: string, position: number}[]) => {
     try {
-      const response = await axios.put(`/api/courses/${courseId}/chapters/reorder`, {list: updateData})
+       await axios.put(`/api/courses/${courseId}/chapters/reorder`, {list: updateData})
       toast.success("chapters reordered successfully")
       router.refresh()
     } catch {
       toast.error("Something went wrong")
     }finally{
-      setIsUpdating(false)
+      // setIsUpdating(false)
     }
   }
 

@@ -20,8 +20,7 @@ import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import z from 'zod'
 import { UPLOAD_SIZE_LIMIT, sampleCourse, paymentAccounts } from "../constants";
-import { formatPrice } from "@/lib/utils";
-
+import { formatPrice } from "@/lib/format";
   
 const accounts = z.enum(paymentAccounts.map(account => account.id), {message: 'Please select a payment account'})
 

@@ -5,8 +5,9 @@ import { db } from "@/lib/db";
 
 export async function PUT(
   req: Request,
-  { params }: { params: { courseId: string; chapterId: string } }
+  { params }: { params: Promise<{ chapterId: string }> }
 ) {
+    const {chapterId} = await params
   try {
     const { userId } = await auth();
     const { isCompleted } = await req.json();
@@ -19,7 +20,7 @@ export async function PUT(
       where: {
         userId_chapterId: {
           userId,
-          chapterId: params.chapterId,
+          chapterId,
         },
       },
       update: {
@@ -27,7 +28,7 @@ export async function PUT(
       },
       create: {
         userId,
-        chapterId: params.chapterId,
+        chapterId,
         isCompleted,
       },
     });

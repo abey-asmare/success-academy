@@ -6,7 +6,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import * as z from "zod";
 
 import { FileUpload } from "@/components/file-upload";
 import { Button } from "@/components/ui/button";
@@ -17,11 +16,12 @@ interface ImageFormProps {
   courseId: string;
 };
 
-const formSchema = z.object({
-  imageUrl: z.string().min(1, {
-    message: "Image is required",
-  }),
-});
+// const formSchema = z.object({
+//   imageUrl: z.string().min(1, {
+//     message: "Image is required",
+//   }),
+// });
+type formSchemaType = {imageUrl: string}
 
 export const ImageForm = ({
   initialData,
@@ -33,7 +33,7 @@ export const ImageForm = ({
 
   const router = useRouter();
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: formSchemaType) => {
     try {
       await axios.patch(`/api/courses/${courseId}`, values);
       toast.success("Course updated");

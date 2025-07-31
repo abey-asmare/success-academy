@@ -1,28 +1,13 @@
 "use client"
 
-import * as React from "react"
 import {
-  IconCamera,
   IconChartBar,
-  IconDashboard,
-  IconDatabase,
-  IconFileAi,
-  IconFileDescription,
-  IconFileWord,
-  IconFolder,
-  IconHelp,
-  IconInnerShadowTop,
-  IconListDetails,
-  IconReport,
-  IconSearch,
-  IconSettings,
-  IconUsers,
+  IconUsers
 } from "@tabler/icons-react"
+import * as React from "react"
 
-import { NavDocuments } from "@/components/nav-documents"
+import { NavAdmin } from "@/components/nav-documents"
 import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
 import {
   Sidebar,
   SidebarContent,
@@ -32,30 +17,12 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { BarChart, Compass, Layout, List, User, WalletCards } from "lucide-react"
+import { Compass, Layout, List, WalletCards } from "lucide-react"
 import Link from "next/link"
 
 import Image from "next/image"
 
 const data = {
-  documents: [
-    {
-      title: "Data Library",
-      url: "#",
-      icon: IconDatabase,
-    },
-    {
-      title: "Reports",
-      url: "#",
-      icon: IconReport,
-    },
-    {
-      title: "Word Assistant",
-      url: "#",
-      icon: IconFileWord,
-    },
-  ],
-
   guestRoutes: [
     {
         icon: Layout,
@@ -113,7 +80,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.guestRoutes} />
-        <NavDocuments items={data.teacherRotues} />
+        <NavAdmin items={data.teacherRotues} />
         {/* <NavSecondary items={data.teacherRotues} className="mt-auto" /> */}
       </SidebarContent>
       <SidebarFooter>

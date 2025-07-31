@@ -15,7 +15,7 @@ import { Editor } from "@/components/editor";
 import { Button } from '@/components/ui/button';
 import { cn } from "@/lib/utils";
 import { Chapter } from "@/prisma/app/generated/prisma/client";
-import { EditIcon, Pencil } from "lucide-react";
+import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -45,7 +45,7 @@ export default function ChapterDescriptionForm({initialData, courseId, chapterId
 
     const onSubmit=  async (values: z.infer<typeof formSchema>) => {
         try{
-            const response = await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}`, values)
+            await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}`, values)
             toast.success("chpater updated successfully")
             setIsEditing(!isEditing)
             router.refresh()
