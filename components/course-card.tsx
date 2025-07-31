@@ -34,6 +34,7 @@ export const CourseCard = ({
             className="object-cover"
             alt={title}
             src={imageUrl}
+            priority
           />
         </div>
         <div className="flex flex-col pt-2">
