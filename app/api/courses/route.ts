@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
 import { isAdmin } from "@/utils/roles";
+import { Course } from "@/prisma/app/generated/prisma/client";
+import { CourseMinimized } from "@/types";
+import { placeholderCourseImage } from "@/app/constants";
 
 export async function POST(req: Request){
     try{
@@ -25,3 +28,31 @@ export async function POST(req: Request){
         return NextResponse.json({error: "Internal server error"}, {status: 500})
     }
 }
+
+
+// fetch all courses if needed
+export async function GET(req: Request){
+    try{
+        const courses = await db.course.findMany({
+            where: {
+              isPublished: true  
+            },
+            orderBy: {
+                createdAt: 'desc'
+            }
+        })
+        const coursesMinimized: CourseMinimized[] = courses.map((course: Course) => ({
+            id: course.id,
+            imageUrl: course.imageUrl || placeholderCourseImage,
+            title: course.title,
+            description: course.description!,
+            price: course.price!,
+            createdAt: course.createdAt
+        }))
+        return NextResponse.json(coursesMinimized)
+    }catch(error){
+        console.log(error)
+        return NextResponse.json({error: "Internal server error"}, {status: 500})
+    }
+}
+    

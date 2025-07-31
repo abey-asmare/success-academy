@@ -1,5 +1,5 @@
 'use client'
-import Image from 'next/image';
+import { Card, CardContent } from '@/components/ui/card';
 import {
   Carousel,
   CarouselContent,
@@ -7,54 +7,35 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-import { Card, CardContent } from '@/components/ui/card';
+import Image from 'next/image';
 
-interface Testimonial {
-  id: number;
-  quote: string;
-  name: string;
-  role: string;
-  image: string;
-}
-
-const testimonials: Testimonial[] = [
+// Testimonial data
+const testimonials = [
   {
-    id: 1,
-    quote: "Byway's tech courses are top-notch! As someone who's always looking to stay ahead in the rapidly evolving tech world, I appreciate the up-to-date content and engaging multimedia.",
-    name: "Jane Doe",
-    role: "Designer",
-    image: "/images/getting-started-1.jpg"
+    quote: "I can't thank Success Academy enough for their incredible support during my freshman year in Economics. Their structured guidance and study materials made all the difference, helping me pass every exam with ease.",
+    name: "Abenezer Tesfaye",
+    title: "Economics Student",
+    image: "/images/partners/addis-ababa.png"
   },
   {
-    id: 2,
-    quote: "The quality of education and the interactive learning experience at Byway has been exceptional. The courses are well-structured and the instructors are knowledgeable.",
-    name: "John Smith",
-    role: "Developer",
-    image: "/images/getting-started-2.jpg"
+    quote: "Success Academy was instrumental in my success as a freshman. The hands-on learning and expert advice I received helped me not only to pass my classes but also to truly understand the material.",
+    name: "Robel Haile",
+    title: "Software Engineering Student",
+    image: "/images/partners/bdr.jpg"
   },
   {
-    id: 3,
-    quote: "I've taken several courses here and each one has helped me advance my career. The practical approach and real-world projects make learning enjoyable and effective.",
-    name: "Sarah Wilson",
-    role: "Product Manager",
-    image: "/images/getting-started-3.jpg"
+    quote: "I am deeply grateful to Success Academy for their unwavering support throughout my freshman year in Law. Their comprehensive resources and personalized guidance helped me pass all my courses and build a solid foundation for my future studies.",
+    name: "Messay Tiruneh",
+    title: "Law Student",
+    image: "/images/partners/bdr.jpg"
   },
   {
-    id: 4,
-    quote: "The hands-on projects and expert guidance have transformed my understanding of technology. I highly recommend these courses to anyone serious about their career growth.",
-    name: "Michael Chen",
-    role: "Software Engineer",
-    image: "/images/getting-started-1.jpg"
-  },
-  {
-    id: 5,
-    quote: "Outstanding learning platform with comprehensive content. The community support and mentorship opportunities are invaluable for professional development.",
-    name: "Emily Rodriguez",
-    role: "Data Scientist",
-    image: "/images/getting-started-2.jpg"
+    quote: "Success Academy made my freshman year in Medicine manageable and successful. With their help, I was able to grasp challenging concepts and pass all my exams, setting me on the path to achieving my dream career.",
+    name: "Biruk Abera",
+    title: "Medicine Student",
+    image: "/images/partners/addis-ababa.png"
   }
 ];
-
 export default function TestimonialSlider() {
   return (
     <div className="bg-gradient-to-br from-blue-50 to-purple-50 py-16 px-4 md:px-10">
@@ -76,9 +57,9 @@ export default function TestimonialSlider() {
           className="w-full max-w-6xl mx-auto"
         >
           <CarouselContent className="-ml-2 md:-ml-4">
-            {testimonials.map((testimonial) => (
+            {testimonials.map((testimonial, index) => (
               <CarouselItem 
-                key={testimonial.id} 
+                key={index} 
                 className="pl-2 md:pl-4 basis-full md:basis-1/2 lg:basis-1/3"
               >
                 <Card className="h-full">
@@ -114,7 +95,7 @@ export default function TestimonialSlider() {
                           {testimonial.name}
                         </h4>
                         <p className="text-gray-600 text-xs md:text-sm">
-                          {testimonial.role}
+                          {testimonial.title}
                         </p>
                       </div>
                     </div>

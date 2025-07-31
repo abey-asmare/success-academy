@@ -49,6 +49,7 @@
   
 }
 
+
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -147,4 +148,9 @@
       transform: translate(calc(-50% - 40px));
     }
   }
+}
+
+
+html{
+  scroll-behavior: smooth;
 }

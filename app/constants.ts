@@ -56,5 +56,7 @@ export const sampleCourse: Course = {
 
 
   
-
+export const placeholderCourseImage = '/images/getting-started-1.jpg'
+export const supportEmail = 'email@gmail.com'
+export const supportPhone = '+251912345678'
   export const MAX_ALLOWED_DEVICES = 2

@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 
 function HeroSection({ className }: { className: string }) {
   return (
@@ -24,8 +25,10 @@ function HeroSection({ className }: { className: string }) {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-            <Button className="bg-primary-500 !py-2" size="lg">
+            <Button className="bg-primary-500 hover:bg-primary-500/80 !py-2 mb-4" size="lg">
+              <Link href="/dashboard/search">
               Start Learning Now
+              </Link>
             </Button>
           </div>
         </div>

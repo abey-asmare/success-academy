@@ -1,17 +1,24 @@
+'use client'
 import Image from "next/image"
 import { Card } from "./ui/card"
+import { CourseMinimized } from "@/types"
+import axios from "axios";
+import { Skeleton } from "./ui/skeleton";
+import { useQuery } from "@tanstack/react-query";
 
 
 
-function CourseList({className}: {className: string}) {
-  // TODO: fetch all courses from db and show all
-  // const courses = db.course.findMany({
-  //   where: {
-  //     isPublished: true
-  //   }
-  // }) 
+export default function CourseList({ className}: {className: string}) {
+  // revalidate in 2 hours, there wont be many course creations after all
+  const { data, isLoading, error } = useQuery<CourseMinimized[], Error, CourseMinimized[]>({
+    queryKey: ['courses'],
+    queryFn: ()=> axios.get('/api/courses').then(res => res.data),
+    staleTime: 60 * 60 * 2 * 1000,
+  });
 
-  // console.log(courses)
+  if (error) return <p>Error loading courses</p>;
+
+ 
   return (
           <div className={className}>
         <div className="course-list py-8 md:py-12 space-y-6 md:space-y-8 px-4 md:px-10">
@@ -20,10 +27,15 @@ function CourseList({className}: {className: string}) {
         </p>
         <div className="courses grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 justify-items-center">
 
-          <CourseCard/>
-          <CourseCard/>
-          <CourseCard/>
-          <CourseCard/>
+        {isLoading ? 
+        Array.from({length: 4}).map((_, index) => (
+          <CourseCardSkeleton key={index} />
+        )): 
+        data?.map((course: CourseMinimized) => (
+          <CourseCard key={course.id} course={course} />
+        ))
+      
+      }
           </div>
       </div>
         </div>
@@ -31,22 +43,22 @@ function CourseList({className}: {className: string}) {
 }
 
 
- function CourseCard(){
+ function CourseCard({course}: {course: CourseMinimized}){
 return (
 <Card className="p-4 border-2 border-gray-200 w-full max-w-[280px] transition-all duration-300 hover:shadow-lg hover:border-gray-300 hover:-translate-y-1">
-<div className="wrapper rounded-md overflow-hidden w-full">
+<div className="wrapper rounded-md overflow-hidden w-full h-[220px] object-cover">
   <Image
-    src="/images/getting-started-1.jpg"
-    alt="Course 1"
+    src={course.imageUrl}
+    alt={course.description}
     width={500}
     height={500}
     className="w-full h-full"
   />
 </div>
 <div className="description space-y-4">
-  <h3 className="font-semibold">Freshman</h3>
+  <h3 className="font-semibold">{course.title}</h3>
   <p className="text-gray-500">
-    12 Chapters. 4 Tests. 30+ resources
+    {course.description}
   </p>
   <button className="enroll-in px-4 py-2 font-semibold bg-primary-500 rounded-md text-white">
     Enroll
@@ -54,8 +66,21 @@ return (
 </div>
 </Card>
 )
-}
+};
 
-
-
-export default CourseList;
+export function CourseCardSkeleton(){
+return (
+<Card className="p-4 border-2 border-gray-200 w-full max-w-[280px] transition-all duration-300 hover:shadow-lg hover:border-gray-300 hover:-translate-y-1">
+<div className="wrapper rounded-md overflow-hidden w-full">
+  <Skeleton
+    className="w-[280px] h-[220px]"
+  />
+</div>
+<div className="description space-y-4">
+  <Skeleton className="font-semibold"/>
+  <Skeleton className="text-gray-500"/>
+  <Skeleton className="enroll-in px-4 py-2 font-semibold w-20 h-10 rounded-md text-white"/>
+</div>
+</Card>
+)
+};
