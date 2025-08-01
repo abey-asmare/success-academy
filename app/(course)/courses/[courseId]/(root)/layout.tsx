@@ -70,7 +70,6 @@ const CourseLayout = async ({
         {children}
       </main>
     </div>
-
   )
 }
 

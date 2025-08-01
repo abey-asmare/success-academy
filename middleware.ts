@@ -2,7 +2,7 @@ import { clerkClient, clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/
 import { NextResponse } from 'next/server'
 import { MAX_ALLOWED_DEVICES } from './app/constants'
 
-const isPublicRoute = createRouteMatcher(['/sign-in(.*)', '/sign-up(.*)', "/api/uploadthing", '/', '/api/courses(.*)'])
+const isPublicRoute = createRouteMatcher(['/sign-in(.*)', '/sign-up(.*)', "/api/uploadthing", '/', '/api/courses(.*)', '/dashbaord-temp'])
 
 const isAdminRoute = createRouteMatcher(['/admin(.*)', '/dashboard/teacher(.*)'])
 

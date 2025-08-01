@@ -1,4 +1,4 @@
-import { AppSidebar } from "@/components/app-sidebar"
+import { AppSidebar } from "./components/app-sidebar"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -53,3 +53,4 @@ export default function Page() {
     </SidebarProvider>
   )
 }
+
