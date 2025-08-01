@@ -1,13 +1,14 @@
 import CreateExamForm from "./components/CreateExamForm";
 
-// interface CreateExamPageProps {
-//   params: {
-//     courseId: string;
-//     chapterId: string;
-//   };
-// }
+interface CreateExamPageProps {
+  params:Promise<
+  {
+    courseId: string;
+    chapterId: string;
+  }>;
+}
 
-export default async function CreateExamPage({params}: {params: Promise<{courseId: string, chapterId: string}>}) {
+export default async function CreateExamPage({params}: CreateExamPageProps) {
   const {courseId, chapterId} = await params
 
   return (

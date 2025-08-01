@@ -105,6 +105,38 @@ export default async function ChpaterDetails({
             </div>
         </div>
         
+        {chapter.exams.length > 0 && (
+          <div className="mt-6">
+            <h2 className="text-xl font-semibold mb-4">Exams</h2>
+            <div className="space-y-3">
+              {chapter.exams.map((exam) => (
+                <div key={exam.id} className="flex items-center justify-between p-3 bg-white rounded border">
+                  <span className="font-medium">{exam.name}</span>
+                  <div className="flex items-center gap-2">
+                    <Link
+                      href={`/dashboard/teacher/courses/${courseId}/chapters/${chapterId}/exam/${exam.id}`}
+                      className="text-blue-500 hover:underline text-sm"
+                    >
+                      View Exam
+                    </Link>
+                    <Link
+                      href={`/dashboard/teacher/courses/${courseId}/chapters/${chapterId}/exam/${exam.id}/update`}
+                      className="text-blue-500 hover:underline text-sm"
+                    >
+                      Edit Exam
+                    </Link>
+                    <DeleteExamButton
+                      courseId={courseId}
+                      chapterId={chapterId}
+                      examId={exam.id}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        
         <div className="mt-6">
           <Button variant="outline">
             <Link

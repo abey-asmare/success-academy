@@ -14,13 +14,10 @@ import { z } from "zod";
 
 import { Editor } from "@/components/editor";
 import { Button } from '@/components/ui/button';
-import { cn } from "@/lib/utils";
 import { Chapter } from "@/prisma/app/generated/prisma/client";
-import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { Preview } from "@/components/preview";
 
 const formSchema = z.object({
     description: z.string().min(1, {message: "description is required"})
