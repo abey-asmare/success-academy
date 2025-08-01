@@ -1,7 +1,12 @@
 import Nav from '@/app/(main)/components/Nav'
-import React from 'react'
+import { auth } from '@clerk/nextjs/server'
+import { redirect } from 'next/navigation'
 
-export default function Layout({children}: {children: React.ReactNode}) {
+export default async function Layout({children}: {children: React.ReactNode}) {
+  const {userId} = await auth()
+
+  if(!userId)
+    return redirect('/sign-in')
   return (
     <div className="h-full">
         <Nav/>

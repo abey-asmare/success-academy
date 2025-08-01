@@ -1,11 +1,6 @@
 import { auth } from "@clerk/nextjs/server";;
 import { redirect } from "next/navigation";
-
-import { db } from "@/lib/db";
 import { getCourses } from "@/actions/get-courses";
-
-import { Categories } from "./components/categories";
-import { SearchInput } from "@/components/search-input";
 import { CoursesList } from "@/components/courses-list";
 
 interface SearchPageProps {

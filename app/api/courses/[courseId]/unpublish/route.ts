@@ -1,6 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
-
+import { isAdmin } from "@/utils/roles";
 import { db } from "@/lib/db";
 
 export async function PATCH(
@@ -11,7 +11,7 @@ export async function PATCH(
   try {
     const { userId } = await auth();
 
-    if (!userId) {
+    if (!userId || !isAdmin()) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 

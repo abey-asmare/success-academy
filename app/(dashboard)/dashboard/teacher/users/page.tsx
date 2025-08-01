@@ -1,5 +1,4 @@
-import { auth, clerkClient } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
+import { clerkClient } from "@clerk/nextjs/server";
 import { DataTable } from "./components/data-table";
 import { columns } from "./components/columns";
 
@@ -54,13 +53,6 @@ const UsersPage = async ({
 }: {
   searchParams: Promise<{ search?: string; page?: string }>;
 }) => {
-  const session = await auth();
-  const userId = session?.userId;
-
-  if (!userId) {
-    return redirect("/");
-  }
-  
 
   const { search } = (await searchParams) || "";
   const page = parseInt((await searchParams).page || "1");

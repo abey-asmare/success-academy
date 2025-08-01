@@ -2,10 +2,9 @@ import { clerkClient, clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/
 import { NextResponse } from 'next/server'
 import { MAX_ALLOWED_DEVICES } from './app/constants'
 
-const isPublicRoute = createRouteMatcher(['/sign-in(.*)', '/sign-up(.*)', "/api/uploadthing", '/api/webhook(.*)', '/', '/api/courses(.*)'])
+const isPublicRoute = createRouteMatcher(['/sign-in(.*)', '/sign-up(.*)', "/api/uploadthing", '/', '/api/courses(.*)'])
 
-
-const isAdminRoute = createRouteMatcher(['/admin(.*)'])
+const isAdminRoute = createRouteMatcher(['/admin(.*)', '/dashboard/teacher(.*)'])
 
 export default clerkMiddleware(async (auth, req) => {
   const authData = await auth()
@@ -24,42 +23,46 @@ export default clerkMiddleware(async (auth, req) => {
   const client = await clerkClient()
 
   // 3. Limit user to 2 active sessions
-  if (userId && sessionId) {
-    const sessions = await client.sessions.getSessionList({userId, status: "active"})
+  // if (userId && sessionId) {
+  //   const sessions = await client.sessions.getSessionList({userId, status: "active"})
 
-    if (sessions.totalCount > MAX_ALLOWED_DEVICES) {
-      await Promise.all(
-        sessions.data.filter((session) => session.id !== sessionId).map((session) => client.sessions.revokeSession(session.id))
-      )
-      const redirectUrl = new URL("/too-many-devices", req.url)
-      return NextResponse.redirect(redirectUrl)
-    }
-  }
+  //   if (sessions.totalCount > MAX_ALLOWED_DEVICES) {
+  //     await Promise.all(
+  //       sessions.data.filter((session) => session.id !== sessionId).map((session) => client.sessions.revokeSession(session.id))
+  //     )
+  //     const redirectUrl = new URL("/too-many-devices", req.url)
+  //     return NextResponse.redirect(redirectUrl)
+  //   }
+  // }
 
   
 // Max one session per device type (mobile & desktop), too strict
-// if (userId && sessionId) {
-//   try {
-//     const sessions = await client.sessions.getSessionList({ userId, status: "active" })
-//     const currentSession = sessions.data.find((s) => s.id === sessionId)
+if (userId && sessionId) {
+  try {
+    const sessions = await client.sessions.getSessionList({ userId, status: "active" })
+    const currentSession = sessions.data.find((s) => s.id === sessionId)
 
-//     if (!currentSession) return NextResponse.next()
+    if (!currentSession) return NextResponse.next()
 
-//     const isMobile = currentSession.latestActivity?.isMobile
-//     const sameTypeSessions = sessions.data.filter(
-//       (s) => s.id !== sessionId && s.latestActivity?.isMobile === isMobile
-//     )
+    const isMobile = currentSession.latestActivity?.isMobile
+    const sameTypeSessions = sessions.data.filter(
+      (s) => s.id !== sessionId && s.latestActivity?.isMobile === isMobile
+    )
 
-//     if (sameTypeSessions.length >= 1) {
-//       await client.sessions.revokeSession(sessionId)
-//       return NextResponse.redirect(new URL("/too-many-devices", req.url))
-//     }
+    if (sameTypeSessions.length >= 1) {
+      await client.sessions.revokeSession(sessionId)
+      // this triggers all the users from the account to log out
+      // await Promise.all(
+      //   sessions.data.filter((session) => session.id !== sessionId).map((session) => client.sessions.revokeSession(session.id))
+      // )
+      return NextResponse.redirect(new URL("/too-many-devices", req.url))
+    }
 
-//   } catch (error) {
-//     console.error("Error fetching sessions:", error)
-//     return NextResponse.next()
-//   }
-// }
+  } catch (error) {
+    console.error("Error fetching sessions:", error)
+    return NextResponse.next()
+  }
+}
 
 })
 

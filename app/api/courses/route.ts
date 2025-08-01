@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
 import { isAdmin } from "@/utils/roles";
@@ -9,7 +9,7 @@ import { placeholderCourseImage } from "@/app/constants";
 
 
 // fetch all courses if needed
-export async function GET(req: NextRequest){
+export async function GET(){
     try{
         const courses = await db.course.findMany({
             where: {
@@ -35,10 +35,6 @@ export async function GET(req: NextRequest){
     }
 }
     
-
-
-
-
 
 
 export async function POST(req: Request){

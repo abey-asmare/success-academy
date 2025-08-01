@@ -1,6 +1,5 @@
 import Banner from "@/components/banner";
 import { db } from "@/lib/db";
-import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import AttachmentForm from "./attachment-form";
 import CategoryForm from "./category-form";
@@ -18,17 +17,11 @@ const CourseIdPage = async ({
 }: {
   params: Promise<{ courseId: string }>
 }) => {
-  const { userId } = await auth();
-
-  if (!userId) {
-    return redirect("/");
-  }
 
   const {courseId} = await params
   const course = await db.course.findUnique({
     where: {
       id: courseId,  
-      userId
     },
     include: {
       chapters: {

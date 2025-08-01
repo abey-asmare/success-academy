@@ -2,7 +2,7 @@
 import { db } from "@/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
-
+import { isAdmin } from "@/utils/roles";
 // ready to be deprecate
 export async function POST(
   req: NextRequest,
@@ -12,7 +12,7 @@ export async function POST(
   try {
     const user = await currentUser();
 
-    if (!user || !user.id) {
+    if (!user || !user.id || !isAdmin()) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 

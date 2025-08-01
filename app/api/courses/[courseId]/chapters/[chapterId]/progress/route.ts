@@ -1,6 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-
+import { isAdmin } from "@/utils/roles";
 import { db } from "@/lib/db";
 
 export async function PUT(
@@ -12,7 +12,7 @@ export async function PUT(
     const { userId } = await auth();
     const { isCompleted } = await req.json();
 
-    if (!userId) {
+    if (!userId || !isAdmin()) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -22,7 +22,7 @@ export async function PUT(
           userId,
           chapterId,
         },
-      },
+      },  
       update: {
         isCompleted,
       },

@@ -1,19 +1,10 @@
-import { redirect } from 'next/navigation';
 import React from 'react'
 import { DataTable } from './components/data-table';
-import { auth, clerkClient } from '@clerk/nextjs/server';
+import { clerkClient } from '@clerk/nextjs/server';
 import { columns } from './components/columns';
 import { db } from '@/lib/db';
 
 export default async function PaymentPage() {
-
-    const { userId } = await auth();
-      if (!userId) {
-          return redirect("/");
-      }
-        
-
-
       const client = await clerkClient()
       const clientInformation = await client.users.getUserList({
         limit: 501,

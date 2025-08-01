@@ -12,10 +12,14 @@ import {
   SidebarInset,
   SidebarProvider,
 } from "@/components/ui/sidebar"
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
 
-
-export default function Layout({ children }: {children: React.ReactNode;}) {
+export default async function Layout({ children }: {children: React.ReactNode;}) {
+  const {userId} = await auth()
+  if(!userId)
+    return redirect('/sign-in')
   return (
     // <div className="h-full">
     //   <div className="h-[80px] md:pl-56 fixed inset-y-0 w-full z-50">

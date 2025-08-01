@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 // import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import Link from "next/link"
-import { MAX_ALLOWED_DEVICES, supportPhone } from "../constants"
+import { MAX_ALLOWED_DEVICES } from "../constants"
 
 export default function TooManyDevicesPage() {
   return (
@@ -28,7 +28,7 @@ export default function TooManyDevicesPage() {
         <Alert className="border-red-200 bg-red-50">
           <AlertTriangle className="h-4 w-4 text-red-600" />
           <AlertDescription className="text-red-800">
-            Only 2 devices are allowed per account, you can reach to us at {supportPhone} for more.
+            Only 2 devices are allowed per account, you&apos;ll be logged out and redirected to home page.
           </AlertDescription>
         </Alert>
 

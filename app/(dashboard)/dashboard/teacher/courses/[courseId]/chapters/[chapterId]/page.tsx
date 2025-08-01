@@ -2,7 +2,6 @@ import Banner from "@/components/banner";
 import IconBadge from "@/components/icon-badge";
 import { Button } from "@/components/ui/button";
 import { db } from "@/lib/db";
-import { auth } from "@clerk/nextjs/server";
 import { ArrowLeft, Eye, LayoutDashboard, Video } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -19,11 +18,6 @@ export default async function ChpaterDetails({
   params: Promise<{ chapterId: string; courseId: string }>;
 }) {
   const { chapterId, courseId } = await params;
-
-  const { userId } = await auth();
-  if (!userId) {
-    return redirect("/");
-  }
 
   const chapter = await db.chapter.findUnique({
     where: {

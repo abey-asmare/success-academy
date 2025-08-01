@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
+import { isAdmin } from "@/utils/roles";
 
 export async function DELETE(
   req: NextRequest, 
@@ -10,12 +11,11 @@ export async function DELETE(
   try {
     const { userId } = await auth();
 
-    if (!userId) {
+    if (!userId || !isAdmin()) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const ownCourse = await auth()
-     db.course.findUnique({
+    const ownCourse = await db.course.findUnique({
       where: {
         id: courseId,
         userId,

@@ -5,13 +5,8 @@ import "react-multi-carousel/lib/styles.css";
 import HeroSection from "./components/HeroSection";
 import LearnAnything from "./components/LearnAnything"; 
 import TestimonialSlider from "@/components/TestimonialSlider";
-import { CourseMinimized } from "@/types";
-
 
 async function Home() {
-  // const courses: CourseMinimized[] = await fetch('/api/courses').then(res => res.json())
-  // const ping = await fetch('/api/courses/c').then(res => res.json())
-  // console.log('ping', ping)
   return (
     <div className="">
       <HeroSection className="pt-4 px-4 md:px-10" />

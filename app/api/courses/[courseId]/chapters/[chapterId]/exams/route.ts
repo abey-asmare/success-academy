@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server"
 import { db } from "@/lib/db";
 import { Answer } from "@/prisma/app/generated/prisma/client";
-
+import { isAdmin } from "@/utils/roles";
+    
 export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ courseId: string; chapterId: string }> }
@@ -11,7 +12,7 @@ export async function POST(
   try {
     const { userId } = await auth();
     
-    if (!userId) {
+    if (!userId || !isAdmin()) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
     const body = await req.json();

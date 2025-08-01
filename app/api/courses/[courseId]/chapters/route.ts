@@ -1,13 +1,14 @@
 import { auth } from "@clerk/nextjs/server"
 import { NextResponse } from "next/server"
 import { db } from "@/lib/db"
+import { isAdmin } from "@/utils/roles"
 
 export async function POST(req: Request, {params}: {params: Promise<{courseId: string}>}) {
     const {courseId} = await params
     const {title} = await req.json()
     try{
         const {userId} = await auth()
-        if(!userId)
+        if(!userId || !isAdmin())
             return new NextResponse("Unauthorized", {status: 401})
 
 

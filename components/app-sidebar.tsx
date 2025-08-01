@@ -11,18 +11,16 @@ import { NavMain } from "@/components/nav-main"
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
-  SidebarMenuItem,
+  SidebarMenuItem
 } from "@/components/ui/sidebar"
 import { Compass, Layout, List, WalletCards } from "lucide-react"
 import Link from "next/link"
 
-import Image from "next/image"
-import { isAdmin } from "@/utils/roles"
 import useRole from "@/utils/useRole"
+import Image from "next/image"
 
 const data = {
   guestRoutes: [
