@@ -77,12 +77,14 @@ const ChapterIdPage = async ({
               {chapter.title}
             </h2>
             {purchase ? (
-              <div className="flex items-center gap-2">
-                <Button className="mr-2 bg-sky-500 text-white hover:bg-sky-600 transition-colors duration-200">
-                  <Link href={`/courses/${courseId}/chapters/${chapterId}/exams/${chapter.exams[0].id}`}>
-                    take exam
+              <div className="flex flex-wrap items-center gap-2">
+              {chapter.exams.map((exam, index) => (
+                <Button key={exam.id} className="mr-2 bg-sky-500 text-white hover:bg-sky-600 transition-colors duration-200">
+                  <Link href={`/courses/${courseId}/chapters/${chapterId}/exams/${exam.id}`}>
+                    take exam  {chapter.exams.length > 1 ? index + 1 : ""}
                   </Link>
                 </Button>
+              ))}
                 <CourseProgressButton
                   chapterId={chapterId}
                   courseId={courseId}

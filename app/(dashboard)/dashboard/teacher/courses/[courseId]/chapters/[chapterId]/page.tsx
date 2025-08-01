@@ -114,7 +114,7 @@ export default async function ChpaterDetails({
                   <span className="font-medium">{exam.name}</span>
                   <div className="flex items-center gap-2">
                     <Link
-                      href={`/dashboard/teacher/courses/${courseId}/chapters/${chapterId}/exam/${exam.id}`}
+                      href={`/dashboard/teacher/courses/${courseId}/chxapters/${chapterId}/exam/${exam.id}`}
                       className="text-blue-500 hover:underline text-sm"
                     >
                       View Exam
