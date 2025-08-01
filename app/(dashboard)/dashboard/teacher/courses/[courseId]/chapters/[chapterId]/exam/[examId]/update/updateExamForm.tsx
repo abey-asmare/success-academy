@@ -5,7 +5,6 @@ import {Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Answer, Exam, Question } from '@/prisma/app/generated/prisma/client'
-import { examSchema } from '@/schemas/validationSchemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Checkbox } from '@/components/ui/checkbox'
 import axios from 'axios'
@@ -15,18 +14,36 @@ import { useState } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import z from 'zod'
-
+  
 
 
 type Props = {
-    courseId: string,
-    chapterId: string,
-    exam: Exam & {
-        questions: Question[] & {
-            answers: Answer[]
-        }
-    }
-}
+  courseId: string;
+  chapterId: string;
+  exam: Exam & {
+    questions: (Question & {
+      answers: Answer[];
+    })[];
+  };
+};
+
+
+const examSchema = z.object({
+  name: z.string(),
+  description: z.string().optional(),
+  questions: z.array(
+    z.object({
+      question: z.string(),
+      answers: z.array(
+        z.object({
+          text: z.string(),
+          isCorrect: z.boolean(),
+        })
+      ),
+    })
+  ),
+});
+
 
 
 export default function UpdateExamForm({courseId, chapterId, exam}: Props) {
@@ -100,7 +117,7 @@ export default function UpdateExamForm({courseId, chapterId, exam}: Props) {
 
     return (
     <Form {...form}>
-    <form   onSubmit={form.handleSubmit(onSubmit, error => toast.error("Something went wrong,Perhapse you left some fields empty or you didn't specify the correct answer?"))} className="space-y-6">
+    <form   onSubmit={form.handleSubmit(onSubmit, () => toast.error("Something went wrong,Perhapse you left some fields empty or you didn't specify the correct answer?"))} className="space-y-6">
       {/* Exam Details */}
       <Card>
         <CardHeader>

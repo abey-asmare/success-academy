@@ -111,7 +111,7 @@ export default function CreateExamForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit, (errors) => toast.error("Something went wrong,Perhapse you left some fields empty or you didn't specify the correct answer?"))} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit, () => toast.error("Something went wrong,Perhapse you left some fields empty or you didn't specify the correct answer?"))} className="space-y-6">
         {/* Exam Details */}
         <Card>
           <CardHeader>
