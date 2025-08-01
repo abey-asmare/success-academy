@@ -39,8 +39,8 @@ export default function ChapterVideoForm({initialData, courseId, chapterId}: Cha
  
 
   return (          
-    <div className="mt-6 border bg-slate-100 rounded-md p-4">
-        <div className="font-medium flex items-center justify-between">
+    <div className="mt-6">
+        <div className="font-medium text-base flex items-center justify-between">
             Chapter Video
             <Button variant='ghost' onClick={()=> setIsEditing((prev)=> !prev)}>
                 {isEditing && (
@@ -67,9 +67,7 @@ export default function ChapterVideoForm({initialData, courseId, chapterId}: Cha
                 <div className="flex items-center justify-center h-60 bg-slate-200 rounded-md"><VideoIcon className="h-10 w-10 text-slate-500"/></div>
             ) : (
                 <div className="relative aspect-video mt-2">
-                    {/* <Image alt="upload" fill className='object-cover rounded-md' src={initialData.videoUrl}/> */}
                     <MuxPlayer playbackId={initialData.muxData?.playbackId || ''} className="rounded-md"/>
-                    {/* video uploaded */}
                 </div>
             ) )
         }
@@ -81,7 +79,7 @@ export default function ChapterVideoForm({initialData, courseId, chapterId}: Cha
                 if(url)
                       onSubmit({videoUrl: url})
                   } }/>
-                  <div className="text-xs text-muted-foreground mt-4">Chapter videos</div>
+                  <div className="text-sm text-muted-foreground mt-4">Chapter videos</div>
             </div>
         )} 
         {initialData.videoUrl && !isEditing && 

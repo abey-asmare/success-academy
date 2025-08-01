@@ -29,7 +29,7 @@ export function NavMain({
   const pathname = usePathname();
   
   const isActive = (href: string)=> (pathname === '/dashboard' && href === '/dashboard' || pathname === href || pathname?.startsWith(`${href}/dashbaord`))
-    const { toggleSidebar } = useSidebar()
+    const { isMobile, toggleSidebar } = useSidebar()
   
 
 
@@ -62,7 +62,7 @@ export function NavMain({
             <Link href={item.url} key={item.title}
             className={cn('', 
               isActive(item.url) && 'bg-black/5 rounded-md')}
-            onClick={()=> toggleSidebar()}
+            onClick={()=> isMobile && toggleSidebar()}
             >
               <SidebarMenuItem>
                 <SidebarMenuButton tooltip={item.title}>

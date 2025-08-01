@@ -4,6 +4,7 @@ import {
     FormControl,
     FormField,
     FormItem,
+    FormLabel,
     FormMessage
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -54,26 +55,7 @@ export default function ChapterTitleForm({initialData, courseId, chapterId}: Cha
 
 
   return (      
-    <div className="mt-6 border bg-slate-100 rounded-md p-4">
-        <div className="font-medium flex items-center justify-between">
-            Chapter title 
-            <Button variant='ghost' onClick={()=> setIsEditing((prev)=> !prev)}>
-                {
-                    isEditing ? 'cancel': 
-                    <>
-                <Pencil className="h-4 w-4 mr-2"/>
-                Edit title
-                </>
-            }
-            </Button>
-            
-        </div>
-        {
-            !EditIcon && (
-                <p className="text-sm mt-2">{initialData.title}</p>
-            )
-        }
-        {isEditing && (
+    <div className="mt-6">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mt-8">
                     <FormField
@@ -83,8 +65,9 @@ export default function ChapterTitleForm({initialData, courseId, chapterId}: Cha
                             <FormItem
                                 
                             >
+                                <FormLabel>Chapter title</FormLabel>    
                                 <FormControl>
-                                    <Input {...field}/>
+                                    <Input  {...field}/>
                                 </FormControl>
                                 <FormMessage/>
                             </FormItem>
@@ -100,7 +83,6 @@ export default function ChapterTitleForm({initialData, courseId, chapterId}: Cha
                     </div>
                 </form> 
             </Form>
-        )}
     </div>
   )
 }

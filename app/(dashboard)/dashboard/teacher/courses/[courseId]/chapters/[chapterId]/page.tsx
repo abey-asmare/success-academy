@@ -1,8 +1,7 @@
 import Banner from "@/components/banner";
-import IconBadge from "@/components/icon-badge";
 import { Button } from "@/components/ui/button";
 import { db } from "@/lib/db";
-import { ArrowLeft, Eye, LayoutDashboard, Video } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import ChapterAccessForm from "./components/chapter-access-form";
@@ -75,82 +74,46 @@ export default async function ChpaterDetails({
             </div>
           </div>
         </div>
-        <div className="grid-grid-cols-1 md:grid-cols 2 gap-6 mt-16">
-          <div className="space-y-4">
-            <div className="flex items-center gap-x-2">
-              <IconBadge icon={LayoutDashboard} />
-              <h2 className="text-xl">Customize your chapter</h2>
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
             <ChapterTitleForm
               initialData={chapter}
               courseId={courseId}
               chapterId={chapterId}
             />
-            <ChapterDescriptionForm
-              initialData={chapter}
-              courseId={courseId}
-              chapterId={chapterId}
-            />
-          </div>
-          <div>
-            <div className="flex items-center gap-x-2">
-              <IconBadge icon={Eye} />
-              <h2 className="text-xl">Access Settings</h2>
-            </div>
+            
             <ChapterAccessForm
               initialData={chapter}
               courseId={courseId}
               chapterId={chapterId}
             />
-          </div>
-          <div>
-            <div className="flex items-center gap-x-2">
-              <IconBadge icon={Video} />
-              <h2 className="text-xl">Add a video</h2>
-            </div>
-            <ChapterVideoForm
-              initialData={{
-                ...chapter,
-                muxData: chapter.muxData ?? undefined,
-              }}
+            
+            <ChapterDescriptionForm
+              initialData={chapter}
               courseId={courseId}
               chapterId={chapterId}
             />
-          </div>
+            
+            <div>
+              <ChapterVideoForm
+                initialData={{
+                  ...chapter,
+                  muxData: chapter.muxData ?? undefined,
+                }}
+                courseId={courseId}
+                chapterId={chapterId}
+              />
+            </div>
         </div>
-      </div>
-      {chapter.exams.length > 0 && (
-        <div className="mt-4">
-          <h2 className="text-xl font-semibold">Exams</h2>
-          <div className="mt-4">
-            {chapter.exams.map((exam) => (
-              <div key={exam.id} className="flex items-center justify-between">
-                <span className="font-medium">{exam.name}</span>
-                <Link
-                  href={`/dashboard/teacher/courses/${courseId}/chapters/${chapterId}/exam/${exam.id}`}
-                  className="text-blue-500 hover:underline"
-                >
-                  View Exam
-                </Link>
-                <DeleteExamButton
-                  courseId={courseId}
-                  chapterId={chapterId}
-                  examId={exam.id}
-                />
-              </div>
-            ))}
-          </div>
+        
+        <div className="mt-6">
+          <Button variant="outline">
+            <Link
+              href={`/dashboard/teacher/courses/${courseId}/chapters/${chapterId}/exam/`}
+            >
+              Create an Exam
+            </Link>
+          </Button>
         </div>
-      )}
-      <div className="mt-4">
-        <Button variant="ghost">
-          <Link
-            className="text-sky-500"
-            href={`/dashboard/teacher/courses/${courseId}/chapters/${chapterId}/exam/`}
-          >
-            Create an Exam
-          </Link>
-        </Button>
       </div>
     </>
   );

@@ -4,6 +4,7 @@ import {
     FormControl,
     FormField,
     FormItem,
+    FormLabel,
     FormMessage
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -57,30 +58,7 @@ export default function ChapterDescriptionForm({initialData, courseId, chapterId
 
 
   return (      
-    <div className="mt-6 border bg-slate-100 rounded-md p-4">
-        <div className="font-medium flex items-center justify-between">
-            chapter description 
-            <Button variant='ghost' onClick={()=> setIsEditing((prev)=> !prev)}>
-                {
-                    isEditing ? 'cancel': 
-                    <>
-                <Pencil className="h-4 w-4 mr-2"/>
-                Edit description
-                </>
-            }
-            </Button>
-            
-        </div>
-        {
-            !isEditing && (
-                <div className={cn("text-sm mt-2", !initialData.description && "italic")}>{!initialData.description && 'No description'}
-                
-                {initialData.description && <Preview value={initialData.description}/>}
-                </div>
-            )
-        }
-
-        {isEditing && (
+    <div className="mt-1">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mt-8">
                     <FormField
@@ -90,8 +68,9 @@ export default function ChapterDescriptionForm({initialData, courseId, chapterId
                             <FormItem
                                 
                             >
+                                <FormLabel className="text-md">Chapter description</FormLabel>
                                 <FormControl>
-                                   <Editor {...field}/>
+                                   <Editor {...field}  value={field.value} onChange={field.onChange}/>
                                     
                                 </FormControl>
                                 <FormMessage/>
@@ -108,7 +87,6 @@ export default function ChapterDescriptionForm({initialData, courseId, chapterId
                     </div>
                 </form> 
             </Form>
-        )}
     </div>
   )
 }

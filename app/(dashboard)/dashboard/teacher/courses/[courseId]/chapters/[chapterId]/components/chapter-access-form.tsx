@@ -5,6 +5,7 @@ import {
     FormDescription,
     FormField,
     FormItem,
+    FormLabel,
     FormMessage
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -58,28 +59,8 @@ export default function ChapterAccessForm({initialData, courseId, chapterId}: Ch
 
 
   return (      
-    <div className="mt-6 border bg  -slate-100 rounded-md p-4">
-        <div className="font-medium flex items-center justify-between">
-            Chapter Access  
-            <Button variant='ghost' onClick={()=> setIsEditing((prev)=> !prev)}>
-                {   
-                    isEditing ? 'cancel': 
-                    <>
-                <Pencil className="h-4 w-4 mr-2"/>
-                Edit Access
-                </>
-            }
-            </Button>
-            
-        </div>
-        {
-            !isEditing && (
-                <div className={cn("text-sm mt-2", !initialData.description && "italic")}>{initialData.isFree ? <>Free for Preview</> : <>chapter is locked</>}
-                </div>
-            )
-        }
+    <div className="mt-6">
 
-        {isEditing && (
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mt-8">
                     <FormField
@@ -87,9 +68,10 @@ export default function ChapterAccessForm({initialData, courseId, chapterId}: Ch
                         name='isFree'
                         render={({field}) => (
                             <FormItem
-                             className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4"   
-                            >
-                                <FormControl>
+                             className="flex flex-col items-start space-x-3 space-y-0 rounded-md"   
+                             >
+                                <FormLabel>Chapter Access</FormLabel>
+                                <FormControl className="border p-2">
                                    <Checkbox checked = {field.value} onCheckedChange={field.onChange} />
                                     
                                 </FormControl>
@@ -112,7 +94,6 @@ export default function ChapterAccessForm({initialData, courseId, chapterId}: Ch
                     </div>
                 </form> 
             </Form>
-        )}
     </div>
   )
 }

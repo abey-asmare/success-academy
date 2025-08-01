@@ -51,7 +51,7 @@ export function NavAdmin({
       <SidebarMenu>
         {items.map((item) => (
           <SidebarMenuItem key={item.title}>
-            <SidebarMenuButton asChild onClick={()=> toggleSidebar()}>
+            <SidebarMenuButton asChild onClick={()=> isMobile && toggleSidebar()}>
               <Link href={item.url} 
               className={
                 cn('', 
