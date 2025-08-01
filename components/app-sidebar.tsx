@@ -89,11 +89,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <NavAdmin items={data.teacherRotues} />
           )
         }
-        {/* <NavSecondary items={data.teacherRotues} className="mt-auto" /> */}
       </SidebarContent>
-      <SidebarFooter>
-        {/* <NavUser user={data.user} /> */}
-      </SidebarFooter>
     </Sidebar>
   )
 }

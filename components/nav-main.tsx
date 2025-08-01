@@ -57,12 +57,12 @@ export function NavMain({
             </Button>
           </SidebarMenuItem> */}
         </SidebarMenu>
-        <SidebarMenu onClick={()=> toggleSidebar()}>
+        <SidebarMenu>
           {items.map((item) => (
             <Link href={item.url} key={item.title}
             className={cn('', 
               isActive(item.url) && 'bg-black/5 rounded-md')}
-            
+            onClick={()=> toggleSidebar()}
             >
               <SidebarMenuItem>
                 <SidebarMenuButton tooltip={item.title}>

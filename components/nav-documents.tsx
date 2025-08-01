@@ -26,6 +26,8 @@ import {
 } from "@/components/ui/sidebar"
 import Link from "next/link"
 import { LucideIcon } from "lucide-react"
+import { usePathname } from "next/navigation"
+import { cn } from "@/lib/utils"
 
 export function NavAdmin({
   items,
@@ -36,7 +38,12 @@ export function NavAdmin({
     icon: Icon | LucideIcon
   }[]
 }) {
-  const { isMobile } = useSidebar()
+  const { isMobile, toggleSidebar } = useSidebar()
+  const pathname = usePathname()
+
+  const isActive = (href: string)=> (pathname === '/dashboard' && href === '/dashboard' || pathname === href || pathname?.startsWith(`${href}/dashbaord`))
+
+
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
@@ -44,8 +51,11 @@ export function NavAdmin({
       <SidebarMenu>
         {items.map((item) => (
           <SidebarMenuItem key={item.title}>
-            <SidebarMenuButton asChild>
-              <Link href={item.url}>
+            <SidebarMenuButton asChild onClick={()=> toggleSidebar()}>
+              <Link href={item.url} 
+              className={
+                cn('', 
+                            isActive(item.url) && 'bg-black/5 rounded-md')}>
                 <item.icon />
                 <span>{item.title}</span>
               </Link>
