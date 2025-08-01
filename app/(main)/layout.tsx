@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import Nav from './components/Nav'
+import image from "@/public/images/success_academy-logo.png"
 
 
 
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
     description: "Your Shortcut to success.",
     images: [
       {
-        url: "/images/success_academy-logo.png",
+        url: image.src,
         width: 1200,
         height: 630,
         alt: "Success Academy Banner",
