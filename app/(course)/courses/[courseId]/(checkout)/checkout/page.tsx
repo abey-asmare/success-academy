@@ -24,9 +24,9 @@ export default  function CheckoutPage() {
   
 
   return (
-    <div className="w-full h-screen flex flex-col justify-center items-center ">
-      <h1 className="text-2xl font-semibold">After you transferred, please upload an image, it may take a few minutes to process</h1>
-     <div className="flex  justify-center items-center gap-12 ">
+    <div className="w-full h-screen flex flex-col justify-center items-center px-10">
+      <h1 className="text-2xl font-semibold w-[40ch] mb-6">After you transferred, please upload an image, it may take a few minutes to process</h1>
+     <div className="flex justify-center items-center gap-12 flex-col md:flex-row ">
      <div className="space-y-4">
         {accounts.map(account => {
 
@@ -34,7 +34,8 @@ export default  function CheckoutPage() {
         })}
         
       </div>
-      <div className="w-0.5  h-72 rounded-full bg-gray-200"></div>
+      {/* divider */}
+      <div className="w-0.5  h-72 rounded-full bg-gray-200 hidden md:block" />
       <div>
     {/* <FileUpload/> */}
     <div className="mt-6 ">
