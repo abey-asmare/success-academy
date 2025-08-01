@@ -15,7 +15,7 @@ export default async function Dashboard() {
 
   const {
     completedCourses,
-    coursesInProgress
+    coursesInProgress,
   } = await getDashboardCourses(userId);
 
   return (

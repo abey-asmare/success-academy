@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { LucideIcon } from "lucide-react"
+import { useSidebar } from "@/components/ui/sidebar"
 
 export function NavMain({
   items,
@@ -28,6 +29,8 @@ export function NavMain({
   const pathname = usePathname();
   
   const isActive = (href: string)=> (pathname === '/dashboard' && href === '/dashboard' || pathname === href || pathname?.startsWith(`${href}/dashbaord`))
+    const { toggleSidebar } = useSidebar()
+  
 
 
   return (
@@ -54,7 +57,7 @@ export function NavMain({
             </Button>
           </SidebarMenuItem> */}
         </SidebarMenu>
-        <SidebarMenu>
+        <SidebarMenu onClick={()=> toggleSidebar()}>
           {items.map((item) => (
             <Link href={item.url} key={item.title}
             className={cn('', 

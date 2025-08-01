@@ -5,6 +5,8 @@ import { CourseMinimized } from "@/types"
 import axios from "axios";
 import { Skeleton } from "./ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
+import { Button } from "./ui/button";
+import Link from "next/link";
 
 
 
@@ -61,9 +63,11 @@ return (
   <p className="text-gray-500">
     {course.description}
   </p>
-  <button className="enroll-in px-4 py-2 font-semibold bg-primary-500 rounded-md text-white">
-    Enroll
-  </button>
+  <Button className="enroll-in px-4 py-2 font-semibold bg-primary-500 hover:bg-primary-600 rounded-md text-white">
+<Link href={`/courses/${course.id}`}>
+Enroll
+</Link>
+  </Button>
 </div>
 </Card>
 )

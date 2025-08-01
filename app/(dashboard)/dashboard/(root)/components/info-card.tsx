@@ -17,16 +17,17 @@ const InfoCard = ({
 }: InfoCardProps) => {
 
     return (
-    <div className='border rounded-md flex items-center gap-x-2 p-3'>
+    <div className='border flex items-center gap-x-2 p-2 px-4 w-fit rounded-full'>
         <IconBadge 
             variant={variant}
             icon={Icon}
+            size="sm"
         />
         <div>
-            <p className='font-medium'>
+            <p className='font-medium text-sm'>
                 {label}
             </p>
-            <p className='text-sm text-gray-500'>
+            <p className='text-xs text-gray-500'>
                 {numberOfItems} courses
             </p>
         </div>

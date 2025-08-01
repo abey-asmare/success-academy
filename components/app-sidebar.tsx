@@ -21,6 +21,8 @@ import { Compass, Layout, List, WalletCards } from "lucide-react"
 import Link from "next/link"
 
 import Image from "next/image"
+import { isAdmin } from "@/utils/roles"
+import useRole from "@/utils/useRole"
 
 const data = {
   guestRoutes: [
@@ -61,6 +63,8 @@ teacherRotues: [
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const role = useRole()
+  console.log('role', role)
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -80,7 +84,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.guestRoutes} />
-        <NavAdmin items={data.teacherRotues} />
+        {
+          role === 'admin' && (
+            <NavAdmin items={data.teacherRotues} />
+          )
+        }
         {/* <NavSecondary items={data.teacherRotues} className="mt-auto" /> */}
       </SidebarContent>
       <SidebarFooter>

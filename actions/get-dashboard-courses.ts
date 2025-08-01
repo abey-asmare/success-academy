@@ -1,7 +1,6 @@
 import { Category, Chapter, Course } from "@/prisma/app/generated/prisma/client";
 import { db } from "@/lib/db";
 import { getProgress } from "./get-progress";
-import { CourseProgressProps } from "@/components/ui/progress";
 
 type CourseWithProgressWithCategory = Course & {
     category: Category;
@@ -45,7 +44,7 @@ export const getDashboardCourses = async (userId: string): Promise<DashboardCour
         // Handle completed and couress in progress
         const completedCourses = courses.filter((course: CourseWithProgressWithCategory) => course.progress === 100);
         // Handle null progress
-        const coursesInProgress = courses.filter((course: CourseWithProgressWithCategory) => course.progress ?? 0);
+        const coursesInProgress = courses.filter((course: CourseWithProgressWithCategory) => course.progress ? course.progress < 100 : course.progress === 0);
 
         return {
             completedCourses,
