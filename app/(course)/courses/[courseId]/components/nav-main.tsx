@@ -1,73 +1,98 @@
 "use client"
 
-import { ChevronRight, type LucideIcon } from "lucide-react"
 
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible"
-import {
   SidebarGroup,
+  SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
+import { cn } from "@/lib/utils"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { Badge } from "@/components/ui/badge"
+import { Lock, NotebookText, PlayCircle, CheckCircle } from "lucide-react"
+
+
+
+export type CourseType = {
+  id: string;
+  chapters: {
+    id: string;
+    title: string;
+    isPublished: boolean;
+    isFree: boolean;
+    position: number;
+    exams: {
+      id: string;
+      title: string;
+      isPublished: boolean;
+      questions: {
+        id: string;
+        title: string;
+        isPublished: boolean;
+      }[];
+    }[];
+    userProgress: {
+      id: string;
+      isCompleted: boolean;
+    }[];
+  }[];
+}
+
 
 export function NavMain({
-  items,
+  course,
+  isLocked,
 }: {
-  items: {
-    title: string
-    url: string
-    icon?: LucideIcon
-    isActive?: boolean
-    items?: {
-      title: string
-      url: string
-    }[]
-  }[]
+  course: CourseType
+  isLocked: boolean
 }) {
+
+  const pathname = usePathname();
+  
+  const isActive = (href: string)=> {
+    return pathname === href
+
+  }
+
+
+
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
-      <SidebarMenu>
-        {items.map((item) => (
-          <Collapsible
-            key={item.title}
-            asChild
-            defaultOpen={item.isActive}
-            className="group/collapsible"
-          >
-            <SidebarMenuItem>
-              <CollapsibleTrigger asChild>
-                <SidebarMenuButton tooltip={item.title}>
-                  {item.icon && <item.icon />}
-                  <span>{item.title}</span>
-                  <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+      <SidebarGroupLabel>Videos</SidebarGroupLabel>
+      <SidebarGroupContent className="flex flex-col gap-2">
+        <SidebarMenu>
+          {course.chapters.map((chapter) => (
+            <Link href={`/courses/${course.id}/chapters/${chapter.id}`} key={chapter.title}
+            className={cn('', 
+              isActive(`/courses/${course.id}/chapters/${chapter.id}`) && 'bg-black/5 rounded-md')}
+            >
+              <SidebarMenuItem className="relative">
+                <SidebarMenuButton tooltip={chapter.title}
+                className={cn(
+                  "flex items-center gap-x-2",
+                  isActive(`/courses/${course.id}/chapters/${chapter.id}`) && "bg-black/5 hover:bg-black/10",
+                )}
+                >
+                  {!chapter.isFree && isLocked ? <Lock /> : (chapter.userProgress?.[0]?.isCompleted ? <CheckCircle /> : <PlayCircle />)}
+
+                  {/* if chanpter has an exam */}
+                  <p className="overflow-hidden text-overflow text-clip line-clamp-1 w-[90%]">{chapter.title}</p>
+                  {chapter.exams.length > 0 && (
+         <Badge variant="default" className="bg-sky-600 hover:bg-sky-700 absolute right-2 z-10">
+          <NotebookText />
+         </Badge>
+        )}
+
                 </SidebarMenuButton>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <SidebarMenuSub>
-                  {item.items?.map((subItem) => (
-                    <SidebarMenuSubItem key={subItem.title}>
-                      <SidebarMenuSubButton asChild>
-                        <a href={subItem.url}>
-                          <span>{subItem.title}</span>
-                        </a>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  ))}
-                </SidebarMenuSub>
-              </CollapsibleContent>
-            </SidebarMenuItem>
-          </Collapsible>
-        ))}
-      </SidebarMenu>
+              </SidebarMenuItem>
+            </Link>
+          ))}
+        </SidebarMenu>
+      </SidebarGroupContent>
     </SidebarGroup>
   )
 }

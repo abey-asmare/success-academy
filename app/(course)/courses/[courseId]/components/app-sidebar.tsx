@@ -1,168 +1,104 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import {
-  AudioWaveform,
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  Map,
-  PieChart,
-  Settings2,
-  SquareTerminal,
-} from "lucide-react"
+import { IconChartBar, IconUsers } from "@tabler/icons-react";
+import * as React from "react";
 
-import { NavMain } from "./nav-main"
-import { TeamSwitcher } from "./team-switcher"
+import { NavMain } from "./nav-main";
 import {
   Sidebar,
   SidebarContent,
   SidebarHeader,
-  SidebarRail,
-} from "@/components/ui/sidebar"
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar";
+import { Compass, Home, Layout, List, WalletCards } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
+import { RouteSwither } from "./route-switcher";
 
-// This is sample data.
+export type CourseType = {
+  id: string;
+
+  chapters: {
+    id: string;
+    title: string;
+    isPublished: boolean;
+    isFree: boolean;
+    position: number;
+    exams: {
+      id: string;
+      title: string;
+      isPublished: boolean;
+      questions: {
+        id: string;
+        title: string;
+        isPublished: boolean;
+      }[];
+    }[];
+    userProgress: {
+      id: string;
+      isCompleted: boolean;
+    }[];
+  }[];
+};
+
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  teams: [
+  routes: [
     {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
+      icon: Home,
+      title: "Success Academy",
+      url: "/",
     },
     {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
+      icon: Layout,
+      title: "Dashboard",
+      url: "/dashboard",
     },
     {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
-  ],
-  navMain: [
-    {
-      title: "Playground",
-      url: "#",
-      icon: SquareTerminal,
-      isActive: true,
-      items: [
-        {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
+      icon: Compass,
+      title: "Browse",
+      url: "/dashboard/search",
     },
     {
-      title: "Models",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
+      icon: List,
+      title: "Courses",
+      url: "/dashboard/teacher/courses",
     },
     {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
+      icon: IconUsers,
+      title: "Users",
+      url: "/dashboard/teacher/users",
     },
     {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
+      icon: WalletCards,
+      title: "Payments",
+      url: "/dashboard/teacher/payment",
+    },
+    {
+      icon: IconChartBar,
+      title: "Analytics",
+      url: "/dashboard/teacher/analytics",
     },
   ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
-    },
-  ],
-}
+};
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({
+  ...props
+}: React.ComponentProps<typeof Sidebar> & {
+  course: CourseType;
+  isLocked: boolean;
+}) {
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} /> 
+        <SidebarHeader>
+          <RouteSwither data={data.routes} /> 
+        </SidebarHeader>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain course={props.course} isLocked={props.isLocked}/>
       </SidebarContent>
-      <SidebarRail />
     </Sidebar>
-  )
+  );
 }
