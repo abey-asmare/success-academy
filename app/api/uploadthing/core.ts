@@ -43,7 +43,6 @@ export const ourFileRouter = {
     chapterVideo: f({video: {maxFileSize: '1GB', maxFileCount: 1}})
     .middleware(handleAuth)
     .onUploadComplete(async ({ metadata, file }) => {
-      console.log("Upload complete for userId:", metadata.userId);
       console.log("file url", file.ufsUrl);
       return { uploadedBy: metadata.userId };
     }) 

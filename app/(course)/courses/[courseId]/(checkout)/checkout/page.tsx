@@ -14,9 +14,10 @@ export default  function CheckoutPage() {
       const onSubmit = async ({imageUrl}: {imageUrl: string}) => {
         try {
           await axios.post(`/api/courses/${courseId}/purchase`, {imageUrl});
-          toast.success("Course updated");
-          // router.refresh();
-          router.push(`/courses/${courseId}`);
+          toast.success("Payment successful. We are processing your payments");
+          setTimeout(() => {
+            router.push(`/courses/${courseId}`);
+          }, 600);
         } catch {
           toast.error("Something went wrong");
         }

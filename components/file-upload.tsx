@@ -18,7 +18,6 @@ export const FileUpload= ({
         onChange(res?.[0].ufsUrl)
     }}
     onUploadError={(error: Error)=> {
-        console.log(error)
         toast.error(error.message)
     }}
     />

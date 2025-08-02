@@ -86,7 +86,6 @@
     });
 
     const onSubmit = async (values: z.infer<typeof examSchema>) => {
-      console.log("onsubmit called");
       try {
         setIsSubmitting(true);
         await axios.put(

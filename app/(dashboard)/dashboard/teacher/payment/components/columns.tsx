@@ -123,11 +123,10 @@ export const columns: ColumnDef<{
           <Badge
             variant={row.getValue("approved") ? "default" : "destructive"}
             className={cn('', 
-              row.getValue("approved") ? "bg-sky-500" : ""
+              row.getValue("approved") ? "bg-emerald-600" : ""
             )}
             >
             {row.getValue("approved") ? "Approved" : "Not Approved"}
-            <ArrowUpDown className="ml-2 h-4 w-4" />
           
           </Badge>
         </div>
@@ -169,7 +168,7 @@ export const columns: ColumnDef<{
                   onClick={async() => {
                     const res = await cancelPayment(row.original.id)
                     if(res.status !== 200) return toast.error('error while canceling payment')
-                    toast.success("successfully cancel payment.")
+                    toast.success("Payment canceled successfully")
                   }}
                 >
                   cancel payment
@@ -183,14 +182,14 @@ export const columns: ColumnDef<{
                   onClick={async() => {
                     const res = await approvePayment(row.original.id)
                     if(res.status !== 200) return toast.error('error while approving payment')
-                    toast.success("successfully approved payment.")
+                    toast.success("Payment approved successfully")
                   }}
                 >
                   approve payment
                 </Button>
               </DropdownMenuItem>
             )}
-          </DropdownMenuContent>
+          </DropdownMenuContent>  
         </DropdownMenu>
       );
     },

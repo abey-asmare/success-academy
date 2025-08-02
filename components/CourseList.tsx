@@ -19,12 +19,12 @@ export default function CourseList({ className}: {className: string}) {
   });
   
 
-  if (error) return <p>Error loading courses</p>;
+  if (error) return <p>Error loading courses. Refresh the page</p>;
 
  
   return (
           <div className={className}>
-        <div className="course-list py-8 md:py-12 space-y-6 md:space-y-8 px-4 md:px-10">
+        <div className="course-list py-8 md:py-12 space-y-4 md:space-y-6 px-4 md:px-10">
         <p className="text-center text-2xl md:text-3xl lg:text-4xl font-semibold">
           Our Popular Courses
         </p>
@@ -56,14 +56,15 @@ return (
     width={500}
     height={500}
     className="w-full h-full"
+    priority
   />
 </div>
-<div className="description space-y-4">
+<div className="description">
   <h3 className="font-semibold">{course.title}</h3>
   <p className="text-gray-500">
     {course.description}
   </p>
-  <Button className="enroll-in px-4 py-2 font-semibold bg-primary-500 hover:bg-primary-600 rounded-md text-white">
+  <Button className="enroll-in px-4 py-1 font-semibold bg-primary-500 hover:bg-primary-600 rounded-md mt-2">
 <Link href={`/courses/${course.id}`}>
 Enroll
 </Link>
@@ -81,7 +82,7 @@ return (
     className="w-[280px] h-[220px]"
   />
 </div>
-<div className="description space-y-4">
+<div className="description space-y-2">
   <Skeleton className="font-semibold"/>
   <Skeleton className="text-gray-500"/>
   <Skeleton className="enroll-in px-4 py-2 font-semibold w-20 h-10 rounded-md text-white"/>

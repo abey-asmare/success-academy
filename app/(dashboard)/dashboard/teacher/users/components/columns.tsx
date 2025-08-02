@@ -24,8 +24,7 @@ async function setRole_(id: string){
   try{
     await setRole(id)
     toast.success("Role updated successfully")
-  }catch(error){
-    console.log(error)
+  }catch{
     toast.error("Failed to update role")
   }
 }
@@ -34,8 +33,7 @@ async function removeRole_(id: string){
   try{
     await removeRole(id)
     toast.success("Role removed successfully")
-  }catch(error){
-    console.log(error)
+  }catch{
     toast.error("Failed to remove role")
   }
 }

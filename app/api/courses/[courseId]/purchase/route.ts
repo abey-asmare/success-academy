@@ -41,8 +41,7 @@ const newPurchase = await db.purchase.create({
 })
 
         return NextResponse.json(newPurchase)
-    }catch(error){
-        console.log(error)
+    }catch{
         return new NextResponse("Internal server error", {status: 500})
     }    
 }

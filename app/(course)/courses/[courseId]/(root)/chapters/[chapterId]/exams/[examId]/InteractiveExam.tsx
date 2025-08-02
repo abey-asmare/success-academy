@@ -88,14 +88,14 @@ export default function InteractiveExam({ exam }: InteractiveExamProps) {
               </h1>
               
               <div className='flex justify-center w-full px-4'>
-                <div className="space-y-2 w-full max-w-4xl">
+                <div className="space-y-4 w-full max-w-4xl">
                   {question.answers.map((answer, answerIndex) => (
                     <div 
                       key={answer.id} 
                       className={cn(
                         'text-gray-600 text-lg border p-1 rounded-sm mx-auto cursor-pointer transition-all duration-200 hover:bg-gray-50 w-full',
                         isAnswerSelected(question.id, answer.id) && 'border-blue-500 bg-blue-50',
-                        showResults && answer.isCorrect && 'border-green-600 border-2 bg-green-50',
+                        showResults && answer.isCorrect && 'border-green-600 border-1 bg-green-50',
                         showResults && isAnswerSelected(question.id, answer.id) && !answer.isCorrect && 'border-red-500 bg-red-50'
                       )}
                       onClick={() => !showResults && handleAnswerSelect(question.id, answer.id)}
@@ -125,38 +125,39 @@ export default function InteractiveExam({ exam }: InteractiveExamProps) {
           ))}
         </div>
 
-        {!showResults ? (
-          <div className="mt-8 flex justify-center px-4">
-            <button
-              onClick={handleSubmit}
-              className="bg-sky-600 hover:bg-sky-700 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200 text-lg"
-            >
-              Submit Exam
-            </button>
-          </div>
-        ) : (
-          <div className="mt-8 px-4">
-            <div className="bg-gray-100 p-6 rounded-lg text-center max-w-2xl mx-auto">
-              <h2 className="text-xl font-bold mb-2">Exam Results</h2>
-              <p className="text-lg">
-                You got <span className="font-bold text-green-600">{getCorrectAnswersCount()}</span> out of{' '}
-                <span className="font-bold">{exam.questions.length}</span> questions correct!
-              </p>
-              <p className="text-gray-600 mt-2">
-                Score: {Math.round((getCorrectAnswersCount() / exam.questions.length) * 100)}%
-              </p>
-              <button
-                onClick={() => {
-                  setShowResults(false);
-                  setSelectedAnswers({});
-                }}
-                className="mt-6 bg-sky-600 hover:bg-sky-700 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200"
-              >
-                Retake Exam
-              </button>
-            </div>
-          </div>
-        )}
+        <div className="mt-8 px-4 min-h-[200px] transition-all duration-300">
+  {!showResults ? (
+    <div className="flex justify-center">
+      <button
+        onClick={handleSubmit}
+        className="bg-sky-600 hover:bg-sky-700 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200 text-lg"
+      >
+        Submit Exam
+      </button>
+    </div>
+  ) : (
+    <div className="bg-gray-100 p-6 rounded-lg text-center max-w-2xl mx-auto">
+      <h2 className="text-xl font-bold mb-2">Exam Results</h2>
+      <p className="text-lg">
+        You got <span className="font-bold text-green-600">{getCorrectAnswersCount()}</span> out of{' '}
+        <span className="font-bold">{exam.questions.length}</span> questions correct!
+      </p>
+      <p className="text-gray-600 mt-2">
+        Score: {Math.round((getCorrectAnswersCount() / exam.questions.length) * 100)}%
+      </p>
+      <button
+        onClick={() => {
+          setShowResults(false);
+          setSelectedAnswers({});
+        }}
+        className="mt-6 bg-sky-600 hover:bg-sky-700 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200"
+      >
+        Retake Exam
+      </button>
+    </div>
+  )}
+</div>
+
       </div>
     </div>
   )

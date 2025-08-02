@@ -51,8 +51,7 @@ export const getDashboardCourses = async (userId: string): Promise<DashboardCour
             coursesInProgress
         }
 
-    } catch (error) {
-        console.log("[GET_DASHBOARD_COURSES]: ", error);
+    }catch {
         return  {
             completedCourses: [],
             coursesInProgress: []

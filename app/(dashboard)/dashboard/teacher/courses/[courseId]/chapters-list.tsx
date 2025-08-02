@@ -48,42 +48,63 @@ export default function ChaptersList({items, onEdit, onReorder}: ChaptersListPro
         onReorder(bulkUpdateData)
     }
   return (
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="chapters">
-          {(provided) => (
-            <div {...provided.droppableProps} ref={provided.innerRef}>
-               {chapters.map((chapter, index) => (
-                <Draggable key={chapter.id} draggableId={chapter.id} index={index}>
-                  {(provided) => (
-                    <div
-                    className={cn('flex itesms-center gap-x-2 bg-slate-200 border-slate-200 border text-slate-700 rounded-md mb-4 text-sm',
-                    chapter.isPublished && 'bg-sky-100 border-sky-100',
-                         index !== chapters.length - 1 && 'mb-2')}
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    >
-                        <div className={cn('px-2 py-3 border-4 border-r-slate-200 hover:bg-slate-300 rounded-l-md transition', chapter.isPublished && 'border-r-sky-200 hover:bg-sky-200')} {...provided.dragHandleProps}>
-                            <Grip className='h-5 w-5 '/>
-                        </div>
-                       {chapter.title} 
-                       <div className="ml-auto pr-2 flex items-center gap-x-2">
-                        {chapter.isFree &&(
-                            <Badge>Free</Badge>
-                        )}
-                        <Badge className={cn('bg-slate-500', chapter.isPublished && "bg-sky-700")}>
-                            {chapter.isPublished ? 'Published' : 'Draft'}
-                        </Badge>
-                        <Pencil onClick={()=> onEdit(chapter.id)} className="cursor-pointer w-4 h-4 hover:opacity-75 transition" />
-                       </div>
-                    </div>
+    <DragDropContext onDragEnd={onDragEnd}>
+    <Droppable droppableId="chapters">
+      {(provided) => (
+        <div {...provided.droppableProps} ref={provided.innerRef} className="space-y-2">
+          {chapters.map((chapter, index) => (
+            <Draggable key={chapter.id} draggableId={chapter.id} index={index}>
+              {(provided, snapshot) => (
+                <div
+                  className={cn(
+                    "flex items-center gap-x-2 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm shadow-sm hover:shadow-md transition-shadow duration-200",
+                    chapter.isPublished && "bg-blue-50 border-blue-200",
+                    snapshot.isDragging && "shadow-lg",
                   )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+                  ref={provided.innerRef}
+                  {...provided.draggableProps}
+                >
+                  <div
+                    className={cn(
+                      "px-3 py-4 border-r border-gray-200 hover:bg-gray-50 rounded-l-lg transition-colors cursor-grab active:cursor-grabbing",
+                      chapter.isPublished && "border-blue-200 hover:bg-blue-100",
+                    )}
+                    {...provided.dragHandleProps}
+                  >
+                    <Grip className="h-4 w-4 text-gray-400" />
+                  </div>
+
+                  <div className="flex-1 py-4 font-medium">{chapter.title}</div>
+
+                  <div className="pr-4 flex items-center gap-x-2">
+                    {chapter.isFree && (
+                      <Badge variant="secondary" className="bg-gray-100 text-gray-600 hover:bg-gray-200">
+                        Free
+                      </Badge>
+                    )}
+                    <Badge
+                      className={cn(
+                        "bg-gray-600 hover:bg-gray-700 text-white",
+                        chapter.isPublished && "bg-blue-600 hover:bg-blue-700",
+                      )}
+                    >
+                      {chapter.isPublished ? "Published" : "Draft"}
+                    </Badge>
+                    <button
+                      onClick={() => onEdit(chapter.id)}
+                      className="p-1 hover:bg-gray-100 rounded transition-colors"
+                    >
+                      <Pencil className="w-4 h-4 text-gray-500 hover:text-gray-700" />
+                    </button>
+                  </div>
+                </div>
+              )}
+            </Draggable>
+          ))}
+          {provided.placeholder}
+        </div>
+      )}
+    </Droppable>
+  </DragDropContext>
   )
 }

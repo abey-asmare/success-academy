@@ -15,7 +15,7 @@ import {
 import { Compass, Home, Layout, List, WalletCards } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { RouteSwither } from "./route-switcher";
+import { RouteSwitcher } from "./route-switcher";
 
 export type CourseType = {
   id: string;
@@ -93,7 +93,7 @@ export function AppSidebar({
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
         <SidebarHeader>
-          <RouteSwither data={data.routes} /> 
+          <RouteSwitcher data={data.routes} /> 
         </SidebarHeader>
       </SidebarHeader>
       <SidebarContent>

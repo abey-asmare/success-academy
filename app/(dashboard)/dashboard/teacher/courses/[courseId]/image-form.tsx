@@ -78,9 +78,6 @@ export const ImageForm = ({
               fill
               className="object-cover rounded-md"
               src={initialData.imageUrl}
-              onError={(e) => {
-                console.error("Image failed to load", e);
-              }}
             />
           </div>
         )
@@ -90,7 +87,6 @@ export const ImageForm = ({
           <FileUpload
             endpoint="courseImage"
             onChange={(url) => {
-              console.log('url', url)
               if (url) {
                 onSubmit({ imageUrl: url });
               }

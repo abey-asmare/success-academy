@@ -125,10 +125,7 @@ function SubmitPaymentForm() {
         if (dialogCloseRef.current) {
           dialogCloseRef.current.click();
         }
-      } catch (error) {
-  
-          console.error("Submission failed:", error);
-  
+      } catch {
       }
     };
   const form = useForm<paymeentFormType>({resolver: zodResolver(paymentFormSchema)})

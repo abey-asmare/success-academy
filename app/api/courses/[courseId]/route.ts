@@ -52,7 +52,6 @@ export async function DELETE(req: NextRequest, {params}: {params: Promise<{cours
 
         return NextResponse.json(deletedCourse)
     }catch(error){
-        console.log(error)
         return new NextResponse("Internal server error", {status: 500})
     }    
 }
@@ -80,8 +79,7 @@ export async function PATCH(req: NextRequest, {params}: {params: Promise<{course
         })
 
         return NextResponse.json(course)
-    }catch(error){
-        console.log(error)
+    }catch{
         return new NextResponse("Internal server error", {status: 500})
     }    
 }

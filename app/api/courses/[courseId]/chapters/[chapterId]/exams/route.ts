@@ -138,7 +138,6 @@ export async function POST(
 
     return NextResponse.json(exam);
   } catch (error) {
-    console.error("[CHAPTER_EXAM_POST]", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
@@ -197,8 +196,7 @@ export async function GET(
     });
 
     return NextResponse.json(exams);
-  } catch (error) {
-    console.error("[CHAPTER_EXAMS_GET]", error);
+  } catch {
     return new NextResponse("Internal Error", { status: 500 });
   }
 }

@@ -40,8 +40,7 @@ export async function POST(req: Request, {params}: {params: Promise<{courseId: s
             }
         })
         return NextResponse.json(chapter)
-    }catch(error){
-        console.log(error)
+    }catch{
         return new NextResponse("Internal server error", {status: 500})
     }    
 }

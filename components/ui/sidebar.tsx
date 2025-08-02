@@ -518,9 +518,6 @@ function SidebarMenuButton({
       data-size={size}
       data-active={isActive}
       className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
-      onClick={() => {
-        console.log("clicked")
-      }}
       {...props}
     />
   )

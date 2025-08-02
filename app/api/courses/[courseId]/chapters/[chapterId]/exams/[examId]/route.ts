@@ -54,7 +54,6 @@ export async function DELETE(
 
     return new NextResponse("OK", { status: 200 });
   } catch (error) {
-    console.error(error);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }
@@ -196,8 +195,7 @@ export async function PUT(
     });
     
     return NextResponse.json(updatedExam);
-  } catch (error) {
-    console.error("[CHAPTER_EXAM_PUT]", error);
+  } catch {
     return new NextResponse("Internal Error", { status: 500 });
   }
 }

@@ -36,7 +36,6 @@ export async function PUT(req: Request, {params}: {params: Promise<{courseId: st
         return NextResponse.json("success", {status: 200})
         
     }catch(error){
-        console.log(error)
         return new NextResponse("Internal server error", {status: 500})
     }
 

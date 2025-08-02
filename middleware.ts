@@ -50,6 +50,7 @@ if (userId && sessionId) {
 
     if (sameTypeSessions.length >= 1) {
       await client.sessions.revokeSession(sessionId)
+      
       // this triggers all the users from the account to log out
       // await Promise.all(
       //   sessions.data.filter((session) => session.id !== sessionId).map((session) => client.sessions.revokeSession(session.id))

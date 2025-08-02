@@ -17,7 +17,6 @@ export async function DELETE(
   { params }: { params: Promise<{ courseId: string; chapterId: string }> }
 ) {
     const {courseId, chapterId} = await params
-    console.log(Video)
   try {
     const { userId } = await auth();
 
@@ -89,8 +88,7 @@ export async function DELETE(
     }
 
     return NextResponse.json(deletedChapter);
-  } catch (error) {
-    console.log("[CHAPTER_ID_DELETE]", error);
+  } catch {
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
@@ -140,8 +138,7 @@ export async function PATCH(
       if (existingMuxData) {
         try {
           await Video.assets.delete(existingMuxData.assetId);
-        } catch (error) {
-          console.log("[Mux Asset Delete]", error);
+        } catch {
         }
         await db.muxData.delete({
           where: {
@@ -156,9 +153,6 @@ export async function PATCH(
           playback_policies: ["public"],
           test: false,
         });
-      
-        console.log("Asset created:", asset);
-      
         if (asset) {
           await db.muxData.create({
             data: {
@@ -168,15 +162,12 @@ export async function PATCH(
             },
           });
         }
-        } catch (error: unknown) {
-          const e = error as Error
-          console.error("[Mux Asset Create Error]", e.message);
+        } catch {
         }
       }
 
       return NextResponse.json(chapter);
-  } catch (error) {
-    console.log("[COURSES_CHAPTER_ID]", error);
+  } catch {
     return new NextResponse("Internal Error", { status: 500 });
   }
 }

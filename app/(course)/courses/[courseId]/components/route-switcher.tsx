@@ -20,7 +20,7 @@ import Image from "next/image"
 import Link from "next/link"
 import useRole from "@/utils/useRole"
 
-export function RouteSwither({
+export function RouteSwitcher({
   data,
 }: {
   data: {
@@ -51,36 +51,37 @@ export function RouteSwither({
                 />
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">Success Academy</span>
+                <Link href="/dashboard"><span className="truncate font-medium">Success Academy</span></Link>
                 <span className="truncate text-xs">/</span>
               </div>
               <ChevronsUpDown className="ml-auto" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
+         {role == 'admin' && 
           <DropdownMenuContent
-            className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
-            align="start"
-            side={isMobile ? "bottom" : "right"}
-            sideOffset={4}
-          >
-            <DropdownMenuLabel className="text-muted-foreground text-xs">
-              Routes
-            </DropdownMenuLabel>
-            {role === 'admin' && data.map((route) => (
-              <DropdownMenuItem
-                key={route.title}
-                className="gap-2 p-2"
-                asChild
-              >
-                <Link href={route.url}>
-                  <div className="flex size-6 items-center justify-center rounded-md border">
-                    <route.icon className="size-3.5 shrink-0" />
-                  </div>
-                  {route.title}
-                </Link>
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
+          className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+          align="start"
+          side={isMobile ? "bottom" : "right"}
+          sideOffset={4}
+        >
+          <DropdownMenuLabel className="text-muted-foreground text-xs">
+            Routes
+          </DropdownMenuLabel>
+          {data.map((route) => (
+            <DropdownMenuItem
+              key={route.title}
+              className="gap-2 p-2"
+              asChild
+            >
+              <Link href={route.url}>
+                <div className="flex size-6 items-center justify-center rounded-md border">
+                  <route.icon className="size-3.5 shrink-0" />
+                </div>
+                {route.title}
+              </Link>
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>}
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>

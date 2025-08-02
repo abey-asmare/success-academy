@@ -46,7 +46,6 @@ export async function PATCH(
       !chapter.description ||
       !chapter.videoUrl
     ) {
-      console.log(chapter, muxData)
       return NextResponse.json({error: "Missing required fields"}, { status: 400 });
     }
 
@@ -61,8 +60,7 @@ export async function PATCH(
     });
 
     return NextResponse.json(publishedChapter);
-  } catch (error) {
-    console.log("[CHAPTER_PUBLISH]", error);
+  } catch {
     return new NextResponse("Internal Error", { status: 500 });
   }
 }

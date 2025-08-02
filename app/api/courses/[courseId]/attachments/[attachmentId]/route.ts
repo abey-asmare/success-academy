@@ -27,8 +27,7 @@ export async function DELETE(req: Request, {params}: {params: Promise<{courseId:
         })
         return NextResponse.json(attachment)
 
-    }catch(error){
-            console.log("attachment id", error)
+    }catch{
             return NextResponse.json({error: "Internal server error"}, {status: 500})
         }
 }

@@ -6,7 +6,7 @@ import {
 } from "@tabler/icons-react"
 import * as React from "react"
 
-import { NavAdmin } from "@/components/nav-documents"
+import { NavAdmin } from "@/components/nav-admin"
 import { NavMain } from "@/components/nav-main"
 import {
   Sidebar,
@@ -42,27 +42,26 @@ teacherRotues: [
         url: '/dashboard/teacher/courses',
     }, 
     {
-        icon: IconChartBar,
-        title: 'Analytics',
-        url: '/dashboard/teacher/analytics',
-    }, 
-    {
-        icon: IconUsers,
-        title: 'Users',
-        url: '/dashboard/teacher/users',
+      icon: IconUsers,
+      title: 'Users',
+      url: '/dashboard/teacher/users',
     },
     {
-        icon: WalletCards,
-        title: 'Payments',
-        url: '/dashboard/teacher/payment',
+      icon: WalletCards,
+      title: 'Payments',
+      url: '/dashboard/teacher/payment',
     },
+    // {
+    //     icon: IconChartBar,
+    //     title: 'Analytics',
+    //     url: '/dashboard/teacher/analytics',
+    // }, 
 
 ]
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const role = useRole()
-  console.log('role', role)
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>

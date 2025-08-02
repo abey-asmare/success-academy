@@ -54,7 +54,6 @@ const CourseIdPage = async ({
     course.price,
     course.chapters.some(chapter => chapter.isPublished),
   ];
-console.log('course', course)
   const totalFields = requiredFields.length;
   const completedFields = requiredFields.filter(Boolean).length;
 
