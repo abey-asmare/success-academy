@@ -60,7 +60,7 @@ export default function ChapterAccessForm({
   };
 
   return (
-    <div className="mt-6 border bg-slate-50 rounded-md p-4">
+    <div className="mt-16 border bg-slate-50 rounded-md p-4 h-fit">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField

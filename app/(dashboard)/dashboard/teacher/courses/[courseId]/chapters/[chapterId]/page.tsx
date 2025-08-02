@@ -10,8 +10,9 @@ import ChapterDescriptionForm from "./components/chapter-description-form";
 import ChapterTitleForm from "./components/chapter-title-form";
 import ChapterVideoForm from "./components/chapter-video-form";
 import DeleteExamButton from "./exam/components/DeleteExamButton";
+import ChapterCategoryForm from "./components/chapter-category-form";
 
-export default async function ChpaterDetails({
+export default async function ChapterDetails({
   params,
 }: {
   params: Promise<{ chapterId: string; courseId: string }>;
@@ -31,6 +32,11 @@ export default async function ChpaterDetails({
   if (!chapter) {
     return redirect("/");
   }
+  const chapterCategories = await db.chapterCategory.findMany({
+    orderBy: {
+      name: "asc",
+    },
+  });
 
   const requiredFields = [chapter.title, chapter.description, chapter.videoUrl];
 
@@ -80,14 +86,23 @@ export default async function ChpaterDetails({
               courseId={courseId}
               chapterId={chapterId}
             />
+               {/* <ChapterCategoryForm
+              initialData={chapter}
+              courseId={courseId}
+              chapterId={chapterId}
+              options={chapterCategories.map((category) => ({
+                label: category.name,
+                value: category.id,
+              }))}
+            /> */}
             
-            <ChapterAccessForm
+            
+            <ChapterDescriptionForm
               initialData={chapter}
               courseId={courseId}
               chapterId={chapterId}
             />
-            
-            <ChapterDescriptionForm
+            <ChapterAccessForm
               initialData={chapter}
               courseId={courseId}
               chapterId={chapterId}

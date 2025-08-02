@@ -37,11 +37,11 @@ const CourseIdPage = async ({
     },
   });
 
-  const categories = await db.category.findMany({
-    orderBy: {
-      name: "asc",
-    },
-  });
+  // const categories = await db.category.findMany({
+  //   orderBy: {
+  //     name: "asc",
+  //   },
+  // });
 
   if (!course) {
     return redirect("/");
@@ -54,7 +54,7 @@ const CourseIdPage = async ({
     course.price,
     course.chapters.some(chapter => chapter.isPublished),
   ];
-
+console.log('course', course)
   const totalFields = requiredFields.length;
   const completedFields = requiredFields.filter(Boolean).length;
 
@@ -86,47 +86,51 @@ const CourseIdPage = async ({
           />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
+          <div className="flex flex-col">
+
             <TitleForm
               initialData={course}
               courseId={course.id}
-            />
+              />
+              </div>
 
+              <div className="flex flex-col">
+  
+                <PriceForm
+                  initialData={course}
+                  courseId={course.id}
+                />
+              </div>
 
-            <CategoryForm
+            {/* <CategoryForm
               initialData={course}
               courseId={course.id}
               options={categories.map((category) => ({
                 label: category.name,
                 value: category.id,
               }))}
-            />
-            <div>
+            /> */}
+            <div className="flex flex-col">
               <ChaptersForm
                 initialData={course}
                 courseId={course.id}
               />
             </div>
-            <div>
-
-              <PriceForm
-                initialData={course}
-                courseId={course.id}
-              />
-            </div>
+              
+            <div className="flex flex-col mt-6">
             <DescriptionForm
               initialData={course}
               courseId={course.id}
             />
-            <div>
-              
             </div>
-            <div>
+
+            <div className="flex flex-col">
               <ImageForm
                 initialData={course}
                 courseId={course.id}
               />
             </div>
-            <div>
+            <div className="flex flex-col">
               <AttachmentForm
                 initialData={course}
                 courseId={course.id}

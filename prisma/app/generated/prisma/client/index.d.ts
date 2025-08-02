@@ -19,6 +19,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type Chapter = $Result.DefaultSelection<Prisma.$ChapterPayload>
 /**
+ * Model ChapterCategory
+ * 
+ */
+export type ChapterCategory = $Result.DefaultSelection<Prisma.$ChapterCategoryPayload>
+/**
  * Model Course
  * 
  */
@@ -198,6 +203,16 @@ export class PrismaClient<
     * ```
     */
   get chapter(): Prisma.ChapterDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.chapterCategory`: Exposes CRUD operations for the **ChapterCategory** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ChapterCategories
+    * const chapterCategories = await prisma.chapterCategory.findMany()
+    * ```
+    */
+  get chapterCategory(): Prisma.ChapterCategoryDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.course`: Exposes CRUD operations for the **Course** model.
@@ -729,6 +744,7 @@ export namespace Prisma {
 
   export const ModelName: {
     Chapter: 'Chapter',
+    ChapterCategory: 'ChapterCategory',
     Course: 'Course',
     Attachment: 'Attachment',
     Category: 'Category',
@@ -756,7 +772,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "chapter" | "course" | "attachment" | "category" | "muxData" | "userProgress" | "purchase" | "exam" | "question" | "answer"
+      modelProps: "chapter" | "chapterCategory" | "course" | "attachment" | "category" | "muxData" | "userProgress" | "purchase" | "exam" | "question" | "answer"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -831,6 +847,80 @@ export namespace Prisma {
           count: {
             args: Prisma.ChapterCountArgs<ExtArgs>
             result: $Utils.Optional<ChapterCountAggregateOutputType> | number
+          }
+        }
+      }
+      ChapterCategory: {
+        payload: Prisma.$ChapterCategoryPayload<ExtArgs>
+        fields: Prisma.ChapterCategoryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ChapterCategoryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChapterCategoryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ChapterCategoryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChapterCategoryPayload>
+          }
+          findFirst: {
+            args: Prisma.ChapterCategoryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChapterCategoryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ChapterCategoryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChapterCategoryPayload>
+          }
+          findMany: {
+            args: Prisma.ChapterCategoryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChapterCategoryPayload>[]
+          }
+          create: {
+            args: Prisma.ChapterCategoryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChapterCategoryPayload>
+          }
+          createMany: {
+            args: Prisma.ChapterCategoryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ChapterCategoryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChapterCategoryPayload>[]
+          }
+          delete: {
+            args: Prisma.ChapterCategoryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChapterCategoryPayload>
+          }
+          update: {
+            args: Prisma.ChapterCategoryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChapterCategoryPayload>
+          }
+          deleteMany: {
+            args: Prisma.ChapterCategoryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ChapterCategoryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ChapterCategoryUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChapterCategoryPayload>[]
+          }
+          upsert: {
+            args: Prisma.ChapterCategoryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChapterCategoryPayload>
+          }
+          aggregate: {
+            args: Prisma.ChapterCategoryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateChapterCategory>
+          }
+          groupBy: {
+            args: Prisma.ChapterCategoryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ChapterCategoryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ChapterCategoryCountArgs<ExtArgs>
+            result: $Utils.Optional<ChapterCategoryCountAggregateOutputType> | number
           }
         }
       }
@@ -1593,6 +1683,7 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     chapter?: ChapterOmit
+    chapterCategory?: ChapterCategoryOmit
     course?: CourseOmit
     attachment?: AttachmentOmit
     category?: CategoryOmit
@@ -1733,6 +1824,37 @@ export namespace Prisma {
    */
   export type ChapterCountOutputTypeCountExamsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ExamWhereInput
+  }
+
+
+  /**
+   * Count Type ChapterCategoryCountOutputType
+   */
+
+  export type ChapterCategoryCountOutputType = {
+    chapters: number
+  }
+
+  export type ChapterCategoryCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    chapters?: boolean | ChapterCategoryCountOutputTypeCountChaptersArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ChapterCategoryCountOutputType without action
+   */
+  export type ChapterCategoryCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChapterCategoryCountOutputType
+     */
+    select?: ChapterCategoryCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ChapterCategoryCountOutputType without action
+   */
+  export type ChapterCategoryCountOutputTypeCountChaptersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ChapterWhereInput
   }
 
 
@@ -1911,6 +2033,7 @@ export namespace Prisma {
     isPublished: boolean | null
     isFree: boolean | null
     courseId: string | null
+    categoryId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1924,6 +2047,7 @@ export namespace Prisma {
     isPublished: boolean | null
     isFree: boolean | null
     courseId: string | null
+    categoryId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1937,6 +2061,7 @@ export namespace Prisma {
     isPublished: number
     isFree: number
     courseId: number
+    categoryId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -1960,6 +2085,7 @@ export namespace Prisma {
     isPublished?: true
     isFree?: true
     courseId?: true
+    categoryId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1973,6 +2099,7 @@ export namespace Prisma {
     isPublished?: true
     isFree?: true
     courseId?: true
+    categoryId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1986,6 +2113,7 @@ export namespace Prisma {
     isPublished?: true
     isFree?: true
     courseId?: true
+    categoryId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -2086,6 +2214,7 @@ export namespace Prisma {
     isPublished: boolean
     isFree: boolean
     courseId: string
+    categoryId: string | null
     createdAt: Date
     updatedAt: Date
     _count: ChapterCountAggregateOutputType | null
@@ -2118,12 +2247,14 @@ export namespace Prisma {
     isPublished?: boolean
     isFree?: boolean
     courseId?: boolean
+    categoryId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     muxData?: boolean | Chapter$muxDataArgs<ExtArgs>
     course?: boolean | CourseDefaultArgs<ExtArgs>
     userProgress?: boolean | Chapter$userProgressArgs<ExtArgs>
     exams?: boolean | Chapter$examsArgs<ExtArgs>
+    category?: boolean | Chapter$categoryArgs<ExtArgs>
     _count?: boolean | ChapterCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["chapter"]>
 
@@ -2136,9 +2267,11 @@ export namespace Prisma {
     isPublished?: boolean
     isFree?: boolean
     courseId?: boolean
+    categoryId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     course?: boolean | CourseDefaultArgs<ExtArgs>
+    category?: boolean | Chapter$categoryArgs<ExtArgs>
   }, ExtArgs["result"]["chapter"]>
 
   export type ChapterSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2150,9 +2283,11 @@ export namespace Prisma {
     isPublished?: boolean
     isFree?: boolean
     courseId?: boolean
+    categoryId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     course?: boolean | CourseDefaultArgs<ExtArgs>
+    category?: boolean | Chapter$categoryArgs<ExtArgs>
   }, ExtArgs["result"]["chapter"]>
 
   export type ChapterSelectScalar = {
@@ -2164,23 +2299,27 @@ export namespace Prisma {
     isPublished?: boolean
     isFree?: boolean
     courseId?: boolean
+    categoryId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ChapterOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "videoUrl" | "position" | "isPublished" | "isFree" | "courseId" | "createdAt" | "updatedAt", ExtArgs["result"]["chapter"]>
+  export type ChapterOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "videoUrl" | "position" | "isPublished" | "isFree" | "courseId" | "categoryId" | "createdAt" | "updatedAt", ExtArgs["result"]["chapter"]>
   export type ChapterInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     muxData?: boolean | Chapter$muxDataArgs<ExtArgs>
     course?: boolean | CourseDefaultArgs<ExtArgs>
     userProgress?: boolean | Chapter$userProgressArgs<ExtArgs>
     exams?: boolean | Chapter$examsArgs<ExtArgs>
+    category?: boolean | Chapter$categoryArgs<ExtArgs>
     _count?: boolean | ChapterCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ChapterIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     course?: boolean | CourseDefaultArgs<ExtArgs>
+    category?: boolean | Chapter$categoryArgs<ExtArgs>
   }
   export type ChapterIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     course?: boolean | CourseDefaultArgs<ExtArgs>
+    category?: boolean | Chapter$categoryArgs<ExtArgs>
   }
 
   export type $ChapterPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2190,6 +2329,7 @@ export namespace Prisma {
       course: Prisma.$CoursePayload<ExtArgs>
       userProgress: Prisma.$UserProgressPayload<ExtArgs>[]
       exams: Prisma.$ExamPayload<ExtArgs>[]
+      category: Prisma.$ChapterCategoryPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2200,6 +2340,7 @@ export namespace Prisma {
       isPublished: boolean
       isFree: boolean
       courseId: string
+      categoryId: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["chapter"]>
@@ -2600,6 +2741,7 @@ export namespace Prisma {
     course<T extends CourseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CourseDefaultArgs<ExtArgs>>): Prisma__CourseClient<$Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     userProgress<T extends Chapter$userProgressArgs<ExtArgs> = {}>(args?: Subset<T, Chapter$userProgressArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     exams<T extends Chapter$examsArgs<ExtArgs> = {}>(args?: Subset<T, Chapter$examsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    category<T extends Chapter$categoryArgs<ExtArgs> = {}>(args?: Subset<T, Chapter$categoryArgs<ExtArgs>>): Prisma__ChapterCategoryClient<$Result.GetResult<Prisma.$ChapterCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2637,6 +2779,7 @@ export namespace Prisma {
     readonly isPublished: FieldRef<"Chapter", 'Boolean'>
     readonly isFree: FieldRef<"Chapter", 'Boolean'>
     readonly courseId: FieldRef<"Chapter", 'String'>
+    readonly categoryId: FieldRef<"Chapter", 'String'>
     readonly createdAt: FieldRef<"Chapter", 'DateTime'>
     readonly updatedAt: FieldRef<"Chapter", 'DateTime'>
   }
@@ -3102,6 +3245,25 @@ export namespace Prisma {
   }
 
   /**
+   * Chapter.category
+   */
+  export type Chapter$categoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChapterCategory
+     */
+    select?: ChapterCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChapterCategory
+     */
+    omit?: ChapterCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChapterCategoryInclude<ExtArgs> | null
+    where?: ChapterCategoryWhereInput
+  }
+
+  /**
    * Chapter without action
    */
   export type ChapterDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3117,6 +3279,1063 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: ChapterInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ChapterCategory
+   */
+
+  export type AggregateChapterCategory = {
+    _count: ChapterCategoryCountAggregateOutputType | null
+    _min: ChapterCategoryMinAggregateOutputType | null
+    _max: ChapterCategoryMaxAggregateOutputType | null
+  }
+
+  export type ChapterCategoryMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ChapterCategoryMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ChapterCategoryCountAggregateOutputType = {
+    id: number
+    name: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ChapterCategoryMinAggregateInputType = {
+    id?: true
+    name?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ChapterCategoryMaxAggregateInputType = {
+    id?: true
+    name?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ChapterCategoryCountAggregateInputType = {
+    id?: true
+    name?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ChapterCategoryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ChapterCategory to aggregate.
+     */
+    where?: ChapterCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ChapterCategories to fetch.
+     */
+    orderBy?: ChapterCategoryOrderByWithRelationInput | ChapterCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ChapterCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ChapterCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ChapterCategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ChapterCategories
+    **/
+    _count?: true | ChapterCategoryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ChapterCategoryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ChapterCategoryMaxAggregateInputType
+  }
+
+  export type GetChapterCategoryAggregateType<T extends ChapterCategoryAggregateArgs> = {
+        [P in keyof T & keyof AggregateChapterCategory]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateChapterCategory[P]>
+      : GetScalarType<T[P], AggregateChapterCategory[P]>
+  }
+
+
+
+
+  export type ChapterCategoryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ChapterCategoryWhereInput
+    orderBy?: ChapterCategoryOrderByWithAggregationInput | ChapterCategoryOrderByWithAggregationInput[]
+    by: ChapterCategoryScalarFieldEnum[] | ChapterCategoryScalarFieldEnum
+    having?: ChapterCategoryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ChapterCategoryCountAggregateInputType | true
+    _min?: ChapterCategoryMinAggregateInputType
+    _max?: ChapterCategoryMaxAggregateInputType
+  }
+
+  export type ChapterCategoryGroupByOutputType = {
+    id: string
+    name: string
+    createdAt: Date
+    updatedAt: Date
+    _count: ChapterCategoryCountAggregateOutputType | null
+    _min: ChapterCategoryMinAggregateOutputType | null
+    _max: ChapterCategoryMaxAggregateOutputType | null
+  }
+
+  type GetChapterCategoryGroupByPayload<T extends ChapterCategoryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ChapterCategoryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ChapterCategoryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ChapterCategoryGroupByOutputType[P]>
+            : GetScalarType<T[P], ChapterCategoryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ChapterCategorySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    chapters?: boolean | ChapterCategory$chaptersArgs<ExtArgs>
+    _count?: boolean | ChapterCategoryCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["chapterCategory"]>
+
+  export type ChapterCategorySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["chapterCategory"]>
+
+  export type ChapterCategorySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["chapterCategory"]>
+
+  export type ChapterCategorySelectScalar = {
+    id?: boolean
+    name?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ChapterCategoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "createdAt" | "updatedAt", ExtArgs["result"]["chapterCategory"]>
+  export type ChapterCategoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    chapters?: boolean | ChapterCategory$chaptersArgs<ExtArgs>
+    _count?: boolean | ChapterCategoryCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ChapterCategoryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type ChapterCategoryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $ChapterCategoryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ChapterCategory"
+    objects: {
+      chapters: Prisma.$ChapterPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["chapterCategory"]>
+    composites: {}
+  }
+
+  type ChapterCategoryGetPayload<S extends boolean | null | undefined | ChapterCategoryDefaultArgs> = $Result.GetResult<Prisma.$ChapterCategoryPayload, S>
+
+  type ChapterCategoryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ChapterCategoryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ChapterCategoryCountAggregateInputType | true
+    }
+
+  export interface ChapterCategoryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ChapterCategory'], meta: { name: 'ChapterCategory' } }
+    /**
+     * Find zero or one ChapterCategory that matches the filter.
+     * @param {ChapterCategoryFindUniqueArgs} args - Arguments to find a ChapterCategory
+     * @example
+     * // Get one ChapterCategory
+     * const chapterCategory = await prisma.chapterCategory.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ChapterCategoryFindUniqueArgs>(args: SelectSubset<T, ChapterCategoryFindUniqueArgs<ExtArgs>>): Prisma__ChapterCategoryClient<$Result.GetResult<Prisma.$ChapterCategoryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ChapterCategory that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ChapterCategoryFindUniqueOrThrowArgs} args - Arguments to find a ChapterCategory
+     * @example
+     * // Get one ChapterCategory
+     * const chapterCategory = await prisma.chapterCategory.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ChapterCategoryFindUniqueOrThrowArgs>(args: SelectSubset<T, ChapterCategoryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ChapterCategoryClient<$Result.GetResult<Prisma.$ChapterCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ChapterCategory that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChapterCategoryFindFirstArgs} args - Arguments to find a ChapterCategory
+     * @example
+     * // Get one ChapterCategory
+     * const chapterCategory = await prisma.chapterCategory.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ChapterCategoryFindFirstArgs>(args?: SelectSubset<T, ChapterCategoryFindFirstArgs<ExtArgs>>): Prisma__ChapterCategoryClient<$Result.GetResult<Prisma.$ChapterCategoryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ChapterCategory that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChapterCategoryFindFirstOrThrowArgs} args - Arguments to find a ChapterCategory
+     * @example
+     * // Get one ChapterCategory
+     * const chapterCategory = await prisma.chapterCategory.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ChapterCategoryFindFirstOrThrowArgs>(args?: SelectSubset<T, ChapterCategoryFindFirstOrThrowArgs<ExtArgs>>): Prisma__ChapterCategoryClient<$Result.GetResult<Prisma.$ChapterCategoryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ChapterCategories that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChapterCategoryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ChapterCategories
+     * const chapterCategories = await prisma.chapterCategory.findMany()
+     * 
+     * // Get first 10 ChapterCategories
+     * const chapterCategories = await prisma.chapterCategory.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const chapterCategoryWithIdOnly = await prisma.chapterCategory.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ChapterCategoryFindManyArgs>(args?: SelectSubset<T, ChapterCategoryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChapterCategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ChapterCategory.
+     * @param {ChapterCategoryCreateArgs} args - Arguments to create a ChapterCategory.
+     * @example
+     * // Create one ChapterCategory
+     * const ChapterCategory = await prisma.chapterCategory.create({
+     *   data: {
+     *     // ... data to create a ChapterCategory
+     *   }
+     * })
+     * 
+     */
+    create<T extends ChapterCategoryCreateArgs>(args: SelectSubset<T, ChapterCategoryCreateArgs<ExtArgs>>): Prisma__ChapterCategoryClient<$Result.GetResult<Prisma.$ChapterCategoryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ChapterCategories.
+     * @param {ChapterCategoryCreateManyArgs} args - Arguments to create many ChapterCategories.
+     * @example
+     * // Create many ChapterCategories
+     * const chapterCategory = await prisma.chapterCategory.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ChapterCategoryCreateManyArgs>(args?: SelectSubset<T, ChapterCategoryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ChapterCategories and returns the data saved in the database.
+     * @param {ChapterCategoryCreateManyAndReturnArgs} args - Arguments to create many ChapterCategories.
+     * @example
+     * // Create many ChapterCategories
+     * const chapterCategory = await prisma.chapterCategory.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ChapterCategories and only return the `id`
+     * const chapterCategoryWithIdOnly = await prisma.chapterCategory.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ChapterCategoryCreateManyAndReturnArgs>(args?: SelectSubset<T, ChapterCategoryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChapterCategoryPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ChapterCategory.
+     * @param {ChapterCategoryDeleteArgs} args - Arguments to delete one ChapterCategory.
+     * @example
+     * // Delete one ChapterCategory
+     * const ChapterCategory = await prisma.chapterCategory.delete({
+     *   where: {
+     *     // ... filter to delete one ChapterCategory
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ChapterCategoryDeleteArgs>(args: SelectSubset<T, ChapterCategoryDeleteArgs<ExtArgs>>): Prisma__ChapterCategoryClient<$Result.GetResult<Prisma.$ChapterCategoryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ChapterCategory.
+     * @param {ChapterCategoryUpdateArgs} args - Arguments to update one ChapterCategory.
+     * @example
+     * // Update one ChapterCategory
+     * const chapterCategory = await prisma.chapterCategory.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ChapterCategoryUpdateArgs>(args: SelectSubset<T, ChapterCategoryUpdateArgs<ExtArgs>>): Prisma__ChapterCategoryClient<$Result.GetResult<Prisma.$ChapterCategoryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ChapterCategories.
+     * @param {ChapterCategoryDeleteManyArgs} args - Arguments to filter ChapterCategories to delete.
+     * @example
+     * // Delete a few ChapterCategories
+     * const { count } = await prisma.chapterCategory.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ChapterCategoryDeleteManyArgs>(args?: SelectSubset<T, ChapterCategoryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ChapterCategories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChapterCategoryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ChapterCategories
+     * const chapterCategory = await prisma.chapterCategory.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ChapterCategoryUpdateManyArgs>(args: SelectSubset<T, ChapterCategoryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ChapterCategories and returns the data updated in the database.
+     * @param {ChapterCategoryUpdateManyAndReturnArgs} args - Arguments to update many ChapterCategories.
+     * @example
+     * // Update many ChapterCategories
+     * const chapterCategory = await prisma.chapterCategory.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ChapterCategories and only return the `id`
+     * const chapterCategoryWithIdOnly = await prisma.chapterCategory.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ChapterCategoryUpdateManyAndReturnArgs>(args: SelectSubset<T, ChapterCategoryUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChapterCategoryPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ChapterCategory.
+     * @param {ChapterCategoryUpsertArgs} args - Arguments to update or create a ChapterCategory.
+     * @example
+     * // Update or create a ChapterCategory
+     * const chapterCategory = await prisma.chapterCategory.upsert({
+     *   create: {
+     *     // ... data to create a ChapterCategory
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ChapterCategory we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ChapterCategoryUpsertArgs>(args: SelectSubset<T, ChapterCategoryUpsertArgs<ExtArgs>>): Prisma__ChapterCategoryClient<$Result.GetResult<Prisma.$ChapterCategoryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ChapterCategories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChapterCategoryCountArgs} args - Arguments to filter ChapterCategories to count.
+     * @example
+     * // Count the number of ChapterCategories
+     * const count = await prisma.chapterCategory.count({
+     *   where: {
+     *     // ... the filter for the ChapterCategories we want to count
+     *   }
+     * })
+    **/
+    count<T extends ChapterCategoryCountArgs>(
+      args?: Subset<T, ChapterCategoryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ChapterCategoryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ChapterCategory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChapterCategoryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ChapterCategoryAggregateArgs>(args: Subset<T, ChapterCategoryAggregateArgs>): Prisma.PrismaPromise<GetChapterCategoryAggregateType<T>>
+
+    /**
+     * Group by ChapterCategory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChapterCategoryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ChapterCategoryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ChapterCategoryGroupByArgs['orderBy'] }
+        : { orderBy?: ChapterCategoryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ChapterCategoryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetChapterCategoryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ChapterCategory model
+   */
+  readonly fields: ChapterCategoryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ChapterCategory.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ChapterCategoryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    chapters<T extends ChapterCategory$chaptersArgs<ExtArgs> = {}>(args?: Subset<T, ChapterCategory$chaptersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChapterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ChapterCategory model
+   */
+  interface ChapterCategoryFieldRefs {
+    readonly id: FieldRef<"ChapterCategory", 'String'>
+    readonly name: FieldRef<"ChapterCategory", 'String'>
+    readonly createdAt: FieldRef<"ChapterCategory", 'DateTime'>
+    readonly updatedAt: FieldRef<"ChapterCategory", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ChapterCategory findUnique
+   */
+  export type ChapterCategoryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChapterCategory
+     */
+    select?: ChapterCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChapterCategory
+     */
+    omit?: ChapterCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChapterCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which ChapterCategory to fetch.
+     */
+    where: ChapterCategoryWhereUniqueInput
+  }
+
+  /**
+   * ChapterCategory findUniqueOrThrow
+   */
+  export type ChapterCategoryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChapterCategory
+     */
+    select?: ChapterCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChapterCategory
+     */
+    omit?: ChapterCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChapterCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which ChapterCategory to fetch.
+     */
+    where: ChapterCategoryWhereUniqueInput
+  }
+
+  /**
+   * ChapterCategory findFirst
+   */
+  export type ChapterCategoryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChapterCategory
+     */
+    select?: ChapterCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChapterCategory
+     */
+    omit?: ChapterCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChapterCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which ChapterCategory to fetch.
+     */
+    where?: ChapterCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ChapterCategories to fetch.
+     */
+    orderBy?: ChapterCategoryOrderByWithRelationInput | ChapterCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ChapterCategories.
+     */
+    cursor?: ChapterCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ChapterCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ChapterCategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ChapterCategories.
+     */
+    distinct?: ChapterCategoryScalarFieldEnum | ChapterCategoryScalarFieldEnum[]
+  }
+
+  /**
+   * ChapterCategory findFirstOrThrow
+   */
+  export type ChapterCategoryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChapterCategory
+     */
+    select?: ChapterCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChapterCategory
+     */
+    omit?: ChapterCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChapterCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which ChapterCategory to fetch.
+     */
+    where?: ChapterCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ChapterCategories to fetch.
+     */
+    orderBy?: ChapterCategoryOrderByWithRelationInput | ChapterCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ChapterCategories.
+     */
+    cursor?: ChapterCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ChapterCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ChapterCategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ChapterCategories.
+     */
+    distinct?: ChapterCategoryScalarFieldEnum | ChapterCategoryScalarFieldEnum[]
+  }
+
+  /**
+   * ChapterCategory findMany
+   */
+  export type ChapterCategoryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChapterCategory
+     */
+    select?: ChapterCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChapterCategory
+     */
+    omit?: ChapterCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChapterCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which ChapterCategories to fetch.
+     */
+    where?: ChapterCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ChapterCategories to fetch.
+     */
+    orderBy?: ChapterCategoryOrderByWithRelationInput | ChapterCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ChapterCategories.
+     */
+    cursor?: ChapterCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ChapterCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ChapterCategories.
+     */
+    skip?: number
+    distinct?: ChapterCategoryScalarFieldEnum | ChapterCategoryScalarFieldEnum[]
+  }
+
+  /**
+   * ChapterCategory create
+   */
+  export type ChapterCategoryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChapterCategory
+     */
+    select?: ChapterCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChapterCategory
+     */
+    omit?: ChapterCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChapterCategoryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ChapterCategory.
+     */
+    data: XOR<ChapterCategoryCreateInput, ChapterCategoryUncheckedCreateInput>
+  }
+
+  /**
+   * ChapterCategory createMany
+   */
+  export type ChapterCategoryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ChapterCategories.
+     */
+    data: ChapterCategoryCreateManyInput | ChapterCategoryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ChapterCategory createManyAndReturn
+   */
+  export type ChapterCategoryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChapterCategory
+     */
+    select?: ChapterCategorySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChapterCategory
+     */
+    omit?: ChapterCategoryOmit<ExtArgs> | null
+    /**
+     * The data used to create many ChapterCategories.
+     */
+    data: ChapterCategoryCreateManyInput | ChapterCategoryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ChapterCategory update
+   */
+  export type ChapterCategoryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChapterCategory
+     */
+    select?: ChapterCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChapterCategory
+     */
+    omit?: ChapterCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChapterCategoryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ChapterCategory.
+     */
+    data: XOR<ChapterCategoryUpdateInput, ChapterCategoryUncheckedUpdateInput>
+    /**
+     * Choose, which ChapterCategory to update.
+     */
+    where: ChapterCategoryWhereUniqueInput
+  }
+
+  /**
+   * ChapterCategory updateMany
+   */
+  export type ChapterCategoryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ChapterCategories.
+     */
+    data: XOR<ChapterCategoryUpdateManyMutationInput, ChapterCategoryUncheckedUpdateManyInput>
+    /**
+     * Filter which ChapterCategories to update
+     */
+    where?: ChapterCategoryWhereInput
+    /**
+     * Limit how many ChapterCategories to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ChapterCategory updateManyAndReturn
+   */
+  export type ChapterCategoryUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChapterCategory
+     */
+    select?: ChapterCategorySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChapterCategory
+     */
+    omit?: ChapterCategoryOmit<ExtArgs> | null
+    /**
+     * The data used to update ChapterCategories.
+     */
+    data: XOR<ChapterCategoryUpdateManyMutationInput, ChapterCategoryUncheckedUpdateManyInput>
+    /**
+     * Filter which ChapterCategories to update
+     */
+    where?: ChapterCategoryWhereInput
+    /**
+     * Limit how many ChapterCategories to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ChapterCategory upsert
+   */
+  export type ChapterCategoryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChapterCategory
+     */
+    select?: ChapterCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChapterCategory
+     */
+    omit?: ChapterCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChapterCategoryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ChapterCategory to update in case it exists.
+     */
+    where: ChapterCategoryWhereUniqueInput
+    /**
+     * In case the ChapterCategory found by the `where` argument doesn't exist, create a new ChapterCategory with this data.
+     */
+    create: XOR<ChapterCategoryCreateInput, ChapterCategoryUncheckedCreateInput>
+    /**
+     * In case the ChapterCategory was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ChapterCategoryUpdateInput, ChapterCategoryUncheckedUpdateInput>
+  }
+
+  /**
+   * ChapterCategory delete
+   */
+  export type ChapterCategoryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChapterCategory
+     */
+    select?: ChapterCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChapterCategory
+     */
+    omit?: ChapterCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChapterCategoryInclude<ExtArgs> | null
+    /**
+     * Filter which ChapterCategory to delete.
+     */
+    where: ChapterCategoryWhereUniqueInput
+  }
+
+  /**
+   * ChapterCategory deleteMany
+   */
+  export type ChapterCategoryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ChapterCategories to delete
+     */
+    where?: ChapterCategoryWhereInput
+    /**
+     * Limit how many ChapterCategories to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ChapterCategory.chapters
+   */
+  export type ChapterCategory$chaptersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Chapter
+     */
+    select?: ChapterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Chapter
+     */
+    omit?: ChapterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChapterInclude<ExtArgs> | null
+    where?: ChapterWhereInput
+    orderBy?: ChapterOrderByWithRelationInput | ChapterOrderByWithRelationInput[]
+    cursor?: ChapterWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ChapterScalarFieldEnum | ChapterScalarFieldEnum[]
+  }
+
+  /**
+   * ChapterCategory without action
+   */
+  export type ChapterCategoryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChapterCategory
+     */
+    select?: ChapterCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChapterCategory
+     */
+    omit?: ChapterCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChapterCategoryInclude<ExtArgs> | null
   }
 
 
@@ -12980,11 +14199,22 @@ export namespace Prisma {
     isPublished: 'isPublished',
     isFree: 'isFree',
     courseId: 'courseId',
+    categoryId: 'categoryId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
 
   export type ChapterScalarFieldEnum = (typeof ChapterScalarFieldEnum)[keyof typeof ChapterScalarFieldEnum]
+
+
+  export const ChapterCategoryScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ChapterCategoryScalarFieldEnum = (typeof ChapterCategoryScalarFieldEnum)[keyof typeof ChapterCategoryScalarFieldEnum]
 
 
   export const CourseScalarFieldEnum: {
@@ -13201,12 +14431,14 @@ export namespace Prisma {
     isPublished?: BoolFilter<"Chapter"> | boolean
     isFree?: BoolFilter<"Chapter"> | boolean
     courseId?: StringFilter<"Chapter"> | string
+    categoryId?: StringNullableFilter<"Chapter"> | string | null
     createdAt?: DateTimeFilter<"Chapter"> | Date | string
     updatedAt?: DateTimeFilter<"Chapter"> | Date | string
     muxData?: XOR<MuxDataNullableScalarRelationFilter, MuxDataWhereInput> | null
     course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
     userProgress?: UserProgressListRelationFilter
     exams?: ExamListRelationFilter
+    category?: XOR<ChapterCategoryNullableScalarRelationFilter, ChapterCategoryWhereInput> | null
   }
 
   export type ChapterOrderByWithRelationInput = {
@@ -13218,12 +14450,14 @@ export namespace Prisma {
     isPublished?: SortOrder
     isFree?: SortOrder
     courseId?: SortOrder
+    categoryId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     muxData?: MuxDataOrderByWithRelationInput
     course?: CourseOrderByWithRelationInput
     userProgress?: UserProgressOrderByRelationAggregateInput
     exams?: ExamOrderByRelationAggregateInput
+    category?: ChapterCategoryOrderByWithRelationInput
   }
 
   export type ChapterWhereUniqueInput = Prisma.AtLeast<{
@@ -13238,12 +14472,14 @@ export namespace Prisma {
     isPublished?: BoolFilter<"Chapter"> | boolean
     isFree?: BoolFilter<"Chapter"> | boolean
     courseId?: StringFilter<"Chapter"> | string
+    categoryId?: StringNullableFilter<"Chapter"> | string | null
     createdAt?: DateTimeFilter<"Chapter"> | Date | string
     updatedAt?: DateTimeFilter<"Chapter"> | Date | string
     muxData?: XOR<MuxDataNullableScalarRelationFilter, MuxDataWhereInput> | null
     course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
     userProgress?: UserProgressListRelationFilter
     exams?: ExamListRelationFilter
+    category?: XOR<ChapterCategoryNullableScalarRelationFilter, ChapterCategoryWhereInput> | null
   }, "id">
 
   export type ChapterOrderByWithAggregationInput = {
@@ -13255,6 +14491,7 @@ export namespace Prisma {
     isPublished?: SortOrder
     isFree?: SortOrder
     courseId?: SortOrder
+    categoryId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ChapterCountOrderByAggregateInput
@@ -13276,8 +14513,59 @@ export namespace Prisma {
     isPublished?: BoolWithAggregatesFilter<"Chapter"> | boolean
     isFree?: BoolWithAggregatesFilter<"Chapter"> | boolean
     courseId?: StringWithAggregatesFilter<"Chapter"> | string
+    categoryId?: StringNullableWithAggregatesFilter<"Chapter"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Chapter"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Chapter"> | Date | string
+  }
+
+  export type ChapterCategoryWhereInput = {
+    AND?: ChapterCategoryWhereInput | ChapterCategoryWhereInput[]
+    OR?: ChapterCategoryWhereInput[]
+    NOT?: ChapterCategoryWhereInput | ChapterCategoryWhereInput[]
+    id?: StringFilter<"ChapterCategory"> | string
+    name?: StringFilter<"ChapterCategory"> | string
+    createdAt?: DateTimeFilter<"ChapterCategory"> | Date | string
+    updatedAt?: DateTimeFilter<"ChapterCategory"> | Date | string
+    chapters?: ChapterListRelationFilter
+  }
+
+  export type ChapterCategoryOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    chapters?: ChapterOrderByRelationAggregateInput
+  }
+
+  export type ChapterCategoryWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ChapterCategoryWhereInput | ChapterCategoryWhereInput[]
+    OR?: ChapterCategoryWhereInput[]
+    NOT?: ChapterCategoryWhereInput | ChapterCategoryWhereInput[]
+    name?: StringFilter<"ChapterCategory"> | string
+    createdAt?: DateTimeFilter<"ChapterCategory"> | Date | string
+    updatedAt?: DateTimeFilter<"ChapterCategory"> | Date | string
+    chapters?: ChapterListRelationFilter
+  }, "id">
+
+  export type ChapterCategoryOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ChapterCategoryCountOrderByAggregateInput
+    _max?: ChapterCategoryMaxOrderByAggregateInput
+    _min?: ChapterCategoryMinOrderByAggregateInput
+  }
+
+  export type ChapterCategoryScalarWhereWithAggregatesInput = {
+    AND?: ChapterCategoryScalarWhereWithAggregatesInput | ChapterCategoryScalarWhereWithAggregatesInput[]
+    OR?: ChapterCategoryScalarWhereWithAggregatesInput[]
+    NOT?: ChapterCategoryScalarWhereWithAggregatesInput | ChapterCategoryScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ChapterCategory"> | string
+    name?: StringWithAggregatesFilter<"ChapterCategory"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"ChapterCategory"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ChapterCategory"> | Date | string
   }
 
   export type CourseWhereInput = {
@@ -13848,6 +15136,7 @@ export namespace Prisma {
     course: CourseCreateNestedOneWithoutChaptersInput
     userProgress?: UserProgressCreateNestedManyWithoutChapterInput
     exams?: ExamCreateNestedManyWithoutChapterInput
+    category?: ChapterCategoryCreateNestedOneWithoutChaptersInput
   }
 
   export type ChapterUncheckedCreateInput = {
@@ -13859,6 +15148,7 @@ export namespace Prisma {
     isPublished?: boolean
     isFree?: boolean
     courseId: string
+    categoryId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     muxData?: MuxDataUncheckedCreateNestedOneWithoutChapterInput
@@ -13880,6 +15170,7 @@ export namespace Prisma {
     course?: CourseUpdateOneRequiredWithoutChaptersNestedInput
     userProgress?: UserProgressUpdateManyWithoutChapterNestedInput
     exams?: ExamUpdateManyWithoutChapterNestedInput
+    category?: ChapterCategoryUpdateOneWithoutChaptersNestedInput
   }
 
   export type ChapterUncheckedUpdateInput = {
@@ -13891,6 +15182,7 @@ export namespace Prisma {
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isFree?: BoolFieldUpdateOperationsInput | boolean
     courseId?: StringFieldUpdateOperationsInput | string
+    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     muxData?: MuxDataUncheckedUpdateOneWithoutChapterNestedInput
@@ -13907,6 +15199,7 @@ export namespace Prisma {
     isPublished?: boolean
     isFree?: boolean
     courseId: string
+    categoryId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -13932,6 +15225,60 @@ export namespace Prisma {
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isFree?: BoolFieldUpdateOperationsInput | boolean
     courseId?: StringFieldUpdateOperationsInput | string
+    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ChapterCategoryCreateInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    chapters?: ChapterCreateNestedManyWithoutCategoryInput
+  }
+
+  export type ChapterCategoryUncheckedCreateInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    chapters?: ChapterUncheckedCreateNestedManyWithoutCategoryInput
+  }
+
+  export type ChapterCategoryUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    chapters?: ChapterUpdateManyWithoutCategoryNestedInput
+  }
+
+  export type ChapterCategoryUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    chapters?: ChapterUncheckedUpdateManyWithoutCategoryNestedInput
+  }
+
+  export type ChapterCategoryCreateManyInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ChapterCategoryUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ChapterCategoryUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -14591,6 +15938,11 @@ export namespace Prisma {
     none?: ExamWhereInput
   }
 
+  export type ChapterCategoryNullableScalarRelationFilter = {
+    is?: ChapterCategoryWhereInput | null
+    isNot?: ChapterCategoryWhereInput | null
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -14613,6 +15965,7 @@ export namespace Prisma {
     isPublished?: SortOrder
     isFree?: SortOrder
     courseId?: SortOrder
+    categoryId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -14630,6 +15983,7 @@ export namespace Prisma {
     isPublished?: SortOrder
     isFree?: SortOrder
     courseId?: SortOrder
+    categoryId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -14643,6 +15997,7 @@ export namespace Prisma {
     isPublished?: SortOrder
     isFree?: SortOrder
     courseId?: SortOrder
+    categoryId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -14725,6 +16080,37 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type ChapterListRelationFilter = {
+    every?: ChapterWhereInput
+    some?: ChapterWhereInput
+    none?: ChapterWhereInput
+  }
+
+  export type ChapterOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ChapterCategoryCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ChapterCategoryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ChapterCategoryMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
   export type FloatNullableFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel> | null
     in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
@@ -14747,12 +16133,6 @@ export namespace Prisma {
     none?: AttachmentWhereInput
   }
 
-  export type ChapterListRelationFilter = {
-    every?: ChapterWhereInput
-    some?: ChapterWhereInput
-    none?: ChapterWhereInput
-  }
-
   export type PurchaseListRelationFilter = {
     every?: PurchaseWhereInput
     some?: PurchaseWhereInput
@@ -14760,10 +16140,6 @@ export namespace Prisma {
   }
 
   export type AttachmentOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type ChapterOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -15116,6 +16492,12 @@ export namespace Prisma {
     connect?: ExamWhereUniqueInput | ExamWhereUniqueInput[]
   }
 
+  export type ChapterCategoryCreateNestedOneWithoutChaptersInput = {
+    create?: XOR<ChapterCategoryCreateWithoutChaptersInput, ChapterCategoryUncheckedCreateWithoutChaptersInput>
+    connectOrCreate?: ChapterCategoryCreateOrConnectWithoutChaptersInput
+    connect?: ChapterCategoryWhereUniqueInput
+  }
+
   export type MuxDataUncheckedCreateNestedOneWithoutChapterInput = {
     create?: XOR<MuxDataCreateWithoutChapterInput, MuxDataUncheckedCreateWithoutChapterInput>
     connectOrCreate?: MuxDataCreateOrConnectWithoutChapterInput
@@ -15206,6 +16588,16 @@ export namespace Prisma {
     deleteMany?: ExamScalarWhereInput | ExamScalarWhereInput[]
   }
 
+  export type ChapterCategoryUpdateOneWithoutChaptersNestedInput = {
+    create?: XOR<ChapterCategoryCreateWithoutChaptersInput, ChapterCategoryUncheckedCreateWithoutChaptersInput>
+    connectOrCreate?: ChapterCategoryCreateOrConnectWithoutChaptersInput
+    upsert?: ChapterCategoryUpsertWithoutChaptersInput
+    disconnect?: ChapterCategoryWhereInput | boolean
+    delete?: ChapterCategoryWhereInput | boolean
+    connect?: ChapterCategoryWhereUniqueInput
+    update?: XOR<XOR<ChapterCategoryUpdateToOneWithWhereWithoutChaptersInput, ChapterCategoryUpdateWithoutChaptersInput>, ChapterCategoryUncheckedUpdateWithoutChaptersInput>
+  }
+
   export type MuxDataUncheckedUpdateOneWithoutChapterNestedInput = {
     create?: XOR<MuxDataCreateWithoutChapterInput, MuxDataUncheckedCreateWithoutChapterInput>
     connectOrCreate?: MuxDataCreateOrConnectWithoutChapterInput
@@ -15242,6 +16634,48 @@ export namespace Prisma {
     update?: ExamUpdateWithWhereUniqueWithoutChapterInput | ExamUpdateWithWhereUniqueWithoutChapterInput[]
     updateMany?: ExamUpdateManyWithWhereWithoutChapterInput | ExamUpdateManyWithWhereWithoutChapterInput[]
     deleteMany?: ExamScalarWhereInput | ExamScalarWhereInput[]
+  }
+
+  export type ChapterCreateNestedManyWithoutCategoryInput = {
+    create?: XOR<ChapterCreateWithoutCategoryInput, ChapterUncheckedCreateWithoutCategoryInput> | ChapterCreateWithoutCategoryInput[] | ChapterUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: ChapterCreateOrConnectWithoutCategoryInput | ChapterCreateOrConnectWithoutCategoryInput[]
+    createMany?: ChapterCreateManyCategoryInputEnvelope
+    connect?: ChapterWhereUniqueInput | ChapterWhereUniqueInput[]
+  }
+
+  export type ChapterUncheckedCreateNestedManyWithoutCategoryInput = {
+    create?: XOR<ChapterCreateWithoutCategoryInput, ChapterUncheckedCreateWithoutCategoryInput> | ChapterCreateWithoutCategoryInput[] | ChapterUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: ChapterCreateOrConnectWithoutCategoryInput | ChapterCreateOrConnectWithoutCategoryInput[]
+    createMany?: ChapterCreateManyCategoryInputEnvelope
+    connect?: ChapterWhereUniqueInput | ChapterWhereUniqueInput[]
+  }
+
+  export type ChapterUpdateManyWithoutCategoryNestedInput = {
+    create?: XOR<ChapterCreateWithoutCategoryInput, ChapterUncheckedCreateWithoutCategoryInput> | ChapterCreateWithoutCategoryInput[] | ChapterUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: ChapterCreateOrConnectWithoutCategoryInput | ChapterCreateOrConnectWithoutCategoryInput[]
+    upsert?: ChapterUpsertWithWhereUniqueWithoutCategoryInput | ChapterUpsertWithWhereUniqueWithoutCategoryInput[]
+    createMany?: ChapterCreateManyCategoryInputEnvelope
+    set?: ChapterWhereUniqueInput | ChapterWhereUniqueInput[]
+    disconnect?: ChapterWhereUniqueInput | ChapterWhereUniqueInput[]
+    delete?: ChapterWhereUniqueInput | ChapterWhereUniqueInput[]
+    connect?: ChapterWhereUniqueInput | ChapterWhereUniqueInput[]
+    update?: ChapterUpdateWithWhereUniqueWithoutCategoryInput | ChapterUpdateWithWhereUniqueWithoutCategoryInput[]
+    updateMany?: ChapterUpdateManyWithWhereWithoutCategoryInput | ChapterUpdateManyWithWhereWithoutCategoryInput[]
+    deleteMany?: ChapterScalarWhereInput | ChapterScalarWhereInput[]
+  }
+
+  export type ChapterUncheckedUpdateManyWithoutCategoryNestedInput = {
+    create?: XOR<ChapterCreateWithoutCategoryInput, ChapterUncheckedCreateWithoutCategoryInput> | ChapterCreateWithoutCategoryInput[] | ChapterUncheckedCreateWithoutCategoryInput[]
+    connectOrCreate?: ChapterCreateOrConnectWithoutCategoryInput | ChapterCreateOrConnectWithoutCategoryInput[]
+    upsert?: ChapterUpsertWithWhereUniqueWithoutCategoryInput | ChapterUpsertWithWhereUniqueWithoutCategoryInput[]
+    createMany?: ChapterCreateManyCategoryInputEnvelope
+    set?: ChapterWhereUniqueInput | ChapterWhereUniqueInput[]
+    disconnect?: ChapterWhereUniqueInput | ChapterWhereUniqueInput[]
+    delete?: ChapterWhereUniqueInput | ChapterWhereUniqueInput[]
+    connect?: ChapterWhereUniqueInput | ChapterWhereUniqueInput[]
+    update?: ChapterUpdateWithWhereUniqueWithoutCategoryInput | ChapterUpdateWithWhereUniqueWithoutCategoryInput[]
+    updateMany?: ChapterUpdateManyWithWhereWithoutCategoryInput | ChapterUpdateManyWithWhereWithoutCategoryInput[]
+    deleteMany?: ChapterScalarWhereInput | ChapterScalarWhereInput[]
   }
 
   export type CategoryCreateNestedOneWithoutCoursesInput = {
@@ -15900,6 +17334,25 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ChapterCategoryCreateWithoutChaptersInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ChapterCategoryUncheckedCreateWithoutChaptersInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ChapterCategoryCreateOrConnectWithoutChaptersInput = {
+    where: ChapterCategoryWhereUniqueInput
+    create: XOR<ChapterCategoryCreateWithoutChaptersInput, ChapterCategoryUncheckedCreateWithoutChaptersInput>
+  }
+
   export type MuxDataUpsertWithoutChapterInput = {
     update: XOR<MuxDataUpdateWithoutChapterInput, MuxDataUncheckedUpdateWithoutChapterInput>
     create: XOR<MuxDataCreateWithoutChapterInput, MuxDataUncheckedCreateWithoutChapterInput>
@@ -16020,6 +17473,106 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Exam"> | Date | string
   }
 
+  export type ChapterCategoryUpsertWithoutChaptersInput = {
+    update: XOR<ChapterCategoryUpdateWithoutChaptersInput, ChapterCategoryUncheckedUpdateWithoutChaptersInput>
+    create: XOR<ChapterCategoryCreateWithoutChaptersInput, ChapterCategoryUncheckedCreateWithoutChaptersInput>
+    where?: ChapterCategoryWhereInput
+  }
+
+  export type ChapterCategoryUpdateToOneWithWhereWithoutChaptersInput = {
+    where?: ChapterCategoryWhereInput
+    data: XOR<ChapterCategoryUpdateWithoutChaptersInput, ChapterCategoryUncheckedUpdateWithoutChaptersInput>
+  }
+
+  export type ChapterCategoryUpdateWithoutChaptersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ChapterCategoryUncheckedUpdateWithoutChaptersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ChapterCreateWithoutCategoryInput = {
+    id?: string
+    title: string
+    description?: string | null
+    videoUrl?: string | null
+    position: number
+    isPublished?: boolean
+    isFree?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    muxData?: MuxDataCreateNestedOneWithoutChapterInput
+    course: CourseCreateNestedOneWithoutChaptersInput
+    userProgress?: UserProgressCreateNestedManyWithoutChapterInput
+    exams?: ExamCreateNestedManyWithoutChapterInput
+  }
+
+  export type ChapterUncheckedCreateWithoutCategoryInput = {
+    id?: string
+    title: string
+    description?: string | null
+    videoUrl?: string | null
+    position: number
+    isPublished?: boolean
+    isFree?: boolean
+    courseId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    muxData?: MuxDataUncheckedCreateNestedOneWithoutChapterInput
+    userProgress?: UserProgressUncheckedCreateNestedManyWithoutChapterInput
+    exams?: ExamUncheckedCreateNestedManyWithoutChapterInput
+  }
+
+  export type ChapterCreateOrConnectWithoutCategoryInput = {
+    where: ChapterWhereUniqueInput
+    create: XOR<ChapterCreateWithoutCategoryInput, ChapterUncheckedCreateWithoutCategoryInput>
+  }
+
+  export type ChapterCreateManyCategoryInputEnvelope = {
+    data: ChapterCreateManyCategoryInput | ChapterCreateManyCategoryInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ChapterUpsertWithWhereUniqueWithoutCategoryInput = {
+    where: ChapterWhereUniqueInput
+    update: XOR<ChapterUpdateWithoutCategoryInput, ChapterUncheckedUpdateWithoutCategoryInput>
+    create: XOR<ChapterCreateWithoutCategoryInput, ChapterUncheckedCreateWithoutCategoryInput>
+  }
+
+  export type ChapterUpdateWithWhereUniqueWithoutCategoryInput = {
+    where: ChapterWhereUniqueInput
+    data: XOR<ChapterUpdateWithoutCategoryInput, ChapterUncheckedUpdateWithoutCategoryInput>
+  }
+
+  export type ChapterUpdateManyWithWhereWithoutCategoryInput = {
+    where: ChapterScalarWhereInput
+    data: XOR<ChapterUpdateManyMutationInput, ChapterUncheckedUpdateManyWithoutCategoryInput>
+  }
+
+  export type ChapterScalarWhereInput = {
+    AND?: ChapterScalarWhereInput | ChapterScalarWhereInput[]
+    OR?: ChapterScalarWhereInput[]
+    NOT?: ChapterScalarWhereInput | ChapterScalarWhereInput[]
+    id?: StringFilter<"Chapter"> | string
+    title?: StringFilter<"Chapter"> | string
+    description?: StringNullableFilter<"Chapter"> | string | null
+    videoUrl?: StringNullableFilter<"Chapter"> | string | null
+    position?: IntFilter<"Chapter"> | number
+    isPublished?: BoolFilter<"Chapter"> | boolean
+    isFree?: BoolFilter<"Chapter"> | boolean
+    courseId?: StringFilter<"Chapter"> | string
+    categoryId?: StringNullableFilter<"Chapter"> | string | null
+    createdAt?: DateTimeFilter<"Chapter"> | Date | string
+    updatedAt?: DateTimeFilter<"Chapter"> | Date | string
+  }
+
   export type CategoryCreateWithoutCoursesInput = {
     id?: string
     name: string
@@ -16078,6 +17631,7 @@ export namespace Prisma {
     muxData?: MuxDataCreateNestedOneWithoutChapterInput
     userProgress?: UserProgressCreateNestedManyWithoutChapterInput
     exams?: ExamCreateNestedManyWithoutChapterInput
+    category?: ChapterCategoryCreateNestedOneWithoutChaptersInput
   }
 
   export type ChapterUncheckedCreateWithoutCourseInput = {
@@ -16088,6 +17642,7 @@ export namespace Prisma {
     position: number
     isPublished?: boolean
     isFree?: boolean
+    categoryId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     muxData?: MuxDataUncheckedCreateNestedOneWithoutChapterInput
@@ -16200,22 +17755,6 @@ export namespace Prisma {
   export type ChapterUpdateManyWithWhereWithoutCourseInput = {
     where: ChapterScalarWhereInput
     data: XOR<ChapterUpdateManyMutationInput, ChapterUncheckedUpdateManyWithoutCourseInput>
-  }
-
-  export type ChapterScalarWhereInput = {
-    AND?: ChapterScalarWhereInput | ChapterScalarWhereInput[]
-    OR?: ChapterScalarWhereInput[]
-    NOT?: ChapterScalarWhereInput | ChapterScalarWhereInput[]
-    id?: StringFilter<"Chapter"> | string
-    title?: StringFilter<"Chapter"> | string
-    description?: StringNullableFilter<"Chapter"> | string | null
-    videoUrl?: StringNullableFilter<"Chapter"> | string | null
-    position?: IntFilter<"Chapter"> | number
-    isPublished?: BoolFilter<"Chapter"> | boolean
-    isFree?: BoolFilter<"Chapter"> | boolean
-    courseId?: StringFilter<"Chapter"> | string
-    createdAt?: DateTimeFilter<"Chapter"> | Date | string
-    updatedAt?: DateTimeFilter<"Chapter"> | Date | string
   }
 
   export type PurchaseUpsertWithWhereUniqueWithoutCourseInput = {
@@ -16408,6 +17947,7 @@ export namespace Prisma {
     course: CourseCreateNestedOneWithoutChaptersInput
     userProgress?: UserProgressCreateNestedManyWithoutChapterInput
     exams?: ExamCreateNestedManyWithoutChapterInput
+    category?: ChapterCategoryCreateNestedOneWithoutChaptersInput
   }
 
   export type ChapterUncheckedCreateWithoutMuxDataInput = {
@@ -16419,6 +17959,7 @@ export namespace Prisma {
     isPublished?: boolean
     isFree?: boolean
     courseId: string
+    categoryId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     userProgress?: UserProgressUncheckedCreateNestedManyWithoutChapterInput
@@ -16454,6 +17995,7 @@ export namespace Prisma {
     course?: CourseUpdateOneRequiredWithoutChaptersNestedInput
     userProgress?: UserProgressUpdateManyWithoutChapterNestedInput
     exams?: ExamUpdateManyWithoutChapterNestedInput
+    category?: ChapterCategoryUpdateOneWithoutChaptersNestedInput
   }
 
   export type ChapterUncheckedUpdateWithoutMuxDataInput = {
@@ -16465,6 +18007,7 @@ export namespace Prisma {
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isFree?: BoolFieldUpdateOperationsInput | boolean
     courseId?: StringFieldUpdateOperationsInput | string
+    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userProgress?: UserProgressUncheckedUpdateManyWithoutChapterNestedInput
@@ -16484,6 +18027,7 @@ export namespace Prisma {
     muxData?: MuxDataCreateNestedOneWithoutChapterInput
     course: CourseCreateNestedOneWithoutChaptersInput
     exams?: ExamCreateNestedManyWithoutChapterInput
+    category?: ChapterCategoryCreateNestedOneWithoutChaptersInput
   }
 
   export type ChapterUncheckedCreateWithoutUserProgressInput = {
@@ -16495,6 +18039,7 @@ export namespace Prisma {
     isPublished?: boolean
     isFree?: boolean
     courseId: string
+    categoryId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     muxData?: MuxDataUncheckedCreateNestedOneWithoutChapterInput
@@ -16530,6 +18075,7 @@ export namespace Prisma {
     muxData?: MuxDataUpdateOneWithoutChapterNestedInput
     course?: CourseUpdateOneRequiredWithoutChaptersNestedInput
     exams?: ExamUpdateManyWithoutChapterNestedInput
+    category?: ChapterCategoryUpdateOneWithoutChaptersNestedInput
   }
 
   export type ChapterUncheckedUpdateWithoutUserProgressInput = {
@@ -16541,6 +18087,7 @@ export namespace Prisma {
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isFree?: BoolFieldUpdateOperationsInput | boolean
     courseId?: StringFieldUpdateOperationsInput | string
+    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     muxData?: MuxDataUncheckedUpdateOneWithoutChapterNestedInput
@@ -16660,6 +18207,7 @@ export namespace Prisma {
     muxData?: MuxDataCreateNestedOneWithoutChapterInput
     course: CourseCreateNestedOneWithoutChaptersInput
     userProgress?: UserProgressCreateNestedManyWithoutChapterInput
+    category?: ChapterCategoryCreateNestedOneWithoutChaptersInput
   }
 
   export type ChapterUncheckedCreateWithoutExamsInput = {
@@ -16671,6 +18219,7 @@ export namespace Prisma {
     isPublished?: boolean
     isFree?: boolean
     courseId: string
+    categoryId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     muxData?: MuxDataUncheckedCreateNestedOneWithoutChapterInput
@@ -16732,6 +18281,7 @@ export namespace Prisma {
     muxData?: MuxDataUpdateOneWithoutChapterNestedInput
     course?: CourseUpdateOneRequiredWithoutChaptersNestedInput
     userProgress?: UserProgressUpdateManyWithoutChapterNestedInput
+    category?: ChapterCategoryUpdateOneWithoutChaptersNestedInput
   }
 
   export type ChapterUncheckedUpdateWithoutExamsInput = {
@@ -16743,6 +18293,7 @@ export namespace Prisma {
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isFree?: BoolFieldUpdateOperationsInput | boolean
     courseId?: StringFieldUpdateOperationsInput | string
+    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     muxData?: MuxDataUncheckedUpdateOneWithoutChapterNestedInput
@@ -16965,6 +18516,64 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ChapterCreateManyCategoryInput = {
+    id?: string
+    title: string
+    description?: string | null
+    videoUrl?: string | null
+    position: number
+    isPublished?: boolean
+    isFree?: boolean
+    courseId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ChapterUpdateWithoutCategoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: IntFieldUpdateOperationsInput | number
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    isFree?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    muxData?: MuxDataUpdateOneWithoutChapterNestedInput
+    course?: CourseUpdateOneRequiredWithoutChaptersNestedInput
+    userProgress?: UserProgressUpdateManyWithoutChapterNestedInput
+    exams?: ExamUpdateManyWithoutChapterNestedInput
+  }
+
+  export type ChapterUncheckedUpdateWithoutCategoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: IntFieldUpdateOperationsInput | number
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    isFree?: BoolFieldUpdateOperationsInput | boolean
+    courseId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    muxData?: MuxDataUncheckedUpdateOneWithoutChapterNestedInput
+    userProgress?: UserProgressUncheckedUpdateManyWithoutChapterNestedInput
+    exams?: ExamUncheckedUpdateManyWithoutChapterNestedInput
+  }
+
+  export type ChapterUncheckedUpdateManyWithoutCategoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: IntFieldUpdateOperationsInput | number
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    isFree?: BoolFieldUpdateOperationsInput | boolean
+    courseId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type AttachmentCreateManyCourseInput = {
     id?: string
     name: string
@@ -16981,6 +18590,7 @@ export namespace Prisma {
     position: number
     isPublished?: boolean
     isFree?: boolean
+    categoryId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -17031,6 +18641,7 @@ export namespace Prisma {
     muxData?: MuxDataUpdateOneWithoutChapterNestedInput
     userProgress?: UserProgressUpdateManyWithoutChapterNestedInput
     exams?: ExamUpdateManyWithoutChapterNestedInput
+    category?: ChapterCategoryUpdateOneWithoutChaptersNestedInput
   }
 
   export type ChapterUncheckedUpdateWithoutCourseInput = {
@@ -17041,6 +18652,7 @@ export namespace Prisma {
     position?: IntFieldUpdateOperationsInput | number
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isFree?: BoolFieldUpdateOperationsInput | boolean
+    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     muxData?: MuxDataUncheckedUpdateOneWithoutChapterNestedInput
@@ -17056,6 +18668,7 @@ export namespace Prisma {
     position?: IntFieldUpdateOperationsInput | number
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isFree?: BoolFieldUpdateOperationsInput | boolean
+    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

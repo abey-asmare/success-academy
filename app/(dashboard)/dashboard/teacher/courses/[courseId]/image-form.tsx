@@ -65,7 +65,7 @@ export const ImageForm = ({
             </>
           )}
         </Button>
-      </div>
+    </div>
       {!isEditing && (
         !initialData.imageUrl ? (
           <div className="flex items-center justify-center h-60 bg-slate-200 rounded-md">
@@ -78,6 +78,9 @@ export const ImageForm = ({
               fill
               className="object-cover rounded-md"
               src={initialData.imageUrl}
+              onError={(e) => {
+                console.error("Image failed to load", e);
+              }}
             />
           </div>
         )
@@ -87,6 +90,7 @@ export const ImageForm = ({
           <FileUpload
             endpoint="courseImage"
             onChange={(url) => {
+              console.log('url', url)
               if (url) {
                 onSubmit({ imageUrl: url });
               }

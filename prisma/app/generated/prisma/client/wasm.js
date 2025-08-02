@@ -129,6 +129,14 @@ exports.Prisma.ChapterScalarFieldEnum = {
   isPublished: 'isPublished',
   isFree: 'isFree',
   courseId: 'courseId',
+  categoryId: 'categoryId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ChapterCategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -231,6 +239,7 @@ exports.Prisma.NullsOrder = {
 
 exports.Prisma.ModelName = {
   Chapter: 'Chapter',
+  ChapterCategory: 'ChapterCategory',
   Course: 'Course',
   Attachment: 'Attachment',
   Category: 'Category',

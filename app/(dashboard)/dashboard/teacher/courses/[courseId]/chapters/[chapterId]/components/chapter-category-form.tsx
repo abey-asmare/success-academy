@@ -13,37 +13,41 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Course } from "@/prisma/app/generated/prisma/client";
+import { Combobox } from "@/components/ui/combobox";
+import { Chapter } from "@/prisma/app/generated/prisma/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { Plus } from "lucide-react";
 
 const formSchema = z.object({
-    price: z.number().min(1, {message: "price is required"})
+    categoryId: z.string().min(1, {message: "category is required"})
 })
 
 
-interface PriceFormProps {
-    initialData: Course
-    courseId: string
+interface ChapterCategoryFormProps {
+    initialData: Chapter
+    courseId: string; 
+    chapterId: string;
+    options: {label: string, value: string}[]
 }
 
 
-export default function PriceForm({initialData, courseId}: PriceFormProps) {
+export default function ChapterCategoryForm({initialData, courseId, chapterId, options}: ChapterCategoryFormProps) {
     const [isEditing, setIsEditing] = useState(false)
     const router = useRouter()
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        defaultValues: {price: initialData.price || 0}
+        defaultValues: {categoryId: initialData.categoryId || ''}
     })
+    
 
     const {isSubmitting, isValid} = form.formState;
 
-    const onSubmit= async (values: z.infer<typeof formSchema>) => {
+    const onSubmit=  async (values: z.infer<typeof formSchema>) => {
         try{
-            await axios.patch(`/api/courses/${courseId}`, values)
-            toast.success("Course price updated successfully")
+            await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}`, values)
+            toast.success("Chapter category updated successfully")
             setIsEditing(!isEditing)
             router.refresh()
         }   catch{
@@ -52,6 +56,8 @@ export default function PriceForm({initialData, courseId}: PriceFormProps) {
     }
 
 
+    // const selectedOption = options.find(option => option.value === initialData.categoryId  )
+
 
   return (      
     <div className="mt-6">
@@ -59,24 +65,17 @@ export default function PriceForm({initialData, courseId}: PriceFormProps) {
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mt-8">
                     <FormField
                         control={form.control}
-                        name='price'
+                        name='categoryId'
                         render={({field}) => (
                             <FormItem
                             
                             >
-                                <FormLabel>Course price</FormLabel>
+                                <FormLabel>Chapter category </FormLabel>
                                 <FormControl>
-                            <Input
-                            type="number"
-                            step={0.01}
-                            value={field.value === 0 ? '' : field.value}
-                            onChange={(e) => {
-                                const val = e.target.value;
-                                // If the input is empty, set it to undefined so Zod can handle required validation
-                                field.onChange(val === '' && undefined ? undefined : Number(val));
-                            }}
-                            />
-                                    
+                                    <Combobox  options={options} onChange={field.onChange} value={field.value} />
+                                    <Button size="icon" variant='outline'>
+                                        <Plus className="h-4 w-4" />
+                                    </Button>
                                 </FormControl>
                                 <FormMessage/>
                             </FormItem>

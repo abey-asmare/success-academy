@@ -15,9 +15,29 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
 export const metadata: Metadata = {
-  title: "Success Academy",
+  title: {
+    template: '%s | Success Academy',
+    default: 'Success Academy',
+  },
   description: "Your Shortcut to success.",
+  metadataBase: new URL(baseUrl),
+  openGraph: {
+    title: "Success Academy",
+    description: "Your Shortcut to success.",
+    type: "website",
+    siteName: "Success Academy",
+    url: baseUrl,
+    images: [
+      {
+        url: "opengraph-image.png",
+        width: 1024,
+        height: 1024,
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
