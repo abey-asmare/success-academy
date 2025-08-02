@@ -10,7 +10,7 @@ import ChapterDescriptionForm from "./components/chapter-description-form";
 import ChapterTitleForm from "./components/chapter-title-form";
 import ChapterVideoForm from "./components/chapter-video-form";
 import DeleteExamButton from "./exam/components/DeleteExamButton";
-import ChapterCategoryForm from "./components/chapter-category-form";
+// import ChapterCategoryForm from "./components/chapter-category-form";
 
 export default async function ChapterDetails({
   params,
@@ -32,11 +32,11 @@ export default async function ChapterDetails({
   if (!chapter) {
     return redirect("/");
   }
-  const chapterCategories = await db.chapterCategory.findMany({
-    orderBy: {
-      name: "asc",
-    },
-  });
+  // const chapterCategories = await db.chapterCategory.findMany({
+  //   orderBy: {
+  //     name: "asc",
+  //   },
+  // });
 
   const requiredFields = [chapter.title, chapter.description, chapter.videoUrl];
 
