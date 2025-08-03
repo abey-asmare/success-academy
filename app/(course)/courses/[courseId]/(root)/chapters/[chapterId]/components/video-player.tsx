@@ -53,7 +53,7 @@ export const VideoPlayer = ({
     return (
         <div className="relative aspect-video">
             {!isReady && !isLocked && (
-                <div className="absolute inset-0 flex items-center justify-center bg-slate-800  dark:bg-slate-200">
+                <div className="absolute w-full h-full flex items-center justify-center bg-slate-800  dark:bg-slate-200">
                     <Loader2 className="h-8 w-8 animate-spin text-secondary" />
                 </div>
             )}
@@ -69,7 +69,8 @@ export const VideoPlayer = ({
                 <MuxPlayer
                     title={title}
                     className={cn(
-                        !isReady && "hidden"
+                        !isReady && "hidden",
+                        "w-full h-full"
                     )}
                     onCanPlay={() => setIsReady(true)}
                     onEnded={onEnd}

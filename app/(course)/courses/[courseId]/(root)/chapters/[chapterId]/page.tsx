@@ -70,6 +70,7 @@ const ChapterIdPage = async ({
             playbackId={muxData?.playbackId}
             isLocked={isLocked}
             completeOnEnd={completeOnEnd}
+
           />
         </div>
         <div>
@@ -104,7 +105,7 @@ const ChapterIdPage = async ({
           <div>
             <Preview value={chapter.description!} />
           </div>
-          {!!attachments.length && (
+          {purchase?.approved && !!attachments.length && (
             <>
               <Separator />
               <div className="p-4 space-y-2 ">
