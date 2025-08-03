@@ -208,6 +208,7 @@ exports.Prisma.ExamScalarFieldEnum = {
 exports.Prisma.QuestionScalarFieldEnum = {
   id: 'id',
   question: 'question',
+  imageUrl: 'imageUrl',
   examId: 'examId',
   createdAt: 'createdAt'
 };

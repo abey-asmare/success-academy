@@ -21,6 +21,7 @@ import { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import z from "zod";
+import { CreateExamImageForm } from "./create-exam-image";
 
 export default function CreateExamForm({
   courseId,
@@ -40,6 +41,7 @@ export default function CreateExamForm({
       questions: [
         {
           question: "",
+          imageUrl: "",
           answers: [
             { text: "", isCorrect: false },
             { text: "", isCorrect: false },
@@ -83,7 +85,8 @@ export default function CreateExamForm({
   const addQuestion = () => {
     appendQuestion({
       question: "",
-      answers: [
+      imageUrl: "",
+        answers: [
         { text: "", isCorrect: false },
         { text: "", isCorrect: false },
       ],
@@ -189,7 +192,12 @@ export default function CreateExamForm({
                     </FormItem>
                   )}
                 />
-
+                <CreateExamImageForm
+                  initialData={form.watch(`questions.${questionIndex}.imageUrl`) || ""}
+                  onChange={(url) => {
+                    form.setValue(`questions.${questionIndex}.imageUrl`, url);
+                  }}
+                />   
                 {/* Answers */}
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">

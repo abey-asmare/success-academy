@@ -28,31 +28,31 @@ export const sampleCourse: Course = {
     "Deployment and DevOps",
     "Final Capstone Project",
   ],
-};
+}
 
-export const paymentAccounts: PaymentAccount[] = [
-  {
-    id: "1",
-    name: "Success Academy Bank Account",
-    accountNumber: "1234567890",
-    bankName: "Commercial Bank of Ethiopia",
-    type: "bank",
-  },
-  {
-    id: "2",
-    name: "Mobile Money - Telebirr",
-    accountNumber: "+251912345678",
-    bankName: "Telebirr",
-    type: "mobile",
-  },
-  {
-    id: "3",
-    name: "Mobile Money - M-Birr",
-    accountNumber: "+251923456789",
-    bankName: "M-Birr",
-    type: "mobile",
-  },
-];
+// export const paymentAccounts: PaymentAccount[] = [
+//   {
+//     id: "1",
+//     name: "Success Academy Bank Account",
+//     accountNumber: "1234567890",
+//     bankName: "Commercial Bank of Ethiopia",
+//     type: "bank",
+//   },
+//   {
+//     id: "2",
+//     name: "Mobile Money - Telebirr",
+//     accountNumber: "+251912345678",
+//     bankName: "Telebirr",
+//     type: "mobile",
+//   },
+//   {
+//     id: "3",
+//     name: "Mobile Money - M-Birr",
+//     accountNumber: "+251923456789",
+//     bankName: "M-Birr",
+//     type: "mobile",
+//   },
+// ];
 
 export const placeholderCourseImage = "/images/getting-started-1.jpg";
 export const supportEmail = "email@gmail.com";

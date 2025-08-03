@@ -70,6 +70,7 @@ export async function POST(
       const existingQuestion = await db.question.findFirst({
         where: {
           question: questionData.question,
+          imageUrl: questionData.imageUrl,
           exam: {
             chapterId: chapterId,
           },
@@ -95,10 +96,10 @@ export async function POST(
             });
           }
         }
-
         // Use existing question but add new answers if any
         processedQuestions.push({
           question: questionData.question,
+          imageUrl: questionData.imageUrl,
           answers: {
             create: newAnswers,
           },
@@ -107,6 +108,7 @@ export async function POST(
         // New question, create with all answers
         processedQuestions.push({
           question: questionData.question,
+          imageUrl: questionData.imageUrl,
           answers: {
             create: questionData.answers.map((answerData: Answer) => ({
               text: answerData.text,
@@ -138,6 +140,7 @@ export async function POST(
 
     return NextResponse.json(exam);
   } catch (error) {
+    console.log('error happened here', error)
     return new NextResponse("Internal Error", { status: 500 });
   }
 }

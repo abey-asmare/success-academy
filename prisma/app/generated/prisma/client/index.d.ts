@@ -11072,7 +11072,7 @@ export namespace Prisma {
     id: string
     name: string
     description: string | null
-    chapterId: string
+    chapterId: string | null
     createdAt: Date
     updatedAt: Date
     _count: ExamCountAggregateOutputType | null
@@ -11102,7 +11102,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     questions?: boolean | Exam$questionsArgs<ExtArgs>
-    chapter?: boolean | ChapterDefaultArgs<ExtArgs>
+    chapter?: boolean | Exam$chapterArgs<ExtArgs>
     _count?: boolean | ExamCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["exam"]>
 
@@ -11113,7 +11113,7 @@ export namespace Prisma {
     chapterId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    chapter?: boolean | ChapterDefaultArgs<ExtArgs>
+    chapter?: boolean | Exam$chapterArgs<ExtArgs>
   }, ExtArgs["result"]["exam"]>
 
   export type ExamSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -11123,7 +11123,7 @@ export namespace Prisma {
     chapterId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    chapter?: boolean | ChapterDefaultArgs<ExtArgs>
+    chapter?: boolean | Exam$chapterArgs<ExtArgs>
   }, ExtArgs["result"]["exam"]>
 
   export type ExamSelectScalar = {
@@ -11138,27 +11138,27 @@ export namespace Prisma {
   export type ExamOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "chapterId" | "createdAt" | "updatedAt", ExtArgs["result"]["exam"]>
   export type ExamInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     questions?: boolean | Exam$questionsArgs<ExtArgs>
-    chapter?: boolean | ChapterDefaultArgs<ExtArgs>
+    chapter?: boolean | Exam$chapterArgs<ExtArgs>
     _count?: boolean | ExamCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ExamIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    chapter?: boolean | ChapterDefaultArgs<ExtArgs>
+    chapter?: boolean | Exam$chapterArgs<ExtArgs>
   }
   export type ExamIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    chapter?: boolean | ChapterDefaultArgs<ExtArgs>
+    chapter?: boolean | Exam$chapterArgs<ExtArgs>
   }
 
   export type $ExamPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Exam"
     objects: {
       questions: Prisma.$QuestionPayload<ExtArgs>[]
-      chapter: Prisma.$ChapterPayload<ExtArgs>
+      chapter: Prisma.$ChapterPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
       description: string | null
-      chapterId: string
+      chapterId: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["exam"]>
@@ -11556,7 +11556,7 @@ export namespace Prisma {
   export interface Prisma__ExamClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     questions<T extends Exam$questionsArgs<ExtArgs> = {}>(args?: Subset<T, Exam$questionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    chapter<T extends ChapterDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ChapterDefaultArgs<ExtArgs>>): Prisma__ChapterClient<$Result.GetResult<Prisma.$ChapterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    chapter<T extends Exam$chapterArgs<ExtArgs> = {}>(args?: Subset<T, Exam$chapterArgs<ExtArgs>>): Prisma__ChapterClient<$Result.GetResult<Prisma.$ChapterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -12012,6 +12012,25 @@ export namespace Prisma {
   }
 
   /**
+   * Exam.chapter
+   */
+  export type Exam$chapterArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Chapter
+     */
+    select?: ChapterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Chapter
+     */
+    omit?: ChapterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChapterInclude<ExtArgs> | null
+    where?: ChapterWhereInput
+  }
+
+  /**
    * Exam without action
    */
   export type ExamDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -12043,6 +12062,7 @@ export namespace Prisma {
   export type QuestionMinAggregateOutputType = {
     id: string | null
     question: string | null
+    imageUrl: string | null
     examId: string | null
     createdAt: Date | null
   }
@@ -12050,6 +12070,7 @@ export namespace Prisma {
   export type QuestionMaxAggregateOutputType = {
     id: string | null
     question: string | null
+    imageUrl: string | null
     examId: string | null
     createdAt: Date | null
   }
@@ -12057,6 +12078,7 @@ export namespace Prisma {
   export type QuestionCountAggregateOutputType = {
     id: number
     question: number
+    imageUrl: number
     examId: number
     createdAt: number
     _all: number
@@ -12066,6 +12088,7 @@ export namespace Prisma {
   export type QuestionMinAggregateInputType = {
     id?: true
     question?: true
+    imageUrl?: true
     examId?: true
     createdAt?: true
   }
@@ -12073,6 +12096,7 @@ export namespace Prisma {
   export type QuestionMaxAggregateInputType = {
     id?: true
     question?: true
+    imageUrl?: true
     examId?: true
     createdAt?: true
   }
@@ -12080,6 +12104,7 @@ export namespace Prisma {
   export type QuestionCountAggregateInputType = {
     id?: true
     question?: true
+    imageUrl?: true
     examId?: true
     createdAt?: true
     _all?: true
@@ -12160,6 +12185,7 @@ export namespace Prisma {
   export type QuestionGroupByOutputType = {
     id: string
     question: string
+    imageUrl: string | null
     examId: string
     createdAt: Date
     _count: QuestionCountAggregateOutputType | null
@@ -12184,6 +12210,7 @@ export namespace Prisma {
   export type QuestionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     question?: boolean
+    imageUrl?: boolean
     examId?: boolean
     createdAt?: boolean
     answers?: boolean | Question$answersArgs<ExtArgs>
@@ -12194,6 +12221,7 @@ export namespace Prisma {
   export type QuestionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     question?: boolean
+    imageUrl?: boolean
     examId?: boolean
     createdAt?: boolean
     exam?: boolean | ExamDefaultArgs<ExtArgs>
@@ -12202,6 +12230,7 @@ export namespace Prisma {
   export type QuestionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     question?: boolean
+    imageUrl?: boolean
     examId?: boolean
     createdAt?: boolean
     exam?: boolean | ExamDefaultArgs<ExtArgs>
@@ -12210,11 +12239,12 @@ export namespace Prisma {
   export type QuestionSelectScalar = {
     id?: boolean
     question?: boolean
+    imageUrl?: boolean
     examId?: boolean
     createdAt?: boolean
   }
 
-  export type QuestionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "question" | "examId" | "createdAt", ExtArgs["result"]["question"]>
+  export type QuestionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "question" | "imageUrl" | "examId" | "createdAt", ExtArgs["result"]["question"]>
   export type QuestionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     answers?: boolean | Question$answersArgs<ExtArgs>
     exam?: boolean | ExamDefaultArgs<ExtArgs>
@@ -12236,6 +12266,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       question: string
+      imageUrl: string | null
       examId: string
       createdAt: Date
     }, ExtArgs["result"]["question"]>
@@ -12665,6 +12696,7 @@ export namespace Prisma {
   interface QuestionFieldRefs {
     readonly id: FieldRef<"Question", 'String'>
     readonly question: FieldRef<"Question", 'String'>
+    readonly imageUrl: FieldRef<"Question", 'String'>
     readonly examId: FieldRef<"Question", 'String'>
     readonly createdAt: FieldRef<"Question", 'DateTime'>
   }
@@ -14305,6 +14337,7 @@ export namespace Prisma {
   export const QuestionScalarFieldEnum: {
     id: 'id',
     question: 'question',
+    imageUrl: 'imageUrl',
     examId: 'examId',
     createdAt: 'createdAt'
   };
@@ -14953,18 +14986,18 @@ export namespace Prisma {
     id?: StringFilter<"Exam"> | string
     name?: StringFilter<"Exam"> | string
     description?: StringNullableFilter<"Exam"> | string | null
-    chapterId?: StringFilter<"Exam"> | string
+    chapterId?: StringNullableFilter<"Exam"> | string | null
     createdAt?: DateTimeFilter<"Exam"> | Date | string
     updatedAt?: DateTimeFilter<"Exam"> | Date | string
     questions?: QuestionListRelationFilter
-    chapter?: XOR<ChapterScalarRelationFilter, ChapterWhereInput>
+    chapter?: XOR<ChapterNullableScalarRelationFilter, ChapterWhereInput> | null
   }
 
   export type ExamOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrderInput | SortOrder
-    chapterId?: SortOrder
+    chapterId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     questions?: QuestionOrderByRelationAggregateInput
@@ -14978,18 +15011,18 @@ export namespace Prisma {
     NOT?: ExamWhereInput | ExamWhereInput[]
     name?: StringFilter<"Exam"> | string
     description?: StringNullableFilter<"Exam"> | string | null
-    chapterId?: StringFilter<"Exam"> | string
+    chapterId?: StringNullableFilter<"Exam"> | string | null
     createdAt?: DateTimeFilter<"Exam"> | Date | string
     updatedAt?: DateTimeFilter<"Exam"> | Date | string
     questions?: QuestionListRelationFilter
-    chapter?: XOR<ChapterScalarRelationFilter, ChapterWhereInput>
+    chapter?: XOR<ChapterNullableScalarRelationFilter, ChapterWhereInput> | null
   }, "id">
 
   export type ExamOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrderInput | SortOrder
-    chapterId?: SortOrder
+    chapterId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ExamCountOrderByAggregateInput
@@ -15004,7 +15037,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Exam"> | string
     name?: StringWithAggregatesFilter<"Exam"> | string
     description?: StringNullableWithAggregatesFilter<"Exam"> | string | null
-    chapterId?: StringWithAggregatesFilter<"Exam"> | string
+    chapterId?: StringNullableWithAggregatesFilter<"Exam"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Exam"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Exam"> | Date | string
   }
@@ -15015,6 +15048,7 @@ export namespace Prisma {
     NOT?: QuestionWhereInput | QuestionWhereInput[]
     id?: StringFilter<"Question"> | string
     question?: StringFilter<"Question"> | string
+    imageUrl?: StringNullableFilter<"Question"> | string | null
     examId?: StringFilter<"Question"> | string
     createdAt?: DateTimeFilter<"Question"> | Date | string
     answers?: AnswerListRelationFilter
@@ -15024,6 +15058,7 @@ export namespace Prisma {
   export type QuestionOrderByWithRelationInput = {
     id?: SortOrder
     question?: SortOrder
+    imageUrl?: SortOrderInput | SortOrder
     examId?: SortOrder
     createdAt?: SortOrder
     answers?: AnswerOrderByRelationAggregateInput
@@ -15036,6 +15071,7 @@ export namespace Prisma {
     OR?: QuestionWhereInput[]
     NOT?: QuestionWhereInput | QuestionWhereInput[]
     question?: StringFilter<"Question"> | string
+    imageUrl?: StringNullableFilter<"Question"> | string | null
     examId?: StringFilter<"Question"> | string
     createdAt?: DateTimeFilter<"Question"> | Date | string
     answers?: AnswerListRelationFilter
@@ -15045,6 +15081,7 @@ export namespace Prisma {
   export type QuestionOrderByWithAggregationInput = {
     id?: SortOrder
     question?: SortOrder
+    imageUrl?: SortOrderInput | SortOrder
     examId?: SortOrder
     createdAt?: SortOrder
     _count?: QuestionCountOrderByAggregateInput
@@ -15058,6 +15095,7 @@ export namespace Prisma {
     NOT?: QuestionScalarWhereWithAggregatesInput | QuestionScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Question"> | string
     question?: StringWithAggregatesFilter<"Question"> | string
+    imageUrl?: StringNullableWithAggregatesFilter<"Question"> | string | null
     examId?: StringWithAggregatesFilter<"Question"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Question"> | Date | string
   }
@@ -15686,14 +15724,14 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     questions?: QuestionCreateNestedManyWithoutExamInput
-    chapter: ChapterCreateNestedOneWithoutExamsInput
+    chapter?: ChapterCreateNestedOneWithoutExamsInput
   }
 
   export type ExamUncheckedCreateInput = {
     id?: string
     name: string
     description?: string | null
-    chapterId: string
+    chapterId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     questions?: QuestionUncheckedCreateNestedManyWithoutExamInput
@@ -15706,14 +15744,14 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     questions?: QuestionUpdateManyWithoutExamNestedInput
-    chapter?: ChapterUpdateOneRequiredWithoutExamsNestedInput
+    chapter?: ChapterUpdateOneWithoutExamsNestedInput
   }
 
   export type ExamUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    chapterId?: StringFieldUpdateOperationsInput | string
+    chapterId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     questions?: QuestionUncheckedUpdateManyWithoutExamNestedInput
@@ -15723,7 +15761,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
-    chapterId: string
+    chapterId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -15740,7 +15778,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    chapterId?: StringFieldUpdateOperationsInput | string
+    chapterId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15748,6 +15786,7 @@ export namespace Prisma {
   export type QuestionCreateInput = {
     id?: string
     question: string
+    imageUrl?: string | null
     createdAt?: Date | string
     answers?: AnswerCreateNestedManyWithoutQuestionInput
     exam: ExamCreateNestedOneWithoutQuestionsInput
@@ -15756,6 +15795,7 @@ export namespace Prisma {
   export type QuestionUncheckedCreateInput = {
     id?: string
     question: string
+    imageUrl?: string | null
     examId: string
     createdAt?: Date | string
     answers?: AnswerUncheckedCreateNestedManyWithoutQuestionInput
@@ -15764,6 +15804,7 @@ export namespace Prisma {
   export type QuestionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     question?: StringFieldUpdateOperationsInput | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     answers?: AnswerUpdateManyWithoutQuestionNestedInput
     exam?: ExamUpdateOneRequiredWithoutQuestionsNestedInput
@@ -15772,6 +15813,7 @@ export namespace Prisma {
   export type QuestionUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     question?: StringFieldUpdateOperationsInput | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     examId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     answers?: AnswerUncheckedUpdateManyWithoutQuestionNestedInput
@@ -15780,6 +15822,7 @@ export namespace Prisma {
   export type QuestionCreateManyInput = {
     id?: string
     question: string
+    imageUrl?: string | null
     examId: string
     createdAt?: Date | string
   }
@@ -15787,12 +15830,14 @@ export namespace Prisma {
   export type QuestionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     question?: StringFieldUpdateOperationsInput | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type QuestionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     question?: StringFieldUpdateOperationsInput | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     examId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16367,6 +16412,11 @@ export namespace Prisma {
     none?: QuestionWhereInput
   }
 
+  export type ChapterNullableScalarRelationFilter = {
+    is?: ChapterWhereInput | null
+    isNot?: ChapterWhereInput | null
+  }
+
   export type QuestionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -16416,6 +16466,7 @@ export namespace Prisma {
   export type QuestionCountOrderByAggregateInput = {
     id?: SortOrder
     question?: SortOrder
+    imageUrl?: SortOrder
     examId?: SortOrder
     createdAt?: SortOrder
   }
@@ -16423,6 +16474,7 @@ export namespace Prisma {
   export type QuestionMaxOrderByAggregateInput = {
     id?: SortOrder
     question?: SortOrder
+    imageUrl?: SortOrder
     examId?: SortOrder
     createdAt?: SortOrder
   }
@@ -16430,6 +16482,7 @@ export namespace Prisma {
   export type QuestionMinOrderByAggregateInput = {
     id?: SortOrder
     question?: SortOrder
+    imageUrl?: SortOrder
     examId?: SortOrder
     createdAt?: SortOrder
   }
@@ -16960,10 +17013,12 @@ export namespace Prisma {
     deleteMany?: QuestionScalarWhereInput | QuestionScalarWhereInput[]
   }
 
-  export type ChapterUpdateOneRequiredWithoutExamsNestedInput = {
+  export type ChapterUpdateOneWithoutExamsNestedInput = {
     create?: XOR<ChapterCreateWithoutExamsInput, ChapterUncheckedCreateWithoutExamsInput>
     connectOrCreate?: ChapterCreateOrConnectWithoutExamsInput
     upsert?: ChapterUpsertWithoutExamsInput
+    disconnect?: ChapterWhereInput | boolean
+    delete?: ChapterWhereInput | boolean
     connect?: ChapterWhereUniqueInput
     update?: XOR<XOR<ChapterUpdateToOneWithWhereWithoutExamsInput, ChapterUpdateWithoutExamsInput>, ChapterUncheckedUpdateWithoutExamsInput>
   }
@@ -17468,7 +17523,7 @@ export namespace Prisma {
     id?: StringFilter<"Exam"> | string
     name?: StringFilter<"Exam"> | string
     description?: StringNullableFilter<"Exam"> | string | null
-    chapterId?: StringFilter<"Exam"> | string
+    chapterId?: StringNullableFilter<"Exam"> | string | null
     createdAt?: DateTimeFilter<"Exam"> | Date | string
     updatedAt?: DateTimeFilter<"Exam"> | Date | string
   }
@@ -18173,6 +18228,7 @@ export namespace Prisma {
   export type QuestionCreateWithoutExamInput = {
     id?: string
     question: string
+    imageUrl?: string | null
     createdAt?: Date | string
     answers?: AnswerCreateNestedManyWithoutQuestionInput
   }
@@ -18180,6 +18236,7 @@ export namespace Prisma {
   export type QuestionUncheckedCreateWithoutExamInput = {
     id?: string
     question: string
+    imageUrl?: string | null
     createdAt?: Date | string
     answers?: AnswerUncheckedCreateNestedManyWithoutQuestionInput
   }
@@ -18253,6 +18310,7 @@ export namespace Prisma {
     NOT?: QuestionScalarWhereInput | QuestionScalarWhereInput[]
     id?: StringFilter<"Question"> | string
     question?: StringFilter<"Question"> | string
+    imageUrl?: StringNullableFilter<"Question"> | string | null
     examId?: StringFilter<"Question"> | string
     createdAt?: DateTimeFilter<"Question"> | Date | string
   }
@@ -18332,14 +18390,14 @@ export namespace Prisma {
     description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    chapter: ChapterCreateNestedOneWithoutExamsInput
+    chapter?: ChapterCreateNestedOneWithoutExamsInput
   }
 
   export type ExamUncheckedCreateWithoutQuestionsInput = {
     id?: string
     name: string
     description?: string | null
-    chapterId: string
+    chapterId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -18394,14 +18452,14 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    chapter?: ChapterUpdateOneRequiredWithoutExamsNestedInput
+    chapter?: ChapterUpdateOneWithoutExamsNestedInput
   }
 
   export type ExamUncheckedUpdateWithoutQuestionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    chapterId?: StringFieldUpdateOperationsInput | string
+    chapterId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18409,6 +18467,7 @@ export namespace Prisma {
   export type QuestionCreateWithoutAnswersInput = {
     id?: string
     question: string
+    imageUrl?: string | null
     createdAt?: Date | string
     exam: ExamCreateNestedOneWithoutQuestionsInput
   }
@@ -18416,6 +18475,7 @@ export namespace Prisma {
   export type QuestionUncheckedCreateWithoutAnswersInput = {
     id?: string
     question: string
+    imageUrl?: string | null
     examId: string
     createdAt?: Date | string
   }
@@ -18439,6 +18499,7 @@ export namespace Prisma {
   export type QuestionUpdateWithoutAnswersInput = {
     id?: StringFieldUpdateOperationsInput | string
     question?: StringFieldUpdateOperationsInput | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     exam?: ExamUpdateOneRequiredWithoutQuestionsNestedInput
   }
@@ -18446,6 +18507,7 @@ export namespace Prisma {
   export type QuestionUncheckedUpdateWithoutAnswersInput = {
     id?: StringFieldUpdateOperationsInput | string
     question?: StringFieldUpdateOperationsInput | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     examId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18757,12 +18819,14 @@ export namespace Prisma {
   export type QuestionCreateManyExamInput = {
     id?: string
     question: string
+    imageUrl?: string | null
     createdAt?: Date | string
   }
 
   export type QuestionUpdateWithoutExamInput = {
     id?: StringFieldUpdateOperationsInput | string
     question?: StringFieldUpdateOperationsInput | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     answers?: AnswerUpdateManyWithoutQuestionNestedInput
   }
@@ -18770,6 +18834,7 @@ export namespace Prisma {
   export type QuestionUncheckedUpdateWithoutExamInput = {
     id?: StringFieldUpdateOperationsInput | string
     question?: StringFieldUpdateOperationsInput | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     answers?: AnswerUncheckedUpdateManyWithoutQuestionNestedInput
   }
@@ -18777,6 +18842,7 @@ export namespace Prisma {
   export type QuestionUncheckedUpdateManyWithoutExamInput = {
     id?: StringFieldUpdateOperationsInput | string
     question?: StringFieldUpdateOperationsInput | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

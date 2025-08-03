@@ -135,21 +135,35 @@ model Exam {
   description String?
   questions   Question[]
 
-  chapterId String
-  chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  chapterId String?
+  chapter   Chapter? @relation(fields: [chapterId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 }
 
+// model Simulation {
+//   id        String     @id @default(uuid())
+//   name      String
+//   description String?
+//   questions Question[]
+
+//   createdAt DateTime   @default(now())
+//   updatedAt DateTime   @updatedAt @default(now())
+// }
+
 model Question {
   id       String   @id @default(uuid())
   question String
+  imageUrl String?
   answers  Answer[]
 
-  examId String
+  // simulationId String?
+  // simulation Simulation? @relation(fields: [simulationId], references: [id], onDelete: Cascade)
 
-  exam      Exam     @relation(fields: [examId], references: [id], onDelete: Cascade)
+  examId String
+  exam   Exam   @relation(fields: [examId], references: [id], onDelete: Cascade)
+
   createdAt DateTime @default(now())
 }
 

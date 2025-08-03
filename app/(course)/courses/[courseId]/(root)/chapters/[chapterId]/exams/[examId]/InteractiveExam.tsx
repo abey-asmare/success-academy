@@ -3,30 +3,18 @@
 import React, { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { Check } from 'lucide-react'
+import Image from 'next/image'
+import UnDownloadableImage from '@/components/UnDownloadableImage'
+import { Answer, Exam, Question } from '@/prisma/app/generated/prisma/client'
 
 const alphabets = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
-interface Answer {
-  id: string
-  text: string
-  isCorrect: boolean
-}
-
-interface Question {
-  id: string
-  question: string
-  answers: Answer[]
-}
-
-interface Exam {
-  id: string
-  name: string
-  description: string | null
-  questions: Question[]
-}
-
-interface InteractiveExamProps {
-  exam: Exam
+type InteractiveExamProps =  {
+  exam: Exam & {
+    questions: (Question & {
+      answers: Answer[]
+    })[]
+  }
 }
 
 export default function InteractiveExam({ exam }: InteractiveExamProps) {
@@ -86,6 +74,17 @@ export default function InteractiveExam({ exam }: InteractiveExamProps) {
               <h1 className="font-medium text-lg text-start self-start w-full max-w-4xl mx-auto px-4">
                 {index + 1}. {question.question}
               </h1>
+              <UnDownloadableImage>
+              {question.imageUrl && (
+                <Image
+                  src={question.imageUrl}
+                  alt={question.question}
+                  width={500}
+                  height={500}
+                  className="w-full max-w-4xl mx-auto px-4 pointer-events-none select-none"
+                />
+              )}
+              </UnDownloadableImage>
               
               <div className='flex justify-center w-full px-4'>
                 <div className="space-y-4 w-full max-w-4xl">

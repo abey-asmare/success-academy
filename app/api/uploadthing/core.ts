@@ -20,6 +20,13 @@ export const ourFileRouter = {
       console.log("file url", file.ufsUrl);
       return { uploadedBy: metadata.userId };
     }),
+    examImage: f({image: {maxFileSize: '4MB', maxFileCount: 1}})
+        .middleware(handleAuth)
+        .onUploadComplete(async ({ metadata, file }) => {
+      console.log("Upload complete for userId:", metadata.userId);
+      console.log("exam url", file.ufsUrl);
+      return { uploadedBy: metadata.userId };
+    }),
     purchaseImage: f({image: {maxFileSize: '4MB', maxFileCount: 1}})
         .middleware(handleAuth)
         .onUploadComplete(async ({ metadata, file }) => {

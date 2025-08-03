@@ -2,7 +2,7 @@ import React from 'react'
 import { db } from '@/lib/db';
 import { redirect } from 'next/navigation';
 import { cn } from '@/lib/utils';
-
+import Image from 'next/image';
 
 const alphabets = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
@@ -20,6 +20,7 @@ export default async function ExamDeatilPage({params}: {params: Promise<{examId:
             },
         },
     })
+    console.log('exam', exam)
     if(!exam){
         return redirect('/dashboard/teacher/courses')
     }
@@ -32,8 +33,19 @@ export default async function ExamDeatilPage({params}: {params: Promise<{examId:
         <div className="mt-4">
             {exam.questions.map((question, index) => (
                 <div key={index} className="flex justify-between flex-col gap-3 w-full items-center">
-                    <h1 className="font-medium text-lg text-start self-start w-1/2 m-auto">{index + 1}. {exam.questions[index].question}</h1>
+                    <h1 className="font-medium text-lg text-start self-start w-1/2 m-auto">{index + 1}. {question.question}</h1>
                     {/* map the answers */}
+                    {question.imageUrl && (
+                        <div className="flex justify-center w-full">
+                            <Image
+                                src={question.imageUrl}
+                                alt={question.question}
+                                width={500}
+                                height={500}
+                                className="w-full h-auto"
+                            />
+                        </div>
+                    )}
                     <div className='flex justify-center w-full' >
                         <div className="space-y-2 w-full">
                         {question.answers.map((answer, answerIndex) => (
