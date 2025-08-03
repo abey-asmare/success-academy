@@ -15,7 +15,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem
 } from "@/components/ui/sidebar"
-import { Compass, Layout, List, WalletCards } from "lucide-react"
+import { BookOpen, Compass, Layout, List, WalletCards } from "lucide-react"
 import Link from "next/link"
 
 import useRole from "@/utils/useRole"
@@ -49,6 +49,13 @@ teacherRotues: [
       icon: WalletCards,
       title: 'Payments',
       url: '/dashboard/teacher/payment',
+    },
+    {
+      icon: BookOpen,
+      title: 'Simulations',
+      url: '/dashboard/teacher/simulation',
+      contextOpen: 'Create Simulation',
+      href: '/dashboard/teacher/simulation/create'
     },
     // {
     //     icon: IconChartBar,

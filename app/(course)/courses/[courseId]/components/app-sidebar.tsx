@@ -12,7 +12,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Compass, Home, Layout, List, WalletCards } from "lucide-react";
+import { BookOpen, Compass, Home, Layout, List, WalletCards } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { RouteSwitcher } from "./route-switcher";
@@ -76,10 +76,15 @@ const data = {
       url: "/dashboard/teacher/payment",
     },
     {
-      icon: IconChartBar,
-      title: "Analytics",
-      url: "/dashboard/teacher/analytics",
+      icon: BookOpen,
+      title: "Simulations",
+      url: "/dashboard/teacher/simulation",
     },
+    // {
+    //   icon: IconChartBar,
+    //   title: "Analytics",
+    //   url: "/dashboard/teacher/analytics",
+    // },
   ],
 };
 

@@ -34,7 +34,7 @@ model Chapter {
 
   userProgress UserProgress[]
 
-  exams Exam[]
+  exams Exam[] @relation("ExamChapter")
 
   categoryId  String?   
   category    ChapterCategory?  @relation(fields: [categoryId], references: [id])
@@ -74,7 +74,7 @@ model Course {
   chapters    Chapter[] 
   purchases Purchase[]
 
-  exams Exam[]
+  exams Exam[] @relation("ExamCourse")
 
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
@@ -153,16 +153,16 @@ model Exam {
   id        String     @id @default(uuid())
   name      String
   description String?
-  questions Question[]
+  questions Question[] @relation("ExamQuestion")
 
 
   // exam can be attached to the chapter, to test the student knowledge for any desired chapter
   chapterId String?
-  chapter Chapter? @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  chapter Chapter? @relation("ExamChapter", fields: [chapterId], references: [id], onDelete: Cascade)
 
   // exam can be attached to the  course, i.e simulation
   courseId String?
-  course Course? @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  course Course? @relation("ExamCourse", fields: [courseId], references: [id], onDelete: Cascade)
   isSimulation Boolean? @default(false)
 
   createdAt DateTime   @default(now())
@@ -178,7 +178,7 @@ model Question{
 
 
   examId String
-  exam Exam @relation(fields: [examId], references: [id], onDelete: Cascade)
+  exam Exam @relation("ExamQuestion", fields: [examId], references: [id], onDelete: Cascade)
 
   createdAt DateTime   @default(now())  
 }
