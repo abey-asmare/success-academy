@@ -46,36 +46,22 @@ export function NavAdmin({
   const isActive = (href: string) =>
     (pathname === "/dashboard" && href === "/dashboard") ||
     pathname === href ||
-    pathname?.startsWith(`${href}/dashbaord`);
+    pathname?.includes(`${href}/`);
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>Admin</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
-          // <SidebarMenuItem key={item.title}>
-          //   <SidebarMenuButton
-          //     asChild
-          //     onClick={() => isMobile && toggleSidebar()}
-          //   >
-          //     <Link
-          //       href={item.url}
-          //       className={cn(
-          //         "",
-          //         isActive(item.url) && "bg-black/10 rounded-md"
-          //       )}
-          //     >
-          //       <item.icon />
-          //       <span>{item.title}</span>
-          //     </Link>
-          //   </SidebarMenuButton>
-          // </SidebarMenuItem>
           <SidebarMenuItem key={item.title}>
             <SidebarMenuButton
               asChild
               onClick={() => isMobile && toggleSidebar()}
             >
-              <Link href={item.url}>
+              <Link href={item.url} className={cn(
+                  "",
+                  isActive(item.url) && "bg-black/10 rounded-md"
+                )}>
                 <item.icon />
                 <span>{item.title}</span>
               </Link>

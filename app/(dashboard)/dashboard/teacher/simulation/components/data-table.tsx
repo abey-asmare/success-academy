@@ -19,6 +19,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { PlusCircle } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -78,6 +80,11 @@ export function DataTable<TData, TValue>({
           onChange={(e) => setSearchInput(e.target.value)}
           className="max-w-sm"
         />
+           <Link href="/dashboard/teacher/simulation/create">
+          <Button variant="outline" size="sm">
+            <PlusCircle className="h-4 w-4 mr-2" />New Simulation
+          </Button> 
+        </Link>
       </div>
       <div className="rounded-md border">
         <Table>

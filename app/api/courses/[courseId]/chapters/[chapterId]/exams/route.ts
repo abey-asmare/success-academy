@@ -144,6 +144,13 @@ export async function POST(
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
+
+
+
+
+
+
+
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ courseId: string; chapterId: string }> }

@@ -11,14 +11,15 @@ import { Course, Exam } from "@/prisma/app/generated/prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import toast from "react-hot-toast";
+import { deleteSimulation } from "./actions";
+import DeleteFormColumn from "./deleteformColumn";
 
 export type ExamCourse = {
   id: string;
-  name: string, 
-  course: string, 
-  updatedAt: string, 
-}
-
+  name: string;
+  course: string;
+  updatedAt: string;
+};
 
 export const columns: ColumnDef<ExamCourse>[] = [
   {
@@ -63,44 +64,41 @@ export const columns: ColumnDef<ExamCourse>[] = [
       );
     },
   },
-  // {
-  //   id: "actions",
-  //   cell: ({ row }) => {
-  //     return (
-  //       <DropdownMenu>
-  //         <DropdownMenuTrigger asChild>
-  //           <Button variant="ghost" className="h-4 w-8 p-0">
-  //             <span className="sr-only">Open menu</span>
-  //             <MoreHorizontal className="h-4 w-4" />
-  //           </Button>
-  //         </DropdownMenuTrigger>
-  //         <DropdownMenuContent align="end">
-  //           {row.getValue("role") === "admin" ? (
-  //             <DropdownMenuItem>
-  //              <form action={()=> removeRole_(row.getValue("id"))}>
-  //              <Button
-  //                 className="text-red-700 w-fit h-fit bg-transparent hover:bg-transparent hover:text-red-700 h-4"
-  //                 type="submit"
-  //               >
-  //                 revoke Admin
-  //               </Button>
-  //              </form>
-  //             </DropdownMenuItem>
-  //           ) : (
-  //             <DropdownMenuItem>
-  //              <form action={()=> setRole_(row.getValue("id"))}>
-  //               <Button
-  //                 className="text-sky-700 w-fit h-fit bg-transparent hover:bg-transparent hover:text-sky-700 h-4"
-  //                 type="submit"
-  //               >
-  //                 make Admin
-  //               </Button>
-  //              </form>
-  //             </DropdownMenuItem>
-  //           )}
-  //         </DropdownMenuContent>
-  //       </DropdownMenu>
-  //     );
-  //   },
-  // },
+  {
+    accessorKey: "updatedAt",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Updated At
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-4 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+              <DropdownMenuItem>
+                <Button variant="link" size='sm' className="text-sky-600 hover:text-sky-700 bg-transparent w-full h-full p-2">Update</Button>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <DeleteFormColumn id={row.getValue("id")} />
+              </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
+  },
 ];
