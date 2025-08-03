@@ -21,6 +21,7 @@
   import { useFieldArray, useForm } from "react-hook-form";
   import toast from "react-hot-toast";
   import z from "zod";
+import { CreateExamImageForm } from "../../components/create-exam-image";
 
   type Props = {
     courseId: string;
@@ -41,6 +42,7 @@
         z
           .object({
             question: z.string().min(1, "Question text is required"),
+            imageUrl: z.string().optional(),
             answers: z
               .array(
                 z.object({
@@ -72,7 +74,14 @@
       defaultValues: {
         name: exam.name,
         description: exam.description || "",
-        questions: exam.questions,
+        questions: exam.questions.map((q) => ({
+          question: q.question,
+          imageUrl: q.imageUrl ?? "",
+          answers: q.answers.map((a) => ({
+            text: a.text,
+            isCorrect: a.isCorrect,
+          })),
+        })),
       },
     });
 
@@ -110,6 +119,7 @@
     const addQuestion = () => {
       appendQuestion({
         question: "",
+        imageUrl: "", 
         answers: [
           { text: "", isCorrect: false },
           { text: "", isCorrect: false },
@@ -223,6 +233,12 @@
                       </FormItem>
                     )}
                   />
+                    <CreateExamImageForm
+                                    initialData={form.watch(`questions.${questionIndex}.imageUrl`) || ""}
+                                    onChange={(url) => {
+                                      form.setValue(`questions.${questionIndex}.imageUrl`, url);
+                                    }}
+                                  />   
 
                   {/* Answers */}
                   <div className="space-y-3">

@@ -74,8 +74,8 @@ export default function InteractiveExam({ exam }: InteractiveExamProps) {
               <h1 className="font-medium text-lg text-start self-start w-full max-w-4xl mx-auto px-4">
                 {index + 1}. {question.question}
               </h1>
-              <UnDownloadableImage>
               {question.imageUrl && (
+              <UnDownloadableImage>
                 <Image
                   src={question.imageUrl}
                   alt={question.question}
@@ -83,8 +83,8 @@ export default function InteractiveExam({ exam }: InteractiveExamProps) {
                   height={500}
                   className="w-full max-w-4xl mx-auto px-4 pointer-events-none select-none"
                 />
-              )}
               </UnDownloadableImage>
+              )}
               
               <div className='flex justify-center w-full px-4'>
                 <div className="space-y-4 w-full max-w-4xl">

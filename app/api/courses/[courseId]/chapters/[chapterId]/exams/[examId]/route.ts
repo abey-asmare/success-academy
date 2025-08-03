@@ -2,7 +2,7 @@ import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import { isAdmin } from "@/utils/roles";
-import {Answer} from "@/prisma/app/generated/prisma/client"
+import {Answer, Question} from "@/prisma/app/generated/prisma/client"
 
 
 export async function DELETE(
@@ -58,15 +58,9 @@ export async function DELETE(
   }
 }
 
-
-
-
-
-
-interface QuestionData {
-  question: string;
-  answers: Answer[];
-}
+type QuestionData =  (Question & {
+  answers: Answer[]
+})
 
 export async function PUT(
   req: NextRequest,
@@ -165,6 +159,7 @@ export async function PUT(
     // Process new questions
     const processedQuestions = questions.map((questionData: QuestionData) => ({
       question: questionData.question,
+      imageUrl: questionData.imageUrl, 
       answers: {
         create: questionData.answers.map((answerData: Answer) => ({
           text: answerData.text,
