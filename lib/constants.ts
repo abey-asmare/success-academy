@@ -5,14 +5,14 @@ export const accounts = [
  {
         name: "CBE",
         image: "/providers/cbe.png",
-        accountHolder: 'abey asmare',
-        accountNumber: '1000 10 101 10',
+        accountHolder: 'Abel Solomon Tadele',
+        accountNumber: '1000 71 02 75 304',
     },
  {
         name: "TeleBirr",
         image: "/providers/telebirr.png",
-        accountHolder: 'abey asmare',
-        accountNumber: '09 18 10 10 10',
+        accountHolder: 'Abel Solomon Tadele',
+        accountNumber: '09 39 33 99 08',
     },
 
 ]

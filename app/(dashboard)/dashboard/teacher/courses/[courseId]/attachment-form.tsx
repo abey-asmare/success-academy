@@ -8,6 +8,7 @@ import { File, Loader2, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import Link from "next/link";
 
 // Validation schema
 type formSchemaType = {url: string | undefined, type: string | undefined, name: string | undefined}[]
@@ -20,7 +21,7 @@ interface AttachmentFormProps {
 export default function AttachmentForm({
   initialData,
   courseId,
-}: AttachmentFormProps) {
+  }: AttachmentFormProps) {
   // const [isEditing, setIsEditing] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const router = useRouter();
@@ -74,15 +75,15 @@ export default function AttachmentForm({
               className="flex items-center p-3 w-full bg-sky-100 border-sky-200 border text-sky-700 rounded-sm"
             >
               <File className="h-4 w-4 mr-2 flex-shrink-0" />
-
-              <a
+              {/* this link is only for preview */}
+              <Link
                 href={attachment.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-xs line-clamp-1 hover:underline"
               >
                 {attachment.name}
-              </a>
+              </Link>
 
               {deleteId === attachment.id ? (
                 <div className="ml-auto">

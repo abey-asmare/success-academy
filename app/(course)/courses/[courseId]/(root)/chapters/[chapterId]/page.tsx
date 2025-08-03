@@ -42,6 +42,7 @@ const ChapterIdPage = async ({
     return redirect("/")
   }
 
+  console.log('purchase', purchase)
  const isLocked = !chapter.isFree && (!purchase || purchase?.approved === false)
   const completeOnEnd = !!purchase && !userProgress?.isCompleted;
 
@@ -76,7 +77,7 @@ const ChapterIdPage = async ({
             <h2 className="text-2xl font-semibold mb-2">
               {chapter.title}
             </h2>
-            {purchase ? (
+            {purchase && purchase.approved ? (
               <div className="flex flex-wrap items-center gap-2">
               {chapter.exams.map((exam, index) => (
                 <Button key={exam.id} className="mr-2 bg-sky-500 text-white hover:bg-sky-600 transition-colors duration-200">
@@ -86,10 +87,10 @@ const ChapterIdPage = async ({
                 </Button>
               ))}
                 <CourseProgressButton
-                  chapterId={chapterId}
-                  courseId={courseId}
-                  nextChapterId={nextChapter?.id}
-                  isCompleted={!!userProgress?.isCompleted}
+                chapterId={chapterId}
+                courseId={courseId}
+                nextChapterId={nextChapter?.id}
+                isCompleted={!!userProgress?.isCompleted}
                 />
               </div>
             ) : (

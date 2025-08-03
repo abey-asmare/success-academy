@@ -39,7 +39,6 @@ export const ourFileRouter = {
       image: { maxFileCount: 10 },
       video: { maxFileCount: 10, maxFileSize: '1GB' },
       audio: { maxFileCount: 10 },
-      pdf: { maxFileCount: 10 }
     })
     .middleware(handleAuth)
     .onUploadComplete(async ({ metadata, file }) => {
