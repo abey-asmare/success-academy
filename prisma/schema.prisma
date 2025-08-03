@@ -74,6 +74,8 @@ model Course {
   chapters    Chapter[] 
   purchases Purchase[]
 
+  exams Exam[]
+
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 
@@ -154,22 +156,19 @@ model Exam {
   questions Question[]
 
 
+  // exam can be attached to the chapter, to test the student knowledge for any desired chapter
   chapterId String?
   chapter Chapter? @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  // exam can be attached to the  course, i.e simulation
+  courseId String?
+  course Course? @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  isSimulation Boolean? @default(false)
 
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt @default(now())
 }
 
-// model Simulation {
-//   id        String     @id @default(uuid())
-//   name      String
-//   description String?
-//   questions Question[]
-
-//   createdAt DateTime   @default(now())
-//   updatedAt DateTime   @updatedAt @default(now())
-// }
 
 model Question{
   id        String     @id @default(uuid())
@@ -177,8 +176,6 @@ model Question{
   imageUrl String?
   answers   Answer[]
 
-  // simulationId String?
-  // simulation Simulation? @relation(fields: [simulationId], references: [id], onDelete: Cascade)
 
   examId String
   exam Exam @relation(fields: [examId], references: [id], onDelete: Cascade)
