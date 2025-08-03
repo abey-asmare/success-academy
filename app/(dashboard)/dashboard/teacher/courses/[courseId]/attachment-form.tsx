@@ -2,7 +2,7 @@
 
 import axios from "axios";
 
-import { FileUpload } from "@/components/file-upload";
+import { FileAttachmentUpload, FileUpload } from "@/components/file-upload";
 import { Attachment, Course } from "@/prisma/app/generated/prisma/client";
 import { File, Loader2, X } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -10,7 +10,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 
 // Validation schema
-type formSchemaType = {url: string}
+type formSchemaType = {url: string | undefined, type: string | undefined, name: string | undefined}[]
 
 interface AttachmentFormProps {
   initialData: Course & { attachments: Attachment[] };
@@ -56,11 +56,11 @@ export default function AttachmentForm({
       )}
 
       <div className="my-4">
-        <FileUpload
+        <FileAttachmentUpload
           endpoint="courseAttachment"
-          onChange={(url) => {
-            if (url) {
-              onSubmit({ url });
+          onChange={(values) => {
+            if (values.length > 0) {
+              onSubmit(values);
             }
           }}
         />

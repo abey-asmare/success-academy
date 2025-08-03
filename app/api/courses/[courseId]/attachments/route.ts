@@ -7,7 +7,11 @@ export async function POST(req: Request, {params}: {params: Promise<{courseId: s
     const { courseId } = await params
     try{
         const {userId} = await auth()
-        const { url } = await req.json()   
+        const body = await req.json()   
+
+        // add courseId to the body
+        const values = body.map((value: {url: string, type: string, name: string}) => ({...value, courseId}))
+
         if(!userId || !isAdmin()){
             return NextResponse.json({error: "Unauthorized"}, {status: 401})
         }
@@ -22,16 +26,13 @@ export async function POST(req: Request, {params}: {params: Promise<{courseId: s
             return NextResponse.json({error: "Unauthorized"}, {status: 401})
         }
         
-        const attachment = await db.attachment.create({
-            data: {
-                courseId: courseId,
-                url, 
-                name: url.split('/').pop() || '',
-            }
+        const attachments = await db.attachment.createMany({
+            data: values
         })
 
-        return NextResponse.json(attachment)
+        return NextResponse.json(attachments)
     }catch(error){
+        console.log('uploadthing error', error)
         return NextResponse.json({error: "Internal server error"}, {status: 500})
     }
 }

@@ -83,6 +83,7 @@ model Attachment {
   id        String     @id @default(uuid())
   name      String
   url       String
+  type      String
 
   courseId  String    
   course    Course     @relation(fields: [courseId], references: [id], onDelete: Cascade)

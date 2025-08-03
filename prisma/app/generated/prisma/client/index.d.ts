@@ -5615,6 +5615,7 @@ export namespace Prisma {
     id: string | null
     name: string | null
     url: string | null
+    type: string | null
     courseId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -5624,6 +5625,7 @@ export namespace Prisma {
     id: string | null
     name: string | null
     url: string | null
+    type: string | null
     courseId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -5633,6 +5635,7 @@ export namespace Prisma {
     id: number
     name: number
     url: number
+    type: number
     courseId: number
     createdAt: number
     updatedAt: number
@@ -5644,6 +5647,7 @@ export namespace Prisma {
     id?: true
     name?: true
     url?: true
+    type?: true
     courseId?: true
     createdAt?: true
     updatedAt?: true
@@ -5653,6 +5657,7 @@ export namespace Prisma {
     id?: true
     name?: true
     url?: true
+    type?: true
     courseId?: true
     createdAt?: true
     updatedAt?: true
@@ -5662,6 +5667,7 @@ export namespace Prisma {
     id?: true
     name?: true
     url?: true
+    type?: true
     courseId?: true
     createdAt?: true
     updatedAt?: true
@@ -5744,6 +5750,7 @@ export namespace Prisma {
     id: string
     name: string
     url: string
+    type: string
     courseId: string
     createdAt: Date
     updatedAt: Date
@@ -5770,6 +5777,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     url?: boolean
+    type?: boolean
     courseId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -5780,6 +5788,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     url?: boolean
+    type?: boolean
     courseId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -5790,6 +5799,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     url?: boolean
+    type?: boolean
     courseId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -5800,12 +5810,13 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     url?: boolean
+    type?: boolean
     courseId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type AttachmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "url" | "courseId" | "createdAt" | "updatedAt", ExtArgs["result"]["attachment"]>
+  export type AttachmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "url" | "type" | "courseId" | "createdAt" | "updatedAt", ExtArgs["result"]["attachment"]>
   export type AttachmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     course?: boolean | CourseDefaultArgs<ExtArgs>
   }
@@ -5825,6 +5836,7 @@ export namespace Prisma {
       id: string
       name: string
       url: string
+      type: string
       courseId: string
       createdAt: Date
       updatedAt: Date
@@ -6255,6 +6267,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Attachment", 'String'>
     readonly name: FieldRef<"Attachment", 'String'>
     readonly url: FieldRef<"Attachment", 'String'>
+    readonly type: FieldRef<"Attachment", 'String'>
     readonly courseId: FieldRef<"Attachment", 'String'>
     readonly createdAt: FieldRef<"Attachment", 'DateTime'>
     readonly updatedAt: FieldRef<"Attachment", 'DateTime'>
@@ -14269,6 +14282,7 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     url: 'url',
+    type: 'type',
     courseId: 'courseId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -14699,6 +14713,7 @@ export namespace Prisma {
     id?: StringFilter<"Attachment"> | string
     name?: StringFilter<"Attachment"> | string
     url?: StringFilter<"Attachment"> | string
+    type?: StringFilter<"Attachment"> | string
     courseId?: StringFilter<"Attachment"> | string
     createdAt?: DateTimeFilter<"Attachment"> | Date | string
     updatedAt?: DateTimeFilter<"Attachment"> | Date | string
@@ -14709,6 +14724,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     url?: SortOrder
+    type?: SortOrder
     courseId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -14722,6 +14738,7 @@ export namespace Prisma {
     NOT?: AttachmentWhereInput | AttachmentWhereInput[]
     name?: StringFilter<"Attachment"> | string
     url?: StringFilter<"Attachment"> | string
+    type?: StringFilter<"Attachment"> | string
     courseId?: StringFilter<"Attachment"> | string
     createdAt?: DateTimeFilter<"Attachment"> | Date | string
     updatedAt?: DateTimeFilter<"Attachment"> | Date | string
@@ -14732,6 +14749,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     url?: SortOrder
+    type?: SortOrder
     courseId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -14747,6 +14765,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Attachment"> | string
     name?: StringWithAggregatesFilter<"Attachment"> | string
     url?: StringWithAggregatesFilter<"Attachment"> | string
+    type?: StringWithAggregatesFilter<"Attachment"> | string
     courseId?: StringWithAggregatesFilter<"Attachment"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Attachment"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Attachment"> | Date | string
@@ -15427,6 +15446,7 @@ export namespace Prisma {
     id?: string
     name: string
     url: string
+    type: string
     createdAt?: Date | string
     updatedAt?: Date | string
     course: CourseCreateNestedOneWithoutAttachmentsInput
@@ -15436,6 +15456,7 @@ export namespace Prisma {
     id?: string
     name: string
     url: string
+    type: string
     courseId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -15445,6 +15466,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     course?: CourseUpdateOneRequiredWithoutAttachmentsNestedInput
@@ -15454,6 +15476,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
     courseId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15463,6 +15486,7 @@ export namespace Prisma {
     id?: string
     name: string
     url: string
+    type: string
     courseId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -15472,6 +15496,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15480,6 +15505,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
     courseId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16259,6 +16285,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     url?: SortOrder
+    type?: SortOrder
     courseId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -16268,6 +16295,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     url?: SortOrder
+    type?: SortOrder
     courseId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -16277,6 +16305,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     url?: SortOrder
+    type?: SortOrder
     courseId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -17651,6 +17680,7 @@ export namespace Prisma {
     id?: string
     name: string
     url: string
+    type: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -17659,6 +17689,7 @@ export namespace Prisma {
     id?: string
     name: string
     url: string
+    type: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -17791,6 +17822,7 @@ export namespace Prisma {
     id?: StringFilter<"Attachment"> | string
     name?: StringFilter<"Attachment"> | string
     url?: StringFilter<"Attachment"> | string
+    type?: StringFilter<"Attachment"> | string
     courseId?: StringFilter<"Attachment"> | string
     createdAt?: DateTimeFilter<"Attachment"> | Date | string
     updatedAt?: DateTimeFilter<"Attachment"> | Date | string
@@ -18640,6 +18672,7 @@ export namespace Prisma {
     id?: string
     name: string
     url: string
+    type: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -18670,6 +18703,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18678,6 +18712,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18686,6 +18721,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

@@ -22,3 +22,22 @@ export const FileUpload= ({
     }}
     />
 }
+
+
+interface FileAttachmentUploadProps {
+    onChange: (values: {url: string, type: string | undefined, name: string | undefined}[]) => void;
+    endpoint: keyof typeof ourFileRouter;
+}
+export const FileAttachmentUpload = ({
+    onChange, endpoint
+}: FileAttachmentUploadProps) => {
+    return <UploadDropzone
+    endpoint={endpoint}
+    onClientUploadComplete={(res)=> {
+        onChange(res?.map((file) => ({url: file.ufsUrl, type: file.type, name: file.name})))
+    }}
+    onUploadError={(error: Error)=> {
+        toast.error(error.message)
+    }}
+    />
+}

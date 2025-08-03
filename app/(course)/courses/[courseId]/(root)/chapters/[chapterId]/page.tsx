@@ -109,7 +109,7 @@ const ChapterIdPage = async ({
               <div className="p-4 space-y-2 ">
                 {attachments.map((attachment) => (
                   <Link
-                    href={attachment.url}
+                    href={`/courses/${courseId}/chapters/${chapterId}/resources/${attachment.id}`}
                     target="_blank"
                     key={attachment.id}
                     className='flex items-center p-3 rounded-sm w-full bg-sky-200 text-sky-700 hover:underline'

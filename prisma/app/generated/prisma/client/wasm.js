@@ -158,6 +158,7 @@ exports.Prisma.AttachmentScalarFieldEnum = {
   id: 'id',
   name: 'name',
   url: 'url',
+  type: 'type',
   courseId: 'courseId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
