@@ -46,7 +46,7 @@ export default function CourseList({ className}: {className: string}) {
 }
 
 
- function CourseCard({course}: {course: CourseMinimized}){
+ export function CourseCard({course}: {course: CourseMinimized}){
 return (
 <Card className="p-4 border-2 border-gray-200 w-full max-w-[280px] transition-all duration-300 hover:shadow-lg hover:border-gray-300 hover:-translate-y-1">
 <div className="wrapper rounded-md overflow-hidden w-full h-[220px] object-cover">

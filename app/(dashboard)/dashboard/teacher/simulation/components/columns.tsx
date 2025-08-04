@@ -102,7 +102,7 @@ export const columns: ColumnDef<ExamCourse>[] = [
                 size='sm'
               >
                 <Link
-                  href={`/courses/${row.getValue("courseId")}`}
+                  href={`/courses/${row.getValue("courseId")}#simulations`}
                 >
                   View
                 </Link>

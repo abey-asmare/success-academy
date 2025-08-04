@@ -32,6 +32,19 @@ export const getChapter = async ({
             },
             select: {
                 price: true,
+                imageUrl: true,
+                title: true,
+                exams: {
+                    select: {
+                        id: true,
+                        name: true, 
+                        description: true  
+                    }, 
+                    orderBy: {
+                        createdAt: "desc",
+                    }
+
+                }
             }
         });
 
