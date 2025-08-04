@@ -1,6 +1,5 @@
-import { clerkClient } from "@clerk/nextjs/server";
 import { DataTable } from "./components/data-table";
-import { columns } from "./components/columns";
+import {columns} from "./components/columns";
 import { db } from "@/lib/db";
 
 export type User = {
@@ -30,7 +29,8 @@ const SimulationPage = async ({
     id: item.id,
     name: item.name,
     course: item.course?.title ?? 'Unknown Course',
-    updatedAt: item.updatedAt.toISOString(), // or format it nicely
+    updatedAt: item.updatedAt.toDateString(),
+    courseId: item.course && item.course.id || 'not exist',
   }));
   return (
     <div className="p-6">

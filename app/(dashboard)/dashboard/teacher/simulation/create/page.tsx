@@ -1,5 +1,4 @@
-import { CourseDropdown } from '../components/CourseDropdown';
-import CreateSimulationForm from '../components/CreateExamForm';
+import CreateSimulationForm from '../components/CreateSimulationForm';
 import { db } from '@/lib/db';
 
 export default async function CreateSimulationPage() {

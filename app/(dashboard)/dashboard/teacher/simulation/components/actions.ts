@@ -10,7 +10,7 @@ export async function deleteSimulation(id: string) {
         return { message: "Not Authorized" };
     }
   try {
-    const res = await db.exam.delete({
+     await db.exam.delete({
       where: {
         id,
       },

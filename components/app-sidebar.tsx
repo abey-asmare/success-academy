@@ -54,7 +54,7 @@ teacherRotues: [
       icon: BookOpen,
       title: 'Simulations',
       url: '/dashboard/teacher/simulation',
-      contextOpen: 'Create Simulation',
+      contextOpen: 'Create',
       href: '/dashboard/teacher/simulation/create'
     },
     // {

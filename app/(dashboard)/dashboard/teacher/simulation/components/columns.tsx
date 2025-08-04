@@ -1,5 +1,4 @@
 "use client";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -7,18 +6,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Course, Exam } from "@/prisma/app/generated/prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-import toast from "react-hot-toast";
-import { deleteSimulation } from "./actions";
-import DeleteFormColumn from "./deleteformColumn";
+import Link from "next/link";
+import { DeleteFormColumn } from "./DeleteformColumn";
 
 export type ExamCourse = {
   id: string;
   name: string;
   course: string;
   updatedAt: string;
+  courseId: string;
 };
 
 export const columns: ColumnDef<ExamCourse>[] = [
@@ -79,10 +77,17 @@ export const columns: ColumnDef<ExamCourse>[] = [
     },
   },
   {
+    accessorKey: "courseId",
+    header: () => null,
+    cell: () => null,
+    enableSorting: false,
+    enableColumnFilter: false,
+  },
+  {
     id: "actions",
     cell: ({ row }) => {
       return (
-        <DropdownMenu>
+        <DropdownMenu>  
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-4 w-8 p-0">
               <span className="sr-only">Open menu</span>
@@ -90,11 +95,36 @@ export const columns: ColumnDef<ExamCourse>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-              <DropdownMenuItem>
-                <Button variant="link" size='sm' className="text-sky-600 hover:text-sky-700 bg-transparent w-full h-full p-2">Update</Button>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <DeleteFormColumn id={row.getValue("id")} />
+            <DropdownMenuItem>
+              <Button
+                variant="link"
+                className="text-sky-600 hover:text-sky-700 bg-transparent hover:bg-transparent w-full h-full"
+                size='sm'
+              >
+                <Link
+                  href={`/courses/${row.getValue("courseId")}`}
+                >
+                  View
+                </Link>
+              </Button>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Button
+                variant="link"
+                className="text-sky-600 hover:text-sky-700 bg-transparent hover:bg-transparent w-full h-full"
+                size='sm'
+              >
+                <Link
+                  href={`/dashboard/teacher/simulation/${row.getValue("id")}`}
+                >
+                  Update
+                </Link>
+              </Button>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <DeleteFormColumn
+                examId={row.getValue("id")}
+              />
               </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
