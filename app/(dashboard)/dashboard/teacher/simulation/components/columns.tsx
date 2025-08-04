@@ -9,7 +9,7 @@ import {
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import Link from "next/link";
-import { DeleteFormColumn } from "./DeleteformColumn";
+import { DeleteFormColumn } from "./DeleteSimulationFormColumn";
 
 export type ExamCourse = {
   id: string;
