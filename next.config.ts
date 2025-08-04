@@ -11,9 +11,6 @@ const nextConfig: NextConfig = {
     ],
   },
   allowedDevOrigins: ['http://localhost:3000', 'https://success-academy.vercel.app', 'https://unified-mole-badly.ngrok-free.app', 'unified-mole-badly.ngrok-free.app'],
-  reactComponentAnnotation: {
-    enabled: process.env.NODE_ENV === 'development',
-  },
 };
 
 export default nextConfig;
