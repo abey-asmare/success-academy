@@ -15,12 +15,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | Success Academy',
-    default: 'Success Academy',
+    template: "%s | Success Academy",
+    default: "Success Academy",
   },
   description: "Your Shortcut to success.",
   metadataBase: new URL(baseUrl),
@@ -47,19 +47,23 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-
-    <html lang="en" className="scroll-smooth md:scroll-auto">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased `}
-      >
-        <main>
-        <ToasterProvider/>
-        <QueryProvider>
-          {children}
-        </QueryProvider>
-        </main>
-      </body>
-    </html>
+      <html lang="en" className="scroll-smooth md:scroll-auto">
+        <meta property="og:title" content="Success Academy" />
+        <meta property="og:description" content="Your Shortcut to success." />
+        <meta
+          property="og:image"
+          content={`${baseUrl}/opengraph-image.png`}
+        />
+        <meta property="og:url" content={baseUrl} />
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased `}
+        >
+          <main>
+            <ToasterProvider />
+            <QueryProvider>{children}</QueryProvider>
+          </main>
+        </body>
+      </html>
     </ClerkProvider>
   );
 }
