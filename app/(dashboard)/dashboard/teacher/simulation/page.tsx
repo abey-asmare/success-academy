@@ -21,6 +21,9 @@ const SimulationPage = async ({
   const offset = (page - 1) * limit;
 
   const exams = await db.exam.findMany({
+    where: {
+      isSimulation: true
+    }, 
     include: {
       course: true
     }
