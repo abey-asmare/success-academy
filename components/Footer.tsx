@@ -1,7 +1,19 @@
-import { supportEmail, supportPhone, telegramLink } from "@/app/constants";
+import {
+  instagramLink,
+  supportEmail,
+  supportPhone,
+  telegramLink,
+  tiktokLink1,
+  tiktokLink2,
+} from "@/app/constants";
 import { Mail, Phone } from "lucide-react";
 import Link from "next/link";
 import OurCourses from "./custom/OurCourses";
+import {
+  IconBrandInstagram,
+  IconBrandTelegram,
+  IconBrandTiktok,
+} from "@tabler/icons-react";
 
 const Footer = () => {
   return (
@@ -10,7 +22,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
           {/* Services Section */}
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-blue-400">
+            <h3 className="text-lg font-semibold mb-4 text-blue-400 ">
               Our Courses
             </h3>
             <OurCourses />
@@ -18,49 +30,45 @@ const Footer = () => {
 
           {/* About Us Section */}
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-blue-400" id="about">
+            <h3 className="text-lg font-semibold mb-4 text-blue-400 " id="about">
               ABOUT US
             </h3>
             <ul className="space-y-2">
               <li>
-                <div
-                  className="text-gray-300 hover:text-white transition-colors"
-                >
+                <div className="text-gray-300 hover:text-white transition-colors">
                   Our Story
                 </div>
               </li>
               <li>
-                <div
-                  className="text-gray-300 hover:text-white transition-colors"
-                >
+                <div className="text-gray-300 hover:text-white transition-colors">
                   Our Team
                 </div>
               </li>
               <li>
-                <div
-                  className="text-gray-300 hover:text-white transition-colors"
-                >
+                <div className="text-gray-300 hover:text-white transition-colors">
                   Mission & Vision
                 </div>
-                </li>
+              </li>
             </ul>
           </div>
 
           {/* Contacts Section */}
           <div>
             <h3
-              className="text-lg font-semibold mb-4 text-blue-400"
+              className="text-lg font-semibold mb-4 text-blue-400 "
               id="contact"
             >
               CONTACTS
             </h3>
             <div className="space-y-3">
               <div className="flex items-center gap-2">
-                <Phone size={16} className="text-blue-400" />
-                <Link href={`tel:${supportPhone}`} className="text-gray-300">{supportPhone}</Link>
+                <Phone size={16} className="text-blue-400 " />
+                <Link href={`tel:${supportPhone}`} className="text-gray-300">
+                  {supportPhone}
+                </Link>
               </div>
               <div className="flex items-center gap-2">
-                <Mail size={16} className="text-blue-400" />
+                <Mail size={16} className="text-blue-400 " />
                 <Link
                   href={`mailto:${supportEmail}`}
                   className="text-gray-300 hover:text-white transition-colors"
@@ -69,10 +77,8 @@ const Footer = () => {
                 </Link>
               </div>
               <div className="flex items-center gap-2">
-                <div className="">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="oklch(62.3% 0.214 259.815)" className="bi bi-telegram" viewBox="0 0 16 16">
-                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.287 5.906q-1.168.486-4.666 2.01-.567.225-.595.442c-.03.243.275.339.69.47l.175.055c.408.133.958.288 1.243.294q.39.01.868-.32 3.269-2.206 3.374-2.23c.05-.012.12-.026.166.016s.042.12.037.141c-.03.129-1.227 1.241-1.846 1.817-.193.18-.33.307-.358.336a8 8 0 0 1-.188.186c-.38.366-.664.64.015 1.088.327.216.589.393.85.571.284.194.568.387.936.629q.14.092.27.187c.331.236.63.448.997.414.214-.02.435-.22.547-.82.265-1.417.786-4.486.906-5.751a1.4 1.4 0 0 0-.013-.315.34.34 0 0 0-.114-.217.53.53 0 0 0-.31-.093c-.3.005-.763.166-2.984 1.09"/>
-                  </svg>
+                <div className="text-blue-400 ">
+                  <IconBrandTelegram size={18} />
                 </div>
                 <Link
                   href={telegramLink}
@@ -80,6 +86,36 @@ const Footer = () => {
                 >
                   Join our telegram
                 </Link>
+              </div>
+              <div className="flex items-center gap-2">
+                <Link
+                  href={instagramLink}
+                  className="text-gray-300 hover:text-white transition-colors flex items-center gap-2"
+                >
+                  <IconBrandInstagram size={20} className="text-blue-400 " />
+                  <span>Follow us on Instagram.</span>
+                </Link>
+              </div>
+              <div className="flex gap-2 flex-col text-gray-300">
+                <span className="underline text-gray-300 transition-colors">
+                  Follow us on TikTok
+                </span>
+                <div className="flex gap-2 flex-col">
+                  <Link
+                    href={tiktokLink1}
+                    className="text-gray-300 transition-colors flex items-center gap-4"
+                  >
+                    <IconBrandTiktok size={16} className="text-blue-400 " />
+                    <span>uattips</span>
+                  </Link>
+                  <Link
+                    href={tiktokLink2}
+                    className="text-gray-300 transition-colors flex items-center gap-4"
+                  >
+                    <IconBrandTiktok size={16} className="text-blue-400 " />
+                    <span>sbjiga</span>
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
@@ -98,7 +134,10 @@ const Footer = () => {
 
           <div className="flex flex-col md:flex-row items-center gap-4 text-sm text-gray-400">
             <div className="hover:text-white transition-colors">
-              Privacy Policy
+              <Link href="/privacy-policy">Privacy Policy</Link>
+            </div>
+            <div className="hover:text-white transition-colors">
+              <Link href="/terms-of-use">Terms of Service</Link>
             </div>
             <span className="hidden md:inline">|</span>
             <span>© {new Date().getFullYear()} — Copyright</span>

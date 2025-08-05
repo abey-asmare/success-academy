@@ -1,5 +1,15 @@
 import { Category, Course } from "./prisma/app/generated/prisma/client";
 
+
+
+export type ExamMinimized = {
+    id: string;
+    name: string;
+    description: string;
+    imageUrl: string
+    courseId: string
+}
+
 export type CourseMinimized = {
     id: string;
     title: string;
@@ -7,6 +17,7 @@ export type CourseMinimized = {
     description: string | ""
     price: number;
     createdAt: Date;
+    exams?: ExamMinimized[]
 };
 
 

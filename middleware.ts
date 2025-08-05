@@ -65,8 +65,7 @@ if (userId && sessionId) {
       return NextResponse.redirect(new URL("/too-many-devices", req.url))
     }
 
-  } catch (error) {
-    console.error("Error fetching sessions:", error)
+  } catch {
     return NextResponse.next()
   }
 }
