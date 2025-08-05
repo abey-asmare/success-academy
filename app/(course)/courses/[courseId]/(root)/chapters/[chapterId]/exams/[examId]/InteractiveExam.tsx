@@ -75,15 +75,17 @@ export default function InteractiveExam({ exam }: InteractiveExamProps) {
                 {index + 1}. {question.question}
               </h1>
               {question.imageUrl && (
+              <div className='w-full'>
               <UnDownloadableImage>
                 <Image
                   src={question.imageUrl}
                   alt={question.question}
-                  width={500}
-                  height={500}
+                  objectFit='contain'
+                  fill
                   className="w-full max-w-4xl mx-auto px-4 pointer-events-none select-none"
                 />
               </UnDownloadableImage>
+              </div>
               )}
               
               <div className='flex justify-center w-full px-4'>

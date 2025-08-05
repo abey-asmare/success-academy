@@ -138,7 +138,7 @@ const ChapterIdPage = async ({
                           alt={exam.name}
                           width={220}
                           height={160}
-                          className="w-full h-full"
+                          className="w-full h-full object-cover"
                           priority
                         />
                       </div>
