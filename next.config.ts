@@ -8,6 +8,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'd46msoxdbl.ufs.sh',
       },
+      {
+        protocol: 'https',
+        hostname: '439a0p1xyg.ufs.sh'
+      },
     ],
   },
   allowedDevOrigins: ['http://localhost:3000', 'https://success-academy.vercel.app', 'https://unified-mole-badly.ngrok-free.app', 'unified-mole-badly.ngrok-free.app'],
