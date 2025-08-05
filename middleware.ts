@@ -1,5 +1,6 @@
 import { clerkClient, clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
+import proxyMiddleware from './proxy-middleware'
 
 const isPublicRoute = createRouteMatcher(['/sign-in(.*)', '/sign-up(.*)', "/api/uploadthing", '/', '/api/courses(.*)'])
 
@@ -8,6 +9,12 @@ const isAdminRoute = createRouteMatcher(['/admin(.*)', '/dashboard/teacher(.*)']
 export default clerkMiddleware(async (auth, req) => {
   const authData = await auth()
   const { userId, sessionId } = authData
+
+  // First check if it's a proxy request
+  const proxyResponse = proxyMiddleware(req)
+  if (proxyResponse) {
+    return proxyResponse
+  }
 
   // 1. Route protection
   if (!isPublicRoute(req)) {
@@ -73,7 +80,7 @@ export const config = {
     '/', 
     // Skip Next.js internals and all static files, unless found in search params
     '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
-    // Always run for API routes
-    '/(api|trpc)(.*)',
+    // Always run for API routes  AND anything passed through the proxy
+    '/(api|trpc|__clerk)(.*)',
   ],
 }
