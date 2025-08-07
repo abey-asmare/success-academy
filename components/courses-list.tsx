@@ -6,7 +6,7 @@ interface CoursesListProps {
 }
 
 export const CoursesList = ({
-    items
+    items,
 }: CoursesListProps) => {
     return (
         <div>

@@ -16,7 +16,12 @@ export default async function Dashboard() {
   const {
     completedCourses,
     coursesInProgress,
+    isVerified
   } = await getDashboardCourses(userId);
+  const allCourses = [
+    ...coursesInProgress.map(course => ({ ...course, isVerified })),
+    ...completedCourses.map(course => ({ ...course, isVerified }))
+  ];
 
   return (
     <div className="p-6 space-y-4"> 
@@ -34,7 +39,7 @@ export default async function Dashboard() {
         />
       </div>
       <CoursesList
-        items={[...coursesInProgress, ...completedCourses]}
+        items={allCourses}
       />
     </div>
   )

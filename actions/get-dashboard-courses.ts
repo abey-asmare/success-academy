@@ -11,6 +11,7 @@ type CourseWithProgressWithCategory = Course & {
 type DashboardCourses = {
     completedCourses: CourseWithProgressWithCategory[];
     coursesInProgress: CourseWithProgressWithCategory[];
+    isVerified: boolean;
 }
 
 export const getDashboardCourses = async (userId: string): Promise<DashboardCourses> => {
@@ -18,7 +19,9 @@ export const getDashboardCourses = async (userId: string): Promise<DashboardCour
 
         const purchasedCourses = await db.purchase.findMany({
             where: {
-                userId
+                userId,
+                approved: true,
+                
             },
             select: {
                 course: {
@@ -48,13 +51,15 @@ export const getDashboardCourses = async (userId: string): Promise<DashboardCour
 
         return {
             completedCourses,
-            coursesInProgress
+            coursesInProgress,
+            isVerified: true
         }
-
+        
     }catch {
         return  {
             completedCourses: [],
-            coursesInProgress: []
+            coursesInProgress: [],
+            isVerified: false
         }
     }
 }

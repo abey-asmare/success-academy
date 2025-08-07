@@ -8,6 +8,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -66,7 +67,7 @@ const referrerOptions = [
 const formSchema = profileFormSchema
 type formType = z.infer<typeof formSchema>;
 
-export default function ProfileDialogDrawerForm({onSuccess}: {onSuccess: ()=> void}){
+export default function ProfileDialogDrawerForm(){
   const isDesktop = useMediaQuery("(min-width: 768px)")
   
   const open = useProfileEnroll(state => state.open)
@@ -83,7 +84,7 @@ export default function ProfileDialogDrawerForm({onSuccess}: {onSuccess: ()=> vo
               While Processing your request, Tell us about yourself, This will help us to provide you with the best possible service.
             </DialogDescription>
           </DialogHeader>
-          <ProfileForm onSuccess = {onSuccess} />
+          <ProfileForm />
         </DialogContent>
       </Dialog></>
     )
@@ -92,20 +93,22 @@ export default function ProfileDialogDrawerForm({onSuccess}: {onSuccess: ()=> vo
 
 
   return (
-    <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerContent>
+    <Drawer open={open} onOpenChange={setOpen} >
+      <DrawerContent className="overflow-y-auto ">
+        <ScrollArea className="p-4 max-h-[60vh] overflow-auto">
         <DrawerHeader className="text-left">
           <DrawerTitle>Tell us about yourself</DrawerTitle>
           <DrawerDescription>
             While Processing your request, Tell us about yourself, This will help us to provide you with the best possible service.
           </DrawerDescription>
         </DrawerHeader>
-        <ProfileForm onSuccess = {onSuccess} />
+        <ProfileForm />
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline" className="mx-6">Cancel</Button>
           </DrawerClose>
         </DrawerFooter>
+        </ScrollArea>
       </DrawerContent>
     </Drawer>
   )
@@ -114,7 +117,7 @@ export default function ProfileDialogDrawerForm({onSuccess}: {onSuccess: ()=> vo
 
 
 
-function ProfileForm({onSuccess}: {onSuccess: ()=> void}) {
+function ProfileForm() {
   
   const { isLoaded, isSignedIn, user } = useUser();
 
@@ -215,8 +218,8 @@ function ProfileForm({onSuccess}: {onSuccess: ()=> void}) {
               <FormItem>
                 <FormLabel className="">University</FormLabel>
                 <FormControl>
-                            <Command>
-              <CommandInput  placeholder="Search"  {...field}/>
+                            <Command {...field}>
+              <CommandInput  placeholder="Search" value={field.value}  />
               <CommandList>
                 <CommandEmpty>No results found.</CommandEmpty>
                 <CommandGroup heading="List of universities">
