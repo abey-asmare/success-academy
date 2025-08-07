@@ -2,6 +2,7 @@
 import { getProgress } from "@/actions/get-progress";
 import { db } from "@/lib/db";
 import { CourseWithProgressWithCategory } from "@/types";
+import { isCoursePaymentVerified } from "./is-course-payment-verified";
 
 type GetCourses = {
   userId: string;
@@ -51,14 +52,20 @@ export const getCourses = async ({
           return {
             ...course,
             progress: null, // make progress possibly null
+            isVerified: false,
           };
         }
+
+        // check for payment verification
+
+        const isVerified = await isCoursePaymentVerified(course.id, userId);
     
         const progressPercentage = await getProgress(userId, course.id);
     
         return {
           ...course,
           progress: progressPercentage,
+          isVerified,
         };
       })
     );

@@ -13,7 +13,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "baseUrl": ".", // ✅ needed for path aliases
+    "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
       "crypto": ["node_modules/crypto-js"]

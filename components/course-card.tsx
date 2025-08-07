@@ -1,11 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
-import { BookOpen } from "lucide-react";
+import { BookOpen, LoaderCircle } from "lucide-react";
 
 import { formatPrice } from "@/lib/format";
 import IconBadge from "./icon-badge";
 import { CourseProgress } from "./course-progress";
 import { Button } from "./ui/button";
+import { isErrorBarRelevantForAxisType } from "recharts/types/state/selectors/axisSelectors";
 
 interface CourseCardProps {
   id: string;
@@ -15,6 +16,7 @@ interface CourseCardProps {
   price: number;
   progress: number | null;
   category: string;
+  isVerified: boolean;
 }
 
 export const CourseCard = ({
@@ -25,6 +27,7 @@ export const CourseCard = ({
   price,
   progress,
   category,
+  isVerified,
 }: CourseCardProps) => {
   return (
     <Link href={`/courses/${id}`}>
@@ -51,21 +54,25 @@ export const CourseCard = ({
               </span>
             </div>
           </div>
-          {progress !== null ? (
+          {progress !== null && isVerified ? (
             <CourseProgress
               variant={progress === 100 ? "success" : "default"}
               size="sm"
               value={progress}
             />
+          ) : !isVerified ? (
+            <Button disabled className="w-full mt-2 bg-sky-600 hover:bg-sky-700" size="sm">
+            <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+            Proccessing Payment </Button>
           ) : (
             <>
-              <p className="text-md md:text-sm font-medium text-slate-700">
-                {formatPrice(price)}
-              </p>
-              <Button className="w-full mt-2 bg-sky-600 hover:bg-sky-700" size="sm" asChild>
-                <Link href={`/courses/${id}/checkout`}>Enroll</Link>
-              </Button>
-            </>
+            <p className="text-md md:text-sm font-medium text-slate-700">
+              {formatPrice(price)}
+            </p>
+            <Button className="w-full mt-2 bg-sky-600 hover:bg-sky-700" size="sm" asChild>
+              <Link href={`/courses/${id}/checkout`}>Enroll</Link>
+            </Button>
+          </>
           )}
         </div>
       </div>

@@ -21,6 +21,7 @@ export const CoursesList = ({
                         price={item.price!}
                         progress={item.progress}
                         category={item.category?.name || ''}
+                        isVerified={item.isVerified}
                     />
                 ))}
             </div>

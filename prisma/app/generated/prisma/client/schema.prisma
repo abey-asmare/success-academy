@@ -174,3 +174,29 @@ model Answer {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+enum Stream {
+  NATURAL_SCIENCE
+  SOCIAL_SCIENCE
+}
+
+enum Referrer {
+  Google
+  Telegram
+  Instagram
+  Tiktok
+  Youtube
+  Friend
+  Other
+}
+
+model Profile {
+  id           String    @id @default(uuid())
+  userId       String    @unique
+  firstName    String
+  lastName     String
+  phone_number String
+  stream       Stream    @default(NATURAL_SCIENCE)
+  university   String
+  referrer     Referrer? @default(Telegram)
+}

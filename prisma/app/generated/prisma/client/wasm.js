@@ -225,6 +225,17 @@ exports.Prisma.AnswerScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  phone_number: 'phone_number',
+  stream: 'stream',
+  university: 'university',
+  referrer: 'referrer'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -239,7 +250,20 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.Stream = exports.$Enums.Stream = {
+  NATURAL_SCIENCE: 'NATURAL_SCIENCE',
+  SOCIAL_SCIENCE: 'SOCIAL_SCIENCE'
+};
 
+exports.Referrer = exports.$Enums.Referrer = {
+  Google: 'Google',
+  Telegram: 'Telegram',
+  Instagram: 'Instagram',
+  Tiktok: 'Tiktok',
+  Youtube: 'Youtube',
+  Friend: 'Friend',
+  Other: 'Other'
+};
 
 exports.Prisma.ModelName = {
   Chapter: 'Chapter',
@@ -252,7 +276,8 @@ exports.Prisma.ModelName = {
   Purchase: 'Purchase',
   Exam: 'Exam',
   Question: 'Question',
-  Answer: 'Answer'
+  Answer: 'Answer',
+  Profile: 'Profile'
 };
 
 /**
