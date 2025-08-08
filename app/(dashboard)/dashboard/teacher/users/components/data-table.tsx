@@ -5,6 +5,12 @@ import {
   getCoreRowModel,
   useReactTable,
   flexRender,
+  ColumnFiltersState,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  PaginationState,
+  SortingState,
 } from "@tanstack/react-table";
 
 import {
@@ -63,11 +69,33 @@ export function DataTable<TData, TValue>({
     router.push(`?${params.toString()}`);
   };
 
+  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+  const [pagination, setPagination] = React.useState<PaginationState>({
+    pageIndex: 0,
+  pageSize: 100,
+  });
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-  });
+    getSortedRowModel: getSortedRowModel(),
+    onSortingChange: setSorting,
+    
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+
+    getPaginationRowModel: getPaginationRowModel(),
+    onPaginationChange: setPagination,
+    
+    state: {
+      sorting,
+      columnFilters,
+      pagination
+    },
+  })
+
 
   return (
     <div>

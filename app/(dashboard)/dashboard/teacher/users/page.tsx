@@ -1,6 +1,8 @@
-import { clerkClient } from "@clerk/nextjs/server";
+import { auth, clerkClient } from "@clerk/nextjs/server";
 import { DataTable } from "./components/data-table";
 import { columns } from "./components/columns";
+import {db} from "@/lib/db";
+import { Stream, Referrer } from "@/prisma/app/generated/prisma/client";
 
 export type User = {
   id: string;
@@ -8,6 +10,16 @@ export type User = {
   firstName: string;
   lastName: string;
   role: "admin" | "moderator" | "User";
+  profile:{
+    phone_number: string;
+    id: string;
+    userId: string;
+    firstName: string;
+    lastName: string;
+    stream: Stream;
+    university: string;
+    referrer: Referrer | null;
+  } | null
 };
 
 async function getAllUserDetails({
@@ -27,11 +39,18 @@ async function getAllUserDetails({
     query: search || undefined,
   });
 
+  const profiles = await db.profile.findMany({
+    where: {
+      userId: {
+        in: response.data.map((user) => user.id),
+      },
+    },
+  }); 
+
   const users: User[] = response.data.map((user) => {
     const primaryEmail = user.emailAddresses.find(
       (email) => email.id === user.primaryEmailAddressId
     );
-
     return {
       id: user.id,
       email: primaryEmail?.emailAddress || "No email",
@@ -39,6 +58,7 @@ async function getAllUserDetails({
       lastName: user.lastName || "",
       role:
         (user.publicMetadata?.role as "admin" | "moderator" | "User") || "User",
+      profile: profiles.find((profile) => profile.userId === user.id) || null,
     };
   });
 
@@ -53,7 +73,6 @@ const UsersPage = async ({
 }: {
   searchParams: Promise<{ search?: string; page?: string }>;
 }) => {
-
   const { search } = (await searchParams) || "";
   const page = parseInt((await searchParams).page || "1");
   const limit = 501;
@@ -72,7 +91,7 @@ const UsersPage = async ({
         data={users}
         totalCount={totalCount}
         currentPage={page}
-        search={search || ''}
+        search={search || ""}
       />
     </div>
   );

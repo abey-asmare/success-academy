@@ -11,14 +11,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import toast from "react-hot-toast";
 import { removeRole, setRole } from "../_actions";
-
-type User = {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  role: 'admin' | 'moderator' | 'User';
-};
+import { User } from "../page";
 
 async function setRole_(id: string){
   try{
@@ -40,17 +33,10 @@ async function removeRole_(id: string){
 export const columns: ColumnDef<User>[] = [
   {
     accessorKey: "id",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Id
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: () => null,
+    cell: () => null,
+    enableSorting: false,
+    enableColumnFilter: false,
   },
   {
     accessorKey: "email",
@@ -60,41 +46,146 @@ export const columns: ColumnDef<User>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          User
+          Email
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
+    sortingFn: (rowA, rowB) => {
+      const a = rowA.original.email.toLowerCase();
+      const b = rowB.original.email.toLowerCase();
+      return a.localeCompare(b);
+    },
   },
   {
-    accessorKey: "firstName",
+    id: "fullName",
+    accessorFn: (row: User) => row.profile?.firstName + " " + row.profile?.lastName || row.firstName + " " + row.lastName,
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          First Name
+          Full Name
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
+    cell: ({ row }) => {
+      const profile = row.original.profile;
+      return (
+        <div className="flex items-center">
+            {
+              profile ? `${profile.firstName} ${profile.lastName}` : row.original.firstName + " " + row.original.lastName 
+            }
+        </div>
+      );
+    },
+    enableSorting: true, 
   },
   {
-    accessorKey: "lastName",
+    id: "phone_number",
+    accessorFn: (row: User) => row.profile?.phone_number || "N/A",
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Phone Number
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
+    cell: ({ row }) => {
+      const phone = row.getValue("phone_number") as string;
+      return <div className="flex items-center">{phone}</div>;
+    },
+    enableSorting: true,
+    enableColumnFilter: true,
+  }, 
+  {
+    id: "stream",
+    accessorFn: (row: User) => row.profile?.stream || "N/A", 
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Last Name
+          Stream
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
-  },
-
+    cell: ({ row }) => {
+      const profile = row.original.profile;
+      return (
+        <div className="flex items-center">
+          {profile?.stream}
+        </div>
+      );
+    },
+    sortingFn: (rowA, rowB) => {
+      const a = rowA.original.profile?.stream || "";
+      const b = rowB.original.profile?.stream || "";
+      return a.localeCompare(b);
+    },
+  }, 
+  {
+    id: "university",
+    accessorFn: (row: User) => row.profile?.university || 'N/A',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          University
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const profile = row.original.profile;
+      return (
+        <div className="flex items-center">
+          {profile?.university}
+        </div>
+      );
+    },
+    sortingFn: (rowA, rowB) => {
+      const a = rowA.original.profile?.university || "";
+      const b = rowB.original.profile?.university || "";
+      return a.localeCompare(b);
+    },
+  }, 
+  {
+    id: "referrer", 
+    accessorFn: (row: User) => row.profile?.referrer || "N/A",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Referrer
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const profile = row.original.profile;
+      return (
+        <div className="flex items-center">
+          {profile?.referrer || "N/A"}
+        </div>
+      );
+    },
+    sortingFn: (rowA, rowB) => {
+      const a = rowA.original.profile?.referrer || "";
+      const b = rowB.original.profile?.referrer || "";
+      return a.localeCompare(b);
+    },
+  }, 
   {
     accessorKey: "role",
     header: ({ column }) => {
@@ -122,6 +213,7 @@ export const columns: ColumnDef<User>[] = [
         </div>
       );
     },
+    enableColumnFilter: true,
   },
 
   {
