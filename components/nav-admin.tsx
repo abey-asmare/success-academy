@@ -2,9 +2,6 @@
 
 import {
   IconDots,
-  IconFolder,
-  IconShare3,
-  IconTrash,
   type Icon,
 } from "@tabler/icons-react";
 

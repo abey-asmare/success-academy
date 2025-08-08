@@ -6,7 +6,6 @@ import { formatPrice } from "@/lib/format";
 import IconBadge from "./icon-badge";
 import { CourseProgress } from "./course-progress";
 import { Button } from "./ui/button";
-import { isErrorBarRelevantForAxisType } from "recharts/types/state/selectors/axisSelectors";
 
 interface CourseCardProps {
   id: string;

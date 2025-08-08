@@ -209,15 +209,20 @@ enum Referrer {
   Other  
 }
 
+enum Role {
+  User
+  Admin
+}
 
 model Profile {
   id String @id @default(uuid())
   userId String @unique
   firstName String
   lastName String
-  phone_number String
-  stream Stream @default(NATURAL_SCIENCE)
-  university String
-  referrer Referrer? @default(Telegram)
-  
+  email String @unique
+  phone_number String?
+  role Role? @default(User)
+  stream Stream? 
+  university String?
+  referrer Referrer? 
 }

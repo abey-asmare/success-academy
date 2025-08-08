@@ -31,7 +31,7 @@ export default function CourseEnrollButton({
     > */}
       Enroll for {formatPrice(price)}
       </Button>   
-      <ProfileDialogDrawerForm onSuccess = {onSuccess}/>
+      <ProfileDialogDrawerForm/>
     </>
   )
 }

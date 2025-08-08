@@ -119,7 +119,7 @@ export default function ProfileDialogDrawerForm({open, setOpen}: {open: boolean,
 
 
 function ProfileForm() {
-  const { isLoaded, isSignedIn, user } = useUser();
+  const { user } = useUser();
   const form = useForm<formType>({
     resolver: zodResolver(formSchema),
     defaultValues: {

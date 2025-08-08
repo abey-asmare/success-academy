@@ -23,15 +23,12 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useDebounce } from "@/hooks/use-debounce";
-import { useRouter, useSearchParams } from "next/navigation";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   totalCount: number;
   currentPage: number;
-  search: string;
 }
 
 export function DataTable<TData, TValue>({
@@ -39,35 +36,11 @@ export function DataTable<TData, TValue>({
   data,
   totalCount,
   currentPage,
-  search,
 }: DataTableProps<TData, TValue>) {
-  const router = useRouter();
-  const searchParams = useSearchParams();
 
-  const [searchInput, setSearchInput] = React.useState(search);
-  const debouncedSearch = useDebounce(searchInput, 500);
+    const [globalFilter, setGlobalFilter] = React.useState("")
 
-  const totalPages = Math.ceil(totalCount / 1); // 1 = limit from page.tsx (change if needed)
-
-  React.useEffect(() => {
-    const params = new URLSearchParams(searchParams.toString());
-    if (debouncedSearch) {
-      params.set("search", debouncedSearch);
-    } else {
-      params.delete("search");
-    }
-    params.set("page", "1"); // reset to page 1 on search
-    router.replace(`?${params.toString()}`);
-  },[debouncedSearch, router, searchParams]);
-
-  const goToPage = (page: number) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("page", page.toString());
-    if (searchInput) {
-      params.set("search", searchInput);
-    }
-    router.push(`?${params.toString()}`);
-  };
+  const totalPages = Math.ceil(totalCount / 1); 
 
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -92,23 +65,25 @@ export function DataTable<TData, TValue>({
     state: {
       sorting,
       columnFilters,
-      pagination
+      pagination, 
+      globalFilter
     },
+    onGlobalFilterChange: setGlobalFilter,
   })
 
 
   return (
-    <div>
+    <div className="max-w-full">
       <div className="flex items-center py-4 justify-between">
         <Input
           placeholder="Search users..."
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
+          value={globalFilter}
+          onChange={(e) => setGlobalFilter(e.target.value)}
           className="max-w-sm"
         />
       </div>
-      <div className="rounded-md border">
-        <Table>
+      <div className="rounded-md border ">
+        <Table className=" ">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -146,22 +121,22 @@ export function DataTable<TData, TValue>({
 
       {/* Pagination */}
       <div className="flex items-center justify-end py-4 gap-2">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => goToPage(currentPage - 1)}
-          disabled={currentPage <= 1}
-        >
-          Previous
-        </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            Previous
+          </Button>
         <span className="text-sm text-muted-foreground">
           Page {currentPage} of {totalPages}
         </span>
         <Button
           variant="outline"
           size="sm"
-          onClick={() => goToPage(currentPage + 1)}
-          disabled={currentPage >= totalPages}
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
         >
           Next
         </Button>

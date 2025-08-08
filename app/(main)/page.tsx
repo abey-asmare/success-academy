@@ -5,10 +5,13 @@ import "react-multi-carousel/lib/styles.css";
 import HeroSection from "./components/HeroSection";
 import LearnAnything from "./components/LearnAnything"; 
 import TestimonialSlider from "@/components/TestimonialSlider";
+import CreateProfile from "./components/CreateProfile";
 
 async function Home() {
+
   return (
     <div className="">
+      <CreateProfile/>
       <HeroSection className="pt-4 px-4 md:px-10" />
       
         {/* learn anything section */}

@@ -52,6 +52,7 @@ import { universities } from "@/lib/constants";
 import { useProfileEnroll } from "@/store";
 import { profileFormSchema } from "@/schemas/validationSchemas";
 import { enrollInCourse } from "../actions";
+import toast from "react-hot-toast";
 
 
 const referrerOptions = [
@@ -119,7 +120,7 @@ export default function ProfileDialogDrawerForm(){
 
 function ProfileForm() {
   
-  const { isLoaded, isSignedIn, user } = useUser();
+  const {  user } = useUser();
 
 
   const form = useForm<formType>({
@@ -128,19 +129,21 @@ function ProfileForm() {
       firstName: user?.firstName || "",
       lastName: user?.lastName || "",
       phoneNumber: "",
+      email: user?.emailAddresses[0].emailAddress || "",
       university: "",
       stream: "Natural science",
       referrer: "Telegram",
     },
   });
 
-   useEffect(() => {
-      if (user) {
-        form.reset({
-          firstName: user.firstName || "",
-          lastName: user.lastName || "",
-          phoneNumber: "",
-          university: "",
+  useEffect(() => {
+    if (user) {
+      form.reset({
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
+        email: user?.emailAddresses[0].emailAddress || "",
+        phoneNumber: "",
+        university: "",
           stream: "Natural science",
           referrer: "Telegram",
         });
@@ -152,13 +155,17 @@ function ProfileForm() {
       <Form {...form} >
         <form 
           className="space-y-4"
-          onSubmit={form.handleSubmit(
-            (data) => {
-              startTransition(() => {
-                enrollInCourse(data)
-              })  
-            }
-          )}
+          onSubmit={form.handleSubmit((data) => {
+            console.log('triggered')
+            startTransition(async () => {
+              try {
+                await enrollInCourse(data);
+                toast.success("Profile updated successfully!");
+              } catch {
+                toast.error("Failed to update profile. Please try again.");
+              }
+            })
+          }, error => console.log(error))}
         >
           <div className="flex space-between gap-4">
 
@@ -224,10 +231,8 @@ function ProfileForm() {
                 <CommandEmpty>No results found.</CommandEmpty>
                 <CommandGroup heading="List of universities">
                 {universities.map((university) => (
-                  <CommandItem key={university} value={university} onSelect={(value)=>{
+                  <CommandItem key={university} value={university} onSelect={()=>{
                     form.setValue("university", university)
-                    console.log(value, 'value')
-                    console.log(form, 'form')
                     form.reset({...form.getValues(), university: university})
                   }}>
                     {university}

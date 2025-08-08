@@ -230,7 +230,9 @@ exports.Prisma.ProfileScalarFieldEnum = {
   userId: 'userId',
   firstName: 'firstName',
   lastName: 'lastName',
+  email: 'email',
   phone_number: 'phone_number',
+  role: 'role',
   stream: 'stream',
   university: 'university',
   referrer: 'referrer'
@@ -250,6 +252,11 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.Role = exports.$Enums.Role = {
+  User: 'User',
+  Admin: 'Admin'
+};
+
 exports.Stream = exports.$Enums.Stream = {
   NATURAL_SCIENCE: 'NATURAL_SCIENCE',
   SOCIAL_SCIENCE: 'SOCIAL_SCIENCE'

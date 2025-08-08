@@ -98,6 +98,14 @@ export const Referrer: {
 
 export type Referrer = (typeof Referrer)[keyof typeof Referrer]
 
+
+export const Role: {
+  User: 'User',
+  Admin: 'Admin'
+};
+
+export type Role = (typeof Role)[keyof typeof Role]
+
 }
 
 export type Stream = $Enums.Stream
@@ -107,6 +115,10 @@ export const Stream: typeof $Enums.Stream
 export type Referrer = $Enums.Referrer
 
 export const Referrer: typeof $Enums.Referrer
+
+export type Role = $Enums.Role
+
+export const Role: typeof $Enums.Role
 
 /**
  * ##  Prisma Client ʲˢ
@@ -14451,7 +14463,9 @@ export namespace Prisma {
     userId: string | null
     firstName: string | null
     lastName: string | null
+    email: string | null
     phone_number: string | null
+    role: $Enums.Role | null
     stream: $Enums.Stream | null
     university: string | null
     referrer: $Enums.Referrer | null
@@ -14462,7 +14476,9 @@ export namespace Prisma {
     userId: string | null
     firstName: string | null
     lastName: string | null
+    email: string | null
     phone_number: string | null
+    role: $Enums.Role | null
     stream: $Enums.Stream | null
     university: string | null
     referrer: $Enums.Referrer | null
@@ -14473,7 +14489,9 @@ export namespace Prisma {
     userId: number
     firstName: number
     lastName: number
+    email: number
     phone_number: number
+    role: number
     stream: number
     university: number
     referrer: number
@@ -14486,7 +14504,9 @@ export namespace Prisma {
     userId?: true
     firstName?: true
     lastName?: true
+    email?: true
     phone_number?: true
+    role?: true
     stream?: true
     university?: true
     referrer?: true
@@ -14497,7 +14517,9 @@ export namespace Prisma {
     userId?: true
     firstName?: true
     lastName?: true
+    email?: true
     phone_number?: true
+    role?: true
     stream?: true
     university?: true
     referrer?: true
@@ -14508,7 +14530,9 @@ export namespace Prisma {
     userId?: true
     firstName?: true
     lastName?: true
+    email?: true
     phone_number?: true
+    role?: true
     stream?: true
     university?: true
     referrer?: true
@@ -14592,9 +14616,11 @@ export namespace Prisma {
     userId: string
     firstName: string
     lastName: string
-    phone_number: string
-    stream: $Enums.Stream
-    university: string
+    email: string
+    phone_number: string | null
+    role: $Enums.Role | null
+    stream: $Enums.Stream | null
+    university: string | null
     referrer: $Enums.Referrer | null
     _count: ProfileCountAggregateOutputType | null
     _min: ProfileMinAggregateOutputType | null
@@ -14620,7 +14646,9 @@ export namespace Prisma {
     userId?: boolean
     firstName?: boolean
     lastName?: boolean
+    email?: boolean
     phone_number?: boolean
+    role?: boolean
     stream?: boolean
     university?: boolean
     referrer?: boolean
@@ -14631,7 +14659,9 @@ export namespace Prisma {
     userId?: boolean
     firstName?: boolean
     lastName?: boolean
+    email?: boolean
     phone_number?: boolean
+    role?: boolean
     stream?: boolean
     university?: boolean
     referrer?: boolean
@@ -14642,7 +14672,9 @@ export namespace Prisma {
     userId?: boolean
     firstName?: boolean
     lastName?: boolean
+    email?: boolean
     phone_number?: boolean
+    role?: boolean
     stream?: boolean
     university?: boolean
     referrer?: boolean
@@ -14653,13 +14685,15 @@ export namespace Prisma {
     userId?: boolean
     firstName?: boolean
     lastName?: boolean
+    email?: boolean
     phone_number?: boolean
+    role?: boolean
     stream?: boolean
     university?: boolean
     referrer?: boolean
   }
 
-  export type ProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "firstName" | "lastName" | "phone_number" | "stream" | "university" | "referrer", ExtArgs["result"]["profile"]>
+  export type ProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "firstName" | "lastName" | "email" | "phone_number" | "role" | "stream" | "university" | "referrer", ExtArgs["result"]["profile"]>
 
   export type $ProfilePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Profile"
@@ -14669,9 +14703,11 @@ export namespace Prisma {
       userId: string
       firstName: string
       lastName: string
-      phone_number: string
-      stream: $Enums.Stream
-      university: string
+      email: string
+      phone_number: string | null
+      role: $Enums.Role | null
+      stream: $Enums.Stream | null
+      university: string | null
       referrer: $Enums.Referrer | null
     }, ExtArgs["result"]["profile"]>
     composites: {}
@@ -15100,7 +15136,9 @@ export namespace Prisma {
     readonly userId: FieldRef<"Profile", 'String'>
     readonly firstName: FieldRef<"Profile", 'String'>
     readonly lastName: FieldRef<"Profile", 'String'>
+    readonly email: FieldRef<"Profile", 'String'>
     readonly phone_number: FieldRef<"Profile", 'String'>
+    readonly role: FieldRef<"Profile", 'Role'>
     readonly stream: FieldRef<"Profile", 'Stream'>
     readonly university: FieldRef<"Profile", 'String'>
     readonly referrer: FieldRef<"Profile", 'Referrer'>
@@ -15627,7 +15665,9 @@ export namespace Prisma {
     userId: 'userId',
     firstName: 'firstName',
     lastName: 'lastName',
+    email: 'email',
     phone_number: 'phone_number',
+    role: 'role',
     stream: 'stream',
     university: 'university',
     referrer: 'referrer'
@@ -15725,6 +15765,20 @@ export namespace Prisma {
    * Reference to a field of type 'Float[]'
    */
   export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Role'
+   */
+  export type EnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role'>
+    
+
+
+  /**
+   * Reference to a field of type 'Role[]'
+   */
+  export type ListEnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role[]'>
     
 
 
@@ -16496,9 +16550,11 @@ export namespace Prisma {
     userId?: StringFilter<"Profile"> | string
     firstName?: StringFilter<"Profile"> | string
     lastName?: StringFilter<"Profile"> | string
-    phone_number?: StringFilter<"Profile"> | string
-    stream?: EnumStreamFilter<"Profile"> | $Enums.Stream
-    university?: StringFilter<"Profile"> | string
+    email?: StringFilter<"Profile"> | string
+    phone_number?: StringNullableFilter<"Profile"> | string | null
+    role?: EnumRoleNullableFilter<"Profile"> | $Enums.Role | null
+    stream?: EnumStreamNullableFilter<"Profile"> | $Enums.Stream | null
+    university?: StringNullableFilter<"Profile"> | string | null
     referrer?: EnumReferrerNullableFilter<"Profile"> | $Enums.Referrer | null
   }
 
@@ -16507,34 +16563,40 @@ export namespace Prisma {
     userId?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
-    phone_number?: SortOrder
-    stream?: SortOrder
-    university?: SortOrder
+    email?: SortOrder
+    phone_number?: SortOrderInput | SortOrder
+    role?: SortOrderInput | SortOrder
+    stream?: SortOrderInput | SortOrder
+    university?: SortOrderInput | SortOrder
     referrer?: SortOrderInput | SortOrder
   }
 
   export type ProfileWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     userId?: string
+    email?: string
     AND?: ProfileWhereInput | ProfileWhereInput[]
     OR?: ProfileWhereInput[]
     NOT?: ProfileWhereInput | ProfileWhereInput[]
     firstName?: StringFilter<"Profile"> | string
     lastName?: StringFilter<"Profile"> | string
-    phone_number?: StringFilter<"Profile"> | string
-    stream?: EnumStreamFilter<"Profile"> | $Enums.Stream
-    university?: StringFilter<"Profile"> | string
+    phone_number?: StringNullableFilter<"Profile"> | string | null
+    role?: EnumRoleNullableFilter<"Profile"> | $Enums.Role | null
+    stream?: EnumStreamNullableFilter<"Profile"> | $Enums.Stream | null
+    university?: StringNullableFilter<"Profile"> | string | null
     referrer?: EnumReferrerNullableFilter<"Profile"> | $Enums.Referrer | null
-  }, "id" | "userId">
+  }, "id" | "userId" | "email">
 
   export type ProfileOrderByWithAggregationInput = {
     id?: SortOrder
     userId?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
-    phone_number?: SortOrder
-    stream?: SortOrder
-    university?: SortOrder
+    email?: SortOrder
+    phone_number?: SortOrderInput | SortOrder
+    role?: SortOrderInput | SortOrder
+    stream?: SortOrderInput | SortOrder
+    university?: SortOrderInput | SortOrder
     referrer?: SortOrderInput | SortOrder
     _count?: ProfileCountOrderByAggregateInput
     _max?: ProfileMaxOrderByAggregateInput
@@ -16549,9 +16611,11 @@ export namespace Prisma {
     userId?: StringWithAggregatesFilter<"Profile"> | string
     firstName?: StringWithAggregatesFilter<"Profile"> | string
     lastName?: StringWithAggregatesFilter<"Profile"> | string
-    phone_number?: StringWithAggregatesFilter<"Profile"> | string
-    stream?: EnumStreamWithAggregatesFilter<"Profile"> | $Enums.Stream
-    university?: StringWithAggregatesFilter<"Profile"> | string
+    email?: StringWithAggregatesFilter<"Profile"> | string
+    phone_number?: StringNullableWithAggregatesFilter<"Profile"> | string | null
+    role?: EnumRoleNullableWithAggregatesFilter<"Profile"> | $Enums.Role | null
+    stream?: EnumStreamNullableWithAggregatesFilter<"Profile"> | $Enums.Stream | null
+    university?: StringNullableWithAggregatesFilter<"Profile"> | string | null
     referrer?: EnumReferrerNullableWithAggregatesFilter<"Profile"> | $Enums.Referrer | null
   }
 
@@ -17328,9 +17392,11 @@ export namespace Prisma {
     userId: string
     firstName: string
     lastName: string
-    phone_number: string
-    stream?: $Enums.Stream
-    university: string
+    email: string
+    phone_number?: string | null
+    role?: $Enums.Role | null
+    stream?: $Enums.Stream | null
+    university?: string | null
     referrer?: $Enums.Referrer | null
   }
 
@@ -17339,9 +17405,11 @@ export namespace Prisma {
     userId: string
     firstName: string
     lastName: string
-    phone_number: string
-    stream?: $Enums.Stream
-    university: string
+    email: string
+    phone_number?: string | null
+    role?: $Enums.Role | null
+    stream?: $Enums.Stream | null
+    university?: string | null
     referrer?: $Enums.Referrer | null
   }
 
@@ -17350,9 +17418,11 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
-    phone_number?: StringFieldUpdateOperationsInput | string
-    stream?: EnumStreamFieldUpdateOperationsInput | $Enums.Stream
-    university?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    stream?: NullableEnumStreamFieldUpdateOperationsInput | $Enums.Stream | null
+    university?: NullableStringFieldUpdateOperationsInput | string | null
     referrer?: NullableEnumReferrerFieldUpdateOperationsInput | $Enums.Referrer | null
   }
 
@@ -17361,9 +17431,11 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
-    phone_number?: StringFieldUpdateOperationsInput | string
-    stream?: EnumStreamFieldUpdateOperationsInput | $Enums.Stream
-    university?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    stream?: NullableEnumStreamFieldUpdateOperationsInput | $Enums.Stream | null
+    university?: NullableStringFieldUpdateOperationsInput | string | null
     referrer?: NullableEnumReferrerFieldUpdateOperationsInput | $Enums.Referrer | null
   }
 
@@ -17372,9 +17444,11 @@ export namespace Prisma {
     userId: string
     firstName: string
     lastName: string
-    phone_number: string
-    stream?: $Enums.Stream
-    university: string
+    email: string
+    phone_number?: string | null
+    role?: $Enums.Role | null
+    stream?: $Enums.Stream | null
+    university?: string | null
     referrer?: $Enums.Referrer | null
   }
 
@@ -17383,9 +17457,11 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
-    phone_number?: StringFieldUpdateOperationsInput | string
-    stream?: EnumStreamFieldUpdateOperationsInput | $Enums.Stream
-    university?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    stream?: NullableEnumStreamFieldUpdateOperationsInput | $Enums.Stream | null
+    university?: NullableStringFieldUpdateOperationsInput | string | null
     referrer?: NullableEnumReferrerFieldUpdateOperationsInput | $Enums.Referrer | null
   }
 
@@ -17394,9 +17470,11 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
-    phone_number?: StringFieldUpdateOperationsInput | string
-    stream?: EnumStreamFieldUpdateOperationsInput | $Enums.Stream
-    university?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableEnumRoleFieldUpdateOperationsInput | $Enums.Role | null
+    stream?: NullableEnumStreamFieldUpdateOperationsInput | $Enums.Stream | null
+    university?: NullableStringFieldUpdateOperationsInput | string | null
     referrer?: NullableEnumReferrerFieldUpdateOperationsInput | $Enums.Referrer | null
   }
 
@@ -18042,11 +18120,18 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type EnumStreamFilter<$PrismaModel = never> = {
-    equals?: $Enums.Stream | EnumStreamFieldRefInput<$PrismaModel>
-    in?: $Enums.Stream[] | ListEnumStreamFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Stream[] | ListEnumStreamFieldRefInput<$PrismaModel>
-    not?: NestedEnumStreamFilter<$PrismaModel> | $Enums.Stream
+  export type EnumRoleNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumRoleNullableFilter<$PrismaModel> | $Enums.Role | null
+  }
+
+  export type EnumStreamNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.Stream | EnumStreamFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Stream[] | ListEnumStreamFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Stream[] | ListEnumStreamFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumStreamNullableFilter<$PrismaModel> | $Enums.Stream | null
   }
 
   export type EnumReferrerNullableFilter<$PrismaModel = never> = {
@@ -18061,7 +18146,9 @@ export namespace Prisma {
     userId?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
+    email?: SortOrder
     phone_number?: SortOrder
+    role?: SortOrder
     stream?: SortOrder
     university?: SortOrder
     referrer?: SortOrder
@@ -18072,7 +18159,9 @@ export namespace Prisma {
     userId?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
+    email?: SortOrder
     phone_number?: SortOrder
+    role?: SortOrder
     stream?: SortOrder
     university?: SortOrder
     referrer?: SortOrder
@@ -18083,20 +18172,32 @@ export namespace Prisma {
     userId?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
+    email?: SortOrder
     phone_number?: SortOrder
+    role?: SortOrder
     stream?: SortOrder
     university?: SortOrder
     referrer?: SortOrder
   }
 
-  export type EnumStreamWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Stream | EnumStreamFieldRefInput<$PrismaModel>
-    in?: $Enums.Stream[] | ListEnumStreamFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Stream[] | ListEnumStreamFieldRefInput<$PrismaModel>
-    not?: NestedEnumStreamWithAggregatesFilter<$PrismaModel> | $Enums.Stream
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumStreamFilter<$PrismaModel>
-    _max?: NestedEnumStreamFilter<$PrismaModel>
+  export type EnumRoleNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumRoleNullableWithAggregatesFilter<$PrismaModel> | $Enums.Role | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumRoleNullableFilter<$PrismaModel>
+    _max?: NestedEnumRoleNullableFilter<$PrismaModel>
+  }
+
+  export type EnumStreamNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Stream | EnumStreamFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Stream[] | ListEnumStreamFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Stream[] | ListEnumStreamFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumStreamNullableWithAggregatesFilter<$PrismaModel> | $Enums.Stream | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumStreamNullableFilter<$PrismaModel>
+    _max?: NestedEnumStreamNullableFilter<$PrismaModel>
   }
 
   export type EnumReferrerNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -18759,8 +18860,12 @@ export namespace Prisma {
     update?: XOR<XOR<QuestionUpdateToOneWithWhereWithoutAnswersInput, QuestionUpdateWithoutAnswersInput>, QuestionUncheckedUpdateWithoutAnswersInput>
   }
 
-  export type EnumStreamFieldUpdateOperationsInput = {
-    set?: $Enums.Stream
+  export type NullableEnumRoleFieldUpdateOperationsInput = {
+    set?: $Enums.Role | null
+  }
+
+  export type NullableEnumStreamFieldUpdateOperationsInput = {
+    set?: $Enums.Stream | null
   }
 
   export type NullableEnumReferrerFieldUpdateOperationsInput = {
@@ -18956,11 +19061,18 @@ export namespace Prisma {
     _max?: NestedBoolNullableFilter<$PrismaModel>
   }
 
-  export type NestedEnumStreamFilter<$PrismaModel = never> = {
-    equals?: $Enums.Stream | EnumStreamFieldRefInput<$PrismaModel>
-    in?: $Enums.Stream[] | ListEnumStreamFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Stream[] | ListEnumStreamFieldRefInput<$PrismaModel>
-    not?: NestedEnumStreamFilter<$PrismaModel> | $Enums.Stream
+  export type NestedEnumRoleNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumRoleNullableFilter<$PrismaModel> | $Enums.Role | null
+  }
+
+  export type NestedEnumStreamNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.Stream | EnumStreamFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Stream[] | ListEnumStreamFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Stream[] | ListEnumStreamFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumStreamNullableFilter<$PrismaModel> | $Enums.Stream | null
   }
 
   export type NestedEnumReferrerNullableFilter<$PrismaModel = never> = {
@@ -18970,14 +19082,24 @@ export namespace Prisma {
     not?: NestedEnumReferrerNullableFilter<$PrismaModel> | $Enums.Referrer | null
   }
 
-  export type NestedEnumStreamWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Stream | EnumStreamFieldRefInput<$PrismaModel>
-    in?: $Enums.Stream[] | ListEnumStreamFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Stream[] | ListEnumStreamFieldRefInput<$PrismaModel>
-    not?: NestedEnumStreamWithAggregatesFilter<$PrismaModel> | $Enums.Stream
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumStreamFilter<$PrismaModel>
-    _max?: NestedEnumStreamFilter<$PrismaModel>
+  export type NestedEnumRoleNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumRoleNullableWithAggregatesFilter<$PrismaModel> | $Enums.Role | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumRoleNullableFilter<$PrismaModel>
+    _max?: NestedEnumRoleNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumStreamNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Stream | EnumStreamFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Stream[] | ListEnumStreamFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Stream[] | ListEnumStreamFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumStreamNullableWithAggregatesFilter<$PrismaModel> | $Enums.Stream | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumStreamNullableFilter<$PrismaModel>
+    _max?: NestedEnumStreamNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumReferrerNullableWithAggregatesFilter<$PrismaModel = never> = {

@@ -1,0 +1,50 @@
+import { auth, currentUser } from "@clerk/nextjs/server";
+import { db } from "@/lib/db";
+import { NextResponse } from "next/server";
+
+export async function GET() {
+  // Get the currently signed-in user's ID
+ try{
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+  
+    // Get the full user object from Clerk
+    const user = await currentUser();
+    if (!user) {
+      return new Response(JSON.stringify({ error: "User not found" }), { status: 404 });
+    }
+  
+    // check if the profile exists
+    const isExist = await db.profile.findUnique({
+        where: {
+            userId
+        }
+    })
+    if(isExist){
+        return NextResponse.json({message: "Profile already exists"})
+    }
+    // Create or update the Profile in Prisma
+    await db.profile.upsert({
+      where: { userId },
+      update: {
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
+        email: user.emailAddresses[0]?.emailAddress || "",
+      },
+      create: {
+        userId,
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
+        email: user.emailAddresses[0]?.emailAddress || "",
+      },
+    });
+  
+    console.log('profile updated/created successfully route.ts')
+    return NextResponse.json({message: "Profile created successfully"})
+ }catch(error){
+    console.log(error, 'rote.ts')
+    return NextResponse.json({message: "Something went wrong"})
+ }
+}
