@@ -53,6 +53,8 @@ import { useProfileEnroll } from "@/store";
 import { profileFormSchema } from "@/schemas/validationSchemas";
 import { enrollInCourse } from "../actions";
 import toast from "react-hot-toast";
+import { redirect, useParams } from "next/navigation";
+import { CornerRightDown } from "lucide-react";
 
 
 const referrerOptions = [
@@ -85,7 +87,7 @@ export default function ProfileDialogDrawerForm(){
               While Processing your request, Tell us about yourself, This will help us to provide you with the best possible service.
             </DialogDescription>
           </DialogHeader>
-          <ProfileForm />
+          <ProfileForm setOpen={setOpen} />
         </DialogContent>
       </Dialog></>
     )
@@ -103,7 +105,7 @@ export default function ProfileDialogDrawerForm(){
             While Processing your request, Tell us about yourself, This will help us to provide you with the best possible service.
           </DrawerDescription>
         </DrawerHeader>
-        <ProfileForm />
+        <ProfileForm setOpen={setOpen}/>
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
             <Button variant="outline" className="mx-6">Cancel</Button>
@@ -118,7 +120,7 @@ export default function ProfileDialogDrawerForm(){
 
 
 
-function ProfileForm() {
+function ProfileForm({setOpen}: {setOpen: (open: boolean) => void}) {
   
   const {  user } = useUser();
 
@@ -149,6 +151,9 @@ function ProfileForm() {
         });
       }
     }, [user, form]);
+    const params = useParams<{ courseId: string }>()
+    const courseId = params?.courseId || '' 
+    console.log('courseid', courseId)
     
   return (
     <div className="max-w-2xl m-auto mt-10 px-10">
@@ -159,11 +164,13 @@ function ProfileForm() {
             console.log('triggered')
             startTransition(async () => {
               try {
-                await enrollInCourse(data);
+                await enrollInCourse(data, courseId);
                 toast.success("Profile updated successfully!");
+                setOpen(false)
               } catch {
                 toast.error("Failed to update profile. Please try again.");
               }
+              redirect(`/courses/${courseId}/checkout`)
             })
           }, error => console.log(error))}
         >

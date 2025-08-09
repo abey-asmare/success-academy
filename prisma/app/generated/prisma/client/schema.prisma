@@ -204,6 +204,6 @@ model Profile {
   phone_number String?
   role         Role?     @default(User)
   stream       Stream?
-  university   String?
+  university   String?   @default("Not Joined yet")
   referrer     Referrer?
 }

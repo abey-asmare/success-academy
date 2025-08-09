@@ -64,6 +64,8 @@ export const universities = [
     "Woldia University",
     "Wolkite University",
     "Wollega University",
-    "Wollo University"
+    "Wollo University",
+    "Not Joined yet", 
+
   ];
   

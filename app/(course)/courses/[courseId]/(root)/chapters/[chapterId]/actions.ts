@@ -5,10 +5,10 @@ import { auth } from "@clerk/nextjs/server";
 import { profileFormSchema } from "@/schemas/validationSchemas";
 import z from "zod";
 import { Stream } from "@/prisma/app/generated/prisma/client";
+import { redirect } from "next/navigation";
 
 
-
-export async function enrollInCourse(data: z.infer<typeof profileFormSchema>) {
+export async function enrollInCourse(data: z.infer<typeof profileFormSchema>, courseId: string) {
     try {
         const {userId} = await auth()
         if (!userId) {
@@ -41,7 +41,7 @@ export async function enrollInCourse(data: z.infer<typeof profileFormSchema>) {
                 phone_number: data.phoneNumber,
                 stream: data.stream == 'Natural science' ? Stream.NATURAL_SCIENCE : Stream.SOCIAL_SCIENCE   ,
                 referrer: data.referrer,
-                university: data.university  
+                university: data.university
             }, 
             update: {
                 firstName: data.firstName,
@@ -53,9 +53,6 @@ export async function enrollInCourse(data: z.infer<typeof profileFormSchema>) {
                 university: data.university    
                }
         })
-        console.log('profile updated/created')
-
-
         // if(profile){
         //     await db.profile.update({
         //         where: {

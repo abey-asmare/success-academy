@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, startTransition} from "react";
 import {
   Form,
   FormControl,
@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useUser } from "@clerk/nextjs";
+import { RedirectToUserProfile, useUser } from "@clerk/nextjs";
 import {
   Select,
   SelectContent,
@@ -39,6 +39,9 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer"
+import { enrollInCourse } from "../(course)/courses/[courseId]/(root)/chapters/[chapterId]/actions";
+import { profileFormSchema } from "@/schemas/validationSchemas";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 
 
 
@@ -52,25 +55,26 @@ const referrerOptions = [
   { value: "Other", label: "Other" },
 ];
 
-const formSchema = z.object({
-  firstName: z.string().min(1, { message: "First name is required" }),
-  lastName: z.string().min(1, { message: "Last name is required" }),
-  phoneNumber: z.string().regex(/^\+?[0-9\s\-()]{7,20}$/, { message: "Phone number is required" }),
-  stream: z.enum(["Natural science", "Social science"]),
-  referrer: z.enum([
-    "Google",
-    "Telegram",
-    "Instagram",
-    "Tiktok",
-    "Youtube",
-    "Friend",
-    "Other",
-  ]),
-  university: z
-    .string()
-    .min(1, { message: "University is required" })
-    .optional(),
-});
+// const formSchema = z.object({
+//   firstName: z.string().min(1, { message: "First name is required" }),
+//   lastName: z.string().min(1, { message: "Last name is required" }),
+//   email: z.email(),
+//   phoneNumber: z.string().regex(/^\+?[0-9\s\-()]{7,20}$/, { message: "Phone number is required" }),
+//   stream: z.enum(["Natural science", "Social science"]),
+//   referrer: z.enum([
+//     "Google",
+//     "Telegram",
+//     "Instagram",
+//     "Tiktok",
+//     "Youtube",
+//     "Friend",
+//     "Other",
+//   ]),
+//   university: z
+//     .string()
+//     .min(1, { message: "University is required" })
+// });
+const formSchema = profileFormSchema
 
 type formType = z.infer<typeof formSchema>;
 
@@ -89,7 +93,7 @@ export default function ProfileDialogDrawerForm({open, setOpen}: {open: boolean,
               To help us provide you with the best possible learning experience, we’d love to get to know you better. Please take a moment to share a bit about yourself 
             </DialogDescription>
           </DialogHeader>
-          <ProfileForm />
+          <ProfileForm setOpen={setOpen}/>
         </DialogContent>
       </Dialog></>
     )
@@ -104,7 +108,7 @@ export default function ProfileDialogDrawerForm({open, setOpen}: {open: boolean,
           To help us provide you with the best possible learning experience, we’d love to get to know you better. Please take a moment to share a bit about yourself 
           </DrawerDescription>
         </DrawerHeader>
-        <ProfileForm  />
+        <ProfileForm setOpen={setOpen}  />
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>
@@ -118,13 +122,14 @@ export default function ProfileDialogDrawerForm({open, setOpen}: {open: boolean,
 
 
 
-function ProfileForm() {
+function ProfileForm({setOpen}: {setOpen: (open: boolean) => void}) {
   const { user } = useUser();
   const form = useForm<formType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       firstName: user?.firstName || "",
       lastName: user?.lastName || "",
+      email: user?.emailAddresses[0].emailAddress || "",
       phoneNumber: "",
       university: "",
       stream: "Natural science",
@@ -132,11 +137,12 @@ function ProfileForm() {
     },
   });
 
-   useEffect(() => {
-      if (user) {
+  useEffect(() => {
+    if (user) {
         form.reset({
           firstName: user.firstName || "",
           lastName: user.lastName || "",
+          email: user?.emailAddresses[0].emailAddress || "",
           phoneNumber: "",
           university: "",
           stream: "Natural science",
@@ -144,13 +150,20 @@ function ProfileForm() {
         });
       }
     }, [user, form]);
-  return (
+
+    return (
     <div className="max-w-2xl m-auto mt-10 px-10">
       <Form {...form}>
         <form
           className="space-y-4"
           onSubmit={form.handleSubmit(
-            (data) => console.log('pass', data),
+            (data) => startTransition( async () => {
+              // const response = await enrollInCourse(data, courseId)
+              console.log(data)
+              // if(response.status !== 500){
+              //   setOpen(false)
+              // }
+            }),
             (error) => console.log('error', error)
           )}
         >
