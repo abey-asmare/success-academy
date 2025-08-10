@@ -11,7 +11,7 @@ export default async function BotRegisterationPage() {
   });
 
   return (
-    <div>
+    <div className="py-10">
       <RegistrationForm courses={courses}/>
     </div>
   );

@@ -36,7 +36,7 @@ function Nav() {
           : "bg-transparent text-white"
       )}
     >
-      <nav className="px-4 md:px-10 flex justify-between items-center h-16 bg-white text-black">
+      <nav className="px-4 md:px-10 flex justify-between items-center h-16 bg-white sm:bg-transparent">
         {/* Logo */}
         <div className="w-12 h-12 md:w-14 md:h-14 bg-transparent">
           <Link href="/" className="w-full h-full">
@@ -132,11 +132,10 @@ function Nav() {
         {isMenuOpen && (
           <div
             className={cn(
-              "absolute top-full left-0 right-0 shadow-sm md:hidden bg-white text-black",
-              scrolled ? "bg-white text-black" : "bg-transparent text-white"
+              "absolute top-full left-0 right-0 shadow-sm md:hidden text-black bg-white",
             )}
           >
-            <div className="flex flex-col p-4 space-y-4 bg-white text-black">
+            <div className="flex flex-col p-4 space-y-4 text-black">
               <Link
                 href="/"
                 className={cn(
@@ -171,11 +170,11 @@ function Nav() {
               {auth.sessionId ? (
                 <UserButton />
               ) : (
-                <Button asChild  className={cn("block md:hidden rounded-md transition-colors w-fit bg-orange-700 text-white hover:bg-white/90")}
-                  >
+                <Button asChild className="px-4 py-2 font-semibold rounded-md transition-colors mt-2 w-fit hover:bg-white/90 bg-orange-700 hover:text-white">
+
                 <Link
                   href="/sign-in"
-                 
+
                   >
                   Sign In
                 </Link>

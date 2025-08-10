@@ -59,9 +59,9 @@ if (userId && sessionId) {
       await client.sessions.revokeSession(sessionId)
       
       // this triggers all the users from the account to log out
-      // await Promise.all(
-      //   sessions.data.filter((session) => session.id !== sessionId).map((session) => client.sessions.revokeSession(session.id))
-      // )
+      await Promise.all(
+        sessions.data.filter((session) => session.id !== sessionId).map((session) => client.sessions.revokeSession(session.id))
+      )
       return NextResponse.redirect(new URL("/too-many-devices", req.url))
     }
 

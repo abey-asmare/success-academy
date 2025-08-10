@@ -24,6 +24,29 @@ export const FileUpload= ({
 }
 
 
+interface TelegramFileUploadProps {
+    onChange: (url?: string) => void;
+    endpoint: keyof typeof ourFileRouter;
+    disabled?: boolean;
+}
+export const TelegramFileUpload= ({
+    onChange, endpoint, disabled
+}: TelegramFileUploadProps) => {
+    return <UploadDropzone
+    endpoint={endpoint}
+    disabled={disabled}
+    onClientUploadComplete={(res)=> {
+        onChange(res?.[0].ufsUrl)
+        toast.success("File uploaded successfully")
+
+    }}
+    onUploadError={(error: Error)=> {
+        toast.error(error.message)
+    }}
+    />
+}
+
+
 interface FileAttachmentUploadProps {
     onChange: (values: {url: string, type: string | undefined, name: string | undefined}[]) => void;
     endpoint: keyof typeof ourFileRouter;

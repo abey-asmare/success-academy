@@ -34,6 +34,11 @@ export const ourFileRouter = {
       console.log("file url", file.ufsUrl);
       return { uploadedBy: metadata.userId };
     }),
+    purchaseImageTelegram: f({image: {maxFileSize: '8MB', maxFileCount: 1}})
+        .onUploadComplete(async ({ metadata, file }) => {
+      console.log("file url", file.ufsUrl);
+      return { };
+    }),
     courseAttachment: f({
       text: { maxFileCount: 10 },
       image: { maxFileCount: 10 },
