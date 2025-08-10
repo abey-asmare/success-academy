@@ -13,7 +13,7 @@ export default function FeatureSection() {
   ];
 
   return (
-    <div className="py-12 md:py-16 bg-gray-50 px-4 md:px-10">
+    <div className="py-12 md:py-16 bg-gray-50 px-4 md:px-10 bg-gradient-to-br from-amber-50 via-orange-50 to-white text-slate-900">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[400px] lg:h-[600px]">
           {/* Right Image */}

@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 
 export default function MainLayout({children}: {children: React.ReactNode}) {
   return (
-    <div>
+    <div className=''>
       <Nav />
       <main>{children}</main>
     </div>

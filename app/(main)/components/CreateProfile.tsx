@@ -14,7 +14,6 @@ export default function CreateProfile() {
           .then(() => setProfileSynced(true))
           .catch(console.error);
       }
-      console.log('hook called profile created successfullpy')
     }, [isSignedIn, user, profileSynced]);
   return (
     <></>

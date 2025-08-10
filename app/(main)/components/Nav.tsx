@@ -1,149 +1,189 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth, UserButton } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 function Nav() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);  // Track scroll
 
   const auth = useAuth();
   const path = usePathname();
 
+  useEffect(() => {
+    function handleScroll() {
+      if (window.scrollY > 50) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <nav className="px-4 md:px-10 flex justify-between items-center sticky top-0 z-50 bg-white shadow-sm">
-      {/* Logo */}
-      <div className="w-12 h-12 md:w-14 md:h-14">
-        <Link href="/" className="w-full h-full">
-          <Image
-            src="/images/success_academy-logo.png"
-            alt="Success Academy Logo"
-            width={1024}
-            height={1024}
-            className="w-full h-full object-contain"
-          />
-        </Link>
-      </div>
-
-      {/* Desktop Navigation */}
-      <div className="hidden md:flex gap-8 items-center">
-        <Link
-          href="/"
-          className={cn(
-            "font-semibold hover:underline transition-all",
-            path === "/" ? "underline" : ""
-          )}
-        >
-          Home
-        </Link>
-        <Link
-          href="/dashboard/search"
-          className="font-semibold hover:underline transition-all"
-        >
-          Courses
-        </Link>
-        <Link
-          href="#about"
-          className="font-semibold hover:underline transition-all"
-        >
-          About us
-        </Link>
-        <Link
-          href="#contact"
-          className="font-semibold hover:underline transition-all"
-        >
-          Contact us
-        </Link>
-      </div>
-
-      {/* Desktop Sign Up Button */}
-      {auth.sessionId ? (
-        <div className="hidden md:block">
-          <UserButton />
-        </div>
-      ) : (
-        <Link
-          href="/sign-in"
-          className="hidden md:block px-4 py-2 bg-primary-500 font-semibold rounded-md text-white hover:bg-primary-600 transition-colors"
-        >
-          Sign In
-        </Link>
+    <div
+      className={cn(
+        "fixed z-100 top-0 left-0 right-0 font-bold transition-colors duration-300",
+        scrolled
+          ? "bg-white text-black shadow-md"
+          : "bg-transparent text-white"
       )}
+    >
+      <nav className="px-4 md:px-10 flex justify-between items-center h-16">
+        {/* Logo */}
+        <div className="w-12 h-12 md:w-14 md:h-14 bg-transparent">
+          <Link href="/" className="w-full h-full">
+            <Image
+              src="/images/success_academy-logo.png"
+              alt="Success Academy Logo"
+              width={1024}
+              height={1024}
+              className="w-full h-full object-contain rounded-md"
+            />
+          </Link>
+        </div>
 
-      {/* Mobile Hamburger Button */}
-      <button
-        className="md:hidden flex flex-col gap-1 p-2"
-        onClick={() => setIsMenuOpen(!isMenuOpen)}
-        aria-label="Toggle menu"
-      >
-        <span
-          className={`w-6 h-0.5 bg-gray-800 transition-all duration-300 ${
-            isMenuOpen ? "rotate-45 translate-y-1.5" : ""
-          }`}
-        ></span>
-        <span
-          className={`w-6 h-0.5 bg-gray-800 transition-all duration-300 ${
-            isMenuOpen ? "opacity-0" : ""
-          }`}
-        ></span>
-        <span
-          className={`w-6 h-0.5 bg-gray-800 transition-all duration-300 ${
-            isMenuOpen ? "-rotate-45 -translate-y-1.5" : ""
-          }`}
-        ></span>
-      </button>
-
-      {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className="absolute top-full left-0 right-0 bg-white shadow-lg md:hidden">
-          <div className="flex flex-col p-4 space-y-4">
-            <Link
-              href="/"
-              className={cn(
-                "font-semibold hover:text-primary-500 transition-colors py-2",
-                path === "/" ? "underline" : ""
-              )}
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Home
-            </Link>
-            <Link
-              href="/dashboard/search"
-              className="font-semibold hover:text-primary-500 transition-colors py-2"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Courses
-            </Link>
-            <Link
-              href="#about"
-              className="font-semibold hover:text-primary-500 transition-colors py-2"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              About
-            </Link>
-            <Link
-              href="#contact"
-              className="font-semibold hover:text-primary-500 transition-colors py-2"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Contact us
-            </Link>
-            {auth.sessionId ? (
-              <UserButton />
-            ) : (
-              <Link
-                href="/sign-in"
-                className="px-4 py-2 bg-primary-500 font-semibold rounded-md text-white hover:bg-primary-600 transition-colors mt-2 w-fit"
-              >
-                Sign In
-              </Link>
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex gap-8 items-center">
+          <Link
+            href="/"
+            className={cn(
+              "font-semibold hover:underline transition-all",
+              path === "/" ? "underline" : ""
             )}
-          </div>
+          >
+            Home
+          </Link>
+          <Link
+            href="/dashboard/search"
+            className="font-semibold hover:underline transition-all"
+          >
+            Courses
+          </Link>
+          <Link
+            href="#about"
+            className="font-semibold hover:underline transition-all"
+          >
+            About us
+          </Link>
+          <Link
+            href="#contact"
+            className="font-semibold hover:underline transition-all"
+          >
+            Contact us
+          </Link>
         </div>
-      )}
-    </nav>
+
+        {/* Desktop Sign Up Button */}
+        <div className="w-24 flex justify-center items-center">
+          {auth.sessionId ? (
+            <div className="hidden md:block">
+              <UserButton />
+            </div>
+          ) : (
+            <Button asChild  className={cn("hidden md:block rounded-md transition-colors",
+              scrolled
+              ? "bg-orange-700 text-white hover:bg-white/90"
+              : "bg-white text-orange-600 hover:bg-white/90")}
+              >
+            <Link
+              href="/sign-in"
+             
+              >
+              Sign In
+            </Link>
+              </Button>
+          )}
+        </div>
+
+        {/* Mobile Hamburger Button */}
+        <button
+          className={cn(
+            "md:hidden flex flex-col gap-1 p-2",
+            scrolled ? "text-black" : "text-white"
+          )}
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          aria-label="Toggle menu"
+        >
+          <span
+            className={`w-6 h-0.5 bg-current transition-all duration-300 ${
+              isMenuOpen ? "rotate-45 translate-y-1.5" : ""
+            }`}
+          ></span>
+          <span
+            className={`w-6 h-0.5 bg-current transition-all duration-300 ${
+              isMenuOpen ? "opacity-0" : ""
+            }`}
+          ></span>
+          <span
+            className={`w-6 h-0.5 bg-current transition-all duration-300 ${
+              isMenuOpen ? "-rotate-45 -translate-y-1.5" : ""
+            }`}
+          ></span>
+        </button>
+
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <div
+            className={cn(
+              "absolute top-full left-0 right-0 shadow-sm md:hidden",
+              scrolled ? "bg-white text-black" : "bg-transparent text-white"
+            )}
+          >
+            <div className="flex flex-col p-4 space-y-4">
+              <Link
+                href="/"
+                className={cn(
+                  "font-semibold hover:text-primary-500 transition-colors py-2",
+                  path === "/" ? "underline" : ""
+                )}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Home
+              </Link>
+              <Link
+                href="/dashboard/search"
+                className="font-semibold hover:text-primary-500 transition-colors py-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Courses
+              </Link>
+              <Link
+                href="#about"
+                className="font-semibold hover:text-primary-500 transition-colors py-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                About
+              </Link>
+              <Link
+                href="#contact"
+                className="font-semibold hover:text-primary-500 transition-colors py-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Contact us
+              </Link>
+              {auth.sessionId ? (
+                <UserButton />
+              ) : (
+                <Link
+                  href="/sign-in"
+                  className="px-4 py-2 font-semibold rounded-md transition-colors mt-2 w-fit text-orange-700 hover:bg-white/90"
+                >
+                  Sign In
+                </Link>
+              )}
+            </div>
+          </div>
+        )}
+      </nav>
+    </div>
   );
 }
 
