@@ -36,7 +36,7 @@ function Nav() {
           : "bg-transparent text-white"
       )}
     >
-      <nav className="px-4 md:px-10 flex justify-between items-center h-16">
+      <nav className="px-4 md:px-10 flex justify-between items-center h-16 bg-white text-black">
         {/* Logo */}
         <div className="w-12 h-12 md:w-14 md:h-14 bg-transparent">
           <Link href="/" className="w-full h-full">
@@ -106,8 +106,7 @@ function Nav() {
         {/* Mobile Hamburger Button */}
         <button
           className={cn(
-            "md:hidden flex flex-col gap-1 p-2",
-            scrolled ? "text-black" : "text-white"
+            "md:hidden flex flex-col gap-1 p-2 text-black",
           )}
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           aria-label="Toggle menu"
@@ -133,11 +132,11 @@ function Nav() {
         {isMenuOpen && (
           <div
             className={cn(
-              "absolute top-full left-0 right-0 shadow-sm md:hidden",
+              "absolute top-full left-0 right-0 shadow-sm md:hidden bg-white text-black",
               scrolled ? "bg-white text-black" : "bg-transparent text-white"
             )}
           >
-            <div className="flex flex-col p-4 space-y-4">
+            <div className="flex flex-col p-4 space-y-4 bg-white text-black">
               <Link
                 href="/"
                 className={cn(
@@ -172,12 +171,15 @@ function Nav() {
               {auth.sessionId ? (
                 <UserButton />
               ) : (
+                <Button asChild  className={cn("block md:hidden rounded-md transition-colors w-fit bg-orange-700 text-white hover:bg-white/90")}
+                  >
                 <Link
                   href="/sign-in"
-                  className="px-4 py-2 font-semibold rounded-md transition-colors mt-2 w-fit text-orange-700 hover:bg-white/90"
-                >
+                 
+                  >
                   Sign In
                 </Link>
+                  </Button>
               )}
             </div>
           </div>
