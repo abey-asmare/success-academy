@@ -170,7 +170,7 @@ function Nav() {
               {auth.sessionId ? (
                 <UserButton />
               ) : (
-                <Button asChild className="px-4 py-2 font-semibold rounded-md transition-colors mt-2 w-fit hover:bg-white/90 bg-orange-700 hover:text-white">
+                <Button asChild className="px-4 py-2 font-semibold rounded-md transition-colors mt-2 w-fit hover:bg-orange-700/90 bg-orange-700 hover:text-white">
 
                 <Link
                   href="/sign-in"

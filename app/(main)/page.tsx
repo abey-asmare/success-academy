@@ -12,7 +12,7 @@ async function Home() {
   return (
     <div className="">
       <CreateProfile/>
-      <HeroOrange className="px-4 md:px-10 pt-16" />
+      <HeroOrange className="pt-30 md:pt-16  px-4 md:px-10" />
       
         {/* learn anything section */}
         {/* <LearnAnything className="px-4 md:px-10 learn-anyting text-white bg-primary-700 space-y-8 md:space-y-16 py-12 md:py-16"/> */}

@@ -19,6 +19,7 @@ export const accounts = [
 
 
 export const universities = [
+    "Not Joined yet", 
 "Addis Ababa University",
     "Adigrat University",
     "Aksum University",
@@ -65,7 +66,6 @@ export const universities = [
     "Wolkite University",
     "Wollega University",
     "Wollo University",
-    "Not Joined yet", 
 
   ];
   

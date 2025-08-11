@@ -1,3 +1,4 @@
+import { supportEmail } from "@/app/constants"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 
@@ -16,7 +17,7 @@ export default function TermsOfUsePage() {
               <section>
                 <h2 className="text-2xl font-semibold text-gray-900 mb-4">1. Acceptance of Terms</h2>
                 <p className="text-gray-700 leading-relaxed">
-                  By accessing and using Success Academy (successacademy.et), you accept and agree to be bound by the
+                  By accessing and using Success Academy ({supportEmail}), you accept and agree to be bound by the
                   terms and provision of this agreement. If you do not agree to abide by the above, please do not use
                   this service.
                 </p>

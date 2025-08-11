@@ -121,14 +121,14 @@ const ChapterIdPage = async ({
                   </Link>
                 ))}
               </div>
-              <div className="space-y-6">
+              <div className="space-y-6 px-4">
                 <h1 className="text-xl md:text-3xl font-semibold text-[#181818]">
                   Simulations
                 </h1>
                 {/* card simulation */}
                 <div
                 id="simulations"
-                className="flex gap-6 items-center flex-wrap w-full"
+                className="flex gap-6 items-center flex-wrap w-full "
                   >
                     {course.exams.length === 0 && (
                       <p className="text-center text-gray-400 font-semibold">No Simulations yet. Keep tuned.</p>

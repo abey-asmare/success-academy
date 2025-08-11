@@ -41,9 +41,9 @@ export const ourFileRouter = {
     }),
     courseAttachment: f({
       text: { maxFileCount: 10 },
-      image: { maxFileCount: 10 },
+      image: { maxFileCount: 10, maxFileSize: '8MB' },
       video: { maxFileCount: 10, maxFileSize: '1GB' },
-      audio: { maxFileCount: 10 },
+      audio: { maxFileCount: 10 , maxFileSize: '16MB'},
     })
     .middleware(handleAuth)
     .onUploadComplete(async ({ metadata, file }) => {

@@ -1,3 +1,4 @@
+import { supportEmail } from "@/app/constants"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 
@@ -238,7 +239,7 @@ export default function PrivacyPolicyPage() {
                     <strong>Success Academy</strong>
                   </p>
                   <p className="text-gray-700">Website: successacademy.et</p>
-                  <p className="text-gray-700">Email: bethlehemtsegaye14@gmail.com</p>
+                  <p className="text-gray-700">Email: {supportEmail}</p>
                   {/* <p className="text-gray-700">Email: privacy@successacademy.et</p>
                   <p className="text-gray-700">Support Email: info@successacademy.et</p> */}
                   <p className="text-gray-700">Location: Ethiopia</p>

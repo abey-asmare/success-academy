@@ -2,7 +2,7 @@ import { clerkClient, clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/
 import { NextResponse } from 'next/server'
 import proxyMiddleware from './proxy-middleware'
 
-const isPublicRoute = createRouteMatcher(['/sign-in(.*)', '/sign-up(.*)', "/api/uploadthing", '/', '/api/courses(.*)', '/telegram-bot(.*)'])
+const isPublicRoute = createRouteMatcher(['/sign-in(.*)', '/sign-up(.*)', "/api/uploadthing", '/', '/api/courses(.*)', '/telegram-bot(.*)', '/privacy-policy(.*)', '/terms-of-use(.*)'])
 
 const isAdminRoute = createRouteMatcher(['/admin(.*)', '/dashboard/teacher(.*)'])
 

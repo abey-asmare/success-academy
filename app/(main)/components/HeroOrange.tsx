@@ -13,7 +13,7 @@ type Props = {
 
 export default function HeroOrange({
   heading = "Your shortcut to Academic Success",
-  subheading = " Join thousands of Ethiopian students who&apos;ve achieved academic excellence with our comprehensive learning platform and expert guidance.",
+  subheading = " Join thousands of Ethiopian students who've achieved academic excellence with our comprehensive learning platform and expert guidance.",
   ctaLabel = "Get Started",
   ctaHref = "/dashboard/search",
   className = ''
@@ -33,7 +33,7 @@ export default function HeroOrange({
       <div className="pointer-events-none absolute -top-24 -left-24 h-80 w-80 rounded-full bg-white/10 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-16 -right-16 h-96 w-96 rounded-full bg-amber-300/10 blur-3xl" />
 
-      <div className="container mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-6 md:grid-cols-2">
+      <div className="container mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 md:px-6 md:grid-cols-2">
         {/* Left content */}
         <div className="space-y-6">
           <h1 id="hero-heading" className="text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">
@@ -65,7 +65,7 @@ export default function HeroOrange({
                         alt="Student working on laptop"
                         width={600}
                         height={400}
-                        className="w-[600px] h-[600px] object-cover rounded-xl md:rounded-2xl object-top"
+                        className="w-[full] h-[600px] object-cover rounded-xl md:rounded-2xl object-top object-"
                         priority
                       />
         </div>

@@ -2,7 +2,7 @@
 export const UPLOAD_SIZE_LIMIT = 5 * 1024 * 1024;
 
 export const placeholderCourseImage = "/images/getting-started-1.jpg";
-export const supportEmail = "successacademy@gmail.com";
+export const supportEmail = "successacademyet@gmail.com";
 export const supportPhone = "+251939339908";
 export const telegramLink = "https://t.me/sucessacademy1";
 export const tiktokLink1 = "https://tiktok.com/@uattips";
