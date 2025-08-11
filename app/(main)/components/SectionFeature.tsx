@@ -37,17 +37,17 @@ export default function SectionFeature() {
                 <LearningDirections
                   number={1}
                   title="Go at your own pace"
-                  description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti ipsum cupiditate soluta voluptatem magni earum mollitia neque reiciendis est, dolorum, iure voluptatum quaerat! Natus mollitia dolores fugiat commodi itaque optio."
+                  description="Courses are structured to fit your schedule, as a self paced manner, Learn it anytime, anywhere."
                 />
                 <LearningDirections
                   number={2}
                   title="Learn From Experts"
-                  description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti ipsum cupiditate soluta voluptatem magni earum mollitia neque reiciendis est, dolorum, iure voluptatum quaerat! Natus mollitia dolores fugiat commodi itaque optio."
+                  description="We are not just your teacher, we are your guide, mentor, and coach. Believe it or not, one of many reasons to start this porgram for the university students is a lack of true mentorship, we like to be with you every step of the way, until your exit exam and more."
                 />
                 <LearningDirections
                   number={3}
                   title="Find Videos and Resources for your need."
-                  description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti ipsum cupiditate soluta voluptatem magni earum mollitia neque reiciendis est, dolorum, iure voluptatum quaerat! Natus mollitia dolores fugiat commodi itaque optio."
+                  description="We provide a wide range of resources to help you succeed in your studies. we have a library of videos, books, and other resources to help you succeed in your studies, we also have a Simulation, the environment to feel what it is like to be in a real exam."
                   last
                 />
               </div>
@@ -73,7 +73,7 @@ function LearningDirections({
     <div className="card flex gap-3 md:gap-4 md:w-[60ch]">
       <div className="text-xl md:text-2xl font-semibold flex flex-col gap-2 items-center flex-shrink-0">
         <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#FB4A19] to-[#F7840C] text-white font-semibold shadow-sm">{number}</span>
-        {!last && <span className="h-[80px] md:h-[110px] w-0.5 bg-white/30 rounded-full" />}
+        {!last && <span className="h-[80px] md:h-[110px] w-0.5  bg-orange-500/20 rounded-full" />}
       </div>
       <div className="flex-1">
         <p className="text-lg md:text-xl font-semibold mb-2">{title}</p>
