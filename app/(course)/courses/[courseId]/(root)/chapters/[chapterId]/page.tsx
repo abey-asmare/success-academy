@@ -130,6 +130,9 @@ const ChapterIdPage = async ({
                 id="simulations"
                 className="flex gap-6 items-center flex-wrap w-full"
                   >
+                    {course.exams.length === 0 && (
+                      <p className="text-center text-gray-400 font-semibold">No Simulations yet. Keep tuned.</p>
+                    )}
                 {course.exams.map((exam) => (
                     <Card key={exam.id} className="p-4 border-2 border-gray-200 w-full max-w-[220px] transition-all duration-300 hover:shadow-lg hover:border-gray-300 hover:-translate-y-1">
                       <div className="wrapper rounded-md overflow-hidden w-full h-[160px] object-cover overflow-hidden">

@@ -38,7 +38,7 @@ function Nav() {
     >
       <nav className="px-4 md:px-10 flex justify-between items-center h-16 bg-white sm:bg-transparent">
         {/* Logo */}
-        <div className="w-12 h-12 md:w-14 md:h-14 bg-transparent">
+        <div className="w-10 h-10 md:w-12 md:h-12 bg-transparent">
           <Link href="/" className="w-full h-full">
             <Image
               src="/images/success_academy-logo.png"

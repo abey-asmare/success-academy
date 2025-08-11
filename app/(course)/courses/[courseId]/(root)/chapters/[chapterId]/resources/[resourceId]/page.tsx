@@ -41,13 +41,13 @@ export default async function ResourceDetailPage({
     <div>
       <div className="border p-4 rounded shadow-sm space-y-4">
         {resourceCategory === "image" && resource?.url && (
-          <UnDownloadableImage>
+          <UnDownloadableImage className="w-[300px] h-[400px]">
             <Image
+            className="w-full h-full rounded object-contain"
               src={resource.url}
               alt={resource.name || "Image"}
               width={800}
               height={600}
-              className="rounded"
             />
           </UnDownloadableImage>
         )}

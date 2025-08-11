@@ -82,21 +82,27 @@ export default function RegistrationForm({courses}: PropType) {
         <form
           className="space-y-4"
           onSubmit={form.handleSubmit(
-            (data) => {
-              console.log("triggered");
-              startTransition(async () => {
-                console.log('data', data);
-                try {
-                  const res = await handleTelegramRegistration(data)
+            async (data) => {
+              try {
+                const res = await handleTelegramRegistration(data);
+        
+                startTransition(() => {
                   if (res?.status === 200) {
                     toast.success("Payment successful. We are processing your payments");
+                  } else {
+                    toast.error("Failed to register. Please try again.");
                   }
-                } catch { 
-                  toast.error("Failed to update profile. Please try again.");
-                }
-              });
+                });
+              } catch (error) {
+                console.error(error);
+                startTransition(() => {
+                  toast.error("Something went wrong. Please try again.");
+                });
+              }
             },
-            (error) => console.log(error)
+            (errors) => {
+              console.log(errors);
+            }
           )}
         >
           <div className="flex space-between gap-4">
@@ -322,8 +328,8 @@ export default function RegistrationForm({courses}: PropType) {
                   />
                  </div>
             <div className="mt-4">
-            <Button className="bg-sky-600 hover:bg-sky-700 mb-10" type="submit" >
-              Submit
+            <Button className="bg-sky-600 hover:bg-sky-700 mb-10" type="submit" disabled={form.formState.isSubmitting} >
+                 {form.formState.isSubmitting ? "Submitting..." : "Submit"}
             </Button>
           </div>
         </form>
