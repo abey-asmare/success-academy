@@ -8,7 +8,7 @@ CREATE TYPE "public"."Referrer" AS ENUM ('Google', 'Telegram', 'Instagram', 'Tik
 CREATE TYPE "public"."Role" AS ENUM ('User', 'Admin');
 
 -- CreateTable
-CREATE TABLE IF NOT EXISTS IF NOT EXISTS "public"."Chapter" (
+CREATE TABLE IF NOT EXISTS "public"."Chapter" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT,
