@@ -7,19 +7,6 @@ const isPublicRoute = createRouteMatcher(['/sign-in(.*)', '/sign-up(.*)', "/api/
 const isAdminRoute = createRouteMatcher(['/admin(.*)', '/dashboard/teacher(.*)'])
 
 export default clerkMiddleware(async (auth, req) => {
-  if (req.method === "OPTIONS") {
-    const origin = req.headers.get("origin");
-    return new Response(null, {
-      status: 200,
-      headers: {
-        "Access-Control-Allow-Origin": origin || "*",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-        "Access-Control-Allow-Headers":
-          "Content-Type, Authorization,  Accept, Accept-Version, Content-Length, Content-MD5, Date, X-Api-Version",
-        "Access-Control-Max-Age": "86400"
-      }
-    });
-  }
   const authData = await auth()
   const { userId, sessionId } = authData
 
