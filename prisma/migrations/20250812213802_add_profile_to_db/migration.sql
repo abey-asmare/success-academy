@@ -1,3 +1,12 @@
+-- CreateEnum
+CREATE TYPE "public"."Stream" AS ENUM ('NATURAL_SCIENCE', 'SOCIAL_SCIENCE');
+
+-- CreateEnum
+CREATE TYPE "public"."Referrer" AS ENUM ('Google', 'Telegram', 'Instagram', 'Tiktok', 'Youtube', 'Friend', 'Other');
+
+-- CreateEnum
+CREATE TYPE "public"."Role" AS ENUM ('User', 'Admin');
+
 -- CreateTable
 CREATE TABLE "public"."Chapter" (
     "id" TEXT NOT NULL,
@@ -136,6 +145,22 @@ CREATE TABLE "public"."Answer" (
     CONSTRAINT "Answer_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "public"."Profile" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "firstName" TEXT NOT NULL,
+    "lastName" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "phone_number" TEXT,
+    "role" "public"."Role" DEFAULT 'User',
+    "stream" "public"."Stream",
+    "university" TEXT DEFAULT 'Not Joined yet',
+    "referrer" "public"."Referrer",
+
+    CONSTRAINT "Profile_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "MuxData_chapterId_key" ON "public"."MuxData"("chapterId");
 
@@ -144,6 +169,12 @@ CREATE UNIQUE INDEX "UserProgress_userId_chapterId_key" ON "public"."UserProgres
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Purchase_userId_courseId_key" ON "public"."Purchase"("userId", "courseId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Profile_userId_key" ON "public"."Profile"("userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Profile_email_key" ON "public"."Profile"("email");
 
 -- AddForeignKey
 ALTER TABLE "public"."Chapter" ADD CONSTRAINT "Chapter_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "public"."Course"("id") ON DELETE CASCADE ON UPDATE CASCADE;
