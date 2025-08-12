@@ -54,7 +54,6 @@ import { profileFormSchema } from "@/schemas/validationSchemas";
 import { enrollInCourse } from "../actions";
 import toast from "react-hot-toast";
 import { redirect, useParams } from "next/navigation";
-import { CornerRightDown } from "lucide-react";
 
 
 const referrerOptions = [
