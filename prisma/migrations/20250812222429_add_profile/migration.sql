@@ -8,7 +8,7 @@ CREATE TYPE "public"."Referrer" AS ENUM ('Google', 'Telegram', 'Instagram', 'Tik
 CREATE TYPE "public"."Role" AS ENUM ('User', 'Admin');
 
 -- CreateTable
-CREATE TABLE "public"."Chapter" (
+CREATE TABLE IF NOT EXISTS IF NOT EXISTS "public"."Chapter" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT,
@@ -25,7 +25,7 @@ CREATE TABLE "public"."Chapter" (
 );
 
 -- CreateTable
-CREATE TABLE "public"."ChapterCategory" (
+CREATE TABLE IF NOT EXISTS "public"."ChapterCategory" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -35,7 +35,7 @@ CREATE TABLE "public"."ChapterCategory" (
 );
 
 -- CreateTable
-CREATE TABLE "public"."Course" (
+CREATE TABLE IF NOT EXISTS "public"."Course" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "title" TEXT NOT NULL,
@@ -51,7 +51,7 @@ CREATE TABLE "public"."Course" (
 );
 
 -- CreateTable
-CREATE TABLE "public"."Attachment" (
+CREATE TABLE IF NOT EXISTS "public"."Attachment" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "url" TEXT NOT NULL,
@@ -64,7 +64,7 @@ CREATE TABLE "public"."Attachment" (
 );
 
 -- CreateTable
-CREATE TABLE "public"."Category" (
+CREATE TABLE IF NOT EXISTS "public"."Category" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -74,7 +74,7 @@ CREATE TABLE "public"."Category" (
 );
 
 -- CreateTable
-CREATE TABLE "public"."MuxData" (
+CREATE TABLE IF NOT EXISTS "public"."MuxData" (
     "id" TEXT NOT NULL,
     "assetId" TEXT NOT NULL,
     "playbackId" TEXT,
@@ -84,7 +84,7 @@ CREATE TABLE "public"."MuxData" (
 );
 
 -- CreateTable
-CREATE TABLE "public"."UserProgress" (
+CREATE TABLE IF NOT EXISTS "public"."UserProgress" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "chapterId" TEXT NOT NULL,
@@ -96,7 +96,7 @@ CREATE TABLE "public"."UserProgress" (
 );
 
 -- CreateTable
-CREATE TABLE "public"."Purchase" (
+CREATE TABLE IF NOT EXISTS "public"."Purchase" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "courseId" TEXT NOT NULL,
@@ -109,7 +109,7 @@ CREATE TABLE "public"."Purchase" (
 );
 
 -- CreateTable
-CREATE TABLE "public"."Exam" (
+CREATE TABLE IF NOT EXISTS "public"."Exam" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "description" TEXT,
@@ -123,7 +123,7 @@ CREATE TABLE "public"."Exam" (
 );
 
 -- CreateTable
-CREATE TABLE "public"."Question" (
+CREATE TABLE IF NOT EXISTS "public"."Question" (
     "id" TEXT NOT NULL,
     "question" TEXT NOT NULL,
     "imageUrl" TEXT,
@@ -134,7 +134,7 @@ CREATE TABLE "public"."Question" (
 );
 
 -- CreateTable
-CREATE TABLE "public"."Answer" (
+CREATE TABLE IF NOT EXISTS "public"."Answer" (
     "id" TEXT NOT NULL,
     "text" TEXT NOT NULL,
     "isCorrect" BOOLEAN NOT NULL DEFAULT false,
@@ -146,7 +146,7 @@ CREATE TABLE "public"."Answer" (
 );
 
 -- CreateTable
-CREATE TABLE "public"."Profile" (
+CREATE TABLE IF NOT EXISTS "public"."Profile" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "firstName" TEXT NOT NULL,
