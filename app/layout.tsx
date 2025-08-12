@@ -46,7 +46,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+     proxyUrl="/__clerk"
+  publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+    >
       <html lang="en" className="scroll-smooth md:scroll-auto">
         <meta property="og:title" content="Success Academy" />
         <meta property="og:description" content="Your Shortcut to success." />
