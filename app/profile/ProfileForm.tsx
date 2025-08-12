@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { RedirectToUserProfile, useUser } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import {
   Select,
   SelectContent,
@@ -39,9 +39,7 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer"
-import { enrollInCourse } from "../(course)/courses/[courseId]/(root)/chapters/[chapterId]/actions";
 import { profileFormSchema } from "@/schemas/validationSchemas";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
 
 
 
@@ -93,7 +91,7 @@ export default function ProfileDialogDrawerForm({open, setOpen}: {open: boolean,
               To help us provide you with the best possible learning experience, we’d love to get to know you better. Please take a moment to share a bit about yourself 
             </DialogDescription>
           </DialogHeader>
-          <ProfileForm setOpen={setOpen}/>
+          <ProfileForm/>
         </DialogContent>
       </Dialog></>
     )
@@ -108,7 +106,7 @@ export default function ProfileDialogDrawerForm({open, setOpen}: {open: boolean,
           To help us provide you with the best possible learning experience, we’d love to get to know you better. Please take a moment to share a bit about yourself 
           </DrawerDescription>
         </DrawerHeader>
-        <ProfileForm setOpen={setOpen}  />
+        <ProfileForm  />
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>
@@ -122,7 +120,7 @@ export default function ProfileDialogDrawerForm({open, setOpen}: {open: boolean,
 
 
 
-function ProfileForm({setOpen}: {setOpen: (open: boolean) => void}) {
+function ProfileForm() {
   const { user } = useUser();
   const form = useForm<formType>({
     resolver: zodResolver(formSchema),
