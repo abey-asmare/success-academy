@@ -7,8 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 export default function OurCourses() {
     const { data } = useQuery<CourseMinimized[], Error, CourseMinimized[]>({
         queryKey: ['courses'],
-        queryFn: () => axios.get('http://localhost:3000/api/courses').then(res => res.data),
-
+        queryFn: ()=> axios.get('/api/courses').then(res => res.data),
         staleTime: 60 * 60 * 2 * 1000,
       });
   return (
