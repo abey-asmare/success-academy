@@ -91,11 +91,9 @@ export const columns: ColumnDef<{
           <Link
             href={row.getValue("imageUrl")}
             target="_blank"
-            className="w-10 h-10 rounded-sm"
             rel="noopener noreferrer"
           >
             <Image
-            className="w-full h-full object-contain"
               src={row.getValue("imageUrl")}
               alt={row.getValue("course")}
               width={50}
