@@ -11,10 +11,10 @@ export default clerkMiddleware(async (auth, req) => {
   const { userId, sessionId } = authData
 
   // First check if it's a proxy request
-  // const proxyResponse = proxyMiddleware(req)
-  // if (proxyResponse) {
-  //   return proxyResponse
-  // }
+  const proxyResponse = proxyMiddleware(req)
+  if (proxyResponse) {
+    return proxyResponse
+  }
 
   // 1. Route protection
   if (!isPublicRoute(req)) {
