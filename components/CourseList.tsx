@@ -13,7 +13,7 @@ import { placeholderCourseImage } from "@/app/constants"
 export default function CourseList({ className }: { className: string }) {
   const { data, isLoading, error } = useQuery<CourseMinimized[], Error>({
     queryKey: ['courses'],
-    queryFn: () => axios.get('/api/courses').then(res => res.data),
+    queryFn: () => axios.get('http://localhost:3000/api/courses').then(res => res.data),
     staleTime: 60 * 60 * 2 * 1000, // 2 hours
   })
 
