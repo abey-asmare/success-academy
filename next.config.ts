@@ -15,6 +15,7 @@ const nextConfig: NextConfig = {
     ],
   },
   allowedDevOrigins: ['http://localhost:3000', 'https://success-academy.vercel.app', 'https://unified-mole-badly.ngrok-free.app', 'unified-mole-badly.ngrok-free.app'],
+  allowedOrigins: ['http://localhost:3000', 'https://success-academy.vercel.app', 'https://unified-mole-badly.ngrok-free.app', 'unified-mole-badly.ngrok-free.app', 'https://successacademy.et'],
 };
 
 export default nextConfig;

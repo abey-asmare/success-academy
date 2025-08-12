@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import Nav from './components/Nav'
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!
 
 export const metadata: Metadata = {
   title: "Home page",
