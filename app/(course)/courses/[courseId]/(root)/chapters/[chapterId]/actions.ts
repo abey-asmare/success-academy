@@ -5,7 +5,6 @@ import { auth } from "@clerk/nextjs/server";
 import { profileFormSchema } from "@/schemas/validationSchemas";
 import z from "zod";
 import { Stream } from "@/prisma/app/generated/prisma/client";
-import { redirect } from "next/navigation";
 
 
 export async function enrollInCourse(data: z.infer<typeof profileFormSchema>, courseId: string) {

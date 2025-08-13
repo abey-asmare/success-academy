@@ -2,7 +2,7 @@
 
 import axios from "axios";
 
-import { FileAttachmentUpload, FileUpload } from "@/components/file-upload";
+import { FileAttachmentUpload } from "@/components/file-upload";
 import { Attachment, Course } from "@/prisma/app/generated/prisma/client";
 import { File, Loader2, X } from "lucide-react";
 import { useRouter } from "next/navigation";

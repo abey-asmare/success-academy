@@ -1,4 +1,3 @@
-import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import { isAdmin } from "@/utils/roles";
 import { db } from "@/lib/db";
@@ -8,7 +7,6 @@ import { Answer } from "@/prisma/app/generated/prisma/client";
 
 export async function POST(req: NextRequest) {
   try {
-    const { userId } = await auth();
     if (!isAdmin()) {
       return new NextResponse("Unauthorized", { status: 401 });
     }

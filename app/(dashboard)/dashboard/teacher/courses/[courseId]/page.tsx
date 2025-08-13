@@ -2,7 +2,6 @@ import Banner from "@/components/banner";
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 import AttachmentForm from "./attachment-form";
-import CategoryForm from "./category-form";
 import ChaptersForm from "./chapters-form";
 import Actions from "./chapters/actions";
 import DescriptionForm from "./description-form";

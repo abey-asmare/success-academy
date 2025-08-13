@@ -57,24 +57,26 @@ export default function CourseList({ className }: { className: string }) {
 
 export function CourseCard({ data }: { data: CourseMinimized }) {
   return (
-    <Card className="p-4 border-2 border-gray-200 w-full min-w-[260px] max-w-[280px] transition-all duration-300 hover:shadow-lg hover:border-gray-300 hover:-translate-y-1">
-      <div className="wrapper rounded-md overflow-hidden w-full h-[180px] object-cover">
-        <Image
-          src={data.imageUrl}
-          alt={data.description}
-          width={500}
-          height={500}
-          className="w-full h-full object-cover"
-          priority
-        />
-      </div>
-      <div className="description">
-        <h3 className="font-semibold">{data.title}</h3>
-        <Button className="enroll-in px-4 py-1 font-semibold bg-primary-500 hover:bg-primary-600 rounded-md mt-2">
-          <Link href={`/courses/${data.id}`}>Enroll</Link>
-        </Button>
-      </div>
-    </Card>
+    <Link href={`/courses/${data.id}`}>
+      <Card className="p-4 border-2 border-gray-200 w-full min-w-[260px] max-w-[280px] transition-all duration-300 hover:shadow-lg hover:border-gray-300 hover:-translate-y-1">
+        <div className="wrapper rounded-md overflow-hidden w-full h-[180px] object-cover">
+          <Image
+            src={data.imageUrl}
+            alt={data.description}
+            width={500}
+            height={500}
+            className="w-full h-full object-cover"
+            priority
+          />
+        </div>
+        <div className="description">
+          <h3 className="font-semibold">{data.title}</h3>
+          <Button className="enroll-in px-4 py-1 font-semibold bg-primary-500 hover:bg-primary-600 rounded-md mt-2">
+            Enroll
+          </Button>
+        </div>
+      </Card>
+    </Link>
   )
 }
 

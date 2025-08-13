@@ -39,9 +39,7 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer"
-import { enrollInCourse } from "../(course)/courses/[courseId]/(root)/chapters/[chapterId]/actions";
 import { profileFormSchema } from "@/schemas/validationSchemas";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
 
 
 

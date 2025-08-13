@@ -1,6 +1,5 @@
 "use client";
-
-import { IconChartBar, IconUsers } from "@tabler/icons-react";
+import { IconUsers } from "@tabler/icons-react";
 import * as React from "react";
 
 import { NavMain } from "./nav-main";
@@ -8,13 +7,8 @@ import {
   Sidebar,
   SidebarContent,
   SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { BookOpen, Compass, Home, Layout, List, WalletCards } from "lucide-react";
-import Link from "next/link";
-import Image from "next/image";
 import { RouteSwitcher } from "./route-switcher";
 
 export type CourseType = {

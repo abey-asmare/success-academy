@@ -33,7 +33,6 @@ import { profileFormSchema } from "@/schemas/validationSchemas";
 import toast from "react-hot-toast";
 import { Course } from "@/prisma/app/generated/prisma/client";
 import { TelegramFileUpload } from "@/components/file-upload";
-import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { handleTelegramRegistration } from "./actions";
 

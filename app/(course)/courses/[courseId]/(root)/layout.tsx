@@ -5,8 +5,6 @@ import { db } from "@/lib/db";
 
 import { getProgress } from "@/actions/get-progress";
 
-import { CourseSideBar } from "../components/course-sidebar";
-import { CourseNavbar } from "../components/course-navbar";
 import { SiteHeader } from "@/components/site-header";
 import { AppSidebar } from "../components/app-sidebar";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
@@ -88,27 +86,8 @@ const CourseLayout = async ({
       }
     });
 
-  const progressCount = await getProgress(userId, course.id);
 
   return (
-
-    // <div className="h-full">
-    //   <div className="h-[80px] md:pl-80 fixed inset-y-0 w-full z-50">
-    //     <CourseNavbar
-    //       course={course}
-    //       progressCount={progressCount!}
-    //     />
-    //   </div>
-    //   <div className="hidden md:flex h-full w-80 flex-col fixed inset-y-0 z-50">    
-    //     <CourseSideBar
-    //       course={course}
-    //       progressCount={progressCount!}
-    //     />
-    //   </div>
-    //   <main className="md:pl-80 pt-[80px] h-full">
-    //     {children}
-    //   </main>
-    // </div>
     <SidebarProvider
     style={
       {

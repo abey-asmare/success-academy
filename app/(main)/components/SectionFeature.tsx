@@ -83,30 +83,3 @@ function LearningDirections({
   );
 }
 
-
-function Step({
-  index,
-  title,
-  description,
-  showConnector = false,
-}: {
-  index: number
-  title: string
-  description: string
-  showConnector?: boolean
-}) {
-  return (
-    <li className="relative pl-16">
-      {/* Number badge and optional connector */}
-      <div className="absolute left-0 top-0 flex flex-col items-center">
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#FB4A19] to-[#F7840C] text-white font-semibold shadow-sm">
-          {index}
-        </div>
-        {showConnector && <div className="mt-2 h-16 w-px bg-amber-200" aria-hidden="true" />}
-      </div>
-
-      <h3 className="text-xl font-semibold text-slate-900">{title}</h3>
-      <p className="mt-2 max-w-prose text-slate-600">{description}</p>
-    </li>
-  )
-}
