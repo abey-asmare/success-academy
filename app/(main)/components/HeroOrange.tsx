@@ -2,6 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { db } from "@/lib/db"
 
 type Props = {
   heading?: string
@@ -11,13 +12,14 @@ type Props = {
   className?: string
 }
 
-export default function HeroOrange({
+export default async  function HeroOrange({
   heading = "Your shortcut to Academic Success",
   subheading = " Join thousands of Ethiopian students who've achieved academic excellence with our comprehensive learning platform and expert guidance.",
   ctaLabel = "Get Started",
   ctaHref = "/dashboard/search",
   className = ''
 }: Props) {
+  const allUsers = await db.profile.count() + 11900
   return (
     <section
       aria-labelledby="hero-heading"
@@ -53,7 +55,7 @@ export default function HeroOrange({
           <div className="hidden md:flex gap-10 pt-8">
             <Stat label="Courses" value="600+" />
             <Stat label="Exams" value="300+" />
-            <Stat label="Students" value="184+" />
+            <Stat label="Students" value={`${allUsers.toString()}+`} />
           </div>
         </div>
 
@@ -74,7 +76,7 @@ export default function HeroOrange({
         <div className="md:hidden -mt-4 grid grid-cols-3 gap-4">
           <Stat label="Courses" value="600+" />
           <Stat label="Exams" value="300+" />
-          <Stat label="Students" value="184+" />
+          <Stat label="Students" value={`${allUsers.toString()}+`} />
         </div>
       </div>
     </section>
