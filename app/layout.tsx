@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000/";
 
 export const metadata: Metadata = {
   title: {
