@@ -8,7 +8,7 @@ CREATE TYPE "public"."Referrer" AS ENUM ('Google', 'Telegram', 'Instagram', 'Tik
 CREATE TYPE "public"."Role" AS ENUM ('User', 'Admin');
 
 -- CreateTable
-CREATE TABLE IF NOT EXISTS "public"."Chapter" (
+CREATE TABLE "public"."Chapter" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT,
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS "public"."Chapter" (
 );
 
 -- CreateTable
-CREATE TABLE IF NOT EXISTS "public"."ChapterCategory" (
+CREATE TABLE "public"."ChapterCategory" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS "public"."ChapterCategory" (
 );
 
 -- CreateTable
-CREATE TABLE IF NOT EXISTS "public"."Course" (
+CREATE TABLE "public"."Course" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "title" TEXT NOT NULL,
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS "public"."Course" (
 );
 
 -- CreateTable
-CREATE TABLE IF NOT EXISTS "public"."Attachment" (
+CREATE TABLE "public"."Attachment" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "url" TEXT NOT NULL,
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS "public"."Attachment" (
 );
 
 -- CreateTable
-CREATE TABLE IF NOT EXISTS "public"."Category" (
+CREATE TABLE "public"."Category" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS "public"."Category" (
 );
 
 -- CreateTable
-CREATE TABLE IF NOT EXISTS "public"."MuxData" (
+CREATE TABLE "public"."MuxData" (
     "id" TEXT NOT NULL,
     "assetId" TEXT NOT NULL,
     "playbackId" TEXT,
@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS "public"."MuxData" (
 );
 
 -- CreateTable
-CREATE TABLE IF NOT EXISTS "public"."UserProgress" (
+CREATE TABLE "public"."UserProgress" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "chapterId" TEXT NOT NULL,
@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS "public"."UserProgress" (
 );
 
 -- CreateTable
-CREATE TABLE IF NOT EXISTS "public"."Purchase" (
+CREATE TABLE "public"."Purchase" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "courseId" TEXT NOT NULL,
@@ -109,7 +109,7 @@ CREATE TABLE IF NOT EXISTS "public"."Purchase" (
 );
 
 -- CreateTable
-CREATE TABLE IF NOT EXISTS "public"."Exam" (
+CREATE TABLE "public"."Exam" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "description" TEXT,
@@ -123,7 +123,7 @@ CREATE TABLE IF NOT EXISTS "public"."Exam" (
 );
 
 -- CreateTable
-CREATE TABLE IF NOT EXISTS "public"."Question" (
+CREATE TABLE "public"."Question" (
     "id" TEXT NOT NULL,
     "question" TEXT NOT NULL,
     "imageUrl" TEXT,
@@ -134,7 +134,7 @@ CREATE TABLE IF NOT EXISTS "public"."Question" (
 );
 
 -- CreateTable
-CREATE TABLE IF NOT EXISTS "public"."Answer" (
+CREATE TABLE "public"."Answer" (
     "id" TEXT NOT NULL,
     "text" TEXT NOT NULL,
     "isCorrect" BOOLEAN NOT NULL DEFAULT false,
@@ -146,7 +146,7 @@ CREATE TABLE IF NOT EXISTS "public"."Answer" (
 );
 
 -- CreateTable
-CREATE TABLE IF NOT EXISTS "public"."Profile" (
+CREATE TABLE "public"."Profile" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "firstName" TEXT NOT NULL,
@@ -177,10 +177,10 @@ CREATE UNIQUE INDEX "Profile_userId_key" ON "public"."Profile"("userId");
 CREATE UNIQUE INDEX "Profile_email_key" ON "public"."Profile"("email");
 
 -- AddForeignKey
-ALTER TABLE "public"."Chapter" ADD CONSTRAINT "Chapter_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "public"."Course"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."Chapter" ADD CONSTRAINT "Chapter_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "public"."ChapterCategory"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."Chapter" ADD CONSTRAINT "Chapter_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "public"."ChapterCategory"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "public"."Chapter" ADD CONSTRAINT "Chapter_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "public"."Course"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "public"."Course" ADD CONSTRAINT "Course_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "public"."Category"("id") ON DELETE SET NULL ON UPDATE CASCADE;
