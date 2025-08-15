@@ -49,7 +49,7 @@ export default function ChaptersForm({
         `/api/courses/${courseId}/chapters`,
         values
       );
-      toast.success("chapter created successfully");
+      toast.success("chapter updated successfully");
       // setIsCreating((current) => !current);
       router.refresh();
     } catch {

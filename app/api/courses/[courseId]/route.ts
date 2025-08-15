@@ -60,6 +60,7 @@ export async function PATCH(req: NextRequest, {params}: {params: Promise<{course
     const {courseId} = await params
     const {title, description, imageUrl, price, categoryId} = await req.json()
     try{
+        //  admin users can update the course even if they didn't create it..
         const {userId} = await auth()
         if(!userId || !isAdmin())
             return new NextResponse("Unauthorized", {status: 401})
@@ -67,7 +68,6 @@ export async function PATCH(req: NextRequest, {params}: {params: Promise<{course
         const course = await db.course.update({
             where: {
                 id: courseId,
-                userId
             },
             data: {
             title,
@@ -77,9 +77,10 @@ export async function PATCH(req: NextRequest, {params}: {params: Promise<{course
             categoryId    
             }
         })
-
+        console.log('patch request', course)
         return NextResponse.json(course)
-    }catch{
+    }catch(error){
+        console.log('patch request error', error)
         return new NextResponse("Internal server error", {status: 500})
     }    
 }
