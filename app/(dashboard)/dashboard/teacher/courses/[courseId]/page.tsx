@@ -46,9 +46,10 @@ const CourseIdPage = async ({
     return redirect("/");
   }
 
+  // description should be optional as requested
   const requiredFields = [
     course.title,
-    course.description,
+    // course.description,
     course.imageUrl,
     course.price,
     course.chapters.some(chapter => chapter.isPublished),

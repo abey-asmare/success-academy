@@ -38,7 +38,12 @@ export default async function ChapterDetails({
   //   },
   // });
 
-  const requiredFields = [chapter.title, chapter.description, chapter.videoUrl];
+  // description should be optional as requested
+  const requiredFields = [
+    chapter.title, 
+    // chapter.description, 
+    chapter.videoUrl
+  ];
 
   const totalFields = requiredFields.length;
   const completedFields = requiredFields.filter(Boolean).length;

@@ -91,7 +91,7 @@ export default function RegistrationForm({courses}: PropType) {
                   } else {
                     toast.error("Failed to register. Please try again.");
                   }
-                });
+                }); 
               } catch (error) {
                 console.error(error);
                 startTransition(() => {
