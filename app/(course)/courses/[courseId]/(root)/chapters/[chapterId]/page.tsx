@@ -11,9 +11,7 @@ import { CourseProgressButton } from "./components/course-progress-button";
 import { VideoPlayer } from "./components/video-player";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import {
-  Card,
-} from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 
 const ChapterIdPage = async ({
   params,
@@ -105,7 +103,7 @@ const ChapterIdPage = async ({
           <div>
             <Preview value={chapter.description!} />
           </div>
-          {purchase?.approved && !!attachments.length && (
+          {purchase?.approved && (
             <>
               <Separator />
               <div className="p-4 space-y-2 ">
@@ -127,14 +125,19 @@ const ChapterIdPage = async ({
                 </h1>
                 {/* card simulation */}
                 <div
-                id="simulations"
-                className="flex gap-6 items-center flex-wrap w-full "
-                  >
-                    {course.exams.length === 0 && (
-                      <p className="text-center text-gray-400 font-semibold">No Simulations yet. Keep tuned.</p>
-                    )}
-                {course.exams.map((exam) => (
-                    <Card key={exam.id} className="p-4 border-2 border-gray-200 w-full max-w-[220px] transition-all duration-300 hover:shadow-lg hover:border-gray-300 hover:-translate-y-1">
+                  id="simulations"
+                  className="flex gap-6 items-center flex-wrap w-full "
+                >
+                  {course.exams.length === 0 && (
+                    <p className="text-center text-gray-400 font-semibold">
+                      No Simulations yet. Keep tuned.
+                    </p>
+                  )}
+                  {course.exams.map((exam) => (
+                    <Card
+                      key={exam.id}
+                      className="p-4 border-2 border-gray-200 w-full max-w-[220px] transition-all duration-300 hover:shadow-lg hover:border-gray-300 hover:-translate-y-1"
+                    >
                       <div className="wrapper rounded-md overflow-hidden w-full h-[160px] object-cover overflow-hidden">
                         <Image
                           src={course.imageUrl!}
@@ -147,13 +150,22 @@ const ChapterIdPage = async ({
                       </div>
                       <div className="description">
                         <h3 className="font-semibold">{exam.name}</h3>
-                        <p className="text-gray-500 line-clamp-3">{exam.description}</p>
-                        <Button size='sm' className="enroll-in px-4 py-1 font-semibold bg-primary-500 hover:bg-primary-600 rounded-md mt-2">
-                          <Link href={`/courses/${courseId}/simulations/${exam.id}`}>take simulation</Link>
+                        <p className="text-gray-500 line-clamp-3">
+                          {exam.description}
+                        </p>
+                        <Button
+                          size="sm"
+                          className="enroll-in px-4 py-1 font-semibold bg-primary-500 hover:bg-primary-600 rounded-md mt-2"
+                        >
+                          <Link
+                            href={`/courses/${courseId}/simulations/${exam.id}`}
+                          >
+                            take simulation
+                          </Link>
                         </Button>
                       </div>
                     </Card>
-                ))}
+                  ))}
                 </div>
               </div>
             </>

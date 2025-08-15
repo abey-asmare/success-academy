@@ -54,7 +54,8 @@ export default function ChapterAccessForm({
       );
       toast.success("Chapter access updated successfully");
       router.refresh();
-    } catch {
+    } catch(error) {
+      console.log(error)
       toast.error("Something went wrong");
     }
   };

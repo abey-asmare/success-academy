@@ -1,7 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
-import { isAdmin } from "@/utils/roles";
 import { db } from "@/lib/db";
 import { Answer } from "@/prisma/app/generated/prisma/client";
+import { getAdminInfo } from "@/utils/roles";
+import * as Sentry from "@sentry/nextjs";
+import { NextRequest, NextResponse } from "next/server";
+
+const { logger } = Sentry;
 
 // create a new simulation
 
@@ -12,7 +15,11 @@ export async function PUT(
   const { simulationId } = await params;
 
   try {
-    if (!isAdmin()) {
+    const {isAdmin} = await getAdminInfo()
+    if (!isAdmin) {
+      logger.warn(
+        `[COURSE_ID_SIMULATION_PUT]: Unauthorized: User is not an admin to update the simulation ${simulationId}`
+      )
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -105,10 +112,11 @@ export async function PUT(
         },
       },
     });
-
+    logger.info(`[COURSE_ID_SIMULATION_PUT]: OK: Simulation ${simulationId} updated successfully`)
     return NextResponse.json(exam);
   } catch (error) {
-    console.log("error happened here", error);
-    return new NextResponse("Internal Error", { status: 500 });
+    logger.error(`[COURSE_ID_SIMULATION_PUT]: Internal Error: Failed to update simulation ${simulationId}, ${error}`)
+    Sentry.captureException(error)
+    return new NextResponse("Internal server error", { status: 500 });
   }
 }

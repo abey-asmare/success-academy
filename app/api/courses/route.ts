@@ -1,7 +1,9 @@
-import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
-import { isAdmin } from "@/utils/roles";
+import { getAdminInfo } from "@/utils/roles";
+import * as Sentry from "@sentry/nextjs";
+import { NextResponse } from "next/server";
+
+const { logger } = Sentry;
 
 // fetch all courses if needed
 export async function GET() {
@@ -24,8 +26,11 @@ export async function GET() {
         createdAt: "desc",
       },
     });
+    logger.info(`[COURSE_GET]: OK: Courses fetched successfully`)
     return NextResponse.json(courses);
-  } catch {
+  } catch (error) {
+    logger.error(`[COURSE_GET]: Internal Error: Failed to fetch courses ${error}`)
+    Sentry.captureException(error)
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
@@ -35,8 +40,8 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    const { userId } = await auth();
-    if (!userId || !isAdmin()) {
+    const { userId, isAdmin } = await getAdminInfo();
+    if (!isAdmin) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
     const { title } = await req.json();
@@ -47,9 +52,11 @@ export async function POST(req: Request) {
         userId,
       },
     });
-
+    logger.info(`[COURSE_POST]: OK: Course ${course.id} created successfully by ${userId}`)
     return NextResponse.json(course);
-  } catch {
+  } catch (error) {
+    logger.error(`[COURSE_POST]: Internal Error: Failed to create course ${error}`)
+    Sentry.captureException(error)
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

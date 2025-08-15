@@ -49,7 +49,6 @@ const referrerOptions = [
 const formSchema = profileFormSchema.extend({
     courseId: z.string().min(1, { message: "Course is required" }),
     imageUrl: z.url({ message: "Image URL is required" }),
-    password: z.string().min(8, { message: "Password has to be at least 8 characters long" }),
 });
 type formType = z.infer<typeof formSchema>;
 
@@ -63,7 +62,6 @@ export default function RegistrationForm({courses}: PropType) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       courseId: '',
-      password: '',  
       firstName: "",
       lastName: "",
       phoneNumber: "",
@@ -177,23 +175,6 @@ export default function RegistrationForm({courses}: PropType) {
             />
           </div>
           
-          <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem className="flex-1">
-                  <FormLabel className="font-medium">Password * (You&apos;ll use this to login to your account)</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder="Password"
-                      variant="custom"
-                    />
-                  </FormControl>
-                    <FormMessage />
-                </FormItem>
-              )}
-            />
           {/* course  */}
           <FormField
             control={form.control}

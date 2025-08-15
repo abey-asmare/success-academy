@@ -10,6 +10,15 @@ export const isAdmin = async () => {
   return sessionClaims?.metadata.role === 'admin'
 }
 
+export const getAdminInfo = async ()=> {
+  const {userId, sessionClaims} = await auth()
+  if(!userId) throw new Error("Unauthorized")
+  return {
+    isAdmin: sessionClaims?.metadata.role === 'admin',
+    userId: userId
+  }
+}
+
 export const checkRoleForUser = async (userId: string, role: Roles) => {
   const client = await clerkClient()
 

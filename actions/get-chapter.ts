@@ -123,6 +123,7 @@ export const getChapter = async ({
         };
 
     } catch (error) {
+        console.log('error', error)
         return {
             chapter: null,
             course: null,

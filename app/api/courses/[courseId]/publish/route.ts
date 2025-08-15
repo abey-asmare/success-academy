@@ -1,18 +1,23 @@
-import { auth } from "@clerk/nextjs/server";
-import { NextRequest, NextResponse } from "next/server";
-import { isAdmin } from "@/utils/roles";
 import { db } from "@/lib/db";
+import { getAdminInfo } from "@/utils/roles";
+import * as Sentry from "@sentry/nextjs";
+import { NextRequest, NextResponse } from "next/server";
+
 
 export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ courseId: string }> }
 ) {
-  try {
-    const { courseId } = await params;
-    const { userId } = await auth();
 
-    if (!userId || !isAdmin()) {
-      return new NextResponse("Unauthorized", { status: 401 });
+  const { userId, isAdmin } = await getAdminInfo();
+  const { logger } = Sentry;
+  const { courseId } = await params;
+  try {
+    if (!isAdmin) {
+      logger.warn(
+        `[COURSE_ID_PUBLISH_PATCH]: Unauthorized: User ${userId} is not an admin to publish course ${courseId}`
+      );
+      return NextResponse.json({error: "Unauthorized"}, { status: 401 });
     }
 
     const course = await db.course.findUnique({
@@ -30,6 +35,9 @@ export async function PATCH(
     });
 
     if (!course) {
+      logger.warn(
+        `[COURSE_ID_PUBLISH_PATCH]: Not Found: Course ${courseId} not found for user ${userId}`
+      );
       return new NextResponse("Not found", { status: 404 });
     }
 
@@ -39,10 +47,12 @@ export async function PATCH(
 
     if (
       !course.title ||
-      !course.description ||
       !course.imageUrl ||
-       !hasPublishedChapter
+      !hasPublishedChapter
     ) {
+      logger.info(
+        `[COURSE_ID_PUBLISH_PATCH]: Bad Request: Course ${courseId} is missing required fields for user ${userId}`
+      );
       return new NextResponse("Missing required fields", { status: 400 });
     }
 
@@ -55,9 +65,15 @@ export async function PATCH(
         isPublished: true,
       },
     });
-
+    logger.info(
+      `[COURSE_ID_PUBLISH_PATCH]: OK: Course ${courseId} published successfully for user ${userId}`
+    );
     return NextResponse.json(publishedCourse);
-  } catch {
+  } catch (error) {
+    logger.error(
+      `[COURSE_ID_PUBLISH_PATCH]: Internal Error: Failed to publish course ${courseId} ${error}`
+    );
+    Sentry.captureException(error);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }

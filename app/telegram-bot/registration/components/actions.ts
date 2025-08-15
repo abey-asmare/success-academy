@@ -12,7 +12,6 @@ import { clerkClient } from "@clerk/nextjs/server";
 const formSchema = profileFormSchema.extend({
   courseId: z.string().min(1, { message: "Course is required" }),
   imageUrl: z.url({ message: "Image URL is required" }),
-  password: z.string().min(8, { message: "Password is required" }),
 });
 type formType = z.infer<typeof formSchema>;
 
@@ -30,11 +29,12 @@ export async function handleTelegramRegistration(data: formType) {
     const user = await client.users.getUserList({emailAddress: [data.email]});
 
     if (user.data.length > 0) {
+      console.log(user.data)
       userId = user.data[0].id;
     } else {
       const newUser = await client.users.createUser({
         emailAddress: [data.email],
-        password: data.password,
+        password: crypto.randomUUID().toString(),
       });
       userId = newUser.id;
     }
@@ -80,14 +80,22 @@ export async function handleTelegramRegistration(data: formType) {
     });
     if (!purchase || !purchase.approved) {
     // create a purchase
-    await db.purchase.create({
-      data: {
+    await db.purchase.upsert({
+      where: {
+        userId_courseId: {
+          userId,
+          courseId: data.courseId,
+        },
+      },
+      update: {
+        imageUrl: data.imageUrl,
+      },
+      create: {
         userId,
         courseId: data.courseId,
         imageUrl: data.imageUrl,
       },
-    });
-  }
+    })};
     return { message: "Registration successful", status: 200 };
   } catch (error) {
     console.log(error);

@@ -1,39 +1,46 @@
 import { db } from "@/lib/db";
-import { isAdmin } from "@/utils/roles";
-import { auth } from "@clerk/nextjs/server";
+import { getAdminInfo } from "@/utils/roles";
 import Mux from "@mux/mux-node";
 import { NextResponse } from "next/server";
+import * as Sentry from "@sentry/nextjs"
 
 const mux = new Mux(
 {
     tokenId: process.env.MUX_TOKEN_ID!,
     tokenSecret: process.env.MUX_TOKEN_SECRET!
-}
+  }
 );
 const Video = mux.video
+
+
+
 
 export async function DELETE(
   req: Request,
   { params }: { params: Promise<{ courseId: string; chapterId: string }> }
 ) {
+  
+  const { userId, isAdmin } = await getAdminInfo()
+  const { logger } = Sentry
     const {courseId, chapterId} = await params
   try {
-    const { userId } = await auth();
 
-    if (!userId || !isAdmin()) {
-      return new NextResponse("Unauthorized", { status: 401 });
+    if (!isAdmin) {
+      logger.warn(`[COURSE_ID_CHAPTER_ID_DELETE]: Unauthorized: User ${userId} is not an admin to delete chapter ${chapterId}`)
+      return  NextResponse.json({error: "Unauthorized"}, { status: 401 });
     }
 
-    const ownCourse = await db.course.findUnique({
-      where: {
-        id: courseId,
-        userId,
-      },
-    });
+    // const ownCourse = await db.course.findUnique({
+    //   where: {
+    //     id: courseId,
+    //     userId,
+    //   },
+    // });
 
-    if (!ownCourse) {
-      return new NextResponse("Unauthorized", { status: 401 });
-    }
+    // if (!ownCourse) {
+    //   logger.info(`[COURSE_ID_CHAPTER_ID_DELETE]: Unauthorized: User ${userId} is not the owner of course ${courseId}`)
+    //   return new NextResponse("Unauthorized", { status: 401 });
+    // }
 
     const chapter = await db.chapter.findUnique({
       where: {
@@ -43,7 +50,8 @@ export async function DELETE(
     });
 
     if (!chapter) {
-      return new NextResponse("Not Found", { status: 404 });
+      logger.info(`[COURSE_ID_CHAPTER_ID_DELETE]: Not Found: Chapter ${chapterId} not found for course ${courseId}`)
+      return  NextResponse.json({error: "Not Found"}, { status: 404 });
     }
 
     if (chapter.videoUrl) {
@@ -87,9 +95,11 @@ export async function DELETE(
       });
     }
 
+    logger.info(`[COURSE_ID_CHAPTER_ID_DELETE]: OK: Chapter ${chapterId} deleted successfully`)
     return NextResponse.json(deletedChapter);
   } catch {
-    return new NextResponse("Internal Error", { status: 500 });
+    logger.error(`[COURSE_ID_CHAPTER_ID_DELETE]: Internal Error: Failed to delete chapter ${chapterId}`)
+    return  NextResponse.json({error: "Internal Error"}, { status: 500 });
   }
 }
 
@@ -98,25 +108,30 @@ export async function PATCH(
   req: Request,
   { params }: { params: Promise<{ courseId: string; chapterId: string }> }
 ) {
+
+  const { userId, isAdmin } = await getAdminInfo()
+
+  const {courseId, chapterId} = await params
+  const { logger } = Sentry 
   try {
-    const { userId } = await auth();
     const {...values } = await req.json();
-    const {courseId, chapterId} = await params
 
-    if (!userId || !isAdmin()) {
-      return new NextResponse("Unauthorized", { status: 401 });
+    if (!isAdmin) {
+      logger.warn(`[COURSE_ID_CHAPTER_ID_PATCH]: Unauthorized: User ${userId} is not an admin to update chapter ${chapterId}`)
+      return NextResponse.json({error: "Unauthorized"}, { status: 401 });
     }
 
-    const ownCourse = await db.course.findUnique({
-      where: {
-        id: courseId,
-        userId,
-      },
-    });
+    // const ownCourse = await db.course.findUnique({
+    //   where: {
+    //     id: courseId,
+    //     userId,
+    //   },
+    // });
 
-    if (!ownCourse) {
-      return new NextResponse("Unauthorized", { status: 401 });
-    }
+    // if (!ownCourse) {
+    //   logger.warn(`[COURSE_ID_CHAPTER_ID_PATCH]: Unauthorized: User ${userId} is not the owner of course ${courseId}`)
+    //   return new NextResponse("Unauthorized", { status: 401 });
+    // }
 
     const chapter = await db.chapter.update({
       where: {
@@ -138,7 +153,9 @@ export async function PATCH(
       if (existingMuxData) {
         try {
           await Video.assets.delete(existingMuxData.assetId);
-        } catch {
+        } catch(error) {
+          Sentry.captureException(error)
+          logger.error(`[COURSE_ID_CHAPTER_ID_PATCH]: Internal Error: Failed to delete Mux asset for chapter ${chapterId} ${error}`)
         }
         await db.muxData.delete({
           where: {
@@ -162,12 +179,17 @@ export async function PATCH(
             },
           });
         }
-        } catch {
-        }
+      } catch(error) {
+        logger.info(`[COURSE_ID_CHAPTER_ID_PATCH]: Internal Error: Failed to create Mux asset for chapter ${chapterId} ${error}`)
+        Sentry.captureException(error)
+        return NextResponse.json({error: "Internal Error"}, {status: 500})
       }
-
-      return NextResponse.json(chapter);
-  } catch {
-    return new NextResponse("Internal Error", { status: 500 });
+    }
+    logger.info(`[COURSE_ID_CHAPTER_ID_PATCH]: OK: Chapter ${chapterId} updated successfully`)
+    return NextResponse.json(chapter);
+  } catch (error) {
+    logger.error(`[COURSE_ID_CHAPTER_ID_PATCH]: Internal Error: Failed to update chapter ${chapterId} ${error}`)
+    Sentry.captureException(error)
+    return NextResponse.json({error: "Internal Error"}, {status: 500});
   }
 }

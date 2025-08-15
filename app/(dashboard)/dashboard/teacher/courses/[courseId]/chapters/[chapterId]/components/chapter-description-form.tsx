@@ -65,7 +65,7 @@ export default function ChapterDescriptionForm({initialData, courseId, chapterId
                             <FormItem
                                 
                             >
-                                <FormLabel className="text-md">Chapter description</FormLabel>
+                                <FormLabel className="text-md">Chapter description <span className="text-sm text-gray-500 italic font-normal text-xs">Optional</span></FormLabel>
                                 <FormControl>
                                    <Editor {...field} value={field.value} onChange={field.onChange}/>
                                     

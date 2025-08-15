@@ -56,7 +56,7 @@ export default function DescriptionForm({initialData, courseId}: DescriptionForm
   return (      
     <div className="mt-6 ">
             <Form {...form}>
-                <FormLabel>Course Description</FormLabel>
+                <FormLabel>Course Description <span className="text-sm text-gray-500 italic font-normal text-xs">Optional</span></FormLabel>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mt-2">
                     <FormField
                         control={form.control}

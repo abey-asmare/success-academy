@@ -1,10 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server"
 import { db } from "@/lib/db";
 import { Answer } from "@/prisma/app/generated/prisma/client";
-import { isAdmin } from "@/utils/roles";
-
-
+import { getAdminInfo } from "@/utils/roles";
+import Sentry from "@sentry/nextjs";
+import { NextRequest, NextResponse } from "next/server";
 
     
 export async function POST(
@@ -12,10 +10,12 @@ export async function POST(
   { params }: { params: Promise<{ courseId: string; chapterId: string }> }
 ) {
     const {courseId, chapterId} = await params
-  try {
-    const { userId } = await auth();
-    
-    if (!userId || !isAdmin()) {
+    const { logger } = Sentry
+    try {
+    const { userId, isAdmin } = await getAdminInfo()
+      
+    if (!isAdmin) {
+      logger.warn(`[COURSE_ID_CHAPTER_ID_EXAM_POST]: Unauthorized: User ${userId} is not an admin`)
       return new NextResponse("Unauthorized", { status: 401 });
     }
     const body = await req.json();
@@ -26,17 +26,18 @@ export async function POST(
       return new NextResponse("Missing required fields", { status: 400 });
     }
 
-    // Check if user owns the course
-    const course = await db.course.findUnique({
-      where: {
-        id: courseId,
-        userId: userId,
-      },
-    });
+    // // Check if user owns the course
+    // const course = await db.course.findUnique({
+    //   where: {
+    //     id: courseId,
+    //     userId: userId,
+    //   },
+    // });
 
-    if (!course) {
-      return new NextResponse("Course not found", { status: 404 });
-    }
+    // if (!course) {
+    //   logger.warn(`[COURSE_ID_CHAPTER_ID_EXAM_POST]: Not Found: Course ${courseId} not found for user ${userId}`)
+    //   return new NextResponse("Course not found", { status: 404 });
+    // }
 
     // Check if the chapter exists and belongs to the course
     const chapter = await db.chapter.findUnique({
@@ -47,6 +48,7 @@ export async function POST(
     });
 
     if (!chapter) {
+      logger.warn(`[COURSE_ID_CHAPTER_ID_EXAM_POST]: Not Found: Chapter ${chapterId} not found for course ${courseId}`)
       return new NextResponse("Chapter not found", { status: 404 });
     }
 
@@ -59,6 +61,7 @@ export async function POST(
     });
 
     if (existingExam) {
+      logger.info(`[COURSE_ID_CHAPTER_ID_EXAM_POST]: Conflict: An exam with this name already exists for this chapter ${chapterId}`)
       return new NextResponse("An exam with this name already exists for this chapter", { status: 409 });
     }
 
@@ -137,44 +140,43 @@ export async function POST(
         },
       },
     });
-
+    
     return NextResponse.json(exam);
   } catch (error) {
-    console.log('error happened here', error)
+    logger.error(`[COURSE_ID_CHAPTER_ID_EXAM_POST]: Internal Error: Failed to create exam for a course ${courseId} ${error}`)
+    Sentry.captureException(error)  
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
-
-
-
-
-
 
 
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ courseId: string; chapterId: string }> }
 ) {
+  const { logger } = Sentry
     const {courseId, chapterId} = await params
   try {
-    const { userId } = await auth();
+    const { userId, isAdmin } = await getAdminInfo();
     
-    if (!userId) {
+    if (!isAdmin) {
+      logger.warn(`[COURSE_ID_CHAPTER_ID_EXAM_GET]: Unauthorized: User ${userId} is not authorized to get exams for a course ${courseId}`)
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
 
     // Check if user owns the course
-    const course = await db.course.findUnique({
-      where: {
-        id: courseId,
-        userId: userId,
-      },
-    });
+    // const course = await db.course.findUnique({
+    //   where: {
+    //     id: courseId,
+    //     userId: userId,
+    //   },
+    // });
 
-    if (!course) {
-      return new NextResponse("Course not found", { status: 404 });
-    }
+    // if (!course) {
+    //   logger.info(`[COURSE_ID_CHAPTER_ID_EXAM_GET]: Not Found: Course ${courseId} not found for user ${userId}`)
+    //   return new NextResponse("Course not found", { status: 404 });
+    // }
 
     // Check if the chapter exists and belongs to the course
     const chapter = await db.chapter.findUnique({
@@ -185,6 +187,7 @@ export async function GET(
     });
 
     if (!chapter) {
+      logger.info(`[COURSE_ID_CHAPTER_ID_EXAM_GET]: Not Found: Chapter ${chapterId} not found for course ${courseId}`)
       return new NextResponse("Chapter not found", { status: 404 });
     }
 
@@ -205,8 +208,10 @@ export async function GET(
       },
     });
 
+    logger.info(`[COURSE_ID_CHAPTER_ID_EXAM_GET]: OK: Exams for chapter ${chapterId} retrieved successfully`)
     return NextResponse.json(exams);
-  } catch {
+  } catch (error) {
+    logger.error(`[COURSE_ID_CHAPTER_ID_EXAM_GET]: Internal Error: Failed to get exams for chapter ${chapterId} ${error}`)
     return new NextResponse("Internal Error", { status: 500 });
   }
 }

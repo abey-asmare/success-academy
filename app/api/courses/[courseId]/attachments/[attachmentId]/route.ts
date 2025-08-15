@@ -1,23 +1,27 @@
 import { db } from "@/lib/db"
-import { isAdmin } from "@/utils/roles"
-import { auth } from "@clerk/nextjs/server"
+import { getAdminInfo } from "@/utils/roles"
+import Sentry from "@sentry/nextjs"
 import { NextResponse } from "next/server"
 
 export async function DELETE(req: Request, {params}: {params: Promise<{courseId: string, attachmentId: string}>}){
     const {courseId, attachmentId} = await params
+    const { logger } = Sentry
     try{
-        const {userId} = await auth()
-        if(!userId || !isAdmin()){
+        const {userId, isAdmin} = await getAdminInfo()       
+        if(!isAdmin){
+            logger.info(`[COURSE_ID_ATTACHMENT_DELETE]: Unauthorized: User ${userId} is not an admin to delete the attachment ${attachmentId}`)
             return NextResponse.json({error: "Unauthorized"}, {status: 401})
         }
-        const courseOwner = await db.course.findUnique({
-            where: {
-               id: courseId, 
-               userId: userId
-            }
-        })
-        if(!courseOwner)
-            return NextResponse.json("unauthorized", {status: 401})
+        // const courseOwner = await db.course.findUnique({
+        //     where: {
+        //        id: courseId, 
+        //        userId: userId
+        //     }
+        // })
+        // if(!courseOwner){
+        //     logger.info(`[COURSE_ID_ATTACHMENT_DELETE]: Unauthorized: User ${userId} is not the owner of course ${courseId}`)
+        //     return NextResponse.json("unauthorized", {status: 401})
+        // }
         
         const attachment = await db.attachment.delete({
             where: {
@@ -25,9 +29,12 @@ export async function DELETE(req: Request, {params}: {params: Promise<{courseId:
                 id: attachmentId
             }
         })
-        return NextResponse.json(attachment)
+        logger.info(`[COURSE_ID_ATTACHMENT_DELETE]: OK: Attachment ${attachmentId} deleted successfully`)
+        return NextResponse.json(attachment)    
 
-    }catch{
+    }catch(error){
+            logger.error(`[COURSE_ID_ATTACHMENT_DELETE]: Internal Error: Failed to delete attachment ${attachmentId} ${error}`)
+            Sentry.captureException(error)
             return NextResponse.json({error: "Internal server error"}, {status: 500})
         }
 }

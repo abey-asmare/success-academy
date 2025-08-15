@@ -1,7 +1,10 @@
-import { auth } from "@clerk/nextjs/server";
-import { NextRequest, NextResponse } from "next/server";
-import { isAdmin } from "@/utils/roles";
 import { db } from "@/lib/db";
+import { getAdminInfo } from "@/utils/roles";
+import * as Sentry from "@sentry/nextjs";
+import { NextRequest, NextResponse } from "next/server";
+
+
+const { logger } = Sentry;
 
 export async function PATCH(
   req: NextRequest,
@@ -9,27 +12,32 @@ export async function PATCH(
 ) {
   const { courseId } = await params
   try {
-    const { userId } = await auth();
-
-    if (!userId || !isAdmin()) {
+    const { userId, isAdmin } = await getAdminInfo()
+    if (!isAdmin) {
+      logger.warn(
+        `[COURSE_ID_UNPUBLISH_PATCH]: Unauthorized: User ${userId} is not an admin to unpublish the course ${courseId}`
+      )
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
     const course = await db.course.findUnique({
       where: {
         id: courseId,
-        userId,
+        // userId,
       },
     });
 
     if (!course) {
+      logger.warn(
+        `[COURSE_ID_UNPUBLISH_PATCH]: Not Found: Course ${courseId} not found`
+      )
       return new NextResponse("Not found", { status: 404 });
     }
 
     const unpublishedCourse = await db.course.update({
       where: {
         id: courseId,
-        userId,
+        // userId,
       },
       data: {         
         isPublished: false,
@@ -37,7 +45,9 @@ export async function PATCH(
     });
 
     return NextResponse.json(unpublishedCourse);
-  } catch {
-    return new NextResponse("Internal Error", { status: 500 });
+  } catch (error) {
+    logger.error(`[COURSE_ID_UNPUBLISH_PATCH]: Internal Error: Failed to unpublish course ${courseId} ${error}`)
+    Sentry.captureException(error)
+    return new NextResponse("Internal server error", { status: 500 });
   }
 }

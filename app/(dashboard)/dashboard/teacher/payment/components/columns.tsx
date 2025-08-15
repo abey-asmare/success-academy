@@ -14,6 +14,7 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 import { approvePayment, cancelPayment } from "../actions";
 import { cn } from "@/lib/utils";
+import FancyBoxWrapper from "@/components/FancyBoxWrapper";
 
 export const columns: ColumnDef<{
   id: string;
@@ -87,19 +88,22 @@ export const columns: ColumnDef<{
     },
     cell: ({ row }) => {
       return (
-        <div className="flex items-center gap-2">
-          <Link
+        <div className="flex items-center gap-2 w-10 h-10 overflow-hidden ">
+         <FancyBoxWrapper className="w-full h-full">
+         <Link
+          data-fancybox
             href={row.getValue("imageUrl")}
-            target="_blank"
-            rel="noopener noreferrer"
+            className="w-full h-full"
           >
             <Image
               src={row.getValue("imageUrl")}
               alt={row.getValue("course")}
               width={50}
               height={50}
+              className="w-full h-full object-cover"
             />
           </Link>
+         </FancyBoxWrapper>
         </div>
       );
     },
