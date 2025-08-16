@@ -60,20 +60,21 @@ export default async  function HeroOrange({
         </div>
 
         {/* Right illustration */}
-        <div className="relative mx-auto h-[420px] w-full max-w-[520px] sm:h-full">
+        <div className="relative mx-auto h-screen h-[280px] w-full max-w-[420px]">
           {/* Ensure parent is relative when using fill, per Next.js recommendations */}
                       <Image
-                        src="/images/hero-image.png"
+                        src="/images/hero-image.webp"
                         alt="Student working on laptop"
-                        width={600}
-                        height={400}
-                        className="w-[full] h-[600px] object-cover rounded-xl md:rounded-2xl object-top object-"
+                        width={601}
+                        height={1077}
+                        className="w-full h-[640px] lg:h-full object-cover object-top"
                         priority
+                        fetchPriority="high"
                       />
         </div>
 
         {/* Stats strip on mobile */}
-        <div className="md:hidden -mt-4 grid grid-cols-3 gap-4">
+        <div className="md:hidden -mt-4 grid grid-cols-3 gap-4 py-4">
           <Stat label="Courses" value="600+" />
           <Stat label="Exams" value="300+" />
           <Stat label="Students" value={`${allUsers.toString()}+`} />
@@ -86,8 +87,8 @@ export default async  function HeroOrange({
 function Stat({ value, label }: { value: string; label: string }) {
   return (
     <div className="rounded-xl bg-white/10 px-4 py-3 text-center backdrop-blur-sm">
-      <div className="text-2xl font-bold">{value}</div>
-      <div className="text-sm text-white/90">{label}</div>
+      <div className="text-lg md:text-2xl font-bold">{value}</div>
+      <div className="text-sm md:text-base text-white/90">{label}</div>
     </div>
   )
 }

@@ -5,9 +5,6 @@ import { Metadata } from "next";
 
 const metadata: Metadata = {
     title: "Our Courses",
-
-
-
 }
 
 

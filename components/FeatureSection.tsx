@@ -18,15 +18,15 @@ export default function FeatureSection() {
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[400px] lg:h-[600px]">
           {/* Right Image */}
           <div className="relative order-first lg:order-last">
-            <div className="relative bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl md:rounded-3xl px-4 md:px-8 py-4 md:py-6">
-              <div className="relative z-10">
+            <div className="relative bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl md:rounded-3xl px-4 md:px-8 pt-4 md:pt-6">
+              <div className="relative z-10 overflow-hidden">
                 <Image
-                  src="/images/hero-image.png"
+                  src="/images/hero-image.webp"
                   alt="Student working on laptop"
-                  width={600}
-                  height={400}
-                  className="w-[600px] h-[600px] object-cover rounded-xl md:rounded-2xl object-top"
-                  priority
+                  width={601}
+                  height={1077}
+                  className="relative w-[600px] h-[600px] object-cover rounded-xl md:rounded-2xl scale-100 object-top"
+                  // priority
                 />
               </div>
               {/* Background decoration */}

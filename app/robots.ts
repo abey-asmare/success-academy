@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/dashboard/*'],
     },
-    sitemap: 'https://success-academy.vercel.app/sitemap.xml',
+    sitemap: 'https://success-academy.et/sitemap.xml',
   }
 }

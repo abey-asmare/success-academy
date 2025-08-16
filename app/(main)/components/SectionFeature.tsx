@@ -1,6 +1,32 @@
 import Image from "next/image"
 
+const sectionImages = [
+  {
+    src: "/images/partners/addis-ababa-gate.webp",
+    alt: "addis ababa university gate",
+    width: 294,
+    height: 220,
+    className: "absolute top-0 left-0 md:left-[30px] w-[180px] rounded-2xl shadow-lg"
+  },
+  {
+    src: "/images/partners/aastu.webp",
+    alt: "Addis ababa science and technology university",
+    width: 320,
+    height: 320,
+    className: "absolute top-2/6 right-0 md:right-[30px] w-[150px] rounded-2xl shadow-lg"
+  },
+  {
+    src: "/images/partners/astu.webp",
+    alt: "Adama science and technology university",
+    width: 204,
+    height: 192,
+    className: "absolute bottom-0 left-0 md:left-[30px] w-[150px] rounded-2xl shadow-lg"
+  }
+]
+
+
 export default function SectionFeature() {
+
   return (
     <section
       aria-labelledby="features-heading"
@@ -9,29 +35,20 @@ export default function SectionFeature() {
   <p className="text-center font-semibold text-xl md:text-2xl mb-10">
               Learn Anything, Anytime, Anywhere
             </p>
-            <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
-              <div className="relative w-full lg:w-1/2 min-h-[300px] md:min-h-[400px] lg:min-h-[500px] order-2 lg:order-1">
+            <div className="flex flex-col lg:flex-row gap8 md:gap-48 lg:gap-12">
+            <div className="relative h-[480px] w-full order-2 lg:order-1 mt-4">
+               {sectionImages.map((image, index) => (
                 <Image
-                  src="/images/getting-started-2.jpg"
-                  width={600}
-                  height={900}
-                  alt="student sitting comfortably"
-                  className="absolute top-0 left-1/4 w-[120px] sm:w-[150px] md:w-[180px] lg:w-[200px] rounded-2xl shadow-lg"
-                />
-                <Image
-                  src="/images/getting-started-1.jpg"
-                  width={626}
-                  height={417}
-                  alt="student sitting comfortably"
-                  className="absolute top-1/2 right-[15px] sm:right-[20px] md:right-[30px] w-[120px] sm:w-[150px] md:w-[180px] lg:w-[200px] rounded-2xl shadow-lg"
-                />
-                <Image
-                  src="/images/getting-started-3.jpg"
-                  width={626}
-                  height={417}
-                  alt="student sitting comfortably"
-                  className="absolute bottom-[10px] md:bottom-[20px] left-[10px] md:left-[20px] w-[120px] sm:w-[150px] md:w-[180px] lg:w-[200px] rounded-2xl shadow-lg"
-                />
+                  key={index}
+                  src={image.src}
+                  alt={image.alt}
+                  width={image.width}
+                  height={image.height}
+                  className={image.className}
+                  priority
+
+                  />
+              ))}
               </div>
               <div className="right space-y-6 md:space-y-8 order-1 lg:order-2">
                 <LearningDirections

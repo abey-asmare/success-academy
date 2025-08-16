@@ -104,8 +104,8 @@ export default function TestimonialSlider() {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="hidden lg:block lg:-left-12 bg-white shadow-lg hover:shadow-xl" />
-          <CarouselNext className="hidden lg:block lg:-right-12 bg-white shadow-lg hover:shadow-xl" />
+          <CarouselPrevious className="hidden lg:block lg:-left-8 bg-white shadow-lg hover:shadow-xl" />
+          <CarouselNext className="hidden lg:block lg:-right-8 bg-white shadow-lg hover:shadow-xl" />
         </Carousel>
       </div>
     </div>
