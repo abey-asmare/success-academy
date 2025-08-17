@@ -35,6 +35,9 @@ import { Course } from "@/prisma/app/generated/prisma/client";
 import { TelegramFileUpload } from "@/components/file-upload";
 import { Button } from "@/components/ui/button";
 import { handleTelegramRegistration } from "./actions";
+import { accounts } from '@/lib/constants';
+import Image from "next/image";
+
 
 const referrerOptions = [
   { value: "Google", label: "Google" },
@@ -286,6 +289,10 @@ export default function RegistrationForm({courses}: PropType) {
             />
           </div>
             <div className="mt-6 ">
+            <div className="space-y-4">
+                    {accounts.map(account => <CardItem key={account.name} {...account} />)}
+                    
+                  </div>
                   <FormField
                     control={form.control}
                     name="imageUrl"
@@ -316,4 +323,31 @@ export default function RegistrationForm({courses}: PropType) {
       </Form>
     </div>
   );
+}
+
+interface CardItemProps {
+  name: string,
+   image: string,
+    accountHolder: string,
+     accountNumber: string
+    }
+function CardItem({name, image, accountHolder, accountNumber}: CardItemProps){
+  return (
+    <div className="my-2">
+          <div className="flex items-center gap-x-2">
+            <Image
+              src={image}
+              className="w-8 h-8"
+              alt={name}
+              width={2000}
+              height={1958}
+            />
+            <h1 className="text-xl font-bold text-gray-800">{name}</h1>
+          </div>
+          <p className="text-gray-600 font-semibold text-sm ml-4 space-x-2 flex flex-col">
+            <span>Account Holder: {accountHolder}</span>
+            <span className="text-sky-600 text-sm">Account Number: {accountNumber}</span>
+          </p>
+        </div>
+  )
 }
