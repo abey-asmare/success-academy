@@ -10,6 +10,7 @@ import ChapterDescriptionForm from "./components/chapter-description-form";
 import ChapterTitleForm from "./components/chapter-title-form";
 import ChapterVideoForm from "./components/chapter-video-form";
 import DeleteExamButton from "./exam/components/DeleteExamButton";
+import ChapterCategoryForm from "./components/chapter-category-form";
 // import ChapterCategoryForm from "./components/chapter-category-form";
 
 export default async function ChapterDetails({
@@ -32,11 +33,11 @@ export default async function ChapterDetails({
   if (!chapter) {
     return redirect("/");
   }
-  // const chapterCategories = await db.chapterCategory.findMany({
-  //   orderBy: {
-  //     name: "asc",
-  //   },
-  // });
+  const chapterCategories = await db.chapterCategory.findMany({
+    orderBy: {
+      name: "asc",
+    },
+  });
 
   // description should be optional as requested
   const requiredFields = [
@@ -86,21 +87,22 @@ export default async function ChapterDetails({
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
-            <ChapterTitleForm
+           <div className="flex flex-col">
+           <ChapterTitleForm
               initialData={chapter}
               courseId={courseId}
               chapterId={chapterId}
             />
-               {/* <ChapterCategoryForm
+
+               <ChapterCategoryForm
               initialData={chapter}
               courseId={courseId}
               chapterId={chapterId}
-              options={chapterCategories?.map((category) => ({
-                label: category.name,
-                value: category.id,
-              }))}
-            /> */}
+              options={chapterCategories.map(category => ({ label: category.name, value: category.id }))}
             
+            /> 
+            
+           </div>
             
             <ChapterDescriptionForm
               initialData={chapter}

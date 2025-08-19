@@ -9,7 +9,7 @@ const InputVariants = cva(
     variants: {
         variant: {
             default: '', 
-            custom: "focus-visible:ring-sky-100 focus-visible:border-sky-100 selection:bg-sky-800", 
+            custom: "focus-visible:ring-sky-100/50 focus-visible:border-sky-200 selection:bg-sky-800", 
         },
       },
 

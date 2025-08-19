@@ -61,7 +61,7 @@ export async function DELETE(
       }
 
     // delete the asset in uploadthing
-     const deletedFile = chapter.videoUrl?.split("/")?.pop();
+     const deletedFile = chapter.videoUrl.split("/")?.pop();
         // delete the uploadthing using utApi
         const deletedFileResponse = await utapi.deleteFiles(deletedFile!);
         if (deletedFileResponse.success) {

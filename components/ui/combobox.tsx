@@ -1,9 +1,8 @@
 "use client"
 
-import * as React from "react"
 import { Check, ChevronsUpDown } from "lucide-react"
+import * as React from "react"
 
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
   Command,
@@ -18,17 +17,19 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { cn } from "@/lib/utils"
 
 
 interface ComboboxProps {
     options: {label: string, value: string}[], 
     value?: string, 
-    onChange: (value: string) => void   
+    onChange: (value: string) => void, 
+    children?: React.ReactNode
 }
 
 
 
-export function Combobox({options, value, onChange}: ComboboxProps) {
+export function Combobox({options, value, onChange, children}: ComboboxProps) {
   const [open, setOpen] = React.useState(false)
 
   return (
@@ -47,7 +48,8 @@ export function Combobox({options, value, onChange}: ComboboxProps) {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0">
-        <Command>
+        <div className="flex gap-1">
+        <Command className="flex-1 relative">
           <CommandInput placeholder="Search a Category..." className="h-9" />
           <CommandList>
             <CommandEmpty>No option found.</CommandEmpty>
@@ -55,7 +57,7 @@ export function Combobox({options, value, onChange}: ComboboxProps) {
               {options.map((option) => (
                 <CommandItem
                   key={option.value}
-                  value={option.value}
+                  value={option.value}  
                   onSelect={() => {
                     onChange(option.value === value ? "" : option.value)
                     setOpen(false)
@@ -73,7 +75,10 @@ export function Combobox({options, value, onChange}: ComboboxProps) {
             </CommandGroup>
           </CommandList>
         </Command>
+        {children}
+        </div>
       </PopoverContent>
     </Popover>
   )
 }
+

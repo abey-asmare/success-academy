@@ -50,34 +50,22 @@ export async function DELETE(req: NextRequest, {params}: {params: Promise<{cours
 
         // delete mux data
         for(const chapter of course.chapters){
-            // delete the video from mux
-            if(chapter.muxData?.assetId){
-                await Video.assets.delete(chapter.muxData.assetId)
-            }
-            if (chapter.videoUrl){
-                // delete the video from uploadthing
-                const deletedFile = chapter.videoUrl?.split("/")?.pop();
+            fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/courses/${courseId}/chapters/${chapter.id}`, {
+                method: "DELETE"
+            })
+        }
+
+            if(course.imageUrl){
+                // delete the course image from uploadthing
+                const deletedFile = course.imageUrl?.split("/")?.pop();
                 // delete the uploadthing using utApi
                 const deletedFileResponse = await utapi.deleteFiles(deletedFile!);
                 if (deletedFileResponse.success) {
-                  logger.info(
-                    `[COURSE_DELETE_UPLOADTHING_VIDEO]: Uploadthing file deleted successfully for chapter ${chapter.id}`
-                  );
+                    logger.info(
+                        `[COURSE_DELETE_SERVER_ACTION]: Uploadthing file deleted successfully for course ${courseId}`
+                    );
                 }
             }
-        }
-
-        // delete uploadthing files
-
-        // delete the course image from uploadthing
-        const deletedFile = course.imageUrl?.split("/")?.pop();
-        // delete the uploadthing using utApi
-        const deletedFileResponse = await utapi.deleteFiles(deletedFile!);
-        if (deletedFileResponse.success) {
-          logger.info(
-            `[COURSE_DELETE_SERVER_ACTION]: Uploadthing file deleted successfully for course ${courseId}`
-          );
-        }
 
         // delete course
         const deletedCourse = await db.course.delete({
