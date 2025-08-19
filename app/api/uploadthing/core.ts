@@ -2,7 +2,6 @@ import { auth } from "@clerk/nextjs/server";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 
 import * as Sentry from "@sentry/nextjs"
-import { isAdmin } from "@/utils/roles";
 
 const { logger } = Sentry;
 

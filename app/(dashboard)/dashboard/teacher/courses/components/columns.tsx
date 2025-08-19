@@ -1,7 +1,7 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal, Pencil } from "lucide-react"
+import { ArrowUpDown, MoreHorizontal, Pencil, Trash } from "lucide-react"
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,10 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Course } from "@/prisma/app/generated/prisma/client";
+import DeleteAlert from "./DeleteAlert";
+import toast from "react-hot-toast";
+import axios from "axios";
+
 
 export const columns: ColumnDef<Course>[] = [
   {
@@ -83,6 +87,13 @@ export const columns: ColumnDef<Course>[] = [
     id: "actions",
     cell: ({ row }) => {
       const { id } = row.original;
+      const deleteCourse = async () => {
+        try {
+          await axios.delete(`/api/courses/${id}`)
+        } catch (error) {
+          console.log(error)
+        }
+      }
 
       return (
         (<DropdownMenu>
@@ -99,6 +110,22 @@ export const columns: ColumnDef<Course>[] = [
                 Edit
               </DropdownMenuItem>
             </Link>
+          <DeleteAlert 
+          title="Are you sure you want to delete this course?"
+          onContinue={()=> 
+            toast.promise(deleteCourse(), {
+              loading: "Deleting course...",
+              success: "Course deleted successfully",
+              error: "Failed to delete course. try again later.",
+            })
+          }
+          >
+          <Button variant="destructive" className="!px-2 flex items-center justify-start gap-x-2 w-full h-full bg-transparent text-red-500 hover:text-red-600 hover:bg-red-100">
+          <span className="sr-only">Delete</span>
+          <Trash className="w-4 h-4 hover:text-gray-700" />
+          Delete
+      </Button>
+          </DeleteAlert>
           </DropdownMenuContent>
         </DropdownMenu>)
       );

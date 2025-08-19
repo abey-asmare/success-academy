@@ -3,6 +3,8 @@ import { getAdminInfo } from "@/utils/roles";
 import Mux from "@mux/mux-node";
 import { NextResponse } from "next/server";
 import * as Sentry from "@sentry/nextjs"
+import { utapi } from "@/lib/uploadthing-server";
+import { revalidatePath } from "next/cache";
 
 const mux = new Mux(
 {
@@ -30,18 +32,6 @@ export async function DELETE(
       return  NextResponse.json({error: "Unauthorized"}, { status: 401 });
     }
 
-    // const ownCourse = await db.course.findUnique({
-    //   where: {
-    //     id: courseId,
-    //     userId,
-    //   },
-    // });
-
-    // if (!ownCourse) {
-    //   logger.info(`[COURSE_ID_CHAPTER_ID_DELETE]: Unauthorized: User ${userId} is not the owner of course ${courseId}`)
-    //   return new NextResponse("Unauthorized", { status: 401 });
-    // }
-
     const chapter = await db.chapter.findUnique({
       where: {
         id: chapterId,
@@ -53,7 +43,7 @@ export async function DELETE(
       logger.info(`[COURSE_ID_CHAPTER_ID_DELETE]: Not Found: Chapter ${chapterId} not found for course ${courseId}`)
       return  NextResponse.json({error: "Not Found"}, { status: 404 });
     }
-
+    // if video delete the asset in the mux
     if (chapter.videoUrl) {
       const existingMuxData = await db.muxData.findFirst({
         where: {
@@ -69,7 +59,18 @@ export async function DELETE(
           },
         });
       }
+
+    // delete the asset in uploadthing
+     const deletedFile = chapter.videoUrl?.split("/")?.pop();
+        // delete the uploadthing using utApi
+        const deletedFileResponse = await utapi.deleteFiles(deletedFile!);
+        if (deletedFileResponse.success) {
+          logger.info(
+            `[CHAPTER_DELETE_SERVER_ACTION]: Uploadthing file deleted successfully for chapter ${chapterId}`
+          );
+        }
     }
+
 
     const deletedChapter = await db.chapter.delete({
       where: {
@@ -77,28 +78,31 @@ export async function DELETE(
       },
     });
 
-    const publishedChaptersInCourse = await db.chapter.findMany({
-      where: {
-        courseId: courseId,
-        isPublished: true,
-      },
-    });
+    // const publishedChaptersInCourse = await db.chapter.findMany({
+    //   where: {
+    //     courseId: courseId,
+    //     isPublished: true,
+    //   },
+    // });
 
-    if (!publishedChaptersInCourse.length) {
-      await db.course.update({
-        where: {
-          id: courseId,
-        },
-        data: {
-          isPublished: false,
-        },
-      });
-    }
+    // if (!publishedChaptersInCourse.length) {
+    //   await db.course.update({
+    //     where: {
+    //       id: courseId,
+    //     },
+    //     data: {
+    //       isPublished: false,
+    //     },
+    //   });
+    // }
 
     logger.info(`[COURSE_ID_CHAPTER_ID_DELETE]: OK: Chapter ${chapterId} deleted successfully`)
+    revalidatePath(`/dashboard/teacher/courses/${courseId}`)  
     return NextResponse.json(deletedChapter);
-  } catch {
+    
+  } catch (error) {
     logger.error(`[COURSE_ID_CHAPTER_ID_DELETE]: Internal Error: Failed to delete chapter ${chapterId}`)
+    Sentry.captureException(error)
     return  NextResponse.json({error: "Internal Error"}, { status: 500 });
   }
 }

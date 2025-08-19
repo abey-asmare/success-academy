@@ -3,8 +3,9 @@ import { getAdminInfo, isAdmin } from "@/utils/roles"
 import { auth } from "@clerk/nextjs/server"
 import Mux from "@mux/mux-node"
 import { NextRequest, NextResponse } from "next/server"
-
+import { utapi } from "@/lib/uploadthing-server"
 import * as Sentry from "@sentry/nextjs"
+import { revalidatePath } from "next/cache"
 
 const {video: Video}= new Mux({
     tokenId: process.env.MUX_TOKEN_ID!,
@@ -49,10 +50,35 @@ export async function DELETE(req: NextRequest, {params}: {params: Promise<{cours
 
         // delete mux data
         for(const chapter of course.chapters){
+            // delete the video from mux
             if(chapter.muxData?.assetId){
                 await Video.assets.delete(chapter.muxData.assetId)
             }
+            if (chapter.videoUrl){
+                // delete the video from uploadthing
+                const deletedFile = chapter.videoUrl?.split("/")?.pop();
+                // delete the uploadthing using utApi
+                const deletedFileResponse = await utapi.deleteFiles(deletedFile!);
+                if (deletedFileResponse.success) {
+                  logger.info(
+                    `[COURSE_DELETE_UPLOADTHING_VIDEO]: Uploadthing file deleted successfully for chapter ${chapter.id}`
+                  );
+                }
+            }
         }
+
+        // delete uploadthing files
+
+        // delete the course image from uploadthing
+        const deletedFile = course.imageUrl?.split("/")?.pop();
+        // delete the uploadthing using utApi
+        const deletedFileResponse = await utapi.deleteFiles(deletedFile!);
+        if (deletedFileResponse.success) {
+          logger.info(
+            `[COURSE_DELETE_SERVER_ACTION]: Uploadthing file deleted successfully for course ${courseId}`
+          );
+        }
+
         // delete course
         const deletedCourse = await db.course.delete({
             where: {
@@ -60,6 +86,7 @@ export async function DELETE(req: NextRequest, {params}: {params: Promise<{cours
                 // userId
             }
         }) 
+        revalidatePath(`/dashboard/teacher/courses`)
         logger.info(`[COURSE_ID_DELETE_DELETE]: OK: Course ${courseId} deleted successfully`)
         return NextResponse.json(deletedCourse)
     }catch(error){
