@@ -1,19 +1,12 @@
 import { db } from "@/lib/db"
+import { logger } from "@/lib/sentryLogger"
+import { utapi } from "@/lib/uploadthing-server"
 import { getAdminInfo, isAdmin } from "@/utils/roles"
 import { auth } from "@clerk/nextjs/server"
-import Mux from "@mux/mux-node"
-import { NextRequest, NextResponse } from "next/server"
-import { utapi } from "@/lib/uploadthing-server"
 import * as Sentry from "@sentry/nextjs"
 import { revalidatePath } from "next/cache"
+import { NextRequest, NextResponse } from "next/server"
 
-const {video: Video}= new Mux({
-    tokenId: process.env.MUX_TOKEN_ID!,
-    tokenSecret: process.env.MUX_TOKEN_SECRET!
-})
-
-
-const { logger } = Sentry;
 export async function DELETE(req: NextRequest, {params}: {params: Promise<{courseId: string}>}) {
     const {courseId} = await params
     try{
@@ -113,7 +106,7 @@ export async function PATCH(req: NextRequest, {params}: {params: Promise<{course
         console.log('patch request', course)
         return NextResponse.json(course)
     }catch(error){
-        logger.error(`[COURSE_ID_DELETE_DELETE]: Internal Error: Failed to delete course ${courseId}, ${error}`)
+        logger.error(`[COURSE_ID_PATCH]: Internal Error: Failed to update course ${courseId}, ${error}`)
         Sentry.captureException(error)
         return new NextResponse("Internal server error", {status: 500})
     }    

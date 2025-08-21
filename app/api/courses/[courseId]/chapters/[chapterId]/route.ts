@@ -125,18 +125,6 @@ export async function PATCH(
       return NextResponse.json({error: "Unauthorized"}, { status: 401 });
     }
 
-    // const ownCourse = await db.course.findUnique({
-    //   where: {
-    //     id: courseId,
-    //     userId,
-    //   },
-    // });
-
-    // if (!ownCourse) {
-    //   logger.warn(`[COURSE_ID_CHAPTER_ID_PATCH]: Unauthorized: User ${userId} is not the owner of course ${courseId}`)
-    //   return new NextResponse("Unauthorized", { status: 401 });
-    // }
-
     const chapter = await db.chapter.update({
       where: {
         id: chapterId,

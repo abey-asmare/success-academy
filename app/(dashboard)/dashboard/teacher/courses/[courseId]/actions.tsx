@@ -29,10 +29,10 @@ const onClickPublish = async () => {
 
       if (isPublished) {
           await axios.patch(`/api/courses/${courseId}/unpublish`);
-          toast.success("Chapter unpublished");
+          toast.success("Course unpublished");
       } else {
           await axios.patch(`/api/courses/${courseId}/publish`);
-          toast.success("Chapter published");
+          toast.success("Course published");
       }
       router.refresh();
   } catch {
@@ -46,7 +46,7 @@ const onDelete = async () => {
   try {
       setIsLoading(true);
       await axios.delete(`/api/courses/${courseId}/`);
-      toast.success("Chapter deleted");
+      toast.success("Course deleted");
       router.refresh();
       router.push(`/teacher/courses/`);
 

@@ -10,32 +10,7 @@ import {
 } from "@/components/ui/sidebar";
 import { BookOpen, Compass, Home, Layout, List, WalletCards } from "lucide-react";
 import { RouteSwitcher } from "./route-switcher";
-
-export type CourseType = {
-  id: string;
-
-  chapters: {
-    id: string;
-    title: string;
-    isPublished: boolean;
-    isFree: boolean;
-    position: number;
-    exams: {
-      id: string;
-      title: string;
-      isPublished: boolean;
-      questions: {
-        id: string;
-        title: string;
-        isPublished: boolean;
-      }[];
-    }[];
-    userProgress: {
-      id: string;
-      isCompleted: boolean;
-    }[];
-  }[];
-};
+import { CourseType } from "@/types";
 
 const data = {
   routes: [
@@ -74,11 +49,6 @@ const data = {
       title: "Simulations",
       url: "/dashboard/teacher/simulation",
     },
-    // {
-    //   icon: IconChartBar,
-    //   title: "Analytics",
-    //   url: "/dashboard/teacher/analytics",
-    // },
   ],
 };
 
@@ -88,6 +58,8 @@ export function AppSidebar({
   course: CourseType;
   isLocked: boolean;
 }) {
+
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>

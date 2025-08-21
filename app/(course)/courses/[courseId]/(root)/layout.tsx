@@ -2,38 +2,39 @@ import { auth } from "@clerk/nextjs/server";;
 import { redirect } from "next/navigation";
 
 import { db } from "@/lib/db";
-
-import { getProgress } from "@/actions/get-progress";
-
 import { SiteHeader } from "@/components/site-header";
 import { AppSidebar } from "../components/app-sidebar";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
+import { CourseType } from "@/types";
 
-
-export type CourseType = {
-  id: string;
-  chapters: {
-    id: string;
-    title: string;
-    isPublished: boolean;
-    isFree: boolean;
-    position: number;
-    exams: {
-      id: string;
-      title: string;
-      isPublished: boolean;
-      questions: {
-        id: string;
-        title: string;
-        isPublished: boolean;
-      }[];
-    }[];
-    userProgress: {
-      id: string;
-      isCompleted: boolean;
-    }[];
-  }[];
-}
+// export type CourseType = {
+//   id: string;
+//   chapters: {
+//     id: string;
+//     title: string;
+//     isPublished: boolean;
+//     isFree: boolean;
+//     position: number;
+//     exams: {
+//       id: string;
+//       title: string;
+//       isPublished: boolean;
+//       questions: {
+//         id: string;
+//         title: string;
+//         isPublished: boolean;
+//       }[];
+//     }[];
+//     userProgress: {
+//       id: string;
+//       isCompleted: boolean;
+//     }[];
+//     category: {
+//       id: string;
+//       name: string;
+//     };
+//   }[];
+// }
 
 const CourseLayout = async ({
   children,
@@ -59,6 +60,7 @@ const CourseLayout = async ({
         },
         include: {
           exams: true,
+          category: true,
           userProgress: {
             where: {
               userId,

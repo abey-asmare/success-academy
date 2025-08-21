@@ -2,8 +2,8 @@ import { db } from "@/lib/db";
 import { getAdminInfo } from "@/utils/roles";
 import * as Sentry from "@sentry/nextjs";
 import { NextResponse } from "next/server";
+import { logger } from "@/lib/sentryLogger";
 
-const { logger } = Sentry;
 
 // fetch all courses if needed
 export async function GET() {

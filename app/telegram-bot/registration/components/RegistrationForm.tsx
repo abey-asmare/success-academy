@@ -1,5 +1,4 @@
 "use client";
-import React, { startTransition } from "react";
 import {
   Form,
   FormControl,
@@ -9,9 +8,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import {
   Select,
   SelectContent,
@@ -19,7 +15,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { startTransition } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
+import { TelegramFileUpload } from "@/components/file-upload";
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -28,15 +30,12 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { universities } from "@/lib/constants";
-import { profileFormSchema } from "@/schemas/validationSchemas";
-import toast from "react-hot-toast";
+import { accounts, universities } from "@/lib/constants";
 import { Course } from "@/prisma/app/generated/prisma/client";
-import { TelegramFileUpload } from "@/components/file-upload";
-import { Button } from "@/components/ui/button";
-import { handleTelegramRegistration } from "./actions";
-import { accounts } from '@/lib/constants';
+import { profileFormSchema } from "@/schemas/validationSchemas";
 import Image from "next/image";
+import toast from "react-hot-toast";
+import { handleTelegramRegistration } from "./actions";
 
 
 const referrerOptions = [

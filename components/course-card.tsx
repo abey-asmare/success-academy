@@ -72,8 +72,8 @@ export const CourseCard = ({
             <p className="text-md md:text-sm font-medium text-slate-700">
               {formatPrice(price)}
             </p>
-            <Button className="w-full mt-2 bg-sky-600 hover:bg-sky-700" size="sm" asChild>
-              <Link href={`/courses/${id}/`}>Enroll</Link>
+            <Button className="w-full mt-2 bg-sky-600 hover:bg-sky-700" size="sm">
+              Enroll
             </Button>
           </>
           )}

@@ -16,7 +16,7 @@ export const ConfirmModal = ({onConfirm, children}: ConfirmModalProps) => {
                 <AlertDialogHeader>
                     <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                     <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete your account and remove your data from our servers.
+                        This action cannot be undone. This will permanently delete this resource, you will not be able to recover it.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>

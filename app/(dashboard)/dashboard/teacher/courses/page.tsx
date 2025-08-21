@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
-import { DataTable } from "./components/data-table";
-import { columns } from "./components/columns";
 import { Metadata } from "next";
+import { columns } from "./components/columns";
+import { DataTable } from "./components/data-table";
 
 const metadata: Metadata = {
     title: "Our Courses",

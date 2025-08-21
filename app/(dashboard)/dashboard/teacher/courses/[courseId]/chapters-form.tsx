@@ -1,11 +1,11 @@
 "use client";
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
@@ -14,18 +14,31 @@ import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Course, Chapter } from "@/prisma/app/generated/prisma/client";
+import { cn } from "@/lib/utils";
+import { Prisma } from "@/prisma/app/generated/prisma/client";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import ChaptersList from "./chapters-list";
-import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
   title: z.string().min(1),
 });
 
+
+type CourseWithRelations = Prisma.CourseGetPayload<{
+  include: {
+    chapters: {
+      include: {
+        category: true;
+      };
+    };
+    attachments: true;
+  };
+}>;
+
+
 interface ChaptersFormProps {
-  initialData: Course & {chapters: Chapter[]};
+  initialData: CourseWithRelations;
   courseId: string;
 }
 
@@ -33,9 +46,9 @@ export default function ChaptersForm({
   initialData,
   courseId,
 }: ChaptersFormProps) {
-  // const [isCreating, setIsCreating] = useState(false);
-  // const [isUpdating, setIsUpdating] = useState(false);
+
   const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: { title: "" },

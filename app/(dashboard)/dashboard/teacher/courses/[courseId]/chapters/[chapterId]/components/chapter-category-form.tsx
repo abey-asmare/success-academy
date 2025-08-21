@@ -16,6 +16,10 @@ import { Combobox } from "@/components/ui/combobox";
 import { Chapter } from "@/prisma/app/generated/prisma/client";
 import { Plus } from "lucide-react";
 import { ChapterCategoryAdd } from "./ChapterCategoryAdd";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import axios from "axios";
 
 const formSchema = z.object({
   categoryId: z.string().min(1, { message: "category is required" }),
@@ -34,17 +38,37 @@ export default function ChapterCategoryForm({
   chapterId,
   options,
 }: ChapterCategoryFormProps) {
+  const [isEditing, setIsEditing] = useState(false)
+
+
+  const router = useRouter()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: { categoryId: initialData.categoryId || "" },
   });
 
-  const { isSubmitting, isValid } = form.formState;
+
+  const {isSubmitting, isValid} = form.formState;
+
+  const onSubmit=  async (values: z.infer<typeof formSchema>) => {
+      try{
+          await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}`, values)
+          setIsEditing(!isEditing)
+          router.refresh()
+      }   catch{
+      }
+  }
+
+
 
   return (
     <div className="mt-6">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(()=> {})} className="space-y-8 mt-8">
+        <form onSubmit={form.handleSubmit(async (data)=> await toast.promise(onSubmit(data), {
+          loading: "Updating chapter category...",
+          success: "Chapter category updated successfully",
+          error: "Failed to update chapter category",
+        }))} className="space-y-8 mt-8">
           <FormField
             control={form.control}
             name="categoryId"

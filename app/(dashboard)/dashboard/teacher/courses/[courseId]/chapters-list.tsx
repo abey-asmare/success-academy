@@ -9,24 +9,29 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { Chapter } from "@/prisma/app/generated/prisma/client";
+import { Prisma } from "@/prisma/app/generated/prisma/client";
 import {
   DragDropContext,
   Draggable,
   DropResult,
   Droppable,
 } from "@hello-pangea/dnd";
-import { Grip, MoreVertical, Pencil, Trash } from "lucide-react";
-import { useEffect, useState } from "react";
 import axios from "axios";
-import toast from "react-hot-toast";
+import { Grip, MoreVertical, Pencil, Trash } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import DeleteAlert  from "../components/DeleteAlert";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import DeleteAlert from "../components/DeleteAlert";
 
+type ChapterWithCategory = Prisma.ChapterGetPayload<{
+  include: {
+    category: true;
+  };
+}>;
 
 interface ChaptersListProps {
-  items: Chapter[];
+  items: ChapterWithCategory[];
   onEdit: (id: string) => void;
   onReorder: (updateData: { id: string; position: number }[]) => void;
 }
@@ -49,7 +54,7 @@ export default function ChaptersList({
     }
   }, [items, isMounted]);
 
-  const router = useRouter()
+  const router = useRouter();
 
   const onDragEnd = (result: DropResult) => {
     if (!result.destination) return;
@@ -108,8 +113,18 @@ export default function ChaptersList({
                     </div>
 
                     <div className="flex-1 py-4 font-medium">
-                      <Link href={`/dashboard/teacher/courses/${chapter.courseId}/chapters/${chapter.id}`}>
-                      {chapter.title}
+                      <Link
+                        href={`/dashboard/teacher/courses/${chapter.courseId}/chapters/${chapter.id}`}
+                      >
+                        {chapter.title}{" "}
+                        {chapter.category && (
+                          <Badge
+                            variant="outline"
+                            className="border-sky-500 text-sky-600 scale-86"
+                          >
+                            {chapter.category.name}
+                          </Badge>
+                        )}
                       </Link>
                     </div>
 
@@ -139,29 +154,43 @@ export default function ChaptersList({
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => onEdit(chapter.id)}>
-                        
-                                <span className="flex items-center gap-x-2 ">
-                                  <span className="sr-only">Edit</span>
-                                  <Pencil className="w-4 h-4 text-gray-500 hover:text-gray-700" />
-                                  Edit
-                                </span>
-                            </DropdownMenuItem>
                             <DropdownMenuItem
-                              asChild
+                              onClick={() => onEdit(chapter.id)}
                             >
-                              <DeleteAlert onContinue={async () => {
-                                toast.success(`Chapter ${chapter.title} is queued for deletion`)
-                                await axios.delete(`/api/courses/${chapter.courseId}/chapters/${chapter.id}`)
-                                router.refresh()
-                              }}>
-                              <Button 
-                                  variant='destructive' 
-                                  className="!px-2 flex items-center justify-start gap-x-2 w-full h-full bg-transparent text-red-500 hover:text-red-600 hover:bg-red-100">
+                              <span className="flex items-center gap-x-2 ">
+                                <span className="sr-only">Edit</span>
+                                <Pencil className="w-4 h-4 text-gray-500 hover:text-gray-700" />
+                                Edit
+                              </span>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                              <DeleteAlert
+                                onContinue={() =>
+                                  toast.promise(
+                                    async () =>
+                                    {
+                                      await axios.delete(
+                                        `/api/courses/${chapter.courseId}/chapters/${chapter.id}`
+                                      )
+                                      router.refresh()
+                                    }, 
+                                    {
+                                      loading: "Deleting chapter...",
+                                      success: "Chapter deleted successfully",
+                                      error:
+                                        "Failed to delete chapter. try again later.",
+                                    }
+                                  )
+                                }
+                              >
+                                <Button
+                                  variant="destructive"
+                                  className="!px-2 flex items-center justify-start gap-x-2 w-full h-full bg-transparent text-red-500 hover:text-red-600 hover:bg-red-100"
+                                >
                                   <span className="sr-only">Delete</span>
                                   <Trash className="w-4 h-4 hover:text-gray-700" />
                                   Delete
-                              </Button>
+                                </Button>
                               </DeleteAlert>
                             </DropdownMenuItem>
                           </DropdownMenuContent>
@@ -171,10 +200,7 @@ export default function ChaptersList({
                   </div>
                 )}
               </Draggable>
-
-            )
-            
-            )}
+            ))}
             {provided.placeholder}
           </div>
         )}

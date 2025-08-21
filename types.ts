@@ -1,4 +1,4 @@
-import { Category, Course } from "./prisma/app/generated/prisma/client";
+import { Category, Course, Prisma  } from "./prisma/app/generated/prisma/client";
 
 
 
@@ -28,3 +28,17 @@ export type CourseWithProgressWithCategory = Course & {
     progress: number | null;
     isVerified: boolean;
 };
+
+
+
+export type CourseType = Prisma.CourseGetPayload<{
+  include: {
+    chapters: {
+      include: {
+        category: true;
+        exams: true;
+        userProgress: true;
+      };
+    };
+  };
+}>;
