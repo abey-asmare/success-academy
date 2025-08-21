@@ -43,7 +43,7 @@ export async function DELETE(req: NextRequest, {params}: {params: Promise<{cours
 
         // delete mux data
         for(const chapter of course.chapters){
-            fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/courses/${courseId}/chapters/${chapter.id}`, {
+            await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/courses/${courseId}/chapters/${chapter.id}`, {
                 method: "DELETE"
             })
         }
