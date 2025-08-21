@@ -36,6 +36,7 @@ import { profileFormSchema } from "@/schemas/validationSchemas";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { handleTelegramRegistration } from "./actions";
+import { formatPrice } from "@/lib/format";
 
 
 const referrerOptions = [
@@ -74,6 +75,11 @@ export default function RegistrationForm({courses}: PropType) {
       imageUrl: "",
     },
   });
+
+  const getCoursePrice = (id: string) => {
+    const course = courses.find((course) => course.id === id);
+    return formatPrice(course?.price || 0);
+  };
 
   return (
     <div className="max-w-2xl m-auto my-10 px-6 transition-all">
@@ -288,6 +294,7 @@ export default function RegistrationForm({courses}: PropType) {
             />
           </div>
             <div className="mt-6 ">
+              <p className="font-semibold color-[#181818]">Amount {getCoursePrice(form.watch('courseId'))}</p>
             <div className="space-y-4">
                     {accounts.map(account => <CardItem key={account.name} {...account} />)}
                     
@@ -315,7 +322,7 @@ export default function RegistrationForm({courses}: PropType) {
                  </div>
             <div className="mt-4">
             <Button className="bg-sky-600 hover:bg-sky-700 mb-10" type="submit" disabled={form.formState.isSubmitting} >
-                 {form.formState.isSubmitting ? "Submitting..." : "Submit"}
+                 {form.formState.isSubmitting ? "Submitting..." : `I Paid ${getCoursePrice(form.watch('courseId'))}`}
             </Button>
           </div>
         </form>
