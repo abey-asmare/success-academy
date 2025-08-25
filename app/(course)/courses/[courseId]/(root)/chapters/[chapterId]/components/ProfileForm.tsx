@@ -23,14 +23,14 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 
-import {useMediaQuery} from "@react-hook/media-query"
+import { useMediaQuery } from "@react-hook/media-query";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import {
   Drawer,
   DrawerClose,
@@ -39,7 +39,7 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-} from "@/components/ui/drawer"
+} from "@/components/ui/drawer";
 import {
   Command,
   CommandEmpty,
@@ -47,14 +47,14 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command"
+} from "@/components/ui/command";
 import { universities } from "@/lib/constants";
 import { useProfileEnroll } from "@/store";
 import { profileFormSchema } from "@/schemas/validationSchemas";
 import { enrollInCourse } from "../actions";
 import toast from "react-hot-toast";
 import { redirect, useParams } from "next/navigation";
-
+import { cn } from "@/lib/utils";
 
 const referrerOptions = [
   { value: "Google", label: "Google" },
@@ -66,63 +66,61 @@ const referrerOptions = [
   { value: "Other", label: "Other" },
 ];
 
-const formSchema = profileFormSchema
+const formSchema = profileFormSchema;
 type formType = z.infer<typeof formSchema>;
 
-export default function ProfileDialogDrawerForm(){
-  const isDesktop = useMediaQuery("(min-width: 768px)")
-  
-  const open = useProfileEnroll(state => state.open)
-  const setOpen = useProfileEnroll(state => state.setOpen)
+export default function ProfileDialogDrawerForm() {
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+
+  const open = useProfileEnroll((state) => state.open);
+  const setOpen = useProfileEnroll((state) => state.setOpen);
 
   if (isDesktop) {
     return (
-    <>
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Tell us about yourself</DialogTitle>
-            <DialogDescription>
-              While Processing your request, Tell us about yourself, This will help us to provide you with the best possible service.
-            </DialogDescription>
-          </DialogHeader>
-          <ProfileForm setOpen={setOpen} />
-        </DialogContent>
-      </Dialog></>
-    )
+      <>
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Tell us about yourself</DialogTitle>
+              <DialogDescription>
+                While Processing your request, Tell us about yourself, This will
+                help us to provide you with the best possible service.
+              </DialogDescription>
+            </DialogHeader>
+            <ProfileForm setOpen={setOpen} />
+          </DialogContent>
+        </Dialog>
+      </>
+    );
   }
 
-
-
   return (
-    <Drawer open={open} onOpenChange={setOpen} >
+    <Drawer open={open} onOpenChange={setOpen}>
       <DrawerContent className="overflow-y-auto ">
         <ScrollArea className="p-4 max-h-[60vh] overflow-auto">
-        <DrawerHeader className="text-left">
-          <DrawerTitle>Tell us about yourself</DrawerTitle>
-          <DrawerDescription>
-            While Processing your request, Tell us about yourself, This will help us to provide you with the best possible service.
-          </DrawerDescription>
-        </DrawerHeader>
-        <ProfileForm setOpen={setOpen}/>
-        <DrawerFooter className="pt-2">
-          <DrawerClose asChild>
-            <Button variant="outline" className="mx-6">Cancel</Button>
-          </DrawerClose>
-        </DrawerFooter>
+          <DrawerHeader className="text-left">
+            <DrawerTitle>Tell us about yourself</DrawerTitle>
+            <DrawerDescription>
+              While Processing your request, Tell us about yourself, This will
+              help us to provide you with the best possible service.
+            </DrawerDescription>
+          </DrawerHeader>
+          <ProfileForm setOpen={setOpen} />
+          <DrawerFooter className="pt-2">
+            <DrawerClose asChild>
+              <Button variant="outline" className="mx-6">
+                Cancel
+              </Button>
+            </DrawerClose>
+          </DrawerFooter>
         </ScrollArea>
       </DrawerContent>
     </Drawer>
-  )
+  );
 }
 
-
-
-
-function ProfileForm({setOpen}: {setOpen: (open: boolean) => void}) {
-  
-  const {  user } = useUser();
-
+function ProfileForm({ setOpen }: { setOpen: (open: boolean) => void }) {
+  const { user } = useUser();
 
   const form = useForm<formType>({
     resolver: zodResolver(formSchema),
@@ -145,65 +143,74 @@ function ProfileForm({setOpen}: {setOpen: (open: boolean) => void}) {
         email: user?.emailAddresses[0].emailAddress || "",
         phoneNumber: "",
         university: "",
-          stream: "Natural science",
-          referrer: "Telegram",
-        });
-      }
-    }, [user, form]);
-    const params = useParams<{ courseId: string }>()
-    const courseId = params?.courseId || '' 
-    console.log('courseid', courseId)
-    
+        stream: "Natural science",
+        referrer: "Telegram",
+      });
+    }
+  }, [user, form]);
+  const params = useParams<{ courseId: string }>();
+  const courseId = params?.courseId || "";
+  console.log("courseid", courseId);
+
   return (
     <div className="max-w-2xl m-auto mt-10 px-10">
-      <Form {...form} >
-        <form 
+      <Form {...form}>
+        <form
           className="space-y-4"
-          onSubmit={form.handleSubmit((data) => {
-            console.log('triggered')
-            startTransition(async () => {
-              try {
-                await enrollInCourse(data, courseId);
-                toast.success("Profile updated successfully!");
-                setOpen(false)
-              } catch {
-                toast.error("Failed to update profile. Please try again.");
-              }
-              redirect(`/courses/${courseId}/checkout`)
-            })
-          }, error => console.log(error))}
+          onSubmit={form.handleSubmit(
+            (data) => {
+              console.log("triggered");
+              startTransition(async () => {
+                try {
+                  await enrollInCourse(data, courseId);
+                  toast.success("Profile updated successfully!");
+                  setOpen(false);
+                } catch {
+                  toast.error("Failed to update profile. Please try again.");
+                }
+                redirect(`/courses/${courseId}/checkout`);
+              });
+            },
+            (error) => console.log(error)
+          )}
         >
           <div className="flex space-between gap-4">
-
-
-          <FormField
-            control={form.control}
-            name="firstName"
-            render={({ field }) => (
-              <FormItem className="flex-1">
-                <FormLabel className="font-medium">First Name *</FormLabel>
-                <FormControl>
-                  <Input {...field} placeholder="First Name" variant="custom" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="lastName"
-            render={({ field }) => (
-              <FormItem className="flex-1">
-                <FormLabel className="font-medium">Last Name *</FormLabel>
-                <FormControl>
-                  <Input {...field} placeholder="Last Name" variant="custom" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            <FormField
+              control={form.control}
+              name="firstName"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel className="font-medium">First Name *</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder="First Name"
+                      variant="custom"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            </div>
+
+            <FormField
+              control={form.control}
+              name="lastName"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel className="font-medium">Last Name *</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder="Last Name"
+                      variant="custom"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
           <FormField
             control={form.control}
@@ -231,22 +238,25 @@ function ProfileForm({setOpen}: {setOpen: (open: boolean) => void}) {
               <FormItem>
                 <FormLabel className="">University</FormLabel>
                 <FormControl>
-                            <Command {...field}>
-              <CommandInput  placeholder="Search" value={field.value}  />
-              <CommandList>
-                <CommandEmpty>No results found.</CommandEmpty>
-                <CommandGroup heading="List of universities">
-                {universities.map((university) => (
-                  <CommandItem key={university} value={university} onSelect={()=>{
-                    form.setValue("university", university)
-                    form.reset({...form.getValues(), university: university})
-                  }}>
-                    {university}
-                  </CommandItem>
-                ))}
-                </CommandGroup>
-              </CommandList>
-            </Command>
+                  <Command {...field}>
+                    <CommandInput placeholder="Search" value={field.value} />
+                    <CommandList>
+                      <CommandEmpty>No results found.</CommandEmpty>
+                      <CommandGroup heading="List of universities">
+                        {universities.map((university) => (
+                          <CommandItem
+                            key={university}
+                            value={university}
+                            onSelect={() => {
+                              form.setValue("university", university);
+                            }}
+                          >
+                            {university}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -308,7 +318,13 @@ function ProfileForm({setOpen}: {setOpen: (open: boolean) => void}) {
             />
           </div>
           <div className="mt-4">
-            <Button className="bg-sky-600 hover:bg-sky-700" type="submit">
+            <Button
+              className={cn("bg-sky-600 hover:bg-sky-700", {
+                "bg-sky-600/60": form.formState.isLoading,
+              })}
+              type="submit"
+              disabled={form.formState.isLoading}
+            >
               Submit
             </Button>
           </div>

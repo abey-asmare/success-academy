@@ -31,12 +31,12 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { accounts, universities } from "@/lib/constants";
+import { formatPrice } from "@/lib/format";
 import { Course } from "@/prisma/app/generated/prisma/client";
 import { profileFormSchema } from "@/schemas/validationSchemas";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { handleTelegramRegistration } from "./actions";
-import { formatPrice } from "@/lib/format";
 
 
 const referrerOptions = [
@@ -224,10 +224,6 @@ export default function RegistrationForm({courses}: PropType) {
                             value={university}
                             onSelect={() => {
                               form.setValue("university", university);
-                              form.reset({
-                                ...form.getValues(),
-                                university: university,
-                              });
                             }}
                           >
                             {university}

@@ -1,23 +1,30 @@
-import { clerkClient, clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
-import { NextResponse } from 'next/server'
-import proxyMiddleware from './proxy-middleware'
+import {
+  clerkClient,
+  clerkMiddleware,
+  createRouteMatcher,
+} from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
 const isPublicRoute = createRouteMatcher([
-  '/', 
-  '/sign-in(.*)', 
-  '/sign-up(.*)', 
-  '/privacy-policy(.*)', 
-  '/terms-of-use(.*)',
-  '/telegram-bot(.*)', 
-  "/api/uploadthing", 
-  '/api/courses(.*)', 
-    ])
+  "/",
+  "/sign-in(.*)",
+  "/sign-up(.*)",
+  "/privacy-policy(.*)",
+  "/terms-of-use(.*)",
+  "/telegram-bot(.*)",
+  "/api/uploadthing",
+  "/api/courses(.*)",
+  "/api/telegram-bot(.*)",
+]);
 
-const isAdminRoute = createRouteMatcher(['/admin(.*)', '/dashboard/teacher(.*)'])
+const isAdminRoute = createRouteMatcher([
+  "/admin(.*)",
+  "/dashboard/teacher(.*)",
+]);
 
 export default clerkMiddleware(async (auth, req) => {
-  const authData = await auth()
-  const { userId, sessionId } = authData
+  const authData = await auth();
+  const { userId, sessionId } = authData;
 
   // First check if it's a proxy request
   // const proxyResponse = proxyMiddleware(req)
@@ -27,15 +34,15 @@ export default clerkMiddleware(async (auth, req) => {
 
   // 1. Route protection
   if (!isPublicRoute(req)) {
-    await auth.protect()
+    await auth.protect();
   }
 
   // 2. Admin-only protectionj
   if (isAdminRoute(req) && authData.sessionClaims?.metadata?.role !== "admin") {
-    const url = new URL("/", req.url)
-    return NextResponse.redirect(url)
+    const url = new URL("/", req.url);
+    return NextResponse.redirect(url);
   }
-  const client = await clerkClient()
+  const client = await clerkClient();
 
   // 3. Limit user to 2 active sessions
   // if (userId && sessionId) {
@@ -50,45 +57,45 @@ export default clerkMiddleware(async (auth, req) => {
   //   }
   // }
 
-  
-// Max one session per device type (mobile & desktop), too strict
-if (userId && sessionId) {
-  try {
-    const sessions = await client.sessions.getSessionList({ userId, status: "active" })
-    const currentSession = sessions.data.find((s) => s.id === sessionId)
+  // Max one session per device type (mobile & desktop), too strict
+  if (userId && sessionId) {
+    try {
+      const sessions = await client.sessions.getSessionList({
+        userId,
+        status: "active",
+      });
+      const currentSession = sessions.data.find((s) => s.id === sessionId);
 
-    if (!currentSession) return NextResponse.next()
+      if (!currentSession) return NextResponse.next();
 
-    const isMobile = currentSession.latestActivity?.isMobile
-    const sameTypeSessions = sessions.data.filter(
-      (s) => s.id !== sessionId && s.latestActivity?.isMobile === isMobile
-    )
+      const isMobile = currentSession.latestActivity?.isMobile;
+      const sameTypeSessions = sessions.data.filter(
+        (s) => s.id !== sessionId && s.latestActivity?.isMobile === isMobile
+      );
 
-    if (sameTypeSessions.length >= 1) {
-      await client.sessions.revokeSession(sessionId)
-      
-      // this triggers all the users from the account to log out
-      await Promise.all(
-        sessions.data.filter((session) => session.id !== sessionId).map((session) => client.sessions.revokeSession(session.id))
-      )
-      return NextResponse.redirect(new URL("/too-many-devices", req.url))
+      if (sameTypeSessions.length >= 1) {
+        await client.sessions.revokeSession(sessionId);
+
+        // this triggers all the users from the account to log out
+        await Promise.all(
+          sessions.data
+            .filter((session) => session.id !== sessionId)
+            .map((session) => client.sessions.revokeSession(session.id))
+        );
+        return NextResponse.redirect(new URL("/too-many-devices", req.url));
+      }
+    } catch {
+      return NextResponse.next();
     }
-
-  } catch {
-    return NextResponse.next()
   }
-}
-
-})
-
-
+});
 
 export const config = {
   matcher: [
-    '/', 
+    "/",
     // Skip Next.js internals and all static files, unless found in search params
-    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
     // Always run for API routes  AND anything passed through the proxy
-    '/(api|trpc)(.*)',
+    "/(api|trpc)(.*)",
   ],
-}
+};

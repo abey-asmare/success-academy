@@ -1,7 +1,8 @@
 import { db } from "@/lib/db";
+import { sendPurchaseRequestToTelegram } from "@/lib/telegram-api";
 import { auth } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
 import * as Sentry from "@sentry/nextjs";
+import { NextResponse } from "next/server";
 
 export async function POST(
   req: Request,
@@ -11,7 +12,7 @@ export async function POST(
   const { courseId } = await params;
   const { imageUrl } = await req.json();
   try {
-    const { userId } = await auth();
+    const {userId} = await auth() 
     if (!userId) {
       logger.warn(
         `[COURSE_ID_PURCHASE_POST]: Unauthorized: User ${userId} is not authorized yet to purchase course ${courseId}`
@@ -47,11 +48,25 @@ export async function POST(
       },
     });
 
-    logger.info(`[COURSE_ID_PURCHASE_POST]: OK: Course ${courseId} purchased successfully`)
+    if (!newPurchase) {
+      logger.error(
+        `[COURSE_ID_PURCHASE_POST]: Internal Error: Failed to purchase course ${courseId}`
+      );
+      return new NextResponse("Internal server error", { status: 500 });
+    }
+    logger.info(
+      `[COURSE_ID_PURCHASE_POST]: OK: Course ${courseId} purchased successfully`
+    );
+
+  //  fetch for telegram
+    sendPurchaseRequestToTelegram(userId, courseId, imageUrl, newPurchase.id);
+
     return NextResponse.json(newPurchase);
-  } catch(error) {
-    logger.error(`[COURSE_ID_PURCHASE_POST]: Internal Error: Failed to purchase course ${courseId} ${error}`)
-    Sentry.captureException(error)
+  } catch (error) {
+    logger.error(
+      `[COURSE_ID_PURCHASE_POST]: Internal Error: Failed to purchase course ${courseId} ${error}`
+    );
+    Sentry.captureException(error);
     return new NextResponse("Internal server error", { status: 500 });
   }
 }

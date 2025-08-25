@@ -1,4 +1,4 @@
-import {withSentryConfig} from '@sentry/nextjs';
+import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
@@ -6,16 +6,22 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'd46msoxdbl.ufs.sh',
+        protocol: "https",
+        hostname: "d46msoxdbl.ufs.sh",
       },
       {
-        protocol: 'https',
-        hostname: '439a0p1xyg.ufs.sh'
+        protocol: "https",
+        hostname: "439a0p1xyg.ufs.sh",
       },
     ],
   },
-  allowedDevOrigins: ['http://localhost:3000', 'https://success-academy.vercel.app', 'https://unified-mole-badly.ngrok-free.app', 'unified-mole-badly.ngrok-free.app'],
+  allowedDevOrigins: [
+    "http://localhost:3000",
+    "https://success-academy.vercel.app",
+    "https://unified-mole-badly.ngrok-free.app",
+    "unified-mole-badly.ngrok-free.app",
+    "passage-knee-keywords-comedy.trycloudflare.com",
+  ],
 };
 
 export default withSentryConfig(nextConfig, {
