@@ -5,6 +5,7 @@ import { profileFormSchema } from "@/schemas/validationSchemas";
 import z from "zod";
 import { Stream } from "@/prisma/app/generated/prisma/client";
 import { clerkClient } from "@clerk/nextjs/server";
+import { sendPurchaseRequestToTelegram } from "@/lib/telegram-api";
 // create a user first
 //  a profile
 //  purchase
@@ -80,7 +81,7 @@ export async function handleTelegramRegistration(data: formType) {
     });
     if (!purchase || !purchase.approved) {
     // create a purchase
-    await db.purchase.upsert({
+    const newPurchase = await db.purchase.upsert({
       where: {
         userId_courseId: {
           userId,
@@ -95,9 +96,15 @@ export async function handleTelegramRegistration(data: formType) {
         courseId: data.courseId,
         imageUrl: data.imageUrl,
       },
-    })};
-    return { message: "Registration successful", status: 200 };
-  } catch (error) {
+    });
+    if (!newPurchase) {
+      return { message: "Registration failed", status: 500 };
+    }
+     //  fetch for telegram
+     sendPurchaseRequestToTelegram(userId, data.courseId, data.imageUrl, newPurchase.id);
+    } 
+      return { message: "Registration successful", status: 200 };
+}catch (error) {
     console.log(error);
     return { message: "Registration failed", status: 500 };
   }
