@@ -9,6 +9,10 @@ interface getChapterProps {
     chapterId: string;
 };
 
+function toUTCMidnight(date: Date) {
+    return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+}
+
 export const getChapter = async ({ 
     userId, 
     courseId, 
@@ -47,18 +51,22 @@ export const getChapter = async ({
                 }
             }, 
         });
+        const today = toUTCMidnight(new Date());
+        console.log("date in get chapt", today)
+        
 
         const promocodes = await db.coursePromocode.findMany({
             where: {
                 courseId: courseId,
                 startDate: {
-                    lte: new Date(),
-                },
+                    lte: today,
+                }, 
                 expiresIn: {
-                    gte: new Date(),
+                    gte: today,
                 },
             },
         });
+        console.log(promocodes, 'promos')
 
         const chapter = await db.chapter.findUnique({
             where: {

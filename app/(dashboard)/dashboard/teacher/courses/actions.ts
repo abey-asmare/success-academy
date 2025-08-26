@@ -12,6 +12,10 @@ const validatePromoCode = z.object({
     expiredAt: z.coerce.date(),
 })
 
+function toUTCMidnight(date: Date) {
+    return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  }
+  
 export async function addPromocode( courseId: string, formData: FormData) {
     console.log("action called witht he data" , formData)
     try {
@@ -19,9 +23,10 @@ export async function addPromocode( courseId: string, formData: FormData) {
         const isValid = validatePromoCode.safeParse({
             code: formData.get("code") as string,
             discount: Number(formData.get("discount")),
-            appliedFrom: new Date(formData.get("appliedFrom") as string),
-            expiredAt: new Date(formData.get("expiredAt") as string),
+            appliedFrom: toUTCMidnight(new Date(formData.get("appliedFrom") as string)),
+            expiredAt: toUTCMidnight(new Date(formData.get("expiredAt") as string)),
         })
+
         console.log("isValid", isValid)
         if(!isValid.success){
             logger.warn(

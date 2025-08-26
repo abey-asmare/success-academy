@@ -172,7 +172,7 @@ function PromoContentForm({
         <DatePickerForm
           name="expiredAt"
           label="Promocode expired at"
-          description="The promocode will be expired just after "
+          description="The promocode will be expired on "
           value={codeState.expiredAt || undefined}
           onChange={(date: Date) =>
             setCodeState({ ...codeState, expiredAt: date })

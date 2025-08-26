@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { startTransition, useEffect, useState } from "react";
+import { startTransition, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -30,6 +30,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
+import { Label } from "@/components/ui/label";
 import { accounts, universities } from "@/lib/constants";
 import { formatPrice } from "@/lib/format";
 import { Prisma } from "@/prisma/app/generated/prisma/client";
@@ -37,7 +38,6 @@ import { profileFormSchema } from "@/schemas/validationSchemas";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { handleTelegramRegistration } from "./actions";
-import { Label } from "@/components/ui/label";
 
 const referrerOptions = [
   { value: "Google", label: "Google" },

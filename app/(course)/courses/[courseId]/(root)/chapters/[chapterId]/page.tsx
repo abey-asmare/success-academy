@@ -1,18 +1,17 @@
+import { getChapter } from "@/actions/get-chapter";
+import Banner from "@/components/banner";
+import { Preview } from "@/components/preview";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
+import { Separator } from "@radix-ui/react-dropdown-menu";
 import { File } from "lucide-react";
 import Image from "next/image";
-import { getChapter } from "@/actions/get-chapter";
-import { Preview } from "@/components/preview";
-import Banner from "@/components/banner";
-import { Separator } from "@radix-ui/react-dropdown-menu";
+import Link from "next/link";
+import { redirect } from "next/navigation";
 import CourseEnrollButton from "./components/course-enroll-button";
 import { CourseProgressButton } from "./components/course-progress-button";
 import { VideoPlayer } from "./components/video-player";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 
 const ChapterIdPage = async ({
   params,
