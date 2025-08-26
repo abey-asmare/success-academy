@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { startTransition } from "react";
+import { startTransition, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -80,6 +80,8 @@ export default function RegistrationForm({courses}: PropType) {
     const course = courses.find((course) => course.id === id);
     return formatPrice(course?.price || 0);
   };
+
+  const [promo, setPromo] = useState('')
 
   return (
     <div className="max-w-2xl m-auto my-10 px-6 transition-all">
@@ -289,7 +291,7 @@ export default function RegistrationForm({courses}: PropType) {
             />
           </div>
           <Label>Promo code</Label>
-          <Input placeholder="Promo code"/>
+          <Input placeholder="Promo code" value={promo} onChange={(e) => setPromo(e.target.value)}/>
 
             <div className="mt-6 ">
               <p className="font-semibold color-[#181818]">Amount {getCoursePrice(form.watch('courseId'))}</p>
