@@ -208,3 +208,22 @@ ALTER TABLE "public"."Question" ADD CONSTRAINT "Question_examId_fkey" FOREIGN KE
 
 -- AddForeignKey
 ALTER TABLE "public"."Answer" ADD CONSTRAINT "Answer_questionId_fkey" FOREIGN KEY ("questionId") REFERENCES "public"."Question"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+
+CREATE TABLE "public"."CoursePromocode" (
+    "id" TEXT NOT NULL,
+    "courseId" TEXT NOT NULL,
+    "code" TEXT NOT NULL,
+    "discount" DOUBLE PRECISION NOT NULL,
+    "startDate" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "expiresIn" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "CoursePromocode_pkey" PRIMARY KEY ("id")
+);
+
+-- AddForeignKey
+ALTER TABLE "public"."CoursePromocode" ADD CONSTRAINT "CoursePromocode_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "public"."Course"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+
