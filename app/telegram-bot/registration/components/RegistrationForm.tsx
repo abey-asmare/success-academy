@@ -32,7 +32,7 @@ import {
 } from "@/components/ui/command";
 import { accounts, universities } from "@/lib/constants";
 import { formatPrice } from "@/lib/format";
-import { Course } from "@/prisma/app/generated/prisma/client";
+import { Prisma } from "@/prisma/app/generated/prisma/client";
 import { profileFormSchema } from "@/schemas/validationSchemas";
 import Image from "next/image";
 import toast from "react-hot-toast";
@@ -50,21 +50,20 @@ const referrerOptions = [
 ];
 
 const formSchema = profileFormSchema.extend({
-    courseId: z.string().min(1, { message: "Course is required" }),
-    imageUrl: z.url({ message: "Image URL is required" }),
+  courseId: z.string().min(1, { message: "Course is required" }),
+  imageUrl: z.url({ message: "Image URL is required" }),
 });
 type formType = z.infer<typeof formSchema>;
 
-
 type PropType = {
-    courses: Course[]
-}
+  courses: Prisma.CourseGetPayload<{ include: { promocodes: true } }>[];
+};
 
-export default function RegistrationForm({courses}: PropType) {
+export default function RegistrationForm({ courses }: PropType) {
   const form = useForm<formType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      courseId: '',
+      courseId: "",
       firstName: "",
       lastName: "",
       phoneNumber: "",
@@ -75,13 +74,24 @@ export default function RegistrationForm({courses}: PropType) {
       imageUrl: "",
     },
   });
+  const [promo, setPromo] = useState("");
 
-  const getCoursePrice = (id: string) => {
-    const course = courses.find((course) => course.id === id);
-    return formatPrice(course?.price || 0);
+  const getCurrentPrice = () => {
+    const selectedCourse = form.watch("courseId");
+    const course = courses.find((course) => course.id === selectedCourse);
+    if (!course || !course.price) return;
+
+    const promocode = course?.promocodes.find(
+      (p) => p.code.toLowerCase() === promo.toLowerCase()
+    );
+    return {
+      price: course.price,
+      discount: promocode?.discount || 0,
+      finalPrice: promocode?.discount
+        ? course.price - (course.price * promocode.discount) / 100
+        : course.price,
+    };
   };
-
-  const [promo, setPromo] = useState('')
 
   return (
     <div className="max-w-2xl m-auto my-10 px-6 transition-all">
@@ -92,14 +102,16 @@ export default function RegistrationForm({courses}: PropType) {
             async (data) => {
               try {
                 const res = await handleTelegramRegistration(data);
-        
+
                 startTransition(() => {
                   if (res?.status === 200) {
-                    toast.success("Payment successful. We are processing your payments");
+                    toast.success(
+                      "Payment successful. We are processing your payments"
+                    );
                   } else {
                     toast.error("Failed to register. Please try again.");
                   }
-                }); 
+                });
               } catch (error) {
                 console.error(error);
                 startTransition(() => {
@@ -126,7 +138,6 @@ export default function RegistrationForm({courses}: PropType) {
                       variant="custom"
                     />
                   </FormControl>
-
                 </FormItem>
               )}
             />
@@ -157,11 +168,7 @@ export default function RegistrationForm({courses}: PropType) {
                 <FormItem className="flex-1">
                   <FormLabel className="font-medium">Email *</FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      placeholder="Email"
-                      variant="custom"
-                    />
+                    <Input {...field} placeholder="Email" variant="custom" />
                   </FormControl>
                 </FormItem>
               )}
@@ -184,7 +191,7 @@ export default function RegistrationForm({courses}: PropType) {
               )}
             />
           </div>
-          
+
           {/* course  */}
           <FormField
             control={form.control}
@@ -192,7 +199,11 @@ export default function RegistrationForm({courses}: PropType) {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="">Course</FormLabel>
-                <Select name={field.name} value={field.value} onValueChange={(value)=>field.onChange(value)}>
+                <Select
+                  name={field.name}
+                  value={field.value}
+                  onValueChange={(value) => field.onChange(value)}
+                >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select a course" />
                   </SelectTrigger>
@@ -213,7 +224,9 @@ export default function RegistrationForm({courses}: PropType) {
             name="university"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="">Where are you currently enrolled in?</FormLabel>
+                <FormLabel className="">
+                  Where are you currently enrolled in?
+                </FormLabel>
                 <FormControl>
                   <Command {...field}>
                     <CommandInput placeholder="Search" value={field.value} />
@@ -291,38 +304,53 @@ export default function RegistrationForm({courses}: PropType) {
             />
           </div>
           <Label>Promo code</Label>
-          <Input placeholder="Promo code" value={promo} onChange={(e) => setPromo(e.target.value)}/>
+          <Input
+            variant="custom"
+            placeholder="Promo code"
+            value={promo}
+            onChange={(e) => setPromo(e.target.value)}
+          />
 
-            <div className="mt-6 ">
-              <p className="font-semibold color-[#181818]">Amount {getCoursePrice(form.watch('courseId'))}</p>
+          <div className="mt-6 ">
+            <p className="font-semibold color-[#181818]">
+              Amount <span className="text-gray-600 ml-2">{getCurrentPrice()?.finalPrice ? "" : "Select a course first"}</span>
+              {getCurrentPrice()?.finalPrice ? <span>{formatPrice(getCurrentPrice()?.finalPrice || 0)} <sup className="text-red-600">{getCurrentPrice()?.discount ? `${getCurrentPrice()?.discount}% off` : ""}</sup></span> : ""}
+            </p>
             <div className="space-y-4">
-                    {accounts.map(account => <CardItem key={account.name} {...account} />)}
-                    
-                  </div>
-                  <FormField
-                    control={form.control}
-                    name="imageUrl"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Payment Info</FormLabel>
-                        <FormControl>
-                          <TelegramFileUpload
-                            endpoint="purchaseImageTelegram"
-                            onChange={(url) => {
-                              if (url) {
-                                form.setValue("imageUrl", url);
-                              }
-                            }}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                 </div>
-            <div className="mt-4">
-            <Button className="bg-sky-600 hover:bg-sky-700 mb-10" type="submit" disabled={form.formState.isSubmitting} >
-                 {form.formState.isSubmitting ? "Submitting..." : `I Paid ${getCoursePrice(form.watch('courseId'))}`}
+              {accounts.map((account) => (
+                <CardItem key={account.name} {...account} />
+              ))}
+            </div>
+            <FormField
+              control={form.control}
+              name="imageUrl"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Payment Info</FormLabel>
+                  <FormControl>
+                    <TelegramFileUpload
+                      endpoint="purchaseImageTelegram"
+                      onChange={(url) => {
+                        if (url) {
+                          form.setValue("imageUrl", url);
+                        }
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="mt-4">
+            <Button
+              className="bg-sky-600 hover:bg-sky-700 mb-10"
+              type="submit"
+              disabled={form.formState.isSubmitting}
+            >
+              {form.formState.isSubmitting
+                ? "Submitting..."
+                : `${getCurrentPrice()?.finalPrice ? `I Paid ${formatPrice(getCurrentPrice()?.finalPrice || 0)}` : "Submit"}`}
             </Button>
           </div>
         </form>
@@ -332,28 +360,35 @@ export default function RegistrationForm({courses}: PropType) {
 }
 
 interface CardItemProps {
-  name: string,
-   image: string,
-    accountHolder: string,
-     accountNumber: string
-    }
-function CardItem({name, image, accountHolder, accountNumber}: CardItemProps){
+  name: string;
+  image: string;
+  accountHolder: string;
+  accountNumber: string;
+}
+function CardItem({
+  name,
+  image,
+  accountHolder,
+  accountNumber,
+}: CardItemProps) {
   return (
     <div className="my-2">
-          <div className="flex items-center gap-x-2">
-            <Image
-              src={image}
-              className="w-8 h-8"
-              alt={name}
-              width={2000}
-              height={1958}
-            />
-            <h1 className="text-xl font-bold text-gray-800">{name}</h1>
-          </div>
-          <p className="text-gray-600 font-semibold text-sm ml-4 space-x-2 flex flex-col">
-            <span>Account Holder: {accountHolder}</span>
-            <span className="text-sky-600 text-sm">Account Number: {accountNumber}</span>
-          </p>
-        </div>
-  )
+      <div className="flex items-center gap-x-2">
+        <Image
+          src={image}
+          className="w-8 h-8"
+          alt={name}
+          width={2000}
+          height={1958}
+        />
+        <h1 className="text-xl font-bold text-gray-800">{name}</h1>
+      </div>
+      <p className="text-gray-600 font-semibold text-sm ml-4 space-x-2 flex flex-col">
+        <span>Account Holder: {accountHolder}</span>
+        <span className="text-sky-600 text-sm">
+          Account Number: {accountNumber}
+        </span>
+      </p>
+    </div>
+  );
 }
