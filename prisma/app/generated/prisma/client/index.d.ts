@@ -29,6 +29,11 @@ export type ChapterCategory = $Result.DefaultSelection<Prisma.$ChapterCategoryPa
  */
 export type Course = $Result.DefaultSelection<Prisma.$CoursePayload>
 /**
+ * Model CoursePromocode
+ * 
+ */
+export type CoursePromocode = $Result.DefaultSelection<Prisma.$CoursePromocodePayload>
+/**
  * Model Attachment
  * 
  */
@@ -274,6 +279,16 @@ export class PrismaClient<
     * ```
     */
   get course(): Prisma.CourseDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.coursePromocode`: Exposes CRUD operations for the **CoursePromocode** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CoursePromocodes
+    * const coursePromocodes = await prisma.coursePromocode.findMany()
+    * ```
+    */
+  get coursePromocode(): Prisma.CoursePromocodeDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.attachment`: Exposes CRUD operations for the **Attachment** model.
@@ -807,6 +822,7 @@ export namespace Prisma {
     Chapter: 'Chapter',
     ChapterCategory: 'ChapterCategory',
     Course: 'Course',
+    CoursePromocode: 'CoursePromocode',
     Attachment: 'Attachment',
     Category: 'Category',
     MuxData: 'MuxData',
@@ -834,7 +850,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "chapter" | "chapterCategory" | "course" | "attachment" | "category" | "muxData" | "userProgress" | "purchase" | "exam" | "question" | "answer" | "profile"
+      modelProps: "chapter" | "chapterCategory" | "course" | "coursePromocode" | "attachment" | "category" | "muxData" | "userProgress" | "purchase" | "exam" | "question" | "answer" | "profile"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1057,6 +1073,80 @@ export namespace Prisma {
           count: {
             args: Prisma.CourseCountArgs<ExtArgs>
             result: $Utils.Optional<CourseCountAggregateOutputType> | number
+          }
+        }
+      }
+      CoursePromocode: {
+        payload: Prisma.$CoursePromocodePayload<ExtArgs>
+        fields: Prisma.CoursePromocodeFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CoursePromocodeFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoursePromocodePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CoursePromocodeFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoursePromocodePayload>
+          }
+          findFirst: {
+            args: Prisma.CoursePromocodeFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoursePromocodePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CoursePromocodeFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoursePromocodePayload>
+          }
+          findMany: {
+            args: Prisma.CoursePromocodeFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoursePromocodePayload>[]
+          }
+          create: {
+            args: Prisma.CoursePromocodeCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoursePromocodePayload>
+          }
+          createMany: {
+            args: Prisma.CoursePromocodeCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CoursePromocodeCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoursePromocodePayload>[]
+          }
+          delete: {
+            args: Prisma.CoursePromocodeDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoursePromocodePayload>
+          }
+          update: {
+            args: Prisma.CoursePromocodeUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoursePromocodePayload>
+          }
+          deleteMany: {
+            args: Prisma.CoursePromocodeDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CoursePromocodeUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CoursePromocodeUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoursePromocodePayload>[]
+          }
+          upsert: {
+            args: Prisma.CoursePromocodeUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoursePromocodePayload>
+          }
+          aggregate: {
+            args: Prisma.CoursePromocodeAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCoursePromocode>
+          }
+          groupBy: {
+            args: Prisma.CoursePromocodeGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CoursePromocodeGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CoursePromocodeCountArgs<ExtArgs>
+            result: $Utils.Optional<CoursePromocodeCountAggregateOutputType> | number
           }
         }
       }
@@ -1821,6 +1911,7 @@ export namespace Prisma {
     chapter?: ChapterOmit
     chapterCategory?: ChapterCategoryOmit
     course?: CourseOmit
+    coursePromocode?: CoursePromocodeOmit
     attachment?: AttachmentOmit
     category?: CategoryOmit
     muxData?: MuxDataOmit
@@ -2004,6 +2095,7 @@ export namespace Prisma {
     chapters: number
     exams: number
     purchases: number
+    promocodes: number
   }
 
   export type CourseCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2011,6 +2103,7 @@ export namespace Prisma {
     chapters?: boolean | CourseCountOutputTypeCountChaptersArgs
     exams?: boolean | CourseCountOutputTypeCountExamsArgs
     purchases?: boolean | CourseCountOutputTypeCountPurchasesArgs
+    promocodes?: boolean | CourseCountOutputTypeCountPromocodesArgs
   }
 
   // Custom InputTypes
@@ -2050,6 +2143,13 @@ export namespace Prisma {
    */
   export type CourseCountOutputTypeCountPurchasesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PurchaseWhereInput
+  }
+
+  /**
+   * CourseCountOutputType without action
+   */
+  export type CourseCountOutputTypeCountPromocodesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CoursePromocodeWhereInput
   }
 
 
@@ -4728,6 +4828,7 @@ export namespace Prisma {
     category?: boolean | Course$categoryArgs<ExtArgs>
     exams?: boolean | Course$examsArgs<ExtArgs>
     purchases?: boolean | Course$purchasesArgs<ExtArgs>
+    promocodes?: boolean | Course$promocodesArgs<ExtArgs>
     _count?: boolean | CourseCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["course"]>
 
@@ -4779,6 +4880,7 @@ export namespace Prisma {
     category?: boolean | Course$categoryArgs<ExtArgs>
     exams?: boolean | Course$examsArgs<ExtArgs>
     purchases?: boolean | Course$purchasesArgs<ExtArgs>
+    promocodes?: boolean | Course$promocodesArgs<ExtArgs>
     _count?: boolean | CourseCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CourseIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4796,6 +4898,7 @@ export namespace Prisma {
       category: Prisma.$CategoryPayload<ExtArgs> | null
       exams: Prisma.$ExamPayload<ExtArgs>[]
       purchases: Prisma.$PurchasePayload<ExtArgs>[]
+      promocodes: Prisma.$CoursePromocodePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5207,6 +5310,7 @@ export namespace Prisma {
     category<T extends Course$categoryArgs<ExtArgs> = {}>(args?: Subset<T, Course$categoryArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     exams<T extends Course$examsArgs<ExtArgs> = {}>(args?: Subset<T, Course$examsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     purchases<T extends Course$purchasesArgs<ExtArgs> = {}>(args?: Subset<T, Course$purchasesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurchasePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    promocodes<T extends Course$promocodesArgs<ExtArgs> = {}>(args?: Subset<T, Course$promocodesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CoursePromocodePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5757,6 +5861,30 @@ export namespace Prisma {
   }
 
   /**
+   * Course.promocodes
+   */
+  export type Course$promocodesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoursePromocode
+     */
+    select?: CoursePromocodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoursePromocode
+     */
+    omit?: CoursePromocodeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoursePromocodeInclude<ExtArgs> | null
+    where?: CoursePromocodeWhereInput
+    orderBy?: CoursePromocodeOrderByWithRelationInput | CoursePromocodeOrderByWithRelationInput[]
+    cursor?: CoursePromocodeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CoursePromocodeScalarFieldEnum | CoursePromocodeScalarFieldEnum[]
+  }
+
+  /**
    * Course without action
    */
   export type CourseDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5772,6 +5900,1137 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: CourseInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CoursePromocode
+   */
+
+  export type AggregateCoursePromocode = {
+    _count: CoursePromocodeCountAggregateOutputType | null
+    _avg: CoursePromocodeAvgAggregateOutputType | null
+    _sum: CoursePromocodeSumAggregateOutputType | null
+    _min: CoursePromocodeMinAggregateOutputType | null
+    _max: CoursePromocodeMaxAggregateOutputType | null
+  }
+
+  export type CoursePromocodeAvgAggregateOutputType = {
+    discount: number | null
+  }
+
+  export type CoursePromocodeSumAggregateOutputType = {
+    discount: number | null
+  }
+
+  export type CoursePromocodeMinAggregateOutputType = {
+    id: string | null
+    courseId: string | null
+    code: string | null
+    discount: number | null
+    startDate: Date | null
+    expiresIn: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CoursePromocodeMaxAggregateOutputType = {
+    id: string | null
+    courseId: string | null
+    code: string | null
+    discount: number | null
+    startDate: Date | null
+    expiresIn: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CoursePromocodeCountAggregateOutputType = {
+    id: number
+    courseId: number
+    code: number
+    discount: number
+    startDate: number
+    expiresIn: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type CoursePromocodeAvgAggregateInputType = {
+    discount?: true
+  }
+
+  export type CoursePromocodeSumAggregateInputType = {
+    discount?: true
+  }
+
+  export type CoursePromocodeMinAggregateInputType = {
+    id?: true
+    courseId?: true
+    code?: true
+    discount?: true
+    startDate?: true
+    expiresIn?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CoursePromocodeMaxAggregateInputType = {
+    id?: true
+    courseId?: true
+    code?: true
+    discount?: true
+    startDate?: true
+    expiresIn?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CoursePromocodeCountAggregateInputType = {
+    id?: true
+    courseId?: true
+    code?: true
+    discount?: true
+    startDate?: true
+    expiresIn?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type CoursePromocodeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CoursePromocode to aggregate.
+     */
+    where?: CoursePromocodeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CoursePromocodes to fetch.
+     */
+    orderBy?: CoursePromocodeOrderByWithRelationInput | CoursePromocodeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CoursePromocodeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CoursePromocodes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CoursePromocodes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CoursePromocodes
+    **/
+    _count?: true | CoursePromocodeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CoursePromocodeAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CoursePromocodeSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CoursePromocodeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CoursePromocodeMaxAggregateInputType
+  }
+
+  export type GetCoursePromocodeAggregateType<T extends CoursePromocodeAggregateArgs> = {
+        [P in keyof T & keyof AggregateCoursePromocode]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCoursePromocode[P]>
+      : GetScalarType<T[P], AggregateCoursePromocode[P]>
+  }
+
+
+
+
+  export type CoursePromocodeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CoursePromocodeWhereInput
+    orderBy?: CoursePromocodeOrderByWithAggregationInput | CoursePromocodeOrderByWithAggregationInput[]
+    by: CoursePromocodeScalarFieldEnum[] | CoursePromocodeScalarFieldEnum
+    having?: CoursePromocodeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CoursePromocodeCountAggregateInputType | true
+    _avg?: CoursePromocodeAvgAggregateInputType
+    _sum?: CoursePromocodeSumAggregateInputType
+    _min?: CoursePromocodeMinAggregateInputType
+    _max?: CoursePromocodeMaxAggregateInputType
+  }
+
+  export type CoursePromocodeGroupByOutputType = {
+    id: string
+    courseId: string
+    code: string
+    discount: number
+    startDate: Date | null
+    expiresIn: Date | null
+    createdAt: Date
+    updatedAt: Date
+    _count: CoursePromocodeCountAggregateOutputType | null
+    _avg: CoursePromocodeAvgAggregateOutputType | null
+    _sum: CoursePromocodeSumAggregateOutputType | null
+    _min: CoursePromocodeMinAggregateOutputType | null
+    _max: CoursePromocodeMaxAggregateOutputType | null
+  }
+
+  type GetCoursePromocodeGroupByPayload<T extends CoursePromocodeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CoursePromocodeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CoursePromocodeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CoursePromocodeGroupByOutputType[P]>
+            : GetScalarType<T[P], CoursePromocodeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CoursePromocodeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    courseId?: boolean
+    code?: boolean
+    discount?: boolean
+    startDate?: boolean
+    expiresIn?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["coursePromocode"]>
+
+  export type CoursePromocodeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    courseId?: boolean
+    code?: boolean
+    discount?: boolean
+    startDate?: boolean
+    expiresIn?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["coursePromocode"]>
+
+  export type CoursePromocodeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    courseId?: boolean
+    code?: boolean
+    discount?: boolean
+    startDate?: boolean
+    expiresIn?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["coursePromocode"]>
+
+  export type CoursePromocodeSelectScalar = {
+    id?: boolean
+    courseId?: boolean
+    code?: boolean
+    discount?: boolean
+    startDate?: boolean
+    expiresIn?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type CoursePromocodeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "courseId" | "code" | "discount" | "startDate" | "expiresIn" | "createdAt" | "updatedAt", ExtArgs["result"]["coursePromocode"]>
+  export type CoursePromocodeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+  }
+  export type CoursePromocodeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+  }
+  export type CoursePromocodeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+  }
+
+  export type $CoursePromocodePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CoursePromocode"
+    objects: {
+      course: Prisma.$CoursePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      courseId: string
+      code: string
+      discount: number
+      startDate: Date | null
+      expiresIn: Date | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["coursePromocode"]>
+    composites: {}
+  }
+
+  type CoursePromocodeGetPayload<S extends boolean | null | undefined | CoursePromocodeDefaultArgs> = $Result.GetResult<Prisma.$CoursePromocodePayload, S>
+
+  type CoursePromocodeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CoursePromocodeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CoursePromocodeCountAggregateInputType | true
+    }
+
+  export interface CoursePromocodeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CoursePromocode'], meta: { name: 'CoursePromocode' } }
+    /**
+     * Find zero or one CoursePromocode that matches the filter.
+     * @param {CoursePromocodeFindUniqueArgs} args - Arguments to find a CoursePromocode
+     * @example
+     * // Get one CoursePromocode
+     * const coursePromocode = await prisma.coursePromocode.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CoursePromocodeFindUniqueArgs>(args: SelectSubset<T, CoursePromocodeFindUniqueArgs<ExtArgs>>): Prisma__CoursePromocodeClient<$Result.GetResult<Prisma.$CoursePromocodePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CoursePromocode that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CoursePromocodeFindUniqueOrThrowArgs} args - Arguments to find a CoursePromocode
+     * @example
+     * // Get one CoursePromocode
+     * const coursePromocode = await prisma.coursePromocode.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CoursePromocodeFindUniqueOrThrowArgs>(args: SelectSubset<T, CoursePromocodeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CoursePromocodeClient<$Result.GetResult<Prisma.$CoursePromocodePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CoursePromocode that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CoursePromocodeFindFirstArgs} args - Arguments to find a CoursePromocode
+     * @example
+     * // Get one CoursePromocode
+     * const coursePromocode = await prisma.coursePromocode.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CoursePromocodeFindFirstArgs>(args?: SelectSubset<T, CoursePromocodeFindFirstArgs<ExtArgs>>): Prisma__CoursePromocodeClient<$Result.GetResult<Prisma.$CoursePromocodePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CoursePromocode that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CoursePromocodeFindFirstOrThrowArgs} args - Arguments to find a CoursePromocode
+     * @example
+     * // Get one CoursePromocode
+     * const coursePromocode = await prisma.coursePromocode.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CoursePromocodeFindFirstOrThrowArgs>(args?: SelectSubset<T, CoursePromocodeFindFirstOrThrowArgs<ExtArgs>>): Prisma__CoursePromocodeClient<$Result.GetResult<Prisma.$CoursePromocodePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CoursePromocodes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CoursePromocodeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CoursePromocodes
+     * const coursePromocodes = await prisma.coursePromocode.findMany()
+     * 
+     * // Get first 10 CoursePromocodes
+     * const coursePromocodes = await prisma.coursePromocode.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const coursePromocodeWithIdOnly = await prisma.coursePromocode.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CoursePromocodeFindManyArgs>(args?: SelectSubset<T, CoursePromocodeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CoursePromocodePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CoursePromocode.
+     * @param {CoursePromocodeCreateArgs} args - Arguments to create a CoursePromocode.
+     * @example
+     * // Create one CoursePromocode
+     * const CoursePromocode = await prisma.coursePromocode.create({
+     *   data: {
+     *     // ... data to create a CoursePromocode
+     *   }
+     * })
+     * 
+     */
+    create<T extends CoursePromocodeCreateArgs>(args: SelectSubset<T, CoursePromocodeCreateArgs<ExtArgs>>): Prisma__CoursePromocodeClient<$Result.GetResult<Prisma.$CoursePromocodePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CoursePromocodes.
+     * @param {CoursePromocodeCreateManyArgs} args - Arguments to create many CoursePromocodes.
+     * @example
+     * // Create many CoursePromocodes
+     * const coursePromocode = await prisma.coursePromocode.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CoursePromocodeCreateManyArgs>(args?: SelectSubset<T, CoursePromocodeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CoursePromocodes and returns the data saved in the database.
+     * @param {CoursePromocodeCreateManyAndReturnArgs} args - Arguments to create many CoursePromocodes.
+     * @example
+     * // Create many CoursePromocodes
+     * const coursePromocode = await prisma.coursePromocode.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CoursePromocodes and only return the `id`
+     * const coursePromocodeWithIdOnly = await prisma.coursePromocode.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CoursePromocodeCreateManyAndReturnArgs>(args?: SelectSubset<T, CoursePromocodeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CoursePromocodePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CoursePromocode.
+     * @param {CoursePromocodeDeleteArgs} args - Arguments to delete one CoursePromocode.
+     * @example
+     * // Delete one CoursePromocode
+     * const CoursePromocode = await prisma.coursePromocode.delete({
+     *   where: {
+     *     // ... filter to delete one CoursePromocode
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CoursePromocodeDeleteArgs>(args: SelectSubset<T, CoursePromocodeDeleteArgs<ExtArgs>>): Prisma__CoursePromocodeClient<$Result.GetResult<Prisma.$CoursePromocodePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CoursePromocode.
+     * @param {CoursePromocodeUpdateArgs} args - Arguments to update one CoursePromocode.
+     * @example
+     * // Update one CoursePromocode
+     * const coursePromocode = await prisma.coursePromocode.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CoursePromocodeUpdateArgs>(args: SelectSubset<T, CoursePromocodeUpdateArgs<ExtArgs>>): Prisma__CoursePromocodeClient<$Result.GetResult<Prisma.$CoursePromocodePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CoursePromocodes.
+     * @param {CoursePromocodeDeleteManyArgs} args - Arguments to filter CoursePromocodes to delete.
+     * @example
+     * // Delete a few CoursePromocodes
+     * const { count } = await prisma.coursePromocode.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CoursePromocodeDeleteManyArgs>(args?: SelectSubset<T, CoursePromocodeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CoursePromocodes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CoursePromocodeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CoursePromocodes
+     * const coursePromocode = await prisma.coursePromocode.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CoursePromocodeUpdateManyArgs>(args: SelectSubset<T, CoursePromocodeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CoursePromocodes and returns the data updated in the database.
+     * @param {CoursePromocodeUpdateManyAndReturnArgs} args - Arguments to update many CoursePromocodes.
+     * @example
+     * // Update many CoursePromocodes
+     * const coursePromocode = await prisma.coursePromocode.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CoursePromocodes and only return the `id`
+     * const coursePromocodeWithIdOnly = await prisma.coursePromocode.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CoursePromocodeUpdateManyAndReturnArgs>(args: SelectSubset<T, CoursePromocodeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CoursePromocodePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CoursePromocode.
+     * @param {CoursePromocodeUpsertArgs} args - Arguments to update or create a CoursePromocode.
+     * @example
+     * // Update or create a CoursePromocode
+     * const coursePromocode = await prisma.coursePromocode.upsert({
+     *   create: {
+     *     // ... data to create a CoursePromocode
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CoursePromocode we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CoursePromocodeUpsertArgs>(args: SelectSubset<T, CoursePromocodeUpsertArgs<ExtArgs>>): Prisma__CoursePromocodeClient<$Result.GetResult<Prisma.$CoursePromocodePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CoursePromocodes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CoursePromocodeCountArgs} args - Arguments to filter CoursePromocodes to count.
+     * @example
+     * // Count the number of CoursePromocodes
+     * const count = await prisma.coursePromocode.count({
+     *   where: {
+     *     // ... the filter for the CoursePromocodes we want to count
+     *   }
+     * })
+    **/
+    count<T extends CoursePromocodeCountArgs>(
+      args?: Subset<T, CoursePromocodeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CoursePromocodeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CoursePromocode.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CoursePromocodeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CoursePromocodeAggregateArgs>(args: Subset<T, CoursePromocodeAggregateArgs>): Prisma.PrismaPromise<GetCoursePromocodeAggregateType<T>>
+
+    /**
+     * Group by CoursePromocode.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CoursePromocodeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CoursePromocodeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CoursePromocodeGroupByArgs['orderBy'] }
+        : { orderBy?: CoursePromocodeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CoursePromocodeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCoursePromocodeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CoursePromocode model
+   */
+  readonly fields: CoursePromocodeFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CoursePromocode.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CoursePromocodeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    course<T extends CourseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CourseDefaultArgs<ExtArgs>>): Prisma__CourseClient<$Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CoursePromocode model
+   */
+  interface CoursePromocodeFieldRefs {
+    readonly id: FieldRef<"CoursePromocode", 'String'>
+    readonly courseId: FieldRef<"CoursePromocode", 'String'>
+    readonly code: FieldRef<"CoursePromocode", 'String'>
+    readonly discount: FieldRef<"CoursePromocode", 'Float'>
+    readonly startDate: FieldRef<"CoursePromocode", 'DateTime'>
+    readonly expiresIn: FieldRef<"CoursePromocode", 'DateTime'>
+    readonly createdAt: FieldRef<"CoursePromocode", 'DateTime'>
+    readonly updatedAt: FieldRef<"CoursePromocode", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CoursePromocode findUnique
+   */
+  export type CoursePromocodeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoursePromocode
+     */
+    select?: CoursePromocodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoursePromocode
+     */
+    omit?: CoursePromocodeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoursePromocodeInclude<ExtArgs> | null
+    /**
+     * Filter, which CoursePromocode to fetch.
+     */
+    where: CoursePromocodeWhereUniqueInput
+  }
+
+  /**
+   * CoursePromocode findUniqueOrThrow
+   */
+  export type CoursePromocodeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoursePromocode
+     */
+    select?: CoursePromocodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoursePromocode
+     */
+    omit?: CoursePromocodeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoursePromocodeInclude<ExtArgs> | null
+    /**
+     * Filter, which CoursePromocode to fetch.
+     */
+    where: CoursePromocodeWhereUniqueInput
+  }
+
+  /**
+   * CoursePromocode findFirst
+   */
+  export type CoursePromocodeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoursePromocode
+     */
+    select?: CoursePromocodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoursePromocode
+     */
+    omit?: CoursePromocodeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoursePromocodeInclude<ExtArgs> | null
+    /**
+     * Filter, which CoursePromocode to fetch.
+     */
+    where?: CoursePromocodeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CoursePromocodes to fetch.
+     */
+    orderBy?: CoursePromocodeOrderByWithRelationInput | CoursePromocodeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CoursePromocodes.
+     */
+    cursor?: CoursePromocodeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CoursePromocodes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CoursePromocodes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CoursePromocodes.
+     */
+    distinct?: CoursePromocodeScalarFieldEnum | CoursePromocodeScalarFieldEnum[]
+  }
+
+  /**
+   * CoursePromocode findFirstOrThrow
+   */
+  export type CoursePromocodeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoursePromocode
+     */
+    select?: CoursePromocodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoursePromocode
+     */
+    omit?: CoursePromocodeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoursePromocodeInclude<ExtArgs> | null
+    /**
+     * Filter, which CoursePromocode to fetch.
+     */
+    where?: CoursePromocodeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CoursePromocodes to fetch.
+     */
+    orderBy?: CoursePromocodeOrderByWithRelationInput | CoursePromocodeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CoursePromocodes.
+     */
+    cursor?: CoursePromocodeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CoursePromocodes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CoursePromocodes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CoursePromocodes.
+     */
+    distinct?: CoursePromocodeScalarFieldEnum | CoursePromocodeScalarFieldEnum[]
+  }
+
+  /**
+   * CoursePromocode findMany
+   */
+  export type CoursePromocodeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoursePromocode
+     */
+    select?: CoursePromocodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoursePromocode
+     */
+    omit?: CoursePromocodeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoursePromocodeInclude<ExtArgs> | null
+    /**
+     * Filter, which CoursePromocodes to fetch.
+     */
+    where?: CoursePromocodeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CoursePromocodes to fetch.
+     */
+    orderBy?: CoursePromocodeOrderByWithRelationInput | CoursePromocodeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CoursePromocodes.
+     */
+    cursor?: CoursePromocodeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CoursePromocodes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CoursePromocodes.
+     */
+    skip?: number
+    distinct?: CoursePromocodeScalarFieldEnum | CoursePromocodeScalarFieldEnum[]
+  }
+
+  /**
+   * CoursePromocode create
+   */
+  export type CoursePromocodeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoursePromocode
+     */
+    select?: CoursePromocodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoursePromocode
+     */
+    omit?: CoursePromocodeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoursePromocodeInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CoursePromocode.
+     */
+    data: XOR<CoursePromocodeCreateInput, CoursePromocodeUncheckedCreateInput>
+  }
+
+  /**
+   * CoursePromocode createMany
+   */
+  export type CoursePromocodeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CoursePromocodes.
+     */
+    data: CoursePromocodeCreateManyInput | CoursePromocodeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CoursePromocode createManyAndReturn
+   */
+  export type CoursePromocodeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoursePromocode
+     */
+    select?: CoursePromocodeSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoursePromocode
+     */
+    omit?: CoursePromocodeOmit<ExtArgs> | null
+    /**
+     * The data used to create many CoursePromocodes.
+     */
+    data: CoursePromocodeCreateManyInput | CoursePromocodeCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoursePromocodeIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CoursePromocode update
+   */
+  export type CoursePromocodeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoursePromocode
+     */
+    select?: CoursePromocodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoursePromocode
+     */
+    omit?: CoursePromocodeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoursePromocodeInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CoursePromocode.
+     */
+    data: XOR<CoursePromocodeUpdateInput, CoursePromocodeUncheckedUpdateInput>
+    /**
+     * Choose, which CoursePromocode to update.
+     */
+    where: CoursePromocodeWhereUniqueInput
+  }
+
+  /**
+   * CoursePromocode updateMany
+   */
+  export type CoursePromocodeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CoursePromocodes.
+     */
+    data: XOR<CoursePromocodeUpdateManyMutationInput, CoursePromocodeUncheckedUpdateManyInput>
+    /**
+     * Filter which CoursePromocodes to update
+     */
+    where?: CoursePromocodeWhereInput
+    /**
+     * Limit how many CoursePromocodes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CoursePromocode updateManyAndReturn
+   */
+  export type CoursePromocodeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoursePromocode
+     */
+    select?: CoursePromocodeSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoursePromocode
+     */
+    omit?: CoursePromocodeOmit<ExtArgs> | null
+    /**
+     * The data used to update CoursePromocodes.
+     */
+    data: XOR<CoursePromocodeUpdateManyMutationInput, CoursePromocodeUncheckedUpdateManyInput>
+    /**
+     * Filter which CoursePromocodes to update
+     */
+    where?: CoursePromocodeWhereInput
+    /**
+     * Limit how many CoursePromocodes to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoursePromocodeIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CoursePromocode upsert
+   */
+  export type CoursePromocodeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoursePromocode
+     */
+    select?: CoursePromocodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoursePromocode
+     */
+    omit?: CoursePromocodeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoursePromocodeInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CoursePromocode to update in case it exists.
+     */
+    where: CoursePromocodeWhereUniqueInput
+    /**
+     * In case the CoursePromocode found by the `where` argument doesn't exist, create a new CoursePromocode with this data.
+     */
+    create: XOR<CoursePromocodeCreateInput, CoursePromocodeUncheckedCreateInput>
+    /**
+     * In case the CoursePromocode was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CoursePromocodeUpdateInput, CoursePromocodeUncheckedUpdateInput>
+  }
+
+  /**
+   * CoursePromocode delete
+   */
+  export type CoursePromocodeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoursePromocode
+     */
+    select?: CoursePromocodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoursePromocode
+     */
+    omit?: CoursePromocodeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoursePromocodeInclude<ExtArgs> | null
+    /**
+     * Filter which CoursePromocode to delete.
+     */
+    where: CoursePromocodeWhereUniqueInput
+  }
+
+  /**
+   * CoursePromocode deleteMany
+   */
+  export type CoursePromocodeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CoursePromocodes to delete
+     */
+    where?: CoursePromocodeWhereInput
+    /**
+     * Limit how many CoursePromocodes to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CoursePromocode without action
+   */
+  export type CoursePromocodeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoursePromocode
+     */
+    select?: CoursePromocodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoursePromocode
+     */
+    omit?: CoursePromocodeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoursePromocodeInclude<ExtArgs> | null
   }
 
 
@@ -15565,6 +16824,20 @@ export namespace Prisma {
   export type CourseScalarFieldEnum = (typeof CourseScalarFieldEnum)[keyof typeof CourseScalarFieldEnum]
 
 
+  export const CoursePromocodeScalarFieldEnum: {
+    id: 'id',
+    courseId: 'courseId',
+    code: 'code',
+    discount: 'discount',
+    startDate: 'startDate',
+    expiresIn: 'expiresIn',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type CoursePromocodeScalarFieldEnum = (typeof CoursePromocodeScalarFieldEnum)[keyof typeof CoursePromocodeScalarFieldEnum]
+
+
   export const AttachmentScalarFieldEnum: {
     id: 'id',
     name: 'name',
@@ -15981,6 +17254,7 @@ export namespace Prisma {
     category?: XOR<CategoryNullableScalarRelationFilter, CategoryWhereInput> | null
     exams?: ExamListRelationFilter
     purchases?: PurchaseListRelationFilter
+    promocodes?: CoursePromocodeListRelationFilter
   }
 
   export type CourseOrderByWithRelationInput = {
@@ -15999,6 +17273,7 @@ export namespace Prisma {
     category?: CategoryOrderByWithRelationInput
     exams?: ExamOrderByRelationAggregateInput
     purchases?: PurchaseOrderByRelationAggregateInput
+    promocodes?: CoursePromocodeOrderByRelationAggregateInput
   }
 
   export type CourseWhereUniqueInput = Prisma.AtLeast<{
@@ -16020,6 +17295,7 @@ export namespace Prisma {
     category?: XOR<CategoryNullableScalarRelationFilter, CategoryWhereInput> | null
     exams?: ExamListRelationFilter
     purchases?: PurchaseListRelationFilter
+    promocodes?: CoursePromocodeListRelationFilter
   }, "id">
 
   export type CourseOrderByWithAggregationInput = {
@@ -16054,6 +17330,78 @@ export namespace Prisma {
     categoryId?: StringNullableWithAggregatesFilter<"Course"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Course"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Course"> | Date | string
+  }
+
+  export type CoursePromocodeWhereInput = {
+    AND?: CoursePromocodeWhereInput | CoursePromocodeWhereInput[]
+    OR?: CoursePromocodeWhereInput[]
+    NOT?: CoursePromocodeWhereInput | CoursePromocodeWhereInput[]
+    id?: StringFilter<"CoursePromocode"> | string
+    courseId?: StringFilter<"CoursePromocode"> | string
+    code?: StringFilter<"CoursePromocode"> | string
+    discount?: FloatFilter<"CoursePromocode"> | number
+    startDate?: DateTimeNullableFilter<"CoursePromocode"> | Date | string | null
+    expiresIn?: DateTimeNullableFilter<"CoursePromocode"> | Date | string | null
+    createdAt?: DateTimeFilter<"CoursePromocode"> | Date | string
+    updatedAt?: DateTimeFilter<"CoursePromocode"> | Date | string
+    course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
+  }
+
+  export type CoursePromocodeOrderByWithRelationInput = {
+    id?: SortOrder
+    courseId?: SortOrder
+    code?: SortOrder
+    discount?: SortOrder
+    startDate?: SortOrderInput | SortOrder
+    expiresIn?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    course?: CourseOrderByWithRelationInput
+  }
+
+  export type CoursePromocodeWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: CoursePromocodeWhereInput | CoursePromocodeWhereInput[]
+    OR?: CoursePromocodeWhereInput[]
+    NOT?: CoursePromocodeWhereInput | CoursePromocodeWhereInput[]
+    courseId?: StringFilter<"CoursePromocode"> | string
+    code?: StringFilter<"CoursePromocode"> | string
+    discount?: FloatFilter<"CoursePromocode"> | number
+    startDate?: DateTimeNullableFilter<"CoursePromocode"> | Date | string | null
+    expiresIn?: DateTimeNullableFilter<"CoursePromocode"> | Date | string | null
+    createdAt?: DateTimeFilter<"CoursePromocode"> | Date | string
+    updatedAt?: DateTimeFilter<"CoursePromocode"> | Date | string
+    course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
+  }, "id">
+
+  export type CoursePromocodeOrderByWithAggregationInput = {
+    id?: SortOrder
+    courseId?: SortOrder
+    code?: SortOrder
+    discount?: SortOrder
+    startDate?: SortOrderInput | SortOrder
+    expiresIn?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: CoursePromocodeCountOrderByAggregateInput
+    _avg?: CoursePromocodeAvgOrderByAggregateInput
+    _max?: CoursePromocodeMaxOrderByAggregateInput
+    _min?: CoursePromocodeMinOrderByAggregateInput
+    _sum?: CoursePromocodeSumOrderByAggregateInput
+  }
+
+  export type CoursePromocodeScalarWhereWithAggregatesInput = {
+    AND?: CoursePromocodeScalarWhereWithAggregatesInput | CoursePromocodeScalarWhereWithAggregatesInput[]
+    OR?: CoursePromocodeScalarWhereWithAggregatesInput[]
+    NOT?: CoursePromocodeScalarWhereWithAggregatesInput | CoursePromocodeScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"CoursePromocode"> | string
+    courseId?: StringWithAggregatesFilter<"CoursePromocode"> | string
+    code?: StringWithAggregatesFilter<"CoursePromocode"> | string
+    discount?: FloatWithAggregatesFilter<"CoursePromocode"> | number
+    startDate?: DateTimeNullableWithAggregatesFilter<"CoursePromocode"> | Date | string | null
+    expiresIn?: DateTimeNullableWithAggregatesFilter<"CoursePromocode"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"CoursePromocode"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"CoursePromocode"> | Date | string
   }
 
   export type AttachmentWhereInput = {
@@ -16795,6 +18143,7 @@ export namespace Prisma {
     category?: CategoryCreateNestedOneWithoutCoursesInput
     exams?: ExamCreateNestedManyWithoutCourseInput
     purchases?: PurchaseCreateNestedManyWithoutCourseInput
+    promocodes?: CoursePromocodeCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateInput = {
@@ -16812,6 +18161,7 @@ export namespace Prisma {
     chapters?: ChapterUncheckedCreateNestedManyWithoutCourseInput
     exams?: ExamUncheckedCreateNestedManyWithoutCourseInput
     purchases?: PurchaseUncheckedCreateNestedManyWithoutCourseInput
+    promocodes?: CoursePromocodeUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUpdateInput = {
@@ -16829,6 +18179,7 @@ export namespace Prisma {
     category?: CategoryUpdateOneWithoutCoursesNestedInput
     exams?: ExamUpdateManyWithoutCourseNestedInput
     purchases?: PurchaseUpdateManyWithoutCourseNestedInput
+    promocodes?: CoursePromocodeUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateInput = {
@@ -16846,6 +18197,7 @@ export namespace Prisma {
     chapters?: ChapterUncheckedUpdateManyWithoutCourseNestedInput
     exams?: ExamUncheckedUpdateManyWithoutCourseNestedInput
     purchases?: PurchaseUncheckedUpdateManyWithoutCourseNestedInput
+    promocodes?: CoursePromocodeUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseCreateManyInput = {
@@ -16882,6 +18234,82 @@ export namespace Prisma {
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CoursePromocodeCreateInput = {
+    id?: string
+    code: string
+    discount: number
+    startDate?: Date | string | null
+    expiresIn?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    course: CourseCreateNestedOneWithoutPromocodesInput
+  }
+
+  export type CoursePromocodeUncheckedCreateInput = {
+    id?: string
+    courseId: string
+    code: string
+    discount: number
+    startDate?: Date | string | null
+    expiresIn?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CoursePromocodeUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    discount?: FloatFieldUpdateOperationsInput | number
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresIn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    course?: CourseUpdateOneRequiredWithoutPromocodesNestedInput
+  }
+
+  export type CoursePromocodeUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    discount?: FloatFieldUpdateOperationsInput | number
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresIn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CoursePromocodeCreateManyInput = {
+    id?: string
+    courseId: string
+    code: string
+    discount: number
+    startDate?: Date | string | null
+    expiresIn?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CoursePromocodeUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    discount?: FloatFieldUpdateOperationsInput | number
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresIn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CoursePromocodeUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    discount?: FloatFieldUpdateOperationsInput | number
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresIn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -17758,11 +19186,21 @@ export namespace Prisma {
     none?: PurchaseWhereInput
   }
 
+  export type CoursePromocodeListRelationFilter = {
+    every?: CoursePromocodeWhereInput
+    some?: CoursePromocodeWhereInput
+    none?: CoursePromocodeWhereInput
+  }
+
   export type AttachmentOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type PurchaseOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CoursePromocodeOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -17827,6 +19265,99 @@ export namespace Prisma {
     _sum?: NestedFloatNullableFilter<$PrismaModel>
     _min?: NestedFloatNullableFilter<$PrismaModel>
     _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
+  export type FloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type CoursePromocodeCountOrderByAggregateInput = {
+    id?: SortOrder
+    courseId?: SortOrder
+    code?: SortOrder
+    discount?: SortOrder
+    startDate?: SortOrder
+    expiresIn?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CoursePromocodeAvgOrderByAggregateInput = {
+    discount?: SortOrder
+  }
+
+  export type CoursePromocodeMaxOrderByAggregateInput = {
+    id?: SortOrder
+    courseId?: SortOrder
+    code?: SortOrder
+    discount?: SortOrder
+    startDate?: SortOrder
+    expiresIn?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CoursePromocodeMinOrderByAggregateInput = {
+    id?: SortOrder
+    courseId?: SortOrder
+    code?: SortOrder
+    discount?: SortOrder
+    startDate?: SortOrder
+    expiresIn?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CoursePromocodeSumOrderByAggregateInput = {
+    discount?: SortOrder
+  }
+
+  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type AttachmentCountOrderByAggregateInput = {
@@ -18456,6 +19987,13 @@ export namespace Prisma {
     connect?: PurchaseWhereUniqueInput | PurchaseWhereUniqueInput[]
   }
 
+  export type CoursePromocodeCreateNestedManyWithoutCourseInput = {
+    create?: XOR<CoursePromocodeCreateWithoutCourseInput, CoursePromocodeUncheckedCreateWithoutCourseInput> | CoursePromocodeCreateWithoutCourseInput[] | CoursePromocodeUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: CoursePromocodeCreateOrConnectWithoutCourseInput | CoursePromocodeCreateOrConnectWithoutCourseInput[]
+    createMany?: CoursePromocodeCreateManyCourseInputEnvelope
+    connect?: CoursePromocodeWhereUniqueInput | CoursePromocodeWhereUniqueInput[]
+  }
+
   export type AttachmentUncheckedCreateNestedManyWithoutCourseInput = {
     create?: XOR<AttachmentCreateWithoutCourseInput, AttachmentUncheckedCreateWithoutCourseInput> | AttachmentCreateWithoutCourseInput[] | AttachmentUncheckedCreateWithoutCourseInput[]
     connectOrCreate?: AttachmentCreateOrConnectWithoutCourseInput | AttachmentCreateOrConnectWithoutCourseInput[]
@@ -18482,6 +20020,13 @@ export namespace Prisma {
     connectOrCreate?: PurchaseCreateOrConnectWithoutCourseInput | PurchaseCreateOrConnectWithoutCourseInput[]
     createMany?: PurchaseCreateManyCourseInputEnvelope
     connect?: PurchaseWhereUniqueInput | PurchaseWhereUniqueInput[]
+  }
+
+  export type CoursePromocodeUncheckedCreateNestedManyWithoutCourseInput = {
+    create?: XOR<CoursePromocodeCreateWithoutCourseInput, CoursePromocodeUncheckedCreateWithoutCourseInput> | CoursePromocodeCreateWithoutCourseInput[] | CoursePromocodeUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: CoursePromocodeCreateOrConnectWithoutCourseInput | CoursePromocodeCreateOrConnectWithoutCourseInput[]
+    createMany?: CoursePromocodeCreateManyCourseInputEnvelope
+    connect?: CoursePromocodeWhereUniqueInput | CoursePromocodeWhereUniqueInput[]
   }
 
   export type NullableFloatFieldUpdateOperationsInput = {
@@ -18558,6 +20103,20 @@ export namespace Prisma {
     deleteMany?: PurchaseScalarWhereInput | PurchaseScalarWhereInput[]
   }
 
+  export type CoursePromocodeUpdateManyWithoutCourseNestedInput = {
+    create?: XOR<CoursePromocodeCreateWithoutCourseInput, CoursePromocodeUncheckedCreateWithoutCourseInput> | CoursePromocodeCreateWithoutCourseInput[] | CoursePromocodeUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: CoursePromocodeCreateOrConnectWithoutCourseInput | CoursePromocodeCreateOrConnectWithoutCourseInput[]
+    upsert?: CoursePromocodeUpsertWithWhereUniqueWithoutCourseInput | CoursePromocodeUpsertWithWhereUniqueWithoutCourseInput[]
+    createMany?: CoursePromocodeCreateManyCourseInputEnvelope
+    set?: CoursePromocodeWhereUniqueInput | CoursePromocodeWhereUniqueInput[]
+    disconnect?: CoursePromocodeWhereUniqueInput | CoursePromocodeWhereUniqueInput[]
+    delete?: CoursePromocodeWhereUniqueInput | CoursePromocodeWhereUniqueInput[]
+    connect?: CoursePromocodeWhereUniqueInput | CoursePromocodeWhereUniqueInput[]
+    update?: CoursePromocodeUpdateWithWhereUniqueWithoutCourseInput | CoursePromocodeUpdateWithWhereUniqueWithoutCourseInput[]
+    updateMany?: CoursePromocodeUpdateManyWithWhereWithoutCourseInput | CoursePromocodeUpdateManyWithWhereWithoutCourseInput[]
+    deleteMany?: CoursePromocodeScalarWhereInput | CoursePromocodeScalarWhereInput[]
+  }
+
   export type AttachmentUncheckedUpdateManyWithoutCourseNestedInput = {
     create?: XOR<AttachmentCreateWithoutCourseInput, AttachmentUncheckedCreateWithoutCourseInput> | AttachmentCreateWithoutCourseInput[] | AttachmentUncheckedCreateWithoutCourseInput[]
     connectOrCreate?: AttachmentCreateOrConnectWithoutCourseInput | AttachmentCreateOrConnectWithoutCourseInput[]
@@ -18612,6 +20171,46 @@ export namespace Prisma {
     update?: PurchaseUpdateWithWhereUniqueWithoutCourseInput | PurchaseUpdateWithWhereUniqueWithoutCourseInput[]
     updateMany?: PurchaseUpdateManyWithWhereWithoutCourseInput | PurchaseUpdateManyWithWhereWithoutCourseInput[]
     deleteMany?: PurchaseScalarWhereInput | PurchaseScalarWhereInput[]
+  }
+
+  export type CoursePromocodeUncheckedUpdateManyWithoutCourseNestedInput = {
+    create?: XOR<CoursePromocodeCreateWithoutCourseInput, CoursePromocodeUncheckedCreateWithoutCourseInput> | CoursePromocodeCreateWithoutCourseInput[] | CoursePromocodeUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: CoursePromocodeCreateOrConnectWithoutCourseInput | CoursePromocodeCreateOrConnectWithoutCourseInput[]
+    upsert?: CoursePromocodeUpsertWithWhereUniqueWithoutCourseInput | CoursePromocodeUpsertWithWhereUniqueWithoutCourseInput[]
+    createMany?: CoursePromocodeCreateManyCourseInputEnvelope
+    set?: CoursePromocodeWhereUniqueInput | CoursePromocodeWhereUniqueInput[]
+    disconnect?: CoursePromocodeWhereUniqueInput | CoursePromocodeWhereUniqueInput[]
+    delete?: CoursePromocodeWhereUniqueInput | CoursePromocodeWhereUniqueInput[]
+    connect?: CoursePromocodeWhereUniqueInput | CoursePromocodeWhereUniqueInput[]
+    update?: CoursePromocodeUpdateWithWhereUniqueWithoutCourseInput | CoursePromocodeUpdateWithWhereUniqueWithoutCourseInput[]
+    updateMany?: CoursePromocodeUpdateManyWithWhereWithoutCourseInput | CoursePromocodeUpdateManyWithWhereWithoutCourseInput[]
+    deleteMany?: CoursePromocodeScalarWhereInput | CoursePromocodeScalarWhereInput[]
+  }
+
+  export type CourseCreateNestedOneWithoutPromocodesInput = {
+    create?: XOR<CourseCreateWithoutPromocodesInput, CourseUncheckedCreateWithoutPromocodesInput>
+    connectOrCreate?: CourseCreateOrConnectWithoutPromocodesInput
+    connect?: CourseWhereUniqueInput
+  }
+
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
+  export type CourseUpdateOneRequiredWithoutPromocodesNestedInput = {
+    create?: XOR<CourseCreateWithoutPromocodesInput, CourseUncheckedCreateWithoutPromocodesInput>
+    connectOrCreate?: CourseCreateOrConnectWithoutPromocodesInput
+    upsert?: CourseUpsertWithoutPromocodesInput
+    connect?: CourseWhereUniqueInput
+    update?: XOR<XOR<CourseUpdateToOneWithWhereWithoutPromocodesInput, CourseUpdateWithoutPromocodesInput>, CourseUncheckedUpdateWithoutPromocodesInput>
   }
 
   export type CourseCreateNestedOneWithoutAttachmentsInput = {
@@ -19048,6 +20647,47 @@ export namespace Prisma {
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
   export type NestedBoolNullableFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
     not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
@@ -19145,6 +20785,7 @@ export namespace Prisma {
     category?: CategoryCreateNestedOneWithoutCoursesInput
     exams?: ExamCreateNestedManyWithoutCourseInput
     purchases?: PurchaseCreateNestedManyWithoutCourseInput
+    promocodes?: CoursePromocodeCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutChaptersInput = {
@@ -19161,6 +20802,7 @@ export namespace Prisma {
     attachments?: AttachmentUncheckedCreateNestedManyWithoutCourseInput
     exams?: ExamUncheckedCreateNestedManyWithoutCourseInput
     purchases?: PurchaseUncheckedCreateNestedManyWithoutCourseInput
+    promocodes?: CoursePromocodeUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutChaptersInput = {
@@ -19293,6 +20935,7 @@ export namespace Prisma {
     category?: CategoryUpdateOneWithoutCoursesNestedInput
     exams?: ExamUpdateManyWithoutCourseNestedInput
     purchases?: PurchaseUpdateManyWithoutCourseNestedInput
+    promocodes?: CoursePromocodeUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutChaptersInput = {
@@ -19309,6 +20952,7 @@ export namespace Prisma {
     attachments?: AttachmentUncheckedUpdateManyWithoutCourseNestedInput
     exams?: ExamUncheckedUpdateManyWithoutCourseNestedInput
     purchases?: PurchaseUncheckedUpdateManyWithoutCourseNestedInput
+    promocodes?: CoursePromocodeUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type ExamUpsertWithWhereUniqueWithoutChapterInput = {
@@ -19616,6 +21260,36 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type CoursePromocodeCreateWithoutCourseInput = {
+    id?: string
+    code: string
+    discount: number
+    startDate?: Date | string | null
+    expiresIn?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CoursePromocodeUncheckedCreateWithoutCourseInput = {
+    id?: string
+    code: string
+    discount: number
+    startDate?: Date | string | null
+    expiresIn?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CoursePromocodeCreateOrConnectWithoutCourseInput = {
+    where: CoursePromocodeWhereUniqueInput
+    create: XOR<CoursePromocodeCreateWithoutCourseInput, CoursePromocodeUncheckedCreateWithoutCourseInput>
+  }
+
+  export type CoursePromocodeCreateManyCourseInputEnvelope = {
+    data: CoursePromocodeCreateManyCourseInput | CoursePromocodeCreateManyCourseInput[]
+    skipDuplicates?: boolean
+  }
+
   export type AttachmentUpsertWithWhereUniqueWithoutCourseInput = {
     where: AttachmentWhereUniqueInput
     update: XOR<AttachmentUpdateWithoutCourseInput, AttachmentUncheckedUpdateWithoutCourseInput>
@@ -19731,6 +21405,120 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Purchase"> | Date | string
   }
 
+  export type CoursePromocodeUpsertWithWhereUniqueWithoutCourseInput = {
+    where: CoursePromocodeWhereUniqueInput
+    update: XOR<CoursePromocodeUpdateWithoutCourseInput, CoursePromocodeUncheckedUpdateWithoutCourseInput>
+    create: XOR<CoursePromocodeCreateWithoutCourseInput, CoursePromocodeUncheckedCreateWithoutCourseInput>
+  }
+
+  export type CoursePromocodeUpdateWithWhereUniqueWithoutCourseInput = {
+    where: CoursePromocodeWhereUniqueInput
+    data: XOR<CoursePromocodeUpdateWithoutCourseInput, CoursePromocodeUncheckedUpdateWithoutCourseInput>
+  }
+
+  export type CoursePromocodeUpdateManyWithWhereWithoutCourseInput = {
+    where: CoursePromocodeScalarWhereInput
+    data: XOR<CoursePromocodeUpdateManyMutationInput, CoursePromocodeUncheckedUpdateManyWithoutCourseInput>
+  }
+
+  export type CoursePromocodeScalarWhereInput = {
+    AND?: CoursePromocodeScalarWhereInput | CoursePromocodeScalarWhereInput[]
+    OR?: CoursePromocodeScalarWhereInput[]
+    NOT?: CoursePromocodeScalarWhereInput | CoursePromocodeScalarWhereInput[]
+    id?: StringFilter<"CoursePromocode"> | string
+    courseId?: StringFilter<"CoursePromocode"> | string
+    code?: StringFilter<"CoursePromocode"> | string
+    discount?: FloatFilter<"CoursePromocode"> | number
+    startDate?: DateTimeNullableFilter<"CoursePromocode"> | Date | string | null
+    expiresIn?: DateTimeNullableFilter<"CoursePromocode"> | Date | string | null
+    createdAt?: DateTimeFilter<"CoursePromocode"> | Date | string
+    updatedAt?: DateTimeFilter<"CoursePromocode"> | Date | string
+  }
+
+  export type CourseCreateWithoutPromocodesInput = {
+    id?: string
+    userId: string
+    title: string
+    description?: string | null
+    imageUrl?: string | null
+    price?: number | null
+    isPublished?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    attachments?: AttachmentCreateNestedManyWithoutCourseInput
+    chapters?: ChapterCreateNestedManyWithoutCourseInput
+    category?: CategoryCreateNestedOneWithoutCoursesInput
+    exams?: ExamCreateNestedManyWithoutCourseInput
+    purchases?: PurchaseCreateNestedManyWithoutCourseInput
+  }
+
+  export type CourseUncheckedCreateWithoutPromocodesInput = {
+    id?: string
+    userId: string
+    title: string
+    description?: string | null
+    imageUrl?: string | null
+    price?: number | null
+    isPublished?: boolean
+    categoryId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    attachments?: AttachmentUncheckedCreateNestedManyWithoutCourseInput
+    chapters?: ChapterUncheckedCreateNestedManyWithoutCourseInput
+    exams?: ExamUncheckedCreateNestedManyWithoutCourseInput
+    purchases?: PurchaseUncheckedCreateNestedManyWithoutCourseInput
+  }
+
+  export type CourseCreateOrConnectWithoutPromocodesInput = {
+    where: CourseWhereUniqueInput
+    create: XOR<CourseCreateWithoutPromocodesInput, CourseUncheckedCreateWithoutPromocodesInput>
+  }
+
+  export type CourseUpsertWithoutPromocodesInput = {
+    update: XOR<CourseUpdateWithoutPromocodesInput, CourseUncheckedUpdateWithoutPromocodesInput>
+    create: XOR<CourseCreateWithoutPromocodesInput, CourseUncheckedCreateWithoutPromocodesInput>
+    where?: CourseWhereInput
+  }
+
+  export type CourseUpdateToOneWithWhereWithoutPromocodesInput = {
+    where?: CourseWhereInput
+    data: XOR<CourseUpdateWithoutPromocodesInput, CourseUncheckedUpdateWithoutPromocodesInput>
+  }
+
+  export type CourseUpdateWithoutPromocodesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attachments?: AttachmentUpdateManyWithoutCourseNestedInput
+    chapters?: ChapterUpdateManyWithoutCourseNestedInput
+    category?: CategoryUpdateOneWithoutCoursesNestedInput
+    exams?: ExamUpdateManyWithoutCourseNestedInput
+    purchases?: PurchaseUpdateManyWithoutCourseNestedInput
+  }
+
+  export type CourseUncheckedUpdateWithoutPromocodesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    isPublished?: BoolFieldUpdateOperationsInput | boolean
+    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attachments?: AttachmentUncheckedUpdateManyWithoutCourseNestedInput
+    chapters?: ChapterUncheckedUpdateManyWithoutCourseNestedInput
+    exams?: ExamUncheckedUpdateManyWithoutCourseNestedInput
+    purchases?: PurchaseUncheckedUpdateManyWithoutCourseNestedInput
+  }
+
   export type CourseCreateWithoutAttachmentsInput = {
     id?: string
     userId: string
@@ -19745,6 +21533,7 @@ export namespace Prisma {
     category?: CategoryCreateNestedOneWithoutCoursesInput
     exams?: ExamCreateNestedManyWithoutCourseInput
     purchases?: PurchaseCreateNestedManyWithoutCourseInput
+    promocodes?: CoursePromocodeCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutAttachmentsInput = {
@@ -19761,6 +21550,7 @@ export namespace Prisma {
     chapters?: ChapterUncheckedCreateNestedManyWithoutCourseInput
     exams?: ExamUncheckedCreateNestedManyWithoutCourseInput
     purchases?: PurchaseUncheckedCreateNestedManyWithoutCourseInput
+    promocodes?: CoursePromocodeUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutAttachmentsInput = {
@@ -19793,6 +21583,7 @@ export namespace Prisma {
     category?: CategoryUpdateOneWithoutCoursesNestedInput
     exams?: ExamUpdateManyWithoutCourseNestedInput
     purchases?: PurchaseUpdateManyWithoutCourseNestedInput
+    promocodes?: CoursePromocodeUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutAttachmentsInput = {
@@ -19809,6 +21600,7 @@ export namespace Prisma {
     chapters?: ChapterUncheckedUpdateManyWithoutCourseNestedInput
     exams?: ExamUncheckedUpdateManyWithoutCourseNestedInput
     purchases?: PurchaseUncheckedUpdateManyWithoutCourseNestedInput
+    promocodes?: CoursePromocodeUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseCreateWithoutCategoryInput = {
@@ -19825,6 +21617,7 @@ export namespace Prisma {
     chapters?: ChapterCreateNestedManyWithoutCourseInput
     exams?: ExamCreateNestedManyWithoutCourseInput
     purchases?: PurchaseCreateNestedManyWithoutCourseInput
+    promocodes?: CoursePromocodeCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutCategoryInput = {
@@ -19841,6 +21634,7 @@ export namespace Prisma {
     chapters?: ChapterUncheckedCreateNestedManyWithoutCourseInput
     exams?: ExamUncheckedCreateNestedManyWithoutCourseInput
     purchases?: PurchaseUncheckedCreateNestedManyWithoutCourseInput
+    promocodes?: CoursePromocodeUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutCategoryInput = {
@@ -20059,6 +21853,7 @@ export namespace Prisma {
     chapters?: ChapterCreateNestedManyWithoutCourseInput
     category?: CategoryCreateNestedOneWithoutCoursesInput
     exams?: ExamCreateNestedManyWithoutCourseInput
+    promocodes?: CoursePromocodeCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutPurchasesInput = {
@@ -20075,6 +21870,7 @@ export namespace Prisma {
     attachments?: AttachmentUncheckedCreateNestedManyWithoutCourseInput
     chapters?: ChapterUncheckedCreateNestedManyWithoutCourseInput
     exams?: ExamUncheckedCreateNestedManyWithoutCourseInput
+    promocodes?: CoursePromocodeUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutPurchasesInput = {
@@ -20107,6 +21903,7 @@ export namespace Prisma {
     chapters?: ChapterUpdateManyWithoutCourseNestedInput
     category?: CategoryUpdateOneWithoutCoursesNestedInput
     exams?: ExamUpdateManyWithoutCourseNestedInput
+    promocodes?: CoursePromocodeUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutPurchasesInput = {
@@ -20123,6 +21920,7 @@ export namespace Prisma {
     attachments?: AttachmentUncheckedUpdateManyWithoutCourseNestedInput
     chapters?: ChapterUncheckedUpdateManyWithoutCourseNestedInput
     exams?: ExamUncheckedUpdateManyWithoutCourseNestedInput
+    promocodes?: CoursePromocodeUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type ChapterCreateWithoutExamsInput = {
@@ -20176,6 +21974,7 @@ export namespace Prisma {
     chapters?: ChapterCreateNestedManyWithoutCourseInput
     category?: CategoryCreateNestedOneWithoutCoursesInput
     purchases?: PurchaseCreateNestedManyWithoutCourseInput
+    promocodes?: CoursePromocodeCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutExamsInput = {
@@ -20192,6 +21991,7 @@ export namespace Prisma {
     attachments?: AttachmentUncheckedCreateNestedManyWithoutCourseInput
     chapters?: ChapterUncheckedCreateNestedManyWithoutCourseInput
     purchases?: PurchaseUncheckedCreateNestedManyWithoutCourseInput
+    promocodes?: CoursePromocodeUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutExamsInput = {
@@ -20293,6 +22093,7 @@ export namespace Prisma {
     chapters?: ChapterUpdateManyWithoutCourseNestedInput
     category?: CategoryUpdateOneWithoutCoursesNestedInput
     purchases?: PurchaseUpdateManyWithoutCourseNestedInput
+    promocodes?: CoursePromocodeUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutExamsInput = {
@@ -20309,6 +22110,7 @@ export namespace Prisma {
     attachments?: AttachmentUncheckedUpdateManyWithoutCourseNestedInput
     chapters?: ChapterUncheckedUpdateManyWithoutCourseNestedInput
     purchases?: PurchaseUncheckedUpdateManyWithoutCourseNestedInput
+    promocodes?: CoursePromocodeUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type QuestionUpsertWithWhereUniqueWithoutExamInput = {
@@ -20673,6 +22475,16 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type CoursePromocodeCreateManyCourseInput = {
+    id?: string
+    code: string
+    discount: number
+    startDate?: Date | string | null
+    expiresIn?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type AttachmentUpdateWithoutCourseInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -20804,6 +22616,36 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type CoursePromocodeUpdateWithoutCourseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    discount?: FloatFieldUpdateOperationsInput | number
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresIn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CoursePromocodeUncheckedUpdateWithoutCourseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    discount?: FloatFieldUpdateOperationsInput | number
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresIn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CoursePromocodeUncheckedUpdateManyWithoutCourseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    discount?: FloatFieldUpdateOperationsInput | number
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresIn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type CourseCreateManyCategoryInput = {
     id?: string
     userId: string
@@ -20830,6 +22672,7 @@ export namespace Prisma {
     chapters?: ChapterUpdateManyWithoutCourseNestedInput
     exams?: ExamUpdateManyWithoutCourseNestedInput
     purchases?: PurchaseUpdateManyWithoutCourseNestedInput
+    promocodes?: CoursePromocodeUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutCategoryInput = {
@@ -20846,6 +22689,7 @@ export namespace Prisma {
     chapters?: ChapterUncheckedUpdateManyWithoutCourseNestedInput
     exams?: ExamUncheckedUpdateManyWithoutCourseNestedInput
     purchases?: PurchaseUncheckedUpdateManyWithoutCourseNestedInput
+    promocodes?: CoursePromocodeUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateManyWithoutCategoryInput = {

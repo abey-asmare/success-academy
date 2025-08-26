@@ -45,7 +45,19 @@ export const getChapter = async ({
                     }
 
                 }
-            }
+            }, 
+        });
+
+        const promocodes = await db.coursePromocode.findMany({
+            where: {
+                courseId: courseId,
+                startDate: {
+                    lte: new Date(),
+                },
+                expiresIn: {
+                    gte: new Date(),
+                },
+            },
         });
 
         const chapter = await db.chapter.findUnique({
@@ -120,6 +132,7 @@ export const getChapter = async ({
             nextChapter,
             userProgress,
             purchase,
+            promocodes
         };
 
     } catch (error) {
@@ -132,6 +145,7 @@ export const getChapter = async ({
             nextChapter: null,
             userProgress: null,
             purchase: null,
+            promocodes: null,
         }
     }
 }

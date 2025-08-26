@@ -21,6 +21,8 @@ const nextConfig: NextConfig = {
     "https://unified-mole-badly.ngrok-free.app",
     "unified-mole-badly.ngrok-free.app",
     "passage-knee-keywords-comedy.trycloudflare.com",
+    // 'https://vanguard-gules.vercel.app'
+
   ],
 };
 

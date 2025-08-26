@@ -10,6 +10,8 @@ const InputVariants = cva(
         variant: {
             default: '', 
             custom: "focus-visible:ring-sky-100/50 focus-visible:border-sky-200 selection:bg-sky-800", 
+            success: "focus-visible:ring-green-100/50 focus-visible:border-green-200", 
+            error: "focus-visible:ring-red-100/50 focus-visible:border-red-200", 
         },
       },
 
@@ -20,7 +22,7 @@ const InputVariants = cva(
 
 
 type InputVariantProps = VariantProps<typeof InputVariants>
-function Input({ className, type, variant, ...props }: React.ComponentProps<"input"> & InputVariantProps) {
+function  Input({ className, type, variant, ...props }: React.ComponentProps<"input"> & InputVariantProps) {
   return (
     <input
       type={type}

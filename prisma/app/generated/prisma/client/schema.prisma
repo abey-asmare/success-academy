@@ -37,21 +37,35 @@ model ChapterCategory {
 }
 
 model Course {
-  id          String       @id @default(uuid())
+  id          String            @id @default(uuid())
   userId      String
   title       String
   description String?
   imageUrl    String?
   price       Float?
-  isPublished Boolean      @default(false)
+  isPublished Boolean           @default(false)
   categoryId  String?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
   attachments Attachment[]
   chapters    Chapter[]
-  category    Category?    @relation(fields: [categoryId], references: [id])
-  exams       Exam[]       @relation("ExamCourse")
+  category    Category?         @relation(fields: [categoryId], references: [id])
+  exams       Exam[]            @relation("ExamCourse")
   purchases   Purchase[]
+  promocodes  CoursePromocode[] @relation("CoursePromocode")
+}
+
+// course can have a promocode
+model CoursePromocode {
+  id        String    @id @default(uuid())
+  courseId  String
+  code      String
+  discount  Float // percentage value
+  startDate DateTime? @default(now())
+  expiresIn DateTime? // set this in your service, e.g., startDate + 7 days if not provided
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  course    Course    @relation("CoursePromocode", fields: [courseId], references: [id], onDelete: Cascade)
 }
 
 model Attachment {

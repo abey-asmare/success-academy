@@ -154,6 +154,17 @@ exports.Prisma.CourseScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.CoursePromocodeScalarFieldEnum = {
+  id: 'id',
+  courseId: 'courseId',
+  code: 'code',
+  discount: 'discount',
+  startDate: 'startDate',
+  expiresIn: 'expiresIn',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.AttachmentScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -276,6 +287,7 @@ exports.Prisma.ModelName = {
   Chapter: 'Chapter',
   ChapterCategory: 'ChapterCategory',
   Course: 'Course',
+  CoursePromocode: 'CoursePromocode',
   Attachment: 'Attachment',
   Category: 'Category',
   MuxData: 'MuxData',

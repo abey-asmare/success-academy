@@ -7,22 +7,22 @@ import Actions from "./chapters/actions";
 import DescriptionForm from "./description-form";
 import { ImageForm } from "./image-form";
 import PriceForm from "./price-form";
+import { PromocodeForm } from "./PromocodeForm";
+import PromoCodes from "./PromoCodes";
 import TitleForm from "./title-form";
-;
-
 
 const CourseIdPage = async ({
-  params
+  params,
 }: {
-  params: Promise<{ courseId: string }>
+  params: Promise<{ courseId: string }>;
 }) => {
-
-  const {courseId} = await params
+  const { courseId } = await params;
   const course = await db.course.findUnique({
     where: {
-      id: courseId,  
+      id: courseId,
     },
     include: {
+      promocodes: true,
       chapters: {
         include: {
           category: true,
@@ -39,7 +39,6 @@ const CourseIdPage = async ({
     },
   });
 
-
   if (!course) {
     return redirect("/");
   }
@@ -50,7 +49,7 @@ const CourseIdPage = async ({
     // course.description,
     course.imageUrl,
     course.price,
-    course.chapters.some(chapter => chapter.isPublished),
+    course.chapters.some((chapter) => chapter.isPublished),
   ];
   const totalFields = requiredFields.length;
   const completedFields = requiredFields.filter(Boolean).length;
@@ -62,16 +61,12 @@ const CourseIdPage = async ({
   return (
     <>
       {!course.isPublished && (
-        <Banner
-          label="This course is unpublished. It will not be visible to the students."
-        />
+        <Banner label="This course is unpublished. It will not be visible to the students." />
       )}
       <div className="p-6">
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-y-2">
-            <h1 className="text-2xl font-medium">
-              Course setup
-            </h1>
+            <h1 className="text-2xl font-medium">Course setup</h1>
             <span className="text-sm text-slate-700">
               Complete all fields {completionText}
             </span>
@@ -84,60 +79,40 @@ const CourseIdPage = async ({
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
           <div className="flex flex-col">
-
-            <TitleForm
-              initialData={course}
-              courseId={course.id}
-              />
-              </div>
-
-              <div className="flex flex-col">
-  
-                <PriceForm
-                  initialData={course}
-                  courseId={course.id}
-                />
-              </div>
-
-            {/* <CategoryForm
-              initialData={course}
-              courseId={course.id}
-              options={categories.map((category) => ({
-                label: category.name,
-                value: category.id,
-              }))}
-            /> */}
-            <div className="flex flex-col">
-              <ChaptersForm
-                initialData={course}
-                courseId={course.id}
-              />
-            </div>
-              
-            <div className="flex flex-col mt-6">
-            <DescriptionForm
-              initialData={course}
-              courseId={course.id}
-            />
-            </div>
-
-            <div className="flex flex-col">
-              <ImageForm
-                initialData={course}
-                courseId={course.id}
-              />
-            </div>
-            <div className="flex flex-col">
-              <AttachmentForm
-                initialData={course}
-                courseId={course.id}
-              />
-            </div>
-           
+            <TitleForm initialData={course} courseId={course.id} />
           </div>
+
+          <div className="flex flex-col">
+            <PriceForm initialData={course} courseId={course.id} />
+          </div>
+
+          <div className="flex flex-col">
+            <ChaptersForm initialData={course} courseId={course.id} />
+          </div>
+
+          <div className="flex flex-col mt-6">
+            <DescriptionForm initialData={course} courseId={course.id} />
+          </div>
+
+          <div className="flex flex-col">
+            <ImageForm initialData={course} courseId={course.id} />
+          </div>
+          <div className="flex flex-col">
+            <AttachmentForm initialData={course} courseId={course.id} />
+          </div>
+          <div className="flex flex-col">
+            <PromocodeForm
+              // initialData={course}
+              courseId={course.id}
+              coursePrice={course.price || 0}
+            />
+            <h3 className="text-lg font-medium text-[#181818]">Promocodes</h3>
+            <PromoCodes courseId={course.id} promocodes = {course.promocodes}/>
+          </div>
+        </div>
       </div>
     </>
   );
-}
+};
 
 export default CourseIdPage;

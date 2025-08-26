@@ -37,7 +37,7 @@ import { profileFormSchema } from "@/schemas/validationSchemas";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { handleTelegramRegistration } from "./actions";
-
+import { Label } from "@/components/ui/label";
 
 const referrerOptions = [
   { value: "Google", label: "Google" },
@@ -260,7 +260,6 @@ export default function RegistrationForm({courses}: PropType) {
                 </FormItem>
               )}
             />
-
             {/* Referrer */}
             <FormField
               control={form.control}
@@ -289,6 +288,9 @@ export default function RegistrationForm({courses}: PropType) {
               )}
             />
           </div>
+          <Label>Promo code</Label>
+          <Input placeholder="Promo code"/>
+
             <div className="mt-6 ">
               <p className="font-semibold color-[#181818]">Amount {getCoursePrice(form.watch('courseId'))}</p>
             <div className="space-y-4">

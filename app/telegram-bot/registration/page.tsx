@@ -7,6 +7,9 @@ export default async function BotRegisterationPage() {
     where: {
     isPublished: true 
     },
+    include: {
+      promocodes: true
+    }
 
   });
 

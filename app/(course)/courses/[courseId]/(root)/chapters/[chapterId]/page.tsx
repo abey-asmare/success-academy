@@ -12,6 +12,7 @@ import { VideoPlayer } from "./components/video-player";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 const ChapterIdPage = async ({
   params,
@@ -33,6 +34,7 @@ const ChapterIdPage = async ({
     nextChapter,
     userProgress,
     purchase,
+    promocodes,
   } = await getChapter({
     userId,
     chapterId,
@@ -96,7 +98,7 @@ const ChapterIdPage = async ({
                 />
               </div>
             ) : (
-              <CourseEnrollButton courseId={courseId} price={course.price!} />
+              <CourseEnrollButton courseId={courseId} price={course.price!} promoCodes={promocodes.map((promo) => ({ code: promo.code, discount: promo.discount }))} />
             )}
           </div>
           <Separator />
