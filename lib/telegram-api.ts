@@ -54,6 +54,9 @@ try {
         imageUrl,
         courseName: course?.title,
         purchaseId,
+        date: new Date().toLocaleString("en-US", {
+          timeZone: "Africa/Addis_Ababa",
+        }),
       }),
     });
     logger.info(
