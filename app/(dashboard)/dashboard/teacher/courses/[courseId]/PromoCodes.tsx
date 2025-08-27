@@ -32,6 +32,7 @@ export default function PromoCodes({
             </div>
           </div>
 
+          <form>
             <Button
               variant="ghost"
               size="icon"
@@ -49,6 +50,7 @@ export default function PromoCodes({
             >
               <X width={20} height={20} />
             </Button>
+          </form>
         </Badge>
       ))}
     </div>
