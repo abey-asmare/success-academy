@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/dashboard/*'],
+      disallow: ['/dashboard/*', 'privacy-policy', 'terms-of-use'],
     },
     sitemap: 'https://successacademy.et/sitemap.xml',
   }
