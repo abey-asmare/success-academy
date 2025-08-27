@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 
 import { Attachment, Chapter } from "@/prisma/app/generated/prisma/client";
+import { TZDate } from "react-day-picker";
 
 
 interface getChapterProps {
@@ -9,9 +10,10 @@ interface getChapterProps {
     chapterId: string;
 };
 
-function toUTCMidnight(date: Date) {
-    return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-}
+function todayInUserZone(timeZone: string) {
+    const now = new TZDate(TZDate.now(), timeZone)
+    return new Date(now.toISOString())
+}  
 
 export const getChapter = async ({ 
     userId, 
@@ -51,7 +53,7 @@ export const getChapter = async ({
                 }
             }, 
         });
-        const today = toUTCMidnight(new Date());
+        const today = todayInUserZone("Africa/Addis_Ababa");
         console.log("date in get chapt", today)
         
 

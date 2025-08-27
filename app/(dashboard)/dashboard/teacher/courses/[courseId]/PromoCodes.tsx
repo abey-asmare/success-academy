@@ -16,7 +16,6 @@ export default function PromoCodes({
   courseId: string;
 }) {
   const router = useRouter();
-  const hanleAction = async (id: string) => {};
   return (
     <div className="flex gap-3 flex-wrap">
       {promocodes.map((promocode) => (
@@ -33,7 +32,6 @@ export default function PromoCodes({
             </div>
           </div>
 
-          <form action={hanleAction.bind(null, promocode.id)}>
             <Button
               variant="ghost"
               size="icon"
@@ -51,7 +49,6 @@ export default function PromoCodes({
             >
               <X width={20} height={20} />
             </Button>
-          </form>
         </Badge>
       ))}
     </div>

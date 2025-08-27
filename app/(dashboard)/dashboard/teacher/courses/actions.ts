@@ -1,9 +1,12 @@
 'use server'
-import {logger, Sentry} from "@/lib/sentryLogger"
 import { db } from "@/lib/db"
-import { getAdminInfo } from "@/utils/roles"
-import { z } from "zod"
+import { logger, Sentry } from "@/lib/sentryLogger"
 import { revalidatePath } from "next/cache"
+import { z } from "zod"
+
+import { getAdminInfo } from "@/utils/roles"
+import { TZDate } from "@date-fns/tz"
+
 
 const validatePromoCode = z.object({
     code: z.string().min(6).max(6),
@@ -12,22 +15,30 @@ const validatePromoCode = z.object({
     expiredAt: z.coerce.date(),
 })
 
-function toUTCMidnight(date: Date) {
-    return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+
+function toUTCMidnight(date: Date, timeZone: string) {
+    const tzMidnight = new TZDate(date.getFullYear(), date.getMonth(), date.getDate(), timeZone)
+    return new Date(tzMidnight.toISOString())
   }
   
-export async function addPromocode( courseId: string, formData: FormData) {
-    console.log("action called witht he data" , formData)
+// function toUTCEndOfDay(date: Date, timeZone: string) {
+// const tzEnd = new TZDate(date.getFullYear(), date.getMonth(), date.getDate(), timeZone)
+// tzEnd.setHours(23, 59, 59, 999)
+// return new Date(tzEnd.toISOString())
+// }
+  
+  
+  export async function addPromocode(courseId: string, formData: FormData) {
+    const timeZone = "Africa/Addis_Ababa"  
     try {
         // validate the promocode
         const isValid = validatePromoCode.safeParse({
             code: formData.get("code") as string,
             discount: Number(formData.get("discount")),
-            appliedFrom: toUTCMidnight(new Date(formData.get("appliedFrom") as string)),
-            expiredAt: toUTCMidnight(new Date(formData.get("expiredAt") as string)),
+            appliedFrom: toUTCMidnight(new Date(formData.get("appliedFrom") as string), timeZone),
+            expiredAt: toUTCMidnight(new Date(formData.get("expiredAt") as string), timeZone),
         })
 
-        console.log("isValid", isValid)
         if(!isValid.success){
             logger.warn(
                 `[ADD_PROMOCODE_SERVER_ACTION]: Invalid promocode: ${isValid.error}`
@@ -58,10 +69,11 @@ export async function addPromocode( courseId: string, formData: FormData) {
             )
             return {message: "Failed to add promocode", status: 500}
         }
-
-
+        logger.info(
+            `[ADD_PROMOCODE_SERVER_ACTION]: Promocode added successfully: ${promocode}`
+        )
+        revalidatePath(`/dashboard/teacher/courses/${courseId}`)
     } catch (error) {
-        console.log(error)
         Sentry.captureException(error)
         logger.error(`[ADD_PROMOCODE_SERVER_ACTION]: Internal Error: Failed to add promocode ${error}`)
     }
