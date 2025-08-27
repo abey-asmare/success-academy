@@ -1,4 +1,4 @@
-import { getChapter } from "@/actions/get-chapter";
+import { getChapter, getCourse, getSingleChapter } from "@/actions/get-chapter";
 import Banner from "@/components/banner";
 import { Preview } from "@/components/preview";
 import { Button } from "@/components/ui/button";
@@ -12,11 +12,43 @@ import { redirect } from "next/navigation";
 import CourseEnrollButton from "./components/course-enroll-button";
 import { CourseProgressButton } from "./components/course-progress-button";
 import { VideoPlayer } from "./components/video-player";
+import { Metadata } from "next";
+
+
+type ChapterIdProps = Promise<{
+  courseId: string;
+  chapterId: string;
+}>;
+
+
+export async function generateMetadata({params}: {params: ChapterIdProps}): Promise<Metadata>{
+  const {chapterId, courseId} = await params;
+  const chapter = await getSingleChapter(chapterId)
+  const course = await getCourse(courseId)
+  
+  if (!chapter || !course) {
+    return {
+      title: "Resourse not found",
+    }
+  }
+
+  return {
+    title: chapter.title, 
+    description: chapter.description ? chapter.description : course.description, 
+    openGraph: {
+      images: [course.imageUrl!]
+    }     
+    
+  }
+
+}
+
+
 
 const ChapterIdPage = async ({
   params,
 }: {
-  params: Promise<{ courseId: string; chapterId: string }>;
+  params: ChapterIdProps;
 }) => {
   const { userId } = await auth();
   const { courseId, chapterId } = await params;
@@ -40,7 +72,7 @@ const ChapterIdPage = async ({
     courseId,
   });
 
-  if (!chapter || !course) {
+  if (!chapter || !course ) {
     return redirect("/");
   }
 

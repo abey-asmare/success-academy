@@ -15,6 +15,8 @@ const isPublicRoute = createRouteMatcher([
   "/api/uploadthing",
   "/api/courses(.*)",
   "/api/telegram-bot(.*)",
+  "/sitemap.xml",
+  "/robots.txt"
 ]);
 
 const isAdminRoute = createRouteMatcher([

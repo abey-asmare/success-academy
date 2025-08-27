@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 
 import { Attachment, Chapter } from "@/prisma/app/generated/prisma/client";
+import { cache } from "react";
 import { TZDate } from "react-day-picker";
 
 
@@ -14,6 +15,57 @@ function todayInUserZone(timeZone: string) {
     const now = new TZDate(TZDate.now(), timeZone)
     return new Date(now.toISOString())
 }  
+
+
+export const getCourse = cache(async (courseId: string)=> {
+    const course = await db.course.findUnique({
+        where: {
+            isPublished: true,
+            id: courseId,
+        },
+        select: {
+            price: true,
+            imageUrl: true,
+            title: true,
+            description: true, 
+            exams: {
+                select: {
+                    id: true,
+                    name: true, 
+                    description: true  
+                }, 
+                orderBy: {
+                    createdAt: "desc",
+                }
+
+            }
+        }, 
+    });
+    return course
+})
+
+export const getSingleChapter = cache(async (chapterId: string)=> {
+    const chapter = await db.chapter.findUnique({
+        where: {
+            id: chapterId,
+            isPublished: true,
+        },
+        include: {
+            exams: {
+                include: {
+                    questions: {    
+                        include: {
+                            answers: true,
+                        },
+                    },
+                }
+            }
+        }
+    });
+    return chapter
+})
+
+
 
 export const getChapter = async ({ 
     userId, 
@@ -31,28 +83,8 @@ export const getChapter = async ({
             }
         });
 
-        const course = await db.course.findUnique({
-            where: {
-                isPublished: true,
-                id: courseId,
-            },
-            select: {
-                price: true,
-                imageUrl: true,
-                title: true,
-                exams: {
-                    select: {
-                        id: true,
-                        name: true, 
-                        description: true  
-                    }, 
-                    orderBy: {
-                        createdAt: "desc",
-                    }
+        const course = await getCourse(courseId)
 
-                }
-            }, 
-        });
         const today = todayInUserZone("Africa/Addis_Ababa");
         console.log("date in get chapt", today)
         
@@ -70,23 +102,7 @@ export const getChapter = async ({
         });
         console.log(promocodes, 'promos')
 
-        const chapter = await db.chapter.findUnique({
-            where: {
-                id: chapterId,
-                isPublished: true,
-            },
-            include: {
-                exams: {
-                    include: {
-                        questions: {
-                            include: {
-                                answers: true,
-                            },
-                        },
-                    },
-                }
-            }
-        });
+        const chapter = await getSingleChapter(chapterId)
 
         if (!chapter || !course) {
             throw new Error("Chapter or course not found");

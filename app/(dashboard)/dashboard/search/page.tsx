@@ -2,6 +2,12 @@ import { auth } from "@clerk/nextjs/server";;
 import { redirect } from "next/navigation";
 import { getCourses } from "@/actions/get-courses";
 import { CoursesList } from "@/components/courses-list";
+import {Metadata} from "next"
+
+export const metadata : Metadata = {
+   title: "Our Courses", 
+}
+
 
 interface SearchPageProps {
   searchParams: Promise<{
