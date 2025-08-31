@@ -12,6 +12,8 @@ const isPublicRoute = createRouteMatcher([
   "/privacy-policy(.*)",
   "/terms-of-use(.*)",
   "/telegram-bot(.*)",
+  "/courses/:courseId",
+
   "/api/uploadthing",
   "/api/courses(.*)",
   "/api/telegram-bot(.*)",

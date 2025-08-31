@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 
 import { db } from "@/lib/db";
 import { SiteHeader } from "@/components/site-header";
-import { AppSidebar } from "../components/app-sidebar";
+import { AppSidebar } from "../../../components/app-sidebar";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { CourseType } from "@/types";
 

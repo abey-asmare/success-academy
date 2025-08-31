@@ -1,4 +1,3 @@
-import React from 'react'
 import { DataTable } from './components/data-table';
 import { clerkClient } from '@clerk/nextjs/server';
 import { columns } from './components/columns';

@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import { columns } from "./components/columns";
 import { DataTable } from "./components/data-table";
 
-const metadata: Metadata = {
+export const metadata: Metadata = {
     title: "Our Courses",
 }
 

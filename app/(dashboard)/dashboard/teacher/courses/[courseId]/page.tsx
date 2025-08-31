@@ -4,12 +4,14 @@ import { redirect } from "next/navigation";
 import AttachmentForm from "./attachment-form";
 import ChaptersForm from "./chapters-form";
 import Actions from "./chapters/actions";
-import DescriptionForm from "./description-form";
+import DescriptionForm from "./course-description-form";
 import { ImageForm } from "./image-form";
 import PriceForm from "./price-form";
 import { PromocodeForm } from "./PromocodeForm";
 import PromoCodes from "./PromoCodes";
 import TitleForm from "./title-form";
+
+
 
 const CourseIdPage = async ({
   params,

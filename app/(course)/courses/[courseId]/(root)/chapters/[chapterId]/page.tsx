@@ -6,13 +6,13 @@ import { Card } from "@/components/ui/card";
 import { auth } from "@clerk/nextjs/server";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import { File } from "lucide-react";
+import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import CourseEnrollButton from "./components/course-enroll-button";
 import { CourseProgressButton } from "./components/course-progress-button";
 import { VideoPlayer } from "./components/video-player";
-import { Metadata } from "next";
 
 
 type ChapterIdProps = Promise<{

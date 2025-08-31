@@ -7,7 +7,83 @@ import * as Sentry from "@sentry/nextjs"
 import { revalidatePath } from "next/cache"
 import { NextRequest, NextResponse } from "next/server"
 
-export async function DELETE(req: NextRequest, {params}: {params: Promise<{courseId: string}>}) {
+
+type Props = {params: Promise<{courseId: string}>}
+
+
+export async function GET(req: NextRequest, {params}: Props){
+    const {courseId} = await params
+    try{
+        const course = await db.course.findUnique({
+            where: {
+                id: courseId,
+            },
+            include: {
+                chapters: {
+                    where: {
+                        isPublished: true,
+                    },
+                    orderBy: {
+                        position: "asc"
+                    }
+                },
+            },
+        });
+        if(!course){
+            logger.warn(
+                `[COURSE_ID_GET]: Not Found: Course ${courseId} not found`
+            )
+            return new NextResponse("Not found", {status: 404})
+        }
+        return NextResponse.json(course)
+    }catch(error){
+        logger.error(`[COURSE_ID_GET]: Internal Error: Failed to get course ${courseId}, ${error}`)
+        Sentry.captureException(error)
+        return new NextResponse("Internal server error", {status: 500})
+    }
+}
+
+
+export async function PATCH(req: NextRequest, {params}: Props) {
+    const {courseId} = await params
+    const {title, description, imageUrl, price, categoryId} = await req.json()
+    try{
+        //  admin users can update the course even if they didn't create it..
+        const {userId} = await auth()
+        const admin = await isAdmin()
+        if(!userId || !admin){
+            logger.warn(
+                `[COURSE_ID_DELETE_DELETE]: Unauthorized: User ${userId} is not authorized yet to delete course ${courseId}`
+            )
+            return new NextResponse("Unauthorized", {status: 401})
+        }
+
+        const course = await db.course.update({
+            where: {
+                id: courseId,
+            },
+            data: {
+            title,
+            description,
+            imageUrl,
+            price,
+            categoryId    
+            }
+        })
+        revalidatePath(`/courses/${courseId}`)
+        revalidatePath(`/dashboard/teacher/courses`)
+        
+        return NextResponse.json(course)
+    }catch(error){
+        logger.error(`[COURSE_ID_PATCH]: Internal Error: Failed to update course ${courseId}, ${error}`)
+        Sentry.captureException(error)
+        return new NextResponse("Internal server error", {status: 500})
+    }    
+}
+
+
+
+export async function DELETE(req: NextRequest, {params}: Props) {
     const {courseId} = await params
     try{
         const {userId, isAdmin} = await getAdminInfo()
@@ -68,6 +144,7 @@ export async function DELETE(req: NextRequest, {params}: {params: Promise<{cours
             }
         }) 
         revalidatePath(`/dashboard/teacher/courses`)
+        revalidatePath(`/courses/${courseId}`)
         logger.info(`[COURSE_ID_DELETE_DELETE]: OK: Course ${courseId} deleted successfully`)
         return NextResponse.json(deletedCourse)
     }catch(error){
@@ -77,37 +154,3 @@ export async function DELETE(req: NextRequest, {params}: {params: Promise<{cours
     }    
 }
 
-export async function PATCH(req: NextRequest, {params}: {params: Promise<{courseId: string}>}) {
-    const {courseId} = await params
-    const {title, description, imageUrl, price, categoryId} = await req.json()
-    try{
-        //  admin users can update the course even if they didn't create it..
-        const {userId} = await auth()
-        const admin = await isAdmin()
-        if(!userId || !admin){
-            logger.warn(
-                `[COURSE_ID_DELETE_DELETE]: Unauthorized: User ${userId} is not authorized yet to delete course ${courseId}`
-            )
-            return new NextResponse("Unauthorized", {status: 401})
-        }
-
-        const course = await db.course.update({
-            where: {
-                id: courseId,
-            },
-            data: {
-            title,
-            description,
-            imageUrl,
-            price,
-            categoryId    
-            }
-        })
-        console.log('patch request', course)
-        return NextResponse.json(course)
-    }catch(error){
-        logger.error(`[COURSE_ID_PATCH]: Internal Error: Failed to update course ${courseId}, ${error}`)
-        Sentry.captureException(error)
-        return new NextResponse("Internal server error", {status: 500})
-    }    
-}

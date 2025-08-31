@@ -14,7 +14,7 @@ interface EditorProps {
 
 export const Editor = ({ value, onChange }: EditorProps) => {
   return (
-    <div className="bg-white">
+    <div className="bg-white overflow-scroll h-[400px]">
       <SimpleMDE value={value} onChange={onChange} />
     </div>
   );

@@ -1,8 +1,7 @@
 import { db } from "@/lib/db";
 import { getAdminInfo } from "@/utils/roles";
-import * as Sentry from "@sentry/nextjs";
 import { NextResponse } from "next/server";
-import { logger } from "@/lib/sentryLogger";
+import { logger, Sentry } from "@/lib/sentryLogger";
 
 
 // fetch all courses if needed

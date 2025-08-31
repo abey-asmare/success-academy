@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
-function Nav() {
+function Nav({classname}: {classname?: string}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);  // Track scroll
 
@@ -33,7 +33,7 @@ function Nav() {
         "fixed z-100 top-0 left-0 right-0 font-bold transition-colors duration-300",
         scrolled
           ? "bg-white text-black shadow-md"
-          : "bg-transparent text-white"
+          : ("bg-transparent text-white " + classname)
       )}
     >
       <nav className="px-4 md:px-10 flex justify-between items-center h-16 bg-white sm:bg-transparent">
