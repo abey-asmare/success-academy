@@ -22,15 +22,8 @@ import toast from "react-hot-toast";
 import z from "zod";
 import { CreateExamImageForm } from "./create-exam-image";
 import { CourseDropdown } from "./CourseDropdown";
-import { questionSchema } from "@/schemas/validationSchemas";
+import { examSchema } from "@/schemas/validationSchemas";
 
-
-export const examSchema = z.object({
-  courseId: z.string().min(1, "Course is required"),
-  name: z.string().min(1, "Exam name is required"),
-  description: z.string().optional(),
-  questions: z.array(questionSchema).min(1, "At least one question is required"),
-});
 
 
 

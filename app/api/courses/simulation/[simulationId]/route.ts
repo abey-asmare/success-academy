@@ -1,12 +1,10 @@
 import { db } from "@/lib/db";
-import { Answer } from "@/prisma/app/generated/prisma/client";
 import { getAdminInfo } from "@/utils/roles";
 import * as Sentry from "@sentry/nextjs";
 import { NextRequest, NextResponse } from "next/server";
+import { examSchema } from "@/schemas/validationSchemas";
 
 const { logger } = Sentry;
-
-// create a new simulation
 
 export async function PUT(
   req: NextRequest,
@@ -15,108 +13,80 @@ export async function PUT(
   const { simulationId } = await params;
 
   try {
-    const {isAdmin} = await getAdminInfo()
+    const { isAdmin } = await getAdminInfo();
     if (!isAdmin) {
       logger.warn(
-        `[COURSE_ID_SIMULATION_PUT]: Unauthorized: User is not an admin to update the simulation ${simulationId}`
-      )
+        `[COURSE_ID_SIMULATION_PUT]: Unauthorized attempt to update simulation ${simulationId}`
+      );
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
     const body = await req.json();
-    const { courseId, name, description, questions } = body;
+    const validatedData = examSchema.safeParse(body);
 
-    // Validate required fields
-    if ((!courseId && !name) || !questions || questions.length === 0) {
+    if (!validatedData.success) {
+      return NextResponse.json(
+        { error: "Validation Error", details: validatedData.error.flatten() },
+        { status: 400 }
+      );
+    }
+
+    const { courseId, name, description, questions } = validatedData.data;
+
+    if (!courseId || !name || !questions || questions.length === 0) {
       return new NextResponse("Missing required fields", { status: 400 });
     }
 
-    // Process questions and check for duplicates within this chapter
-    const processedQuestions = [];
-
-    for (const questionData of questions) {
-      // Check if question with exact text already exists in any exam for this chapter
-      const existingQuestion = await db.question.findFirst({
-        where: {
-          question: questionData.question,
-          imageUrl: questionData.imageUrl,
-          exam: {
-            courseId,
-          },
-        },
-        include: {
-          answers: true,
-        },
-      });
-
-      if (existingQuestion) {
-        // Question exists, check if we need to add new answers
-        const newAnswers = [];
-
-        for (const answerData of questionData.answers) {
-          const existingAnswer = existingQuestion.answers.find(
-            (answer) =>
-              answer.text.toLowerCase().trim() ===
-              answerData.text.toLowerCase().trim()
-          );
-
-          if (!existingAnswer) {
-            newAnswers.push({
-              text: answerData.text,
-              isCorrect: answerData.isCorrect,
-            });
-          }
-        }
-        // Use existing question but add new answers if any
-        processedQuestions.push({
-          question: questionData.question,
-          imageUrl: questionData.imageUrl,
-          answers: {
-            create: newAnswers,
-          },
-        });
-      } else {
-        // New question, create with all answers
-        processedQuestions.push({
-          question: questionData.question,
-          imageUrl: questionData.imageUrl,
-          answers: {
-            create: questionData.answers.map((answerData: Answer) => ({
-              text: answerData.text,
-              isCorrect: answerData.isCorrect,
-            })),
-          },
-        });
-      }
-    }
-
-    // Create the exam with processed questions for the specific chapter
-    const exam = await db.exam.update({
+    const simulation = await db.exam.findUnique({
       where: {
         id: simulationId,
-      },
-      data: {
         isSimulation: true,
-        name,
-        description,
-        courseId,
-        questions: {
-          create: processedQuestions,
-        },
-      },
-      include: {
-        questions: {
-          include: {
-            answers: true,
-          },
-        },
       },
     });
-    logger.info(`[COURSE_ID_SIMULATION_PUT]: OK: Simulation ${simulationId} updated successfully`)
-    return NextResponse.json(exam);
+
+    if (!simulation) {
+      return new NextResponse("Simulation not found", { status: 404 });
+    }
+
+    await db.question.deleteMany({
+      where: { examId: simulationId },
+    });
+
+    for (const q of questions) {
+      await db.question.create({
+        data: {
+          question: q.question,
+          imageUrl: q.imageUrl,
+          examId: simulationId,
+          answers: {
+            create: q.answers.map((a) => ({
+              text: a.text,
+              isCorrect: a.isCorrect,
+            })),
+          },
+        },
+      });
+    }
+
+    await db.exam.update({
+      where: { id: simulationId },
+      data: {
+        courseId,
+        name,
+        description,
+        updatedAt: new Date(),
+      },
+    });
+
+    logger.info(
+      `[COURSE_ID_SIMULATION_PUT]: OK: Simulation ${simulationId} updated successfully`
+    );
+    return NextResponse.json({ success: true });
   } catch (error) {
-    logger.error(`[COURSE_ID_SIMULATION_PUT]: Internal Error: Failed to update simulation ${simulationId}, ${error}`)
-    Sentry.captureException(error)
+    logger.error(
+      `[COURSE_ID_SIMULATION_PUT]: Internal Error: Failed to update simulation ${simulationId}, ${error}`
+    );
+    Sentry.captureException(error);
     return new NextResponse("Internal server error", { status: 500 });
   }
 }

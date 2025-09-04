@@ -82,6 +82,7 @@ export const Preview = ({ value }: PreviewProps) => {
               {children}
             </h6>
           ),
+          
         }}
       >
         {value}
