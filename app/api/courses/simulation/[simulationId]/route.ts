@@ -55,6 +55,7 @@ export async function PUT(
             question: q.question,
           imageUrl: q.imageUrl,
           examId: simulationId,
+          answerDescription: q.answerDescription,
           answers: {
             create: q.answers.map((a) => ({
               text: a.text,

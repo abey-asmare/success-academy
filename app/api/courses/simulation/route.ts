@@ -65,6 +65,7 @@ export async function POST(req: NextRequest) {
         processedQuestions.push({
           question: questionData.question,
           imageUrl: questionData.imageUrl,
+          answerDescription: questionData.answerDescription,
           answers: {
             create: newAnswers,
           },
@@ -74,6 +75,7 @@ export async function POST(req: NextRequest) {
         processedQuestions.push({
           question: questionData.question,
           imageUrl: questionData.imageUrl,
+          answerDescription: questionData.answerDescription,
           answers: {
             create: questionData.answers.map((answerData: Answer) => ({
               text: answerData.text,

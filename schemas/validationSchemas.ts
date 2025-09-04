@@ -28,6 +28,7 @@ export const answerSchema = z.object({
 export const questionSchema = z.object({
   question: z.string().min(1, "Question text is required"),
   imageUrl: z.string().optional(),
+  answerDescription: z.string().optional(),
   answers: z.array(answerSchema).min(2, "At least 2 answers are required").refine(
     (answers) => answers.some(answer => answer.isCorrect),
     "At least one answer must be marked as correct"
