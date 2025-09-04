@@ -1,5 +1,5 @@
 import { DataTable } from "./components/data-table";
-import {columns} from "./components/columns";
+import { columns } from "./components/columns";
 import { db } from "@/lib/db";
 
 export type User = {
@@ -14,7 +14,6 @@ const SimulationPage = async ({
 }: {
   searchParams: Promise<{ search?: string; page?: string }>;
 }) => {
-
   const { search } = (await searchParams) || "";
   const page = parseInt((await searchParams).page || "1");
   const limit = 501;
@@ -22,18 +21,18 @@ const SimulationPage = async ({
 
   const exams = await db.exam.findMany({
     where: {
-      isSimulation: true
-    }, 
+      isSimulation: true,
+    },
     include: {
-      course: true
-    }
-  })
+      course: true,
+    },
+  });
   const examCourses = exams.map((item) => ({
     id: item.id,
     name: item.name,
-    course: item.course?.title ?? 'Unknown Course',
+    course: item.course?.title ?? "Unknown Course",
     updatedAt: item.updatedAt.toDateString(),
-    courseId: item.course && item.course.id || 'not exist',
+    courseId: (item.course && item.course.id) || "not exist",
   }));
   return (
     <div className="p-6">
@@ -42,11 +41,10 @@ const SimulationPage = async ({
         data={examCourses}
         totalCount={examCourses.length}
         currentPage={page}
-        search={search || ''}
+        search={search || ""}
       />
     </div>
   );
 };
 
 export default SimulationPage;
-

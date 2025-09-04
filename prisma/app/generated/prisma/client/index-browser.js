@@ -147,6 +147,7 @@ exports.Prisma.CourseScalarFieldEnum = {
   title: 'title',
   description: 'description',
   imageUrl: 'imageUrl',
+  bgImageUrl: 'bgImageUrl',
   price: 'price',
   isPublished: 'isPublished',
   categoryId: 'categoryId',
@@ -224,7 +225,8 @@ exports.Prisma.QuestionScalarFieldEnum = {
   question: 'question',
   imageUrl: 'imageUrl',
   examId: 'examId',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  answerDescription: 'answerDescription'
 };
 
 exports.Prisma.AnswerScalarFieldEnum = {

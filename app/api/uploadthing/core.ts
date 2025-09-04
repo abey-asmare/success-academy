@@ -26,6 +26,12 @@ export const ourFileRouter = {
       logger.info(`[UPLOADTHING_COURSE_IMAGE]: OK: File uploaded successfully for user ${metadata.userId} file ${file.ufsUrl}`)
       return { uploadedBy: metadata.userId };
     }),
+    courseBgImage: f({image: {maxFileSize: '4MB', maxFileCount: 1}})
+        .middleware(handleAdmin)
+        .onUploadComplete(async ({ metadata, file }) => {
+      logger.info(`[UPLOADTHING_COURSE_BG_IMAGE]: OK: File uploaded successfully for user ${metadata.userId} file ${file.ufsUrl}`)
+      return { uploadedBy: metadata.userId };
+    }),
     examImage: f({image: {maxFileSize: '4MB', maxFileCount: 1}})
         .middleware(handleAdmin)
         .onUploadComplete(async ({ metadata, file }) => {

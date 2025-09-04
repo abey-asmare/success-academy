@@ -3,8 +3,11 @@ import Footer from "@/components/Footer";
 import { Preview } from "@/components/preview";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { db } from "@/lib/db";
+import { auth } from "@clerk/nextjs/server";
+import { Loader2 } from "lucide-react";
+import { telegramLink } from "@/app/constants";
 
 type Props = {
   params: Promise<{ courseId: string }>;
@@ -65,6 +68,24 @@ export default async function CourseDetail({
     console.error("Network or JSON error", error);
     course = null;
   }
+
+  const {userId} = await auth()
+  let isPendingPurchase = false
+  if(userId){
+    const purchase = await db.purchase.findUnique({
+      where: {
+        userId_courseId: {
+          userId,
+          courseId,
+        }
+      }
+    })
+    if(purchase?.approved){
+      return redirect(`/courses/${courseId}/chapters/${course.chapters[0].id}`)
+    }
+    isPendingPurchase = !!purchase && !purchase.approved
+  }
+    
   return (
     <div>
       <div>
@@ -76,7 +97,7 @@ export default async function CourseDetail({
             <div className="w-full h-full absolute top-0 left-0 z-10">
               <Image
                 className="w-full h-full"
-                src={course.imageUrl!}
+                src={course.bgImageUrl || "/bg/defaultbackground.webp"}
                 alt={course.title}
                 fill
                 objectFit="cover"
@@ -92,12 +113,24 @@ export default async function CourseDetail({
                   : "Course description not set"
               }
             />  
-            <Link
-            href={`/courses/${course.id}/chapters/${course.chapters[0].id}`}
-              className="ml-[12%] md:ml-[20%] bg-sky-600 hover:bg-sky-700 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200 text-base"
-          >
-            Enroll Now
-          </Link>
+            
+            {
+              isPendingPurchase ? (
+                <div className="ml-[12%] md:ml-[20%] space-y-2">
+                <div className="bg-sky-500/70 hover:bg-sky-700 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200 text-base w-fit flex items-center">
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />Pending
+                </div>
+                <p className="text-sm  w-[60ch] text-gray-600">Your payment is being processed, The request usually takes a only a few minutes, if the request took longer than expected, please contact us through <Link  className="text-sky-600 hover:underline" href={telegramLink}>Telegram</Link></p>
+                </div>
+              ) : (
+                <Link
+                href={`/courses/${course.id}/chapters/${course.chapters[0].id}`}
+                  className="ml-[12%] md:ml-[20%] bg-sky-600 hover:bg-sky-700 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200 text-base"
+              >
+                 Enroll Now
+              </Link>
+              )
+            }
           </div>
         </div>
       </main>

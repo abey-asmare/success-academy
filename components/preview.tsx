@@ -11,6 +11,9 @@ interface PreviewProps {
 export const Preview = ({ value }: PreviewProps) => {
   // detect how many <img> tags exist in the markdown
   const imageCount = useMemo(() => {
+    if(!value){
+      return 0;
+    }
     const matches = value.match(/<img\s+[^>]*src=|!\[.*?\]\(.*?\)/g);
     return matches ? matches.length : 0;
   }, [value]);

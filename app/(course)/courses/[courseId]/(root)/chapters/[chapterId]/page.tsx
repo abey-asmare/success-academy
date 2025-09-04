@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { auth } from "@clerk/nextjs/server";
 import { Separator } from "@radix-ui/react-dropdown-menu";
-import { File } from "lucide-react";
+import { File, Loader2 } from "lucide-react";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,42 +14,36 @@ import CourseEnrollButton from "./components/course-enroll-button";
 import { CourseProgressButton } from "./components/course-progress-button";
 import { VideoPlayer } from "./components/video-player";
 
-
 type ChapterIdProps = Promise<{
   courseId: string;
   chapterId: string;
 }>;
 
-
-export async function generateMetadata({params}: {params: ChapterIdProps}): Promise<Metadata>{
-  const {chapterId, courseId} = await params;
-  const chapter = await getSingleChapter(chapterId)
-  const course = await getCourse(courseId)
-  
-  if (!chapter || !course) {
-    return {
-      title: "Resourse not found",
-    }
-  }
-
-  return {
-    title: chapter.title, 
-    description: chapter.description ? chapter.description : course.description, 
-    openGraph: {
-      images: [course.imageUrl!]
-    }     
-    
-  }
-
-}
-
-
-
-const ChapterIdPage = async ({
+export async function generateMetadata({
   params,
 }: {
   params: ChapterIdProps;
-}) => {
+}): Promise<Metadata> {
+  const { chapterId, courseId } = await params;
+  const chapter = await getSingleChapter(chapterId);
+  const course = await getCourse(courseId);
+
+  if (!chapter || !course) {
+    return {
+      title: "Resourse not found",
+    };
+  }
+
+  return {
+    title: chapter.title,
+    description: chapter.description ? chapter.description : course.description,
+    openGraph: {
+      images: [course.imageUrl!],
+    },
+  };
+}
+
+const ChapterIdPage = async ({ params }: { params: ChapterIdProps }) => {
   const { userId } = await auth();
   const { courseId, chapterId } = await params;
 
@@ -72,7 +66,7 @@ const ChapterIdPage = async ({
     courseId,
   });
 
-  if (!chapter || !course ) {
+  if (!chapter || !course) {
     return redirect("/");
   }
 
@@ -107,7 +101,16 @@ const ChapterIdPage = async ({
         <div>
           <div className="p-4 flex flex-col md:flex-row items-center justify-between">
             <h2 className="text-2xl font-semibold mb-2">{chapter.title}</h2>
-            {purchase && purchase.approved ? (
+            {!purchase ? (
+              <CourseEnrollButton
+                courseId={courseId}
+                price={course.price!}
+                promoCodes={promocodes.map((promo) => ({
+                  code: promo.code,
+                  discount: promo.discount,
+                }))}
+              />
+            ) : purchase.approved ? (
               <div className="flex flex-wrap items-center gap-2">
                 {chapter.exams.map((exam, index) => (
                   <Button
@@ -129,7 +132,10 @@ const ChapterIdPage = async ({
                 />
               </div>
             ) : (
-              <CourseEnrollButton courseId={courseId} price={course.price!} promoCodes={promocodes.map((promo) => ({ code: promo.code, discount: promo.discount }))} />
+              <div className="bg-sky-500/70 hover:bg-sky-700 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200 text-base w-fit flex items-center">
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Pending
+              </div>
             )}
           </div>
           <Separator />

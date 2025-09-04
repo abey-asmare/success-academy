@@ -4611,6 +4611,7 @@ export namespace Prisma {
     title: string | null
     description: string | null
     imageUrl: string | null
+    bgImageUrl: string | null
     price: number | null
     isPublished: boolean | null
     categoryId: string | null
@@ -4624,6 +4625,7 @@ export namespace Prisma {
     title: string | null
     description: string | null
     imageUrl: string | null
+    bgImageUrl: string | null
     price: number | null
     isPublished: boolean | null
     categoryId: string | null
@@ -4637,6 +4639,7 @@ export namespace Prisma {
     title: number
     description: number
     imageUrl: number
+    bgImageUrl: number
     price: number
     isPublished: number
     categoryId: number
@@ -4660,6 +4663,7 @@ export namespace Prisma {
     title?: true
     description?: true
     imageUrl?: true
+    bgImageUrl?: true
     price?: true
     isPublished?: true
     categoryId?: true
@@ -4673,6 +4677,7 @@ export namespace Prisma {
     title?: true
     description?: true
     imageUrl?: true
+    bgImageUrl?: true
     price?: true
     isPublished?: true
     categoryId?: true
@@ -4686,6 +4691,7 @@ export namespace Prisma {
     title?: true
     description?: true
     imageUrl?: true
+    bgImageUrl?: true
     price?: true
     isPublished?: true
     categoryId?: true
@@ -4786,6 +4792,7 @@ export namespace Prisma {
     title: string
     description: string | null
     imageUrl: string | null
+    bgImageUrl: string | null
     price: number | null
     isPublished: boolean
     categoryId: string | null
@@ -4818,6 +4825,7 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     imageUrl?: boolean
+    bgImageUrl?: boolean
     price?: boolean
     isPublished?: boolean
     categoryId?: boolean
@@ -4838,6 +4846,7 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     imageUrl?: boolean
+    bgImageUrl?: boolean
     price?: boolean
     isPublished?: boolean
     categoryId?: boolean
@@ -4852,6 +4861,7 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     imageUrl?: boolean
+    bgImageUrl?: boolean
     price?: boolean
     isPublished?: boolean
     categoryId?: boolean
@@ -4866,6 +4876,7 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     imageUrl?: boolean
+    bgImageUrl?: boolean
     price?: boolean
     isPublished?: boolean
     categoryId?: boolean
@@ -4873,7 +4884,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type CourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "title" | "description" | "imageUrl" | "price" | "isPublished" | "categoryId" | "createdAt" | "updatedAt", ExtArgs["result"]["course"]>
+  export type CourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "title" | "description" | "imageUrl" | "bgImageUrl" | "price" | "isPublished" | "categoryId" | "createdAt" | "updatedAt", ExtArgs["result"]["course"]>
   export type CourseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     attachments?: boolean | Course$attachmentsArgs<ExtArgs>
     chapters?: boolean | Course$chaptersArgs<ExtArgs>
@@ -4906,6 +4917,7 @@ export namespace Prisma {
       title: string
       description: string | null
       imageUrl: string | null
+      bgImageUrl: string | null
       price: number | null
       isPublished: boolean
       categoryId: string | null
@@ -5345,6 +5357,7 @@ export namespace Prisma {
     readonly title: FieldRef<"Course", 'String'>
     readonly description: FieldRef<"Course", 'String'>
     readonly imageUrl: FieldRef<"Course", 'String'>
+    readonly bgImageUrl: FieldRef<"Course", 'String'>
     readonly price: FieldRef<"Course", 'Float'>
     readonly isPublished: FieldRef<"Course", 'Boolean'>
     readonly categoryId: FieldRef<"Course", 'String'>
@@ -13564,6 +13577,7 @@ export namespace Prisma {
     imageUrl: string | null
     examId: string | null
     createdAt: Date | null
+    answerDescription: string | null
   }
 
   export type QuestionMaxAggregateOutputType = {
@@ -13572,6 +13586,7 @@ export namespace Prisma {
     imageUrl: string | null
     examId: string | null
     createdAt: Date | null
+    answerDescription: string | null
   }
 
   export type QuestionCountAggregateOutputType = {
@@ -13580,6 +13595,7 @@ export namespace Prisma {
     imageUrl: number
     examId: number
     createdAt: number
+    answerDescription: number
     _all: number
   }
 
@@ -13590,6 +13606,7 @@ export namespace Prisma {
     imageUrl?: true
     examId?: true
     createdAt?: true
+    answerDescription?: true
   }
 
   export type QuestionMaxAggregateInputType = {
@@ -13598,6 +13615,7 @@ export namespace Prisma {
     imageUrl?: true
     examId?: true
     createdAt?: true
+    answerDescription?: true
   }
 
   export type QuestionCountAggregateInputType = {
@@ -13606,6 +13624,7 @@ export namespace Prisma {
     imageUrl?: true
     examId?: true
     createdAt?: true
+    answerDescription?: true
     _all?: true
   }
 
@@ -13687,6 +13706,7 @@ export namespace Prisma {
     imageUrl: string | null
     examId: string
     createdAt: Date
+    answerDescription: string | null
     _count: QuestionCountAggregateOutputType | null
     _min: QuestionMinAggregateOutputType | null
     _max: QuestionMaxAggregateOutputType | null
@@ -13712,6 +13732,7 @@ export namespace Prisma {
     imageUrl?: boolean
     examId?: boolean
     createdAt?: boolean
+    answerDescription?: boolean
     answers?: boolean | Question$answersArgs<ExtArgs>
     exam?: boolean | ExamDefaultArgs<ExtArgs>
     _count?: boolean | QuestionCountOutputTypeDefaultArgs<ExtArgs>
@@ -13723,6 +13744,7 @@ export namespace Prisma {
     imageUrl?: boolean
     examId?: boolean
     createdAt?: boolean
+    answerDescription?: boolean
     exam?: boolean | ExamDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["question"]>
 
@@ -13732,6 +13754,7 @@ export namespace Prisma {
     imageUrl?: boolean
     examId?: boolean
     createdAt?: boolean
+    answerDescription?: boolean
     exam?: boolean | ExamDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["question"]>
 
@@ -13741,9 +13764,10 @@ export namespace Prisma {
     imageUrl?: boolean
     examId?: boolean
     createdAt?: boolean
+    answerDescription?: boolean
   }
 
-  export type QuestionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "question" | "imageUrl" | "examId" | "createdAt", ExtArgs["result"]["question"]>
+  export type QuestionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "question" | "imageUrl" | "examId" | "createdAt" | "answerDescription", ExtArgs["result"]["question"]>
   export type QuestionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     answers?: boolean | Question$answersArgs<ExtArgs>
     exam?: boolean | ExamDefaultArgs<ExtArgs>
@@ -13768,6 +13792,7 @@ export namespace Prisma {
       imageUrl: string | null
       examId: string
       createdAt: Date
+      answerDescription: string | null
     }, ExtArgs["result"]["question"]>
     composites: {}
   }
@@ -14198,6 +14223,7 @@ export namespace Prisma {
     readonly imageUrl: FieldRef<"Question", 'String'>
     readonly examId: FieldRef<"Question", 'String'>
     readonly createdAt: FieldRef<"Question", 'DateTime'>
+    readonly answerDescription: FieldRef<"Question", 'String'>
   }
     
 
@@ -16814,6 +16840,7 @@ export namespace Prisma {
     title: 'title',
     description: 'description',
     imageUrl: 'imageUrl',
+    bgImageUrl: 'bgImageUrl',
     price: 'price',
     isPublished: 'isPublished',
     categoryId: 'categoryId',
@@ -16915,7 +16942,8 @@ export namespace Prisma {
     question: 'question',
     imageUrl: 'imageUrl',
     examId: 'examId',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    answerDescription: 'answerDescription'
   };
 
   export type QuestionScalarFieldEnum = (typeof QuestionScalarFieldEnum)[keyof typeof QuestionScalarFieldEnum]
@@ -17244,6 +17272,7 @@ export namespace Prisma {
     title?: StringFilter<"Course"> | string
     description?: StringNullableFilter<"Course"> | string | null
     imageUrl?: StringNullableFilter<"Course"> | string | null
+    bgImageUrl?: StringNullableFilter<"Course"> | string | null
     price?: FloatNullableFilter<"Course"> | number | null
     isPublished?: BoolFilter<"Course"> | boolean
     categoryId?: StringNullableFilter<"Course"> | string | null
@@ -17263,6 +17292,7 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrderInput | SortOrder
     imageUrl?: SortOrderInput | SortOrder
+    bgImageUrl?: SortOrderInput | SortOrder
     price?: SortOrderInput | SortOrder
     isPublished?: SortOrder
     categoryId?: SortOrderInput | SortOrder
@@ -17285,6 +17315,7 @@ export namespace Prisma {
     title?: StringFilter<"Course"> | string
     description?: StringNullableFilter<"Course"> | string | null
     imageUrl?: StringNullableFilter<"Course"> | string | null
+    bgImageUrl?: StringNullableFilter<"Course"> | string | null
     price?: FloatNullableFilter<"Course"> | number | null
     isPublished?: BoolFilter<"Course"> | boolean
     categoryId?: StringNullableFilter<"Course"> | string | null
@@ -17304,6 +17335,7 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrderInput | SortOrder
     imageUrl?: SortOrderInput | SortOrder
+    bgImageUrl?: SortOrderInput | SortOrder
     price?: SortOrderInput | SortOrder
     isPublished?: SortOrder
     categoryId?: SortOrderInput | SortOrder
@@ -17325,6 +17357,7 @@ export namespace Prisma {
     title?: StringWithAggregatesFilter<"Course"> | string
     description?: StringNullableWithAggregatesFilter<"Course"> | string | null
     imageUrl?: StringNullableWithAggregatesFilter<"Course"> | string | null
+    bgImageUrl?: StringNullableWithAggregatesFilter<"Course"> | string | null
     price?: FloatNullableWithAggregatesFilter<"Course"> | number | null
     isPublished?: BoolWithAggregatesFilter<"Course"> | boolean
     categoryId?: StringNullableWithAggregatesFilter<"Course"> | string | null
@@ -17781,6 +17814,7 @@ export namespace Prisma {
     imageUrl?: StringNullableFilter<"Question"> | string | null
     examId?: StringFilter<"Question"> | string
     createdAt?: DateTimeFilter<"Question"> | Date | string
+    answerDescription?: StringNullableFilter<"Question"> | string | null
     answers?: AnswerListRelationFilter
     exam?: XOR<ExamScalarRelationFilter, ExamWhereInput>
   }
@@ -17791,6 +17825,7 @@ export namespace Prisma {
     imageUrl?: SortOrderInput | SortOrder
     examId?: SortOrder
     createdAt?: SortOrder
+    answerDescription?: SortOrderInput | SortOrder
     answers?: AnswerOrderByRelationAggregateInput
     exam?: ExamOrderByWithRelationInput
   }
@@ -17804,6 +17839,7 @@ export namespace Prisma {
     imageUrl?: StringNullableFilter<"Question"> | string | null
     examId?: StringFilter<"Question"> | string
     createdAt?: DateTimeFilter<"Question"> | Date | string
+    answerDescription?: StringNullableFilter<"Question"> | string | null
     answers?: AnswerListRelationFilter
     exam?: XOR<ExamScalarRelationFilter, ExamWhereInput>
   }, "id">
@@ -17814,6 +17850,7 @@ export namespace Prisma {
     imageUrl?: SortOrderInput | SortOrder
     examId?: SortOrder
     createdAt?: SortOrder
+    answerDescription?: SortOrderInput | SortOrder
     _count?: QuestionCountOrderByAggregateInput
     _max?: QuestionMaxOrderByAggregateInput
     _min?: QuestionMinOrderByAggregateInput
@@ -17828,6 +17865,7 @@ export namespace Prisma {
     imageUrl?: StringNullableWithAggregatesFilter<"Question"> | string | null
     examId?: StringWithAggregatesFilter<"Question"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Question"> | Date | string
+    answerDescription?: StringNullableWithAggregatesFilter<"Question"> | string | null
   }
 
   export type AnswerWhereInput = {
@@ -18134,6 +18172,7 @@ export namespace Prisma {
     title: string
     description?: string | null
     imageUrl?: string | null
+    bgImageUrl?: string | null
     price?: number | null
     isPublished?: boolean
     createdAt?: Date | string
@@ -18152,6 +18191,7 @@ export namespace Prisma {
     title: string
     description?: string | null
     imageUrl?: string | null
+    bgImageUrl?: string | null
     price?: number | null
     isPublished?: boolean
     categoryId?: string | null
@@ -18170,6 +18210,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bgImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18188,6 +18229,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bgImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -18206,6 +18248,7 @@ export namespace Prisma {
     title: string
     description?: string | null
     imageUrl?: string | null
+    bgImageUrl?: string | null
     price?: number | null
     isPublished?: boolean
     categoryId?: string | null
@@ -18219,6 +18262,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bgImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18231,6 +18275,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bgImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -18699,6 +18744,7 @@ export namespace Prisma {
     question: string
     imageUrl?: string | null
     createdAt?: Date | string
+    answerDescription?: string | null
     answers?: AnswerCreateNestedManyWithoutQuestionInput
     exam: ExamCreateNestedOneWithoutQuestionsInput
   }
@@ -18709,6 +18755,7 @@ export namespace Prisma {
     imageUrl?: string | null
     examId: string
     createdAt?: Date | string
+    answerDescription?: string | null
     answers?: AnswerUncheckedCreateNestedManyWithoutQuestionInput
   }
 
@@ -18717,6 +18764,7 @@ export namespace Prisma {
     question?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    answerDescription?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: AnswerUpdateManyWithoutQuestionNestedInput
     exam?: ExamUpdateOneRequiredWithoutQuestionsNestedInput
   }
@@ -18727,6 +18775,7 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     examId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    answerDescription?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: AnswerUncheckedUpdateManyWithoutQuestionNestedInput
   }
 
@@ -18736,6 +18785,7 @@ export namespace Prisma {
     imageUrl?: string | null
     examId: string
     createdAt?: Date | string
+    answerDescription?: string | null
   }
 
   export type QuestionUpdateManyMutationInput = {
@@ -18743,6 +18793,7 @@ export namespace Prisma {
     question?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    answerDescription?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type QuestionUncheckedUpdateManyInput = {
@@ -18751,6 +18802,7 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     examId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    answerDescription?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AnswerCreateInput = {
@@ -19210,6 +19262,7 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     imageUrl?: SortOrder
+    bgImageUrl?: SortOrder
     price?: SortOrder
     isPublished?: SortOrder
     categoryId?: SortOrder
@@ -19227,6 +19280,7 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     imageUrl?: SortOrder
+    bgImageUrl?: SortOrder
     price?: SortOrder
     isPublished?: SortOrder
     categoryId?: SortOrder
@@ -19240,6 +19294,7 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     imageUrl?: SortOrder
+    bgImageUrl?: SortOrder
     price?: SortOrder
     isPublished?: SortOrder
     categoryId?: SortOrder
@@ -19601,6 +19656,7 @@ export namespace Prisma {
     imageUrl?: SortOrder
     examId?: SortOrder
     createdAt?: SortOrder
+    answerDescription?: SortOrder
   }
 
   export type QuestionMaxOrderByAggregateInput = {
@@ -19609,6 +19665,7 @@ export namespace Prisma {
     imageUrl?: SortOrder
     examId?: SortOrder
     createdAt?: SortOrder
+    answerDescription?: SortOrder
   }
 
   export type QuestionMinOrderByAggregateInput = {
@@ -19617,6 +19674,7 @@ export namespace Prisma {
     imageUrl?: SortOrder
     examId?: SortOrder
     createdAt?: SortOrder
+    answerDescription?: SortOrder
   }
 
   export type QuestionScalarRelationFilter = {
@@ -20777,6 +20835,7 @@ export namespace Prisma {
     title: string
     description?: string | null
     imageUrl?: string | null
+    bgImageUrl?: string | null
     price?: number | null
     isPublished?: boolean
     createdAt?: Date | string
@@ -20794,6 +20853,7 @@ export namespace Prisma {
     title: string
     description?: string | null
     imageUrl?: string | null
+    bgImageUrl?: string | null
     price?: number | null
     isPublished?: boolean
     categoryId?: string | null
@@ -20927,6 +20987,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bgImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20944,6 +21005,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bgImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -21441,6 +21503,7 @@ export namespace Prisma {
     title: string
     description?: string | null
     imageUrl?: string | null
+    bgImageUrl?: string | null
     price?: number | null
     isPublished?: boolean
     createdAt?: Date | string
@@ -21458,6 +21521,7 @@ export namespace Prisma {
     title: string
     description?: string | null
     imageUrl?: string | null
+    bgImageUrl?: string | null
     price?: number | null
     isPublished?: boolean
     categoryId?: string | null
@@ -21491,6 +21555,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bgImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21508,6 +21573,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bgImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -21525,6 +21591,7 @@ export namespace Prisma {
     title: string
     description?: string | null
     imageUrl?: string | null
+    bgImageUrl?: string | null
     price?: number | null
     isPublished?: boolean
     createdAt?: Date | string
@@ -21542,6 +21609,7 @@ export namespace Prisma {
     title: string
     description?: string | null
     imageUrl?: string | null
+    bgImageUrl?: string | null
     price?: number | null
     isPublished?: boolean
     categoryId?: string | null
@@ -21575,6 +21643,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bgImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21592,6 +21661,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bgImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -21609,6 +21679,7 @@ export namespace Prisma {
     title: string
     description?: string | null
     imageUrl?: string | null
+    bgImageUrl?: string | null
     price?: number | null
     isPublished?: boolean
     createdAt?: Date | string
@@ -21626,6 +21697,7 @@ export namespace Prisma {
     title: string
     description?: string | null
     imageUrl?: string | null
+    bgImageUrl?: string | null
     price?: number | null
     isPublished?: boolean
     createdAt?: Date | string
@@ -21672,6 +21744,7 @@ export namespace Prisma {
     title?: StringFilter<"Course"> | string
     description?: StringNullableFilter<"Course"> | string | null
     imageUrl?: StringNullableFilter<"Course"> | string | null
+    bgImageUrl?: StringNullableFilter<"Course"> | string | null
     price?: FloatNullableFilter<"Course"> | number | null
     isPublished?: BoolFilter<"Course"> | boolean
     categoryId?: StringNullableFilter<"Course"> | string | null
@@ -21845,6 +21918,7 @@ export namespace Prisma {
     title: string
     description?: string | null
     imageUrl?: string | null
+    bgImageUrl?: string | null
     price?: number | null
     isPublished?: boolean
     createdAt?: Date | string
@@ -21862,6 +21936,7 @@ export namespace Prisma {
     title: string
     description?: string | null
     imageUrl?: string | null
+    bgImageUrl?: string | null
     price?: number | null
     isPublished?: boolean
     categoryId?: string | null
@@ -21895,6 +21970,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bgImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21912,6 +21988,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bgImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -21966,6 +22043,7 @@ export namespace Prisma {
     title: string
     description?: string | null
     imageUrl?: string | null
+    bgImageUrl?: string | null
     price?: number | null
     isPublished?: boolean
     createdAt?: Date | string
@@ -21983,6 +22061,7 @@ export namespace Prisma {
     title: string
     description?: string | null
     imageUrl?: string | null
+    bgImageUrl?: string | null
     price?: number | null
     isPublished?: boolean
     categoryId?: string | null
@@ -22004,6 +22083,7 @@ export namespace Prisma {
     question: string
     imageUrl?: string | null
     createdAt?: Date | string
+    answerDescription?: string | null
     answers?: AnswerCreateNestedManyWithoutQuestionInput
   }
 
@@ -22012,6 +22092,7 @@ export namespace Prisma {
     question: string
     imageUrl?: string | null
     createdAt?: Date | string
+    answerDescription?: string | null
     answers?: AnswerUncheckedCreateNestedManyWithoutQuestionInput
   }
 
@@ -22085,6 +22166,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bgImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -22102,6 +22184,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bgImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -22138,6 +22221,7 @@ export namespace Prisma {
     imageUrl?: StringNullableFilter<"Question"> | string | null
     examId?: StringFilter<"Question"> | string
     createdAt?: DateTimeFilter<"Question"> | Date | string
+    answerDescription?: StringNullableFilter<"Question"> | string | null
   }
 
   export type AnswerCreateWithoutQuestionInput = {
@@ -22259,6 +22343,7 @@ export namespace Prisma {
     question: string
     imageUrl?: string | null
     createdAt?: Date | string
+    answerDescription?: string | null
     exam: ExamCreateNestedOneWithoutQuestionsInput
   }
 
@@ -22268,6 +22353,7 @@ export namespace Prisma {
     imageUrl?: string | null
     examId: string
     createdAt?: Date | string
+    answerDescription?: string | null
   }
 
   export type QuestionCreateOrConnectWithoutAnswersInput = {
@@ -22291,6 +22377,7 @@ export namespace Prisma {
     question?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    answerDescription?: NullableStringFieldUpdateOperationsInput | string | null
     exam?: ExamUpdateOneRequiredWithoutQuestionsNestedInput
   }
 
@@ -22300,6 +22387,7 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     examId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    answerDescription?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ExamCreateManyChapterInput = {
@@ -22652,6 +22740,7 @@ export namespace Prisma {
     title: string
     description?: string | null
     imageUrl?: string | null
+    bgImageUrl?: string | null
     price?: number | null
     isPublished?: boolean
     createdAt?: Date | string
@@ -22664,6 +22753,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bgImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -22681,6 +22771,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bgImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -22698,6 +22789,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bgImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableFloatFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -22709,6 +22801,7 @@ export namespace Prisma {
     question: string
     imageUrl?: string | null
     createdAt?: Date | string
+    answerDescription?: string | null
   }
 
   export type QuestionUpdateWithoutExamInput = {
@@ -22716,6 +22809,7 @@ export namespace Prisma {
     question?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    answerDescription?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: AnswerUpdateManyWithoutQuestionNestedInput
   }
 
@@ -22724,6 +22818,7 @@ export namespace Prisma {
     question?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    answerDescription?: NullableStringFieldUpdateOperationsInput | string | null
     answers?: AnswerUncheckedUpdateManyWithoutQuestionNestedInput
   }
 
@@ -22732,6 +22827,7 @@ export namespace Prisma {
     question?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    answerDescription?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AnswerCreateManyQuestionInput = {

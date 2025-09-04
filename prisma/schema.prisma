@@ -42,6 +42,7 @@ model Course {
   title       String
   description String?
   imageUrl    String?
+  bgImageUrl    String?
   price       Float?
   isPublished Boolean      @default(false)
   categoryId  String?
@@ -141,6 +142,7 @@ model Question {
   examId    String
   createdAt DateTime @default(now())
   answers   Answer[]
+  answerDescription String?
   exam      Exam     @relation("ExamQuestion", fields: [examId], references: [id], onDelete: Cascade)
 }
 

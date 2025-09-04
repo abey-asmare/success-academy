@@ -15,18 +15,15 @@ import { Course } from "@/prisma/app/generated/prisma/client";
 interface ImageFormProps {
   initialData: Course
   courseId: string;
+  type?: 'image' | 'bg';
 };
 
-// const formSchema = z.object({
-//   imageUrl: z.string().min(1, {
-//     message: "Image is required",
-//   }),
-// });
 type formSchemaType = {imageUrl: string}
 
 export const ImageForm = ({
   initialData,
-  courseId
+  courseId,
+  type
 }: ImageFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
 
@@ -35,31 +32,34 @@ export const ImageForm = ({
   const router = useRouter();
 
   const onSubmit = async (values: formSchemaType) => {
-    try {
-      await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Course updated");
-      toggleEdit();
-      router.refresh();
-    } catch {
-      toast.error("Something went wrong");
+    const payload = type === 'bg' ? {bgImageUrl: values.imageUrl} : {imageUrl: values.imageUrl}
+      try {
+        await axios.patch(`/api/courses/${courseId}`, payload);
+        toast.success("Course updated");
+        toggleEdit();
+        router.refresh();
+      } catch {
+        toast.error("Something went wrong");
+      }
     }
-  }
+
+    const imageUrl = type === 'bg' ? initialData.bgImageUrl : initialData.imageUrl;
 
   return (
     <div className="mt-6 ">
       <div className="font-medium flex items-center justify-between">
-        Course image
+        Course {type === 'bg' ? 'background image' : 'image'}
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing && (
             <>Cancel</>
           )}
-          {!isEditing && !initialData.imageUrl && (
+          {!isEditing && !imageUrl && (
             <>
               <PlusCircle className="h-4 w-4 mr-2" />
               Add an image
             </>
           )}
-          {!isEditing && initialData.imageUrl && (
+          {!isEditing && imageUrl && (
             <>
               <Pencil className="h-4 w-4 mr-2" />
               Edit image
@@ -68,7 +68,7 @@ export const ImageForm = ({
         </Button>
     </div>
       {!isEditing && (
-        !initialData.imageUrl ? (
+        !imageUrl ? (
           <div className="flex items-center justify-center h-60 bg-slate-200 rounded-md">
             <ImageIcon className="h-10 w-10 text-slate-500" />
           </div>
@@ -78,7 +78,7 @@ export const ImageForm = ({
               alt="Upload"
               fill
               className="object-cover rounded-md"
-              src={initialData.imageUrl}
+              src={imageUrl}
             />
           </div>
         )

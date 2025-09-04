@@ -41,6 +41,7 @@ CREATE TABLE "public"."Course" (
     "title" TEXT NOT NULL,
     "description" TEXT,
     "imageUrl" TEXT,
+    "bgImageUrl" TEXT,
     "price" DOUBLE PRECISION,
     "isPublished" BOOLEAN NOT NULL DEFAULT false,
     "categoryId" TEXT,
@@ -48,6 +49,20 @@ CREATE TABLE "public"."Course" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Course_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."CoursePromocode" (
+    "id" TEXT NOT NULL,
+    "courseId" TEXT NOT NULL,
+    "code" TEXT NOT NULL,
+    "discount" DOUBLE PRECISION NOT NULL,
+    "startDate" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "expiresIn" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "CoursePromocode_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -129,6 +144,7 @@ CREATE TABLE "public"."Question" (
     "imageUrl" TEXT,
     "examId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "answerDescription" TEXT,
 
     CONSTRAINT "Question_pkey" PRIMARY KEY ("id")
 );
@@ -186,6 +202,9 @@ ALTER TABLE "public"."Chapter" ADD CONSTRAINT "Chapter_courseId_fkey" FOREIGN KE
 ALTER TABLE "public"."Course" ADD CONSTRAINT "Course_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "public"."Category"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "public"."CoursePromocode" ADD CONSTRAINT "CoursePromocode_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "public"."Course"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "public"."Attachment" ADD CONSTRAINT "Attachment_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "public"."Course"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -208,22 +227,3 @@ ALTER TABLE "public"."Question" ADD CONSTRAINT "Question_examId_fkey" FOREIGN KE
 
 -- AddForeignKey
 ALTER TABLE "public"."Answer" ADD CONSTRAINT "Answer_questionId_fkey" FOREIGN KEY ("questionId") REFERENCES "public"."Question"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
-
-CREATE TABLE "public"."CoursePromocode" (
-    "id" TEXT NOT NULL,
-    "courseId" TEXT NOT NULL,
-    "code" TEXT NOT NULL,
-    "discount" DOUBLE PRECISION NOT NULL,
-    "startDate" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
-    "expiresIn" TIMESTAMP(3),
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "CoursePromocode_pkey" PRIMARY KEY ("id")
-);
-
--- AddForeignKey
-ALTER TABLE "public"."CoursePromocode" ADD CONSTRAINT "CoursePromocode_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "public"."Course"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
-

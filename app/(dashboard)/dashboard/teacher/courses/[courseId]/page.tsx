@@ -92,7 +92,7 @@ const CourseIdPage = async ({
             <ChaptersForm initialData={course} courseId={course.id} />
           </div>
 
-          <div className="flex flex-col mt-6">
+          <div className="flex flex-col mt-3 ">
             <DescriptionForm initialData={course} courseId={course.id} />
           </div>
 
@@ -100,7 +100,13 @@ const CourseIdPage = async ({
             <ImageForm initialData={course} courseId={course.id} />
           </div>
           <div className="flex flex-col">
+            <ImageForm initialData={course} courseId={course.id} type='bg' />
+          </div>
+          <div className="flex flex-col">
             <AttachmentForm initialData={course} courseId={course.id} />
+          </div>
+          {/* empty div for formatting */}
+          <div className="flex flex-col">
           </div>
           <div className="flex flex-col">
             <PromocodeForm

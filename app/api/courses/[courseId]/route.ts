@@ -46,14 +46,14 @@ export async function GET(req: NextRequest, {params}: Props){
 
 export async function PATCH(req: NextRequest, {params}: Props) {
     const {courseId} = await params
-    const {title, description, imageUrl, price, categoryId} = await req.json()
+    const {title, description, imageUrl, bgImageUrl, price, categoryId} = await req.json()
     try{
         //  admin users can update the course even if they didn't create it..
         const {userId} = await auth()
         const admin = await isAdmin()
         if(!userId || !admin){
             logger.warn(
-                `[COURSE_ID_DELETE_DELETE]: Unauthorized: User ${userId} is not authorized yet to delete course ${courseId}`
+                `[COURSE_ID_DELETE_DELETE]: Unauthorized: User ${userId} is not authorized yet to update course ${courseId}`
             )
             return new NextResponse("Unauthorized", {status: 401})
         }
@@ -66,6 +66,7 @@ export async function PATCH(req: NextRequest, {params}: Props) {
             title,
             description,
             imageUrl,
+            bgImageUrl,
             price,
             categoryId    
             }
