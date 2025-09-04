@@ -57,9 +57,10 @@ export async function POST(
     logger.info(
       `[COURSE_ID_PURCHASE_POST]: OK: Course ${courseId} purchased successfully`
     );
+    logger.info(`[COURSE_ID_PURCHASE_POST]: OK: Course ${courseId} attempt to send.`)
 
   //  fetch for telegram
-    sendPurchaseRequestToTelegram(userId, courseId, imageUrl, newPurchase.id);
+    await sendPurchaseRequestToTelegram(userId, courseId, imageUrl, newPurchase.id);
 
     return NextResponse.json(newPurchase);
   } catch (error) {

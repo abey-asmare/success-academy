@@ -6,9 +6,7 @@ import z from "zod";
 import { Stream } from "@/prisma/app/generated/prisma/client";
 import { clerkClient } from "@clerk/nextjs/server";
 import { sendPurchaseRequestToTelegram } from "@/lib/telegram-api";
-// create a user first
-//  a profile
-//  purchase
+import { logger } from "@/lib/sentryLogger";
 
 const formSchema = profileFormSchema.extend({
   courseId: z.string().min(1, { message: "Course is required" }),
@@ -100,7 +98,9 @@ export async function handleTelegramRegistration(data: formType) {
     if (!newPurchase) {
       return { message: "Registration failed", status: 500 };
     }
-     //  fetch for telegram
+  
+    logger.info(`[COURSE_ID_PURCHASE_POST]: OK: Course ${data.courseId} attempt to send.`)
+    //  fetch for telegram
      sendPurchaseRequestToTelegram(userId, data.courseId, data.imageUrl, newPurchase.id);
     } 
       return { message: "Registration successful", status: 200 };
