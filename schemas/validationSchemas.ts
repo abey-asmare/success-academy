@@ -35,7 +35,7 @@ export const questionSchema = z.object({
 });
 
 export const examSchema = z.object({
-  courseId: z.string().min(1, "Course is required"),
+  courseId: z.string().min(1, "Course is required").optional(),
   name: z.string().min(1, "Exam name is required"),
   description: z.string().optional(),
   questions: z.array(questionSchema).min(1, "At least one question is required"),

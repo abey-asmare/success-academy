@@ -47,15 +47,12 @@ export async function PUT(
     if (!simulation) {
       return new NextResponse("Simulation not found", { status: 404 });
     }
-
-    await db.question.deleteMany({
-      where: { examId: simulationId },
-    });
-
-    for (const q of questions) {
-      await db.question.create({
-        data: {
-          question: q.question,
+    const updatedExam = await db.$transaction(async (tx) => {
+      await tx.question.deleteMany({ where: { examId: simulationId } });
+      for (const q of questions) {
+        await tx.question.create({
+          data: {
+            question: q.question,
           imageUrl: q.imageUrl,
           examId: simulationId,
           answers: {
@@ -67,8 +64,7 @@ export async function PUT(
         },
       });
     }
-
-    await db.exam.update({
+    return tx.exam.update({
       where: { id: simulationId },
       data: {
         courseId,
@@ -77,11 +73,12 @@ export async function PUT(
         updatedAt: new Date(),
       },
     });
+  })
 
     logger.info(
       `[COURSE_ID_SIMULATION_PUT]: OK: Simulation ${simulationId} updated successfully`
     );
-    return NextResponse.json({ success: true });
+    return NextResponse.json(updatedExam);
   } catch (error) {
     logger.error(
       `[COURSE_ID_SIMULATION_PUT]: Internal Error: Failed to update simulation ${simulationId}, ${error}`

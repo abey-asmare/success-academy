@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
@@ -82,7 +83,9 @@ export const Preview = ({ value }: PreviewProps) => {
               {children}
             </h6>
           ),
-          
+          a: ({ node, children }) => (
+            <Link href={node ? node.properties.href as string : ""} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{children}</Link>
+          ),
         }}
       >
         {value}

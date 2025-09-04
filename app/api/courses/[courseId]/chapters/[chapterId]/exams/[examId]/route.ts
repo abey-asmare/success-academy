@@ -1,12 +1,8 @@
 import { db } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminInfo } from "@/utils/roles";
-import {Answer, Question} from "@/prisma/app/generated/prisma/client"
-import Sentry from "@sentry/nextjs"
-
-
-
-
+import {Sentry, logger} from "@/lib/sentryLogger"
+import { examSchema } from "@/schemas/validationSchemas";
 
 
 export async function DELETE(
@@ -69,151 +65,120 @@ export async function DELETE(
   }
 }
 
-type QuestionData =  (Question & {
-  answers: Answer[]
-})
-
 export async function PUT(
   req: NextRequest,
   { params }: { params: Promise<{ courseId: string; chapterId: string; examId: string }> }
 ) {
-
-
-
-  const {userId, isAdmin }   = await getAdminInfo()    
-  const { logger } = Sentry
   const { courseId, chapterId, examId } = await params;
-  
+
   try {
-    
+    const { userId, isAdmin } = await getAdminInfo();
+
     if (!isAdmin) {
-      logger.info(`[COURSE_ID_CHAPTER_ID_EXAM_PUT]: Unauthorized: User ${userId} is not an admin to update the exam ${examId}`)
+      logger.info(
+        `[COURSE_ID_CHAPTER_ID_EXAM_PUT]: Unauthorized: User ${userId} is not an admin to update exam ${examId}`
+      );
       return new NextResponse("Unauthorized", { status: 401 });
     }
-    
+
     const body = await req.json();
-    const { name, description, questions } = body;
-    
-    // Validate required fields
+    const validatedData = examSchema.safeParse(body);
+
+    if (!validatedData.success) {
+      return NextResponse.json(
+        { error: "Validation Error", details: validatedData.error.flatten() },
+        { status: 400 }
+      );
+    }
+
+    const { name, description, questions } = validatedData.data;
+
     if (!name || !questions || questions.length === 0) {
       return new NextResponse("Missing required fields", { status: 400 });
     }
-    
-    // Check if user owns the course
-    // const course = await db.course.findUnique({
-    //   where: {
-    //     id: courseId,
-    //     userId: userId,
-    //   },
-    // });
-    
-    // if (!course) {
-    //   logger.info(`[COURSE_ID_CHAPTER_ID_EXAM_PUT]: Not Found: Course ${courseId} not found for user ${userId}`)
-    //   return new NextResponse("Course not found", { status: 404 });
-    // }
-    
-    // Check if the chapter exists and belongs to the course
+
+    // chapter exists
     const chapter = await db.chapter.findUnique({
-      where: {
-        id: chapterId,
-        courseId: courseId,
-      },
+      where: { id: chapterId, courseId },
     });
-    
+
     if (!chapter) {
-      logger.info(`[COURSE_ID_CHAPTER_ID_EXAM_PUT]: Not Found: Chapter ${chapterId} not found for course ${courseId}`)
+      logger.info(
+        `[COURSE_ID_CHAPTER_ID_EXAM_PUT]: Not Found: Chapter ${chapterId} not found for course ${courseId}`
+      );
       return new NextResponse("Chapter not found", { status: 404 });
     }
-    
-    // Check if the exam exists and belongs to this chapter
+
+    // exam exists
     const existingExam = await db.exam.findUnique({
-      where: {
-        id: examId,
-        chapterId: chapterId,
-      },
-      include: {
-        questions: {
-          include: {
-            answers: true,
-          },
-        },
-      },
+      where: { id: examId, chapterId },
     });
-    
+
     if (!existingExam) {
-      logger.info(`[COURSE_ID_CHAPTER_ID_EXAM_PUT]: Not Found: Exam ${examId} not found for chapter ${chapterId}`)
+      logger.info(
+        `[COURSE_ID_CHAPTER_ID_EXAM_PUT]: Not Found: Exam ${examId} not found for chapter ${chapterId}`
+      );
       return new NextResponse("Exam not found", { status: 404 });
     }
-    
-    // Check if another exam with the same name exists (excluding current exam)
-    const duplicateExam = await db.exam.findFirst({
-      where: {
-        name: name,
-        chapterId: chapterId,
-        id: {
-          not: examId,
+
+    // Filter out duplicate questions (by text + imageUrl combo)
+    const uniqueQuestions = questions.filter(
+      (q, index, self) =>
+        index ===
+        self.findIndex(
+          (other) =>
+            other.question.trim() === q.question.trim() &&
+            (other.imageUrl || "") === (q.imageUrl || "")
+        )
+    );
+
+    // Run everything atomically
+    const updatedExam = await db.$transaction(async (tx) => {
+      // Delete old questions (cascade removes answers)
+      await tx.question.deleteMany({ where: { examId } });
+
+      // Recreate unique questions with answers
+      for (const q of uniqueQuestions) {
+        await tx.question.create({
+          data: {
+            question: q.question,
+            imageUrl: q.imageUrl,
+            examId,
+            answers: {
+              create: q.answers.map((a) => ({
+                text: a.text,
+                isCorrect: a.isCorrect,
+              })),
+            },
+          },
+        });
+      }
+
+      // Update exam info
+      return tx.exam.update({
+        where: { id: examId },
+        data: {
+          name,
+          description,
+          updatedAt: new Date(),
         },
-      },
-    });
-    
-    if (duplicateExam) {
-      logger.info(`[COURSE_ID_CHAPTER_ID_EXAM_PUT]: Conflict: An exam with this name already exists for this chapter ${chapterId}`)
-      return new NextResponse("An exam with this name already exists for this chapter", { status: 409 });
-    }
-    
-    // Delete existing questions and answers
-    await db.answer.deleteMany({
-      where: {
-        question: {
-          examId: examId,
-        },
-      },
-    });
-    
-    await db.question.deleteMany({
-      where: {
-        examId: examId,
-      },
-    });
-    
-    // Process new questions
-    const processedQuestions = questions.map((questionData: QuestionData) => ({
-      question: questionData.question,
-      imageUrl: questionData.imageUrl, 
-      answers: {
-        create: questionData.answers.map((answerData: Answer) => ({
-          text: answerData.text,
-          isCorrect: answerData.isCorrect,
-        })),
-      },
-    }));
-    
-    // Update the exam with new data
-    const updatedExam = await db.exam.update({
-      where: {
-        id: examId,
-      },
-      data: {
-        name,
-        description,
-        questions: {
-          create: processedQuestions,
-        },
-      },
-      include: {
-        questions: {
-          include: {
-            answers: true,
+        include: {
+          questions: {
+            include: { answers: true },
           },
         },
-      },
+      });
     });
-    
-    logger.info(`[COURSE_ID_CHAPTER_ID_EXAM_PUT]: OK: Exam ${examId} updated successfully`)
+
+    logger.info(
+      `[COURSE_ID_CHAPTER_ID_EXAM_PUT]: OK: Exam ${examId} updated successfully`
+    );
     return NextResponse.json(updatedExam);
-  } catch(error) {
-    logger.error(`[COURSE_ID_CHAPTER_ID_EXAM_PUT]: Internal Error: Failed to update exam ${examId} ${error}`)
-    Sentry.captureException(error)  
-    return new NextResponse("Internal Error", { status: 500 });
+  } catch (error) {
+    logger.error(
+      `[COURSE_ID_CHAPTER_ID_EXAM_PUT]: Internal Error: Failed to update exam ${examId}, ${error}`
+    );
+    Sentry.captureException(error);
+    return new NextResponse("Internal Server Error", { status: 500 });
   }
 }
