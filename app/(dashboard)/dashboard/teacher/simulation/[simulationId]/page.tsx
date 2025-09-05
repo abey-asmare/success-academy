@@ -27,6 +27,7 @@ export default async function UpdateSimulationPage({params}: {params: Promise<{s
     questions: exam.questions.map((question) => ({
       question: question.question,
       imageUrl: question.imageUrl ?? "",
+      answerDescription: question.answerDescription ?? "",
       answers: question.answers.map((answer) => ({
         text: answer.text,
         isCorrect: answer.isCorrect,

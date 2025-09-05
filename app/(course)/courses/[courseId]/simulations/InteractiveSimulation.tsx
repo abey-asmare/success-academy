@@ -1,8 +1,7 @@
 "use client";
-
 import { useState, useEffect, useCallback } from "react";
 import { cn } from "@/lib/utils";
-import { Check, Clock, AlertTriangle } from "lucide-react";
+import { Check, Clock, AlertTriangle, ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import type {
   Answer,
@@ -10,6 +9,9 @@ import type {
   Question,
 } from "@/prisma/app/generated/prisma/client";
 import UnDownloadableImage from "@/components/UnDownloadableImage";
+import AnswerDescription from "../components/AnswerDescription";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 const alphabets = [
   "A",
@@ -242,7 +244,7 @@ export default function InteractiveSimulation({ exam }: InteractiveExamProps) {
                       onClick={() => handleAnswerSelect(question.id, answer.id)}
                     >
                       <div className="flex items-center gap-2 flex-wrap justify-between">
-                        <div className="flex items-start gap-2 flex-wrap flex-1 min-w-0 ">
+                        <div className="flex items-start gap-2 flex-wrap flex-1 min-w-0">
                           <span
                             className={cn(
                               "font-bold bg-gray-200 p-1 px-3 mr-2 rounded-sm transition-colors flex-shrink-0",
@@ -270,6 +272,7 @@ export default function InteractiveSimulation({ exam }: InteractiveExamProps) {
                       </div>
                     </div>
                   ))}
+                {showResults && <AnswerDescription description = {question.answerDescription}/>}
                 </div>
               </div>
             </div>
@@ -318,17 +321,21 @@ export default function InteractiveSimulation({ exam }: InteractiveExamProps) {
                   Exam was automatically submitted due to time expiration.
                 </p>
               )}
-              <button
-                onClick={() => {
-                  setShowResults(false);
-                  setSelectedAnswers({});
-                  setTimeRemaining(2 * 60 * 60); // Reset timer to 2 hours
-                  setIsTimeUp(false);
-                }}
-                className="mt-6 bg-sky-600 hover:bg-sky-700 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200"
-              >
-                Retake Exam
-              </button>
+              <div className="flex flex-col gap-2 justify-center items-center">
+                <button
+                  onClick={() => {
+                    setShowResults(false);
+                    setSelectedAnswers({});
+                    setTimeRemaining(2 * 60 * 60); // Reset timer to 2 hours
+                    setIsTimeUp(false);
+                  }}
+                  className="mt-6 bg-sky-600 hover:bg-sky-700 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200"
+                >
+                  Retake Exam
+                </button>
+
+                <Link href={`/courses/${exam.courseId}`} className="group underline text-gray-600 flex gap-1 items-center"><span><ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-all duration-300"/></span>Back to course</Link>
+              </div>
             </div>
           )}
         </div>

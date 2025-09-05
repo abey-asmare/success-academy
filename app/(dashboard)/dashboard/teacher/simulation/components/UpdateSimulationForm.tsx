@@ -1,18 +1,19 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { examSchema } from "@/schemas/validationSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Checkbox } from "@/components/ui/checkbox";
 import axios from "axios";
 import { Plus, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -20,12 +21,8 @@ import { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import z from "zod";
-import { CreateExamImageForm } from "./create-exam-image";
 import { CourseDropdown } from "./CourseDropdown";
-import { examSchema } from "@/schemas/validationSchemas";
-
-
-
+import { CreateExamImageForm } from "./create-exam-image";
 
 export default function UpdateSimulationForm({
   courses,
@@ -56,14 +53,9 @@ export default function UpdateSimulationForm({
   const onSubmit = async (values: z.infer<typeof examSchema>) => {
     try {
       setIsSubmitting(true);
-      await axios.put(
-        `/api/courses/simulation/${simulationId}`,
-        values
-      );
+      await axios.put(`/api/courses/simulation/${simulationId}`, values);
       toast.success("Simulation updated successfully");
-      router.push(
-        `/dashboard/teacher/simulation`
-      );
+      router.push(`/dashboard/teacher/simulation`);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.data?.message) {
         toast.error(error.response.data.message);
@@ -79,7 +71,8 @@ export default function UpdateSimulationForm({
     appendQuestion({
       question: "",
       imageUrl: "",
-        answers: [
+      answerDescription: "",
+      answers: [
         { text: "", isCorrect: false },
         { text: "", isCorrect: false },
       ],
@@ -106,9 +99,21 @@ export default function UpdateSimulationForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit, () => toast.error("Something went wrong,Perhapse you left some fields empty or you didn't specify the correct answer?"))} className="space-y-6">
+      <form
+        onSubmit={form.handleSubmit(onSubmit, () =>
+          toast.error(
+            "Something went wrong,Perhapse you left some fields empty or you didn't specify the correct answer?"
+          )
+        )}
+        className="space-y-6"
+      >
         {/* Exam Details */}
-        <CourseDropdown courses={courses} value={form.watch("courseId")} onChange={(courseId: string) => form.setValue("courseId", courseId)} placeholder='choose a Course'/>
+        <CourseDropdown
+          courses={courses}
+          value={form.watch("courseId")}
+          onChange={(courseId: string) => form.setValue("courseId", courseId)}
+          placeholder="choose a Course"
+        />
 
         <Card>
           <CardHeader>
@@ -188,11 +193,13 @@ export default function UpdateSimulationForm({
                   )}
                 />
                 <CreateExamImageForm
-                  initialData={form.watch(`questions.${questionIndex}.imageUrl`) || ""}
+                  initialData={
+                    form.watch(`questions.${questionIndex}.imageUrl`) || ""
+                  }
                   onChange={(url) => {
                     form.setValue(`questions.${questionIndex}.imageUrl`, url);
                   }}
-                />   
+                />
                 {/* Answers */}
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
@@ -269,6 +276,24 @@ export default function UpdateSimulationForm({
                   name={`questions.${questionIndex}.answers`}
                   render={() => (
                     <FormItem>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* anaswer desctiption */}
+                <FormField
+                  control={form.control}
+                  name={`questions.${questionIndex}.answerDescription`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel> Answer description (Optional)</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          {...field}
+                          placeholder="Enter answer description"
+                        />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}

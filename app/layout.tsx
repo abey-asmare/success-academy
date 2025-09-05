@@ -25,21 +25,6 @@ export const metadata: Metadata = {
     default: "Success Academy",
   },
   description: "Explore Success Academy’s online courses.Flexible, engaging learning for University and pre-university students to achieve your academic success.",
-  // metadataBase: new URL(baseUrl),
-  // openGraph: {
-  //   title: "Success Academy",
-  //   description: "Explore Success Academy’s online courses.Flexible, engaging learning for University and pre-university students to achieve your academic success.",
-  //   type: "website",
-  //   siteName: "Success Academy",
-  //   url: baseUrl,
-  //   images: [
-  //     {
-  //       url: `${baseUrl}/opengraph-image.png`,
-  //       width: 1024,
-  //       height: 1024,
-  //     },
-  //   ],
-  // },
 };
 
 export default function RootLayout({
