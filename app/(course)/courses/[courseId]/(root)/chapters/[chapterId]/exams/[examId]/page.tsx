@@ -3,8 +3,8 @@ import { db } from '@/lib/db';
 import { redirect } from 'next/navigation';
 import InteractiveExam from './InteractiveExam';
 
-export default async function ExamDetailPage({params}: {params: Promise<{examId: string}>}) {
-    const {examId} = await params;
+export default async function ExamDetailPage({params}: {params: Promise<{examId: string, courseId: string}>}) {
+    const {examId, courseId} = await params;
     const exam = await db.exam.findUnique({
         where: {
             id: examId,
@@ -22,5 +22,5 @@ export default async function ExamDetailPage({params}: {params: Promise<{examId:
         return redirect('/dashboard/teacher/courses')
     }
 
-    return <InteractiveExam exam={exam} />
+    return <InteractiveExam exam={exam} courseId={courseId} />
 }

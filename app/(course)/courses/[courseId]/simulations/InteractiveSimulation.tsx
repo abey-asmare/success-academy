@@ -1,17 +1,16 @@
 "use client";
-import { useState, useEffect, useCallback } from "react";
+import AnswerDescription from '@/app/(course)/courses/[courseId]/components/AnswerDescription';
+import UnDownloadableImage from "@/components/UnDownloadableImage";
 import { cn } from "@/lib/utils";
-import { Check, Clock, AlertTriangle, ArrowLeft } from "lucide-react";
-import Image from "next/image";
 import type {
   Answer,
   Exam,
   Question,
 } from "@/prisma/app/generated/prisma/client";
-import UnDownloadableImage from "@/components/UnDownloadableImage";
-import AnswerDescription from "../components/AnswerDescription";
+import { AlertTriangle, ArrowLeft, Check, Clock } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { useCallback, useEffect, useState } from "react";
 
 const alphabets = [
   "A",
