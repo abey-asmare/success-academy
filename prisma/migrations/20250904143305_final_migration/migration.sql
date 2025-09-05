@@ -41,7 +41,6 @@ CREATE TABLE "public"."Course" (
     "title" TEXT NOT NULL,
     "description" TEXT,
     "imageUrl" TEXT,
-    "bgImageUrl" TEXT,
     "price" DOUBLE PRECISION,
     "isPublished" BOOLEAN NOT NULL DEFAULT false,
     "categoryId" TEXT,
@@ -144,7 +143,6 @@ CREATE TABLE "public"."Question" (
     "imageUrl" TEXT,
     "examId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "answerDescription" TEXT,
 
     CONSTRAINT "Question_pkey" PRIMARY KEY ("id")
 );
@@ -227,3 +225,10 @@ ALTER TABLE "public"."Question" ADD CONSTRAINT "Question_examId_fkey" FOREIGN KE
 
 -- AddForeignKey
 ALTER TABLE "public"."Answer" ADD CONSTRAINT "Answer_questionId_fkey" FOREIGN KEY ("questionId") REFERENCES "public"."Question"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+
+-- alter course table to have a bgImageUrl
+ALTER TABLE "public"."Course" ADD COLUMN "bgImageUrl" TEXT;
+
+-- alter question to have answerDescription
+ALTER TABLE "public"."Question" ADD COLUMN "answerDescription" TEXT;
