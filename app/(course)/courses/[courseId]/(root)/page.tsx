@@ -14,21 +14,22 @@ type Props = {
 }
 
 // make this page statically generated
-export async function generateStaticParams() {
- const courses = await db.course.findMany({
-   where: {
-     isPublished: true,
-   },
-   select: {
-     id: true,
-   }
- })
- console.log("courses", courses)
- return courses  
-}
+// export async function generateStaticParams() {
+//  const courses = await db.course.findMany({
+//    where: {
+//      isPublished: true,
+//    },
+//    select: {
+//      id: true,
+//    }
+//  })
+//  console.log("courses", courses)
+//  return courses  
+// }
 
 export const generateMetadata = async ({ params }: Props) => {
   const { courseId } = await params;
+  
   const course = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/courses/${courseId}`
   ).then((res) => res.json());

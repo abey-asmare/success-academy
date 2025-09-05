@@ -38,12 +38,12 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  const { title } = await req.json();
   try {
     const { userId, isAdmin } = await getAdminInfo();
     if (!isAdmin) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    const { title } = await req.json();
 
     const course = await db.course.create({
       data: {
