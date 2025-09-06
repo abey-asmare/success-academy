@@ -75,7 +75,7 @@ export async function PUT(
       },
     });
   }, {
-          timeout: 60_000, // 60 seconds
+          timeout: 10_000, // 10 seconds
       maxWait: 10_000,
       })
 
