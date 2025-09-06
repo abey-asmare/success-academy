@@ -42,6 +42,7 @@ export default function CreateExamForm({
         {
           question: "",
           imageUrl: "",
+          answerDescription: "",
           answers: [
             { text: "", isCorrect: false },
             { text: "", isCorrect: false },
@@ -86,7 +87,8 @@ export default function CreateExamForm({
     appendQuestion({
       question: "",
       imageUrl: "",
-        answers: [
+      answerDescription: "",
+      answers: [
         { text: "", isCorrect: false },
         { text: "", isCorrect: false },
       ],
@@ -278,6 +280,23 @@ export default function CreateExamForm({
                     </FormItem>
                   )}
                 />
+                  {/* anaswer desctiption */}
+                                <FormField
+                                  control={form.control}
+                                  name={`questions.${questionIndex}.answerDescription`}
+                                  render={({ field }) => (
+                                    <FormItem>
+                                      <FormLabel> Answer description (Optional)</FormLabel>
+                                      <FormControl>
+                                        <Textarea
+                                          {...field}
+                                          placeholder="Enter answer description"
+                                        />
+                                      </FormControl>
+                                      <FormMessage />
+                                    </FormItem>
+                                  )}
+                                />
               </CardContent>
             </Card>
           ))}

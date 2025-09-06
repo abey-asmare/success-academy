@@ -74,6 +74,7 @@ export async function POST(
         where: {
           question: questionData.question,
           imageUrl: questionData.imageUrl,
+          answerDescription: questionData.answerDescription,
           exam: {
             chapterId: chapterId,
           },

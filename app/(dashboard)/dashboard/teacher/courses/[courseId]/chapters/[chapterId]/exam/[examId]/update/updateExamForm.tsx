@@ -22,6 +22,7 @@
   import toast from "react-hot-toast";
   import z from "zod";
 import { CreateExamImageForm } from "../../components/create-exam-image";
+import { examSchema } from "@/schemas/validationSchemas";
 
   type Props = {
     courseId: string;
@@ -32,37 +33,6 @@ import { CreateExamImageForm } from "../../components/create-exam-image";
       })[];
     };
   };
-
-
-  const examSchema = z.object({
-    name: z.string().min(1, "Exam name is required"),
-    description: z.string().optional(),
-    questions: z
-      .array(
-        z
-          .object({
-            question: z.string().min(1, "Question text is required"),
-            imageUrl: z.string().optional(),
-            answers: z
-              .array(
-                z.object({
-                  text: z.string().min(1, "Answer text is required"),
-                  isCorrect: z.boolean(),
-                })
-              )
-              .min(2, "Each question must have at least 2 answers")
-              .refine(
-                (answers) => answers.some((a) => a.isCorrect),
-                {
-                  message: "Each question must have at least one correct answer",
-                }
-              ),
-          })
-      )
-      .min(1, "You must have at least one question"),
-  });
-
-  
   
 
   export default function UpdateExamForm({ courseId, chapterId, exam }: Props) {
@@ -77,6 +47,7 @@ import { CreateExamImageForm } from "../../components/create-exam-image";
         questions: exam.questions.map((q) => ({
           question: q.question,
           imageUrl: q.imageUrl ?? "",
+          answerDescription: q.answerDescription ?? "",
           answers: q.answers.map((a) => ({
             text: a.text,
             isCorrect: a.isCorrect,
@@ -119,7 +90,8 @@ import { CreateExamImageForm } from "../../components/create-exam-image";
     const addQuestion = () => {
       appendQuestion({
         question: "",
-        imageUrl: "", 
+        imageUrl: "",
+        answerDescription: "", 
         answers: [
           { text: "", isCorrect: false },
           { text: "", isCorrect: false },
@@ -320,9 +292,27 @@ import { CreateExamImageForm } from "../../components/create-exam-image";
                       </FormItem>
                     )}
                   />
+                    {/* anaswer desctiption */}
+                                  <FormField
+                                    control={form.control}
+                                    name={`questions.${questionIndex}.answerDescription`}
+                                    render={({ field }) => (
+                                      <FormItem>
+                                        <FormLabel> Answer description (Optional)</FormLabel>
+                                        <FormControl>
+                                          <Textarea
+                                            {...field}
+                                            placeholder="Enter answer description"
+                                          />
+                                        </FormControl>
+                                        <FormMessage />
+                                      </FormItem>
+                                    )}
+                                  />
                 </CardContent>
               </Card>
             ))}
+
           </div>
 
           <div className="flex justify-end space-x-4">

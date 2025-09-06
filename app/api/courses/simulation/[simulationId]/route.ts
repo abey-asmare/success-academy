@@ -1,10 +1,9 @@
 import { db } from "@/lib/db";
-import { getAdminInfo } from "@/utils/roles";
-import * as Sentry from "@sentry/nextjs";
 import { NextRequest, NextResponse } from "next/server";
+import { getAdminInfo } from "@/utils/roles";
+import { Sentry, logger } from "@/lib/sentryLogger";
 import { examSchema } from "@/schemas/validationSchemas";
-
-const { logger } = Sentry;
+import { notFound } from "next/navigation";
 
 export async function PUT(
   req: NextRequest,
@@ -13,10 +12,11 @@ export async function PUT(
   const { simulationId } = await params;
 
   try {
-    const { isAdmin } = await getAdminInfo();
+    const { userId, isAdmin } = await getAdminInfo();
+
     if (!isAdmin) {
       logger.warn(
-        `[COURSE_ID_SIMULATION_PUT]: Unauthorized attempt to update simulation ${simulationId}`
+        `[SIMULATION_PUT]: Unauthorized: User ${userId} is not an admin to update simulation ${simulationId}`
       );
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -37,57 +37,94 @@ export async function PUT(
       return new NextResponse("Missing required fields", { status: 400 });
     }
 
+    // Ensure simulation exists
     const simulation = await db.exam.findUnique({
-      where: {
-        id: simulationId,
-        isSimulation: true,
-      },
+      where: { id: simulationId, isSimulation: true },
     });
 
     if (!simulation) {
-      return new NextResponse("Simulation not found", { status: 404 });
+      logger.info(`[SIMULATION_PUT]: Not Found: Simulation ${simulationId} not found`);
+      notFound();
     }
-    const updatedExam = await db.$transaction(async (tx) => {
+
+    // Deduplicate questions before transaction
+    const uniqueQuestions = questions.filter(
+      (q, index, self) =>
+        index ===
+        self.findIndex(
+          (other) =>
+            other.question.trim() === q.question.trim() &&
+            (other.imageUrl || "") === (q.imageUrl || "")
+        )
+    );
+
+    // Optimized transaction
+    const updatedSimulation = await db.$transaction(async (tx) => {
+      // Remove old questions (cascade deletes answers)
       await tx.question.deleteMany({ where: { examId: simulationId } });
-      for (const q of questions) {
-        await tx.question.create({
-          data: {
-            question: q.question,
-          imageUrl: q.imageUrl,
+
+      // Insert new questions in bulk
+      await tx.question.createMany({
+        data: uniqueQuestions.map((q) => ({
+          question: q.question.trim(),
+          imageUrl: q.imageUrl || null,
+          answerDescription: q.answerDescription || null,
           examId: simulationId,
-          answerDescription: q.answerDescription,
-          answers: {
-            create: q.answers.map((a) => ({
-              text: a.text,
-              isCorrect: a.isCorrect,
-            })),
+        })),
+      });
+
+      // Fetch back inserted questions with IDs
+      const dbQuestions = await tx.question.findMany({
+        where: { examId: simulationId },
+        select: { id: true, question: true, imageUrl: true, answerDescription: true },
+      });
+
+      // Build answers for bulk insert
+      const answersData = uniqueQuestions.flatMap((q) => {
+        const parent = dbQuestions.find(
+          (dq) =>
+            dq.question.trim() === q.question.trim() &&
+            (dq.imageUrl || "") === (q.imageUrl || "")
+        );
+        if (!parent) return [];
+        return q.answers.map((a) => ({
+          text: a.text,
+          isCorrect: a.isCorrect,
+          questionId: parent.id,
+        }));
+      });
+
+      if (answersData.length > 0) {
+        await tx.answer.createMany({ data: answersData });
+      }
+
+      // Update simulation metadata
+      return tx.exam.update({
+        where: { id: simulationId },
+        data: {
+          courseId,
+          name,
+          description,
+          updatedAt: new Date(),
+        },
+        include: {
+          questions: {
+            include: { answers: true },
           },
         },
       });
-    }
-    return tx.exam.update({
-      where: { id: simulationId },
-      data: {
-        courseId,
-        name,
-        description,
-        updatedAt: new Date(),
-      },
-    });
-  }, {
-          timeout: 10_000, // 10 seconds
+    }, {
+      timeout: 10_000,
       maxWait: 10_000,
-      })
+    });
 
-    logger.info(
-      `[COURSE_ID_SIMULATION_PUT]: OK: Simulation ${simulationId} updated successfully`
-    );
-    return NextResponse.json(updatedExam);
+    logger.info(`[SIMULATION_PUT]: OK: Simulation ${simulationId} updated successfully`);
+    return NextResponse.json(updatedSimulation);
   } catch (error) {
     logger.error(
-      `[COURSE_ID_SIMULATION_PUT]: Internal Error: Failed to update simulation ${simulationId}, ${error}`
+      `[SIMULATION_PUT]: Internal Error: Failed to update simulation ${simulationId}, ${error}`
     );
     Sentry.captureException(error);
-    return new NextResponse("Internal server error", { status: 500 });
+    return new NextResponse("Internal Server Error", { status: 500 });
   }
 }

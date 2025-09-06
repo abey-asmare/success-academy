@@ -1,69 +1,9 @@
 import { db } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminInfo } from "@/utils/roles";
-import {Sentry, logger} from "@/lib/sentryLogger"
+import { Sentry, logger } from "@/lib/sentryLogger";
 import { examSchema } from "@/schemas/validationSchemas";
-
-
-export async function DELETE(
-  req: NextRequest, 
-  { params }: { params: Promise<{ courseId: string; chapterId: string; examId: string }> }
-) {
-  const {userId, isAdmin }   = await getAdminInfo()    
-
-  const {courseId, chapterId, examId} = await params
-    const { logger } = Sentry
-  try {
-    if (!isAdmin) {
-      logger.warn(`[COURSE_ID_CHAPTER_ID_EXAM_DELETE]: Unauthorized: User ${userId} is not an admin to update the exam ${examId}`)
-      return new NextResponse("Unauthorized", { status: 401 });
-    }
-
-    // const ownCourse = await db.course.findUnique({
-    //   where: {
-    //     id: courseId,
-    //     userId,
-    //   },
-    // });
-
-    // if (!ownCourse) {
-    //   logger.warn(`[COURSE_ID_CHAPTER_ID_EXAM_DELETE]: Unauthorized: User ${userId} is not the owner of course ${courseId}`)
-    //   return new NextResponse("Unauthorized", { status: 401 });
-    // }
-
-    const chapter = await db.chapter.findUnique({
-      where: {
-        id: chapterId,
-        courseId: courseId,
-      },
-    });
-
-    if (!chapter) {
-      logger.info(`[COURSE_ID_CHAPTER_ID_EXAM_DELETE]: Not Found: Chapter ${chapterId} not found for course ${courseId}`)
-      return NextResponse.json({error: "Not Found"}, { status: 404 });
-    }
-
-    const exam = await db.exam.findUnique({
-      where: {
-        id: examId,
-        chapterId: chapterId,
-      },
-    });
-
-    if (!exam) {
-      logger.info(`[COURSE_ID_CHAPTER_ID_EXAM_DELETE]: Not Found: Exam ${examId} not found for chapter ${chapterId}`)
-      return NextResponse.json({error: "Not Found"}, { status: 404 });
-    }
-
-    await db.exam.delete({ where: { id: examId } });
-
-    return NextResponse.json({message: "OK"}, { status: 200 });
-  } catch (error) {
-    Sentry.captureException(error)  
-    logger.error(`[COURSE_ID_CHAPTER_ID_EXAM_DELETE]: Internal Server Error: ${error}`)
-    return new NextResponse("Internal Server Error", { status: 500 });
-  }
-}
+import { notFound } from "next/navigation";
 
 export async function PUT(
   req: NextRequest,
@@ -81,6 +21,7 @@ export async function PUT(
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
+
     const body = await req.json();
     const validatedData = examSchema.safeParse(body);
 
@@ -97,31 +38,7 @@ export async function PUT(
       return new NextResponse("Missing required fields", { status: 400 });
     }
 
-    // chapter exists
-    const chapter = await db.chapter.findUnique({
-      where: { id: chapterId, courseId },
-    });
-
-    if (!chapter) {
-      logger.info(
-        `[COURSE_ID_CHAPTER_ID_EXAM_PUT]: Not Found: Chapter ${chapterId} not found for course ${courseId}`
-      );
-      return new NextResponse("Chapter not found", { status: 404 });
-    }
-
-    // exam exists
-    const existingExam = await db.exam.findUnique({
-      where: { id: examId, chapterId },
-    });
-
-    if (!existingExam) {
-      logger.info(
-        `[COURSE_ID_CHAPTER_ID_EXAM_PUT]: Not Found: Exam ${examId} not found for chapter ${chapterId}`
-      );
-      return new NextResponse("Exam not found", { status: 404 });
-    }
-
-    // Filter out duplicate questions (by text + imageUrl combo)
+    // delete duplicate if any
     const uniqueQuestions = questions.filter(
       (q, index, self) =>
         index ===
@@ -132,29 +49,73 @@ export async function PUT(
         )
     );
 
-    // Run everything atomically
+    // Ensure chapter exists
+    const chapter = await db.chapter.findUnique({
+      where: { id: chapterId, courseId },
+    });
+
+    if (!chapter) {
+      logger.info(
+        `[COURSE_ID_CHAPTER_ID_EXAM_PUT]: Not Found: Chapter ${chapterId} not found for course ${courseId}`
+      );
+      notFound()
+      // return new NextResponse("Chapter not found", { status: 404 });
+    }
+
+    // Ensure exam exists
+    const existingExam = await db.exam.findUnique({
+      where: { id: examId, chapterId },
+    });
+
+    if (!existingExam) {
+      logger.info(
+        `[COURSE_ID_CHAPTER_ID_EXAM_PUT]: Not Found: Exam ${examId} not found for chapter ${chapterId}`
+      );
+      notFound()
+      // return new NextResponse("Exam not found", { status: 404 });
+    }
+
+    // atomic transaction
     const updatedExam = await db.$transaction(async (tx) => {
-      // Delete old questions (cascade removes answers)
+      // Remove old questions + answers
       await tx.question.deleteMany({ where: { examId } });
 
-      // Recreate unique questions with answers
-      for (const q of uniqueQuestions) {
-        await tx.question.create({
-          data: {
-            question: q.question,
-            imageUrl: q.imageUrl,
-            examId,
-            answers: {
-              create: q.answers.map((a) => ({
-                text: a.text,
-                isCorrect: a.isCorrect,
-              })),
-            },
-          },
-        });
+      // Insert new questions
+      await tx.question.createMany({
+        data: uniqueQuestions.map((q) => ({
+          question: q.question.trim(),
+          imageUrl: q.imageUrl || null,
+          answerDescription: q.answerDescription || null,
+          examId,
+        })),
+      });
+
+      // Fetch back inserted questions
+      const dbQuestions = await tx.question.findMany({
+        where: { examId },
+        select: { id: true, question: true, imageUrl: true, answerDescription: true },
+      });
+
+      // Build answers for bulk insert
+      const answersData = uniqueQuestions.flatMap((q) => {
+        const parent = dbQuestions.find(
+          (dq) =>
+            dq.question.trim() === q.question.trim() &&
+            (dq.imageUrl || "") === (q.imageUrl || "")
+        );
+        if (!parent) return [];
+        return q.answers.map((a) => ({
+          text: a.text,
+          isCorrect: a.isCorrect,
+          questionId: parent.id,
+        }));
+      });
+
+      if (answersData.length > 0) {
+        await tx.answer.createMany({ data: answersData });
       }
 
-      // Update exam info
+      // Update exam metadata
       return tx.exam.update({
         where: { id: examId },
         data: {
@@ -169,8 +130,8 @@ export async function PUT(
         },
       });
     }, {
-        timeout: 10_000, // 50 seconds
-    maxWait: 5_000,
+      timeout: 10_000,
+      maxWait: 10_000,
     });
 
     logger.info(
