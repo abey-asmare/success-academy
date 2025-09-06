@@ -168,6 +168,9 @@ export async function PUT(
           },
         },
       });
+    }, {
+        timeout: 50_000, // 50 seconds
+    maxWait: 5_000,
     });
 
     logger.info(

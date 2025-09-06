@@ -74,7 +74,10 @@ export async function PUT(
         updatedAt: new Date(),
       },
     });
-  })
+  }, {
+          timeout: 60_000, // 60 seconds
+      maxWait: 10_000,
+      })
 
     logger.info(
       `[COURSE_ID_SIMULATION_PUT]: OK: Simulation ${simulationId} updated successfully`

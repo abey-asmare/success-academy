@@ -29,7 +29,6 @@ type Props = {
 
 export const generateMetadata = async ({ params }: Props) => {
   const { courseId } = await params;
-  
   const course = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/courses/${courseId}`
   ).then((res) => res.json());
