@@ -24,6 +24,8 @@ import {
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { cn } from "@/lib/utils"
+import { useSidebar } from "@/components/ui/sidebar"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -38,8 +40,8 @@ export function DataTable<TData, TValue>({
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [pagination, setPagination] = React.useState<PaginationState>({
-    pageIndex: 0,
-  pageSize: 100,
+  pageIndex: 0,
+  pageSize: 10,
   });
 
   const table = useReactTable({
@@ -47,18 +49,21 @@ export function DataTable<TData, TValue>({
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
-    onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    
+    onColumnFiltersChange: setColumnFilters,
+    onSortingChange: setSorting,
+    onPaginationChange: setPagination,
+    
     state: {
       sorting,
       columnFilters,
       pagination
     },
-    onPaginationChange: setPagination,
   })
 
+  const sidebar = useSidebar()
   return (
     (<div>
       <div className="flex items-center py-4 justify-between">
@@ -71,7 +76,12 @@ export function DataTable<TData, TValue>({
           className="max-w-sm"
         />
       </div>
-      <div className="rounded-md border">
+      <div className={
+        cn(
+          "rounded-md border overflow-x-auto",
+          sidebar.open ? "max-w-[920px] " : "w-full"
+        )
+      }>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

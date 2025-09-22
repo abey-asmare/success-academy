@@ -1,12 +1,19 @@
 "use client";
-import * as React from "react";
+import { useState } from "react";
 import {
   ColumnDef,
-  getCoreRowModel,
-  useReactTable,
   flexRender,
+  getCoreRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  ColumnFiltersState,
+  SortingState,
+  useReactTable,
+  PaginationState,
+  getFilteredRowModel,
 } from "@tanstack/react-table";
-
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -15,79 +22,61 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useDebounce } from "@/hooks/use-debounce";
-import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
 import { PlusCircle } from "lucide-react";
+import Link from "next/link";
+import { useSidebar } from "@/components/ui/sidebar"
+import {cn} from "@/lib/utils"
+
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   totalCount: number;
-  currentPage: number;
-  search: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   totalCount,
-  currentPage,
-  search,
 }: DataTableProps<TData, TValue>) {
-  const router = useRouter();
-  const searchParams = useSearchParams();
 
-  const [searchInput, setSearchInput] = React.useState(search);
-  const debouncedSearch = useDebounce(searchInput, 500);
-
-  const totalPages = Math.ceil(totalCount / 1); // 1 = limit from page.tsx (change if needed)
-
-  React.useEffect(() => {
-    const params = new URLSearchParams(searchParams.toString());
-    if (debouncedSearch) {
-      params.set("search", debouncedSearch);
-    } else {
-      params.delete("search");
-    }
-    params.set("page", "1"); // reset to page 1 on search
-    router.replace(`?${params.toString()}`);
-  },[debouncedSearch, router, searchParams]);
-
-  const goToPage = (page: number) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("page", page.toString());
-    if (searchInput) {
-      params.set("search", searchInput);
-    }
-    router.push(`?${params.toString()}`);
-  };
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  })
 
   const table = useReactTable({
     data,
     columns,
    getCoreRowModel: getCoreRowModel(),
-  //  getPaginationRowModel: getPaginationRowModel(),
-  //  getSortedRowModel: getSortedRowModel(),
-  //  onSortingChange: setSorting,
-  //  onColumnFiltersChange: setColumnFilters,
-  //  state: {
-  //    sorting,
-  //    columnFilters,
-  //       pagination
-  //     },
-  //     onPaginationChange: setPagination,
+   getPaginationRowModel: getPaginationRowModel(),
+   getSortedRowModel: getSortedRowModel(),
+   getFilteredRowModel: getFilteredRowModel(),
+
+   onSortingChange: setSorting,
+   onColumnFiltersChange: setColumnFilters,
+   onPaginationChange: setPagination,
+   
+   state: {
+     sorting,
+     columnFilters,
+        pagination
+      },
   });
+
+  const sidebar = useSidebar()
 
   return (
     <div>
       <div className="flex items-center py-4 justify-between">
         <Input
           placeholder="Search users..."
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
+          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+              table.getColumn("name")?.setFilterValue(event.target.value)
+          }
           className="max-w-sm"
         />
            <Link href="/dashboard/teacher/simulation/create">
@@ -96,7 +85,7 @@ export function DataTable<TData, TValue>({
           </Button> 
         </Link>
       </div>
-      <div className="rounded-md border">
+      <div className={cn("rounded-md border overflow-x-auto", sidebar.open ? "max-w-[920px] " : "w-full")}>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -134,23 +123,23 @@ export function DataTable<TData, TValue>({
       </div>
 
       {/* Pagination */}
-      <div className="flex items-center justify-end py-4 gap-2">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => goToPage(currentPage - 1)}
-          disabled={currentPage <= 1}
-        >
-          Previous
-        </Button>
+<div className="flex items-center justify-end py-4 gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            Previous
+          </Button>
         <span className="text-sm text-muted-foreground">
-          Page {currentPage} of {totalPages}
+          Page {pagination.pageIndex + 1} of {Math.ceil(totalCount / pagination.pageSize)}
         </span>
         <Button
           variant="outline"
           size="sm"
-          onClick={() => goToPage(currentPage + 1)}
-          disabled={currentPage >= totalPages}
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
         >
           Next
         </Button>

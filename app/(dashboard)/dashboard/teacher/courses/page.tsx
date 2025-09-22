@@ -16,7 +16,7 @@ const CoursesPage = async () => {
     });
 
     return (
-        <div className="p-6">
+        <div className="p-2 md:p-6">
             <DataTable columns={columns} data={courses} />
         </div>
     );

@@ -1,18 +1,20 @@
 "use client";
-import * as React from "react";
 import {
   ColumnDef,
-  getCoreRowModel,
-  useReactTable,
-  flexRender,
   ColumnFiltersState,
+  flexRender,
+  getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   PaginationState,
   SortingState,
+  useReactTable,
 } from "@tanstack/react-table";
+import * as React from "react";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -21,32 +23,33 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+
+import { useSidebar } from "@/components/ui/sidebar";
+import { cn } from "@/lib/utils";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   totalCount: number;
-  currentPage: number;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   totalCount,
-  currentPage,
 }: DataTableProps<TData, TValue>) {
 
-    const [globalFilter, setGlobalFilter] = React.useState("")
+  const sidebar = useSidebar()
+  console.log(sidebar)
 
-  const totalPages = Math.ceil(totalCount / 1); 
+
+    const [globalFilter, setGlobalFilter] = React.useState("")
 
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
-  pageSize: 100,
+  pageSize: 10,
   });
 
   const table = useReactTable({
@@ -82,8 +85,14 @@ export function DataTable<TData, TValue>({
           className="max-w-sm"
         />
       </div>
-      <div className="rounded-md border ">
-        <Table className=" ">
+      <div className={
+        cn
+        (
+          "rounded-md border overflow-x-auto",
+          sidebar.open ? "w-[920px] " : "w-full"
+        )
+      }>
+        <Table className="w-full overflow-auto">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -130,7 +139,7 @@ export function DataTable<TData, TValue>({
             Previous
           </Button>
         <span className="text-sm text-muted-foreground">
-          Page {currentPage} of {totalPages}
+          Page {pagination.pageIndex + 1} of {Math.ceil(totalCount / pagination.pageSize)}
         </span>
         <Button
           variant="outline"

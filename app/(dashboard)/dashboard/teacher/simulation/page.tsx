@@ -9,16 +9,7 @@ export type User = {
   lastName: string;
   role: "admin" | "moderator" | "User";
 };
-const SimulationPage = async ({
-  searchParams,
-}: {
-  searchParams: Promise<{ search?: string; page?: string }>;
-}) => {
-  const { search } = (await searchParams) || "";
-  const page = parseInt((await searchParams).page || "1");
-  const limit = 501;
-  const offset = (page - 1) * limit;
-
+const SimulationPage = async () => {
   const exams = await db.exam.findMany({
     where: {
       isSimulation: true,
@@ -40,8 +31,6 @@ const SimulationPage = async ({
         columns={columns}
         data={examCourses}
         totalCount={examCourses.length}
-        currentPage={page}
-        search={search || ""}
       />
     </div>
   );

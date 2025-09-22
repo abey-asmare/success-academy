@@ -22,29 +22,8 @@ export const columns: ColumnDef<{
   course: string;
   imageUrl: string;
   approved: boolean;
-  date: string;
+  date: Date;
 }>[] = [
-  {
-    accessorKey: "id",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Id
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({row}) => {
-      return (
-        <div className="max-w-[20ch] break-words whitespace-normal ">
-          {row.getValue("id")}
-        </div>
-      )
-    }
-  },
   {
     accessorKey: "email",
     header: ({ column }) => {
@@ -72,6 +51,13 @@ export const columns: ColumnDef<{
         </Button>
       );
     },
+    cell: ({row}) => {
+      return (
+        <div className="max-w-[20ch] truncate">
+          {row.getValue("course")}
+        </div>
+      )
+    }
   },
   {
     accessorKey: "imageUrl",
@@ -100,7 +86,7 @@ export const columns: ColumnDef<{
               alt={row.getValue("course")}
               width={50}
               height={50}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover rounded-sm"
             />
           </Link>
          </FancyBoxWrapper>
@@ -151,7 +137,15 @@ export const columns: ColumnDef<{
         </Button>
       );
     },
+    cell: ({row}) => {  
+      return (
+        <div className="flex items-center gap-2">
+          {new Date(row.getValue("date")).toDateString()}
+        </div>
+      );
+    },
   },
+  
   {
     id: "actions",
     cell: ({ row }) => {

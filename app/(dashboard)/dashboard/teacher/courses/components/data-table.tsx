@@ -4,6 +4,7 @@ import * as React from "react"
 import {
     ColumnDef,
     ColumnFiltersState,
+    PaginationState,
     SortingState,
     flexRender,
     getCoreRowModel,
@@ -25,6 +26,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import { PlusCircle } from "lucide-react"
+import { cn } from "@/lib/utils"
+import { useSidebar } from "@/components/ui/sidebar"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -38,6 +41,10 @@ export function DataTable<TData, TValue>({
 
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+  const [pagination, setPagination] = React.useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
 
 
 
@@ -46,16 +53,22 @@ export function DataTable<TData, TValue>({
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
-    onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    onPaginationChange: setPagination,
+    
     state: {
       sorting,
       columnFilters,
+      pagination,
     },
   })
 
+
+  const sidebar = useSidebar()
   return (
     (<div>
       <div className="flex items-center py-4 justify-between">
@@ -73,7 +86,13 @@ export function DataTable<TData, TValue>({
           </Button> 
         </Link>
       </div>
-      <div className="rounded-md border">
+      <div className={
+        cn
+        (
+          "rounded-md border overflow-x-auto",
+          sidebar.open ? "max-w-[920px] " : "w-full"
+        )
+      }>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

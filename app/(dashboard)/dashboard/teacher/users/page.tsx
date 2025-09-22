@@ -13,7 +13,6 @@ const UsersPage = async () => {
         columns={columns}
         data={profiles}
         totalCount={profiles.length}
-        currentPage={1}
       />
     </div>
   );
