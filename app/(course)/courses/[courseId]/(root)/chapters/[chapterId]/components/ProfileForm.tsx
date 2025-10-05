@@ -120,6 +120,8 @@ export default function ProfileDialogDrawerForm() {
 }
 
 function ProfileForm({ setOpen }: { setOpen: (open: boolean) => void }) {
+  // the user doesn't have an account he has to be redirected, since this page/form is protected
+  //  hence if the user can see this form, he already have an account with us.
   const { user } = useUser();
 
   const form = useForm<formType>({
@@ -165,8 +167,7 @@ function ProfileForm({ setOpen }: { setOpen: (open: boolean) => void }) {
               startTransition(async () => {
                 try {
                   console.log('data', data)
-                  const message = await enrollInCourse(data, courseId);
-                  console.log('message', message)
+                  await enrollInCourse(data, courseId, user!.id);
                   toast.success("Profile updated successfully!");
                   setOpen(false);
                 } catch {

@@ -3,13 +3,12 @@
 import { db } from "@/lib/db";
 import { Stream } from "@/prisma/app/generated/prisma/client";
 import { profileFormSchema } from "@/schemas/validationSchemas";
-import { auth } from "@clerk/nextjs/server";
 import z from "zod";
 
 
-export async function enrollInCourse(data: z.infer<typeof profileFormSchema>, courseId: string) {
+export async function enrollInCourse(data: z.infer<typeof profileFormSchema>, courseId: string, userId: string) {
     try {
-        const {userId} = await auth()
+        console.log("userId", userId)
         if (!userId) {
             throw new Error("Unauthorized")
         }
@@ -17,7 +16,7 @@ export async function enrollInCourse(data: z.infer<typeof profileFormSchema>, co
         
         const profile =await  db.profile.findUnique({
             where: {
-                userId: userId
+                userId
             }
         })
         if(!profile){
