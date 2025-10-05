@@ -135,19 +135,21 @@ function ProfileForm({ setOpen }: { setOpen: (open: boolean) => void }) {
     },
   });
 
-  useEffect(() => {
-    if (user) {
-      form.reset({
-        firstName: user.firstName || "",
-        lastName: user.lastName || "",
-        email: user?.emailAddresses[0].emailAddress || "",
-        phoneNumber: "",
-        university: "",
-        stream: "Natural science",
-        referrer: "Telegram",
-      });
-    }
-  }, [user, form]);
+
+  // useEffect(() => {
+  //   if (user) {
+  //     form.reset({
+  //       firstName: user.firstName || "",
+  //       lastName: user.lastName || "",
+  //       email: user?.emailAddresses[0].emailAddress || "",
+  //       phoneNumber: "",
+  //       university: "",
+  //       stream: "Natural science",
+  //       referrer: "Telegram",
+  //     });
+  //   }
+  // }, [user, form]);
+
   const params = useParams<{ courseId: string }>();
   const courseId = params?.courseId || "";
   console.log("courseid", courseId);
@@ -270,7 +272,8 @@ function ProfileForm({ setOpen }: { setOpen: (open: boolean) => void }) {
               render={({ field }) => (
                 <FormItem className="flex-1">
                   <FormLabel>Stream</FormLabel>
-                  <Select {...field}>
+                  <Select   onValueChange={field.onChange}
+                    defaultValue={field.value}>
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select a stream" />
                     </SelectTrigger>

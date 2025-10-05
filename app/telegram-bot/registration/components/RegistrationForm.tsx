@@ -259,7 +259,7 @@ export default function RegistrationForm({ courses }: PropType) {
               render={({ field }) => (
                 <FormItem className="flex-1">
                   <FormLabel>Stream</FormLabel>
-                  <Select {...field}>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select a stream" />
                     </SelectTrigger>
