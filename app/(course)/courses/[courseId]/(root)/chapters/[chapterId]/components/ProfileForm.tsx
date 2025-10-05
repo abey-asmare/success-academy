@@ -1,5 +1,5 @@
 "use client";
-import React, { startTransition, useEffect } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -8,12 +8,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { useUser } from "@clerk/nextjs";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -21,9 +17,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
+import { useUser } from "@clerk/nextjs";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { startTransition } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { useMediaQuery } from "@react-hook/media-query";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 import {
   Dialog,
   DialogContent,
@@ -40,21 +47,14 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
 import { universities } from "@/lib/constants";
-import { useProfileEnroll } from "@/store";
-import { profileFormSchema } from "@/schemas/validationSchemas";
-import { enrollInCourse } from "../actions";
-import toast from "react-hot-toast";
-import { redirect, useParams } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { profileFormSchema } from "@/schemas/validationSchemas";
+import { useProfileEnroll } from "@/store";
+import { useMediaQuery } from "@react-hook/media-query";
+import { redirect, useParams } from "next/navigation";
+import toast from "react-hot-toast";
+import { enrollInCourse } from "../actions";
 
 const referrerOptions = [
   { value: "Google", label: "Google" },
@@ -161,10 +161,12 @@ function ProfileForm({ setOpen }: { setOpen: (open: boolean) => void }) {
           className="space-y-4"
           onSubmit={form.handleSubmit(
             (data) => {
-              console.log("triggered");
+              console.log(data)
               startTransition(async () => {
                 try {
-                  await enrollInCourse(data, courseId);
+                  console.log('data', data)
+                  const message = await enrollInCourse(data, courseId);
+                  console.log('message', message)
                   toast.success("Profile updated successfully!");
                   setOpen(false);
                 } catch {
@@ -240,7 +242,7 @@ function ProfileForm({ setOpen }: { setOpen: (open: boolean) => void }) {
               <FormItem>
                 <FormLabel className="">University</FormLabel>
                 <FormControl>
-                  <Command {...field}>
+                  <Command {...field} >
                     <CommandInput placeholder="Search" value={field.value} />
                     <CommandList>
                       <CommandEmpty>No results found.</CommandEmpty>

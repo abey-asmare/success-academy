@@ -1,10 +1,10 @@
 'use server'
 
 import { db } from "@/lib/db";
-import { auth } from "@clerk/nextjs/server";
-import { profileFormSchema } from "@/schemas/validationSchemas";
-import z from "zod";
 import { Stream } from "@/prisma/app/generated/prisma/client";
+import { profileFormSchema } from "@/schemas/validationSchemas";
+import { auth } from "@clerk/nextjs/server";
+import z from "zod";
 
 
 export async function enrollInCourse(data: z.infer<typeof profileFormSchema>, courseId: string) {

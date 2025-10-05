@@ -20,7 +20,9 @@ export const accounts = [
 
 export const universities = [
     "Not Joined yet", 
-"Addis Ababa University",
+    "Adama Science and Technology University", 
+    "Addis Ababa Science and Technology University", 
+    "Addis Ababa University",
     "Adigrat University",
     "Aksum University",
     "Ambo University",

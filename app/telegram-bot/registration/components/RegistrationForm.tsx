@@ -100,9 +100,9 @@ export default function RegistrationForm({ courses }: PropType) {
           className="space-y-4"
           onSubmit={form.handleSubmit(
             async (data) => {
-              try {
+                try {
                 const res = await handleTelegramRegistration(data);
-
+                
                 startTransition(() => {
                   if (res?.status === 200) {
                     toast.success(
