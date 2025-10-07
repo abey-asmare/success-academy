@@ -21,6 +21,13 @@ export type ExamCourse = {
 
 export const columns: ColumnDef<ExamCourse>[] = [
   {
+    accessorKey: "id",
+    header: () => null,
+    cell: () => null,
+    enableSorting: false,
+    enableColumnFilter: false,
+  },
+  {
     accessorKey: "name",
     header: ({ column }) => {
       return (
