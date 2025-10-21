@@ -1,31 +1,25 @@
-'use client'
-
-import Image from "next/image"
-import { Card } from "./ui/card"
-import { CourseMinimized, ExamMinimized } from "@/types"
-import axios from "axios"
-import { Skeleton } from "./ui/skeleton"
-import { useQuery } from "@tanstack/react-query"
-import { Button } from "./ui/button"
-import Link from "next/link"
 import { placeholderCourseImage } from "@/app/constants"
+import { CourseMinimized, ExamMinimized } from "@/types"
+import Image from "next/image"
+import Link from "next/link"
+import { Suspense } from "react"
+import { Button } from "./ui/button"
+import { Card } from "./ui/card"
+import { Skeleton } from "./ui/skeleton"
+import { getCoursesForHomePage } from "@/actions/get-courses"
 
-export default function CourseList({ className }: { className: string }) {
-  const { data, isLoading, error } = useQuery<CourseMinimized[], Error>({
-    queryKey: ['courses'],
-    queryFn: () => axios.get('/api/courses').then(res => res.data),
-    staleTime: 60 * 60 * 2 * 1000, // 2 hours
-  })
 
-  const examsMinimized: ExamMinimized[] = (data ?? [])
-    .flatMap((course) =>
-      (course.exams ?? []).map((exam) => ({
-        ...exam,
-        imageUrl: course.imageUrl || placeholderCourseImage,
-      }))
-    )
+export default async function CourseList({ className }: { className: string }) {
 
-  if (error) return <p>Error loading courses. Refresh the page.</p>
+  const courses: CourseMinimized[] = await getCoursesForHomePage()
+
+  const examsMinimized: ExamMinimized[] = (courses ?? [])
+  .flatMap((course) =>
+    (course.exams ?? []).map((exam) => ({
+      ...exam,
+      imageUrl: course.imageUrl || placeholderCourseImage,
+    }))
+  )
 
   return (
     <div className={className}>
@@ -35,20 +29,13 @@ export default function CourseList({ className }: { className: string }) {
         </p>
 
         <div className="courses grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 justify-items-center">
-          {isLoading ? (
-            Array.from({ length: 4 }).map((_, index) => (
-              <CourseCardSkeleton key={index} />
-            ))
-          ) : (
-            <>
-              {data?.map((course) => (
-                <CourseCard key={course.id} data={course} />
-              ))}
-              {examsMinimized.map((exam) => (
-                <ExamCard key={exam.id} data={exam} />
-              ))}
-            </>
-          )}
+          <Suspense fallback={Array.from({length: 4}).map((_, index) => (
+            <CourseCardSkeleton key={index} />
+          ))}>
+          <CourseCard key={1} data={courses[0]} />
+                <ExamCard key={1} data={examsMinimized[0]} />
+
+          </Suspense>
         </div>
       </div>
     </div>
@@ -107,12 +94,13 @@ export function CourseCardSkeleton() {
   return (
     <Card className="p-4 border-2 border-gray-200 w-full max-w-[280px] transition-all duration-300 hover:shadow-lg hover:border-gray-300 hover:-translate-y-1">
       <div className="wrapper rounded-md overflow-hidden w-full">
-        <Skeleton className="w-[280px] h-[220px]" />
+        <Skeleton className="w-[260px] h-[160px]" />
       </div>
       <div className="description space-y-2">
-        <Skeleton className="w-3/4 h-6" />
-        <Skeleton className="w-full h-4" />
-        <Skeleton className="w-20 h-10 rounded-md" />
+        <Skeleton className="w-3/4 h-4" />
+        <Skeleton className="w-full h-2.5" />
+        <Skeleton className="w-full h-2.5" />
+        <Skeleton className="w-16 h-8 rounded-md" />
       </div>
     </Card>
   )

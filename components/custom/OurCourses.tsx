@@ -1,19 +1,13 @@
-'use client'
+import { getCoursesForHomePage } from '@/actions/get-courses';
 import { CourseMinimized } from '@/types';
-import axios from 'axios';
-import Link from 'next/link'
-import { useQuery } from '@tanstack/react-query';
+import Link from 'next/link';
 
-export default function OurCourses() {
-    const { data } = useQuery<CourseMinimized[], Error, CourseMinimized[]>({
-        queryKey: ['courses'],
-        queryFn: ()=> axios.get('/api/courses').then(res => res.data),
-        staleTime: 60 * 60 * 2 * 1000,
-      });
+export default async function OurCourses() {
+  const courses = await getCoursesForHomePage()
   return (
     <ul className="space-y-2">
               {
-                data?.map((course: CourseMinimized) => (
+                courses?.map((course: CourseMinimized) => (
                     <li key={course.id}>
                         <Link href={`/courses/${course.id}`} className="text-gray-300 hover:text-white transition-colors">
                             {course.title}

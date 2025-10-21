@@ -3,6 +3,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { db } from "@/lib/db"
+import {REVALIDATE_RARELY } from "@/server-constants"
 
 type Props = {
   heading?: string
@@ -19,7 +20,7 @@ export default async  function HeroOrange({
   ctaHref = "/dashboard/search",
   className = ''
 }: Props) {
-  const allUsers = await db.profile.count() + 11900
+  const allUsers = await db.profile.count({cacheStrategy: {ttl: REVALIDATE_RARELY, swr: REVALIDATE_RARELY}}) + 11900
   return (
     <section
       aria-labelledby="hero-heading"

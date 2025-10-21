@@ -4,6 +4,8 @@ import { db } from "@/lib/db";
 import { CourseWithProgressWithCategory } from "@/types";
 import { isCoursePaymentVerified } from "./is-course-payment-verified";
 import { Course } from "@/schemas/validationSchemas";
+import { cache } from "react";
+import { REVALIDATE_RARELY } from "@/server-constants";
 
 type GetCourses = {
   userId: string;
@@ -114,3 +116,9 @@ export const getCoursesInProduction = async () => {
     return []
   }
 }
+
+export const getCoursesForHomePage = cache(async()=> await fetch(`${process.env.NEXT_PUBLIC_BASE_URL!}/api/courses`, {
+  next: {
+    revalidate: REVALIDATE_RARELY,
+  },
+}).then((res)=>res.json()))

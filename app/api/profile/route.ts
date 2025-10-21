@@ -5,6 +5,8 @@ import { NextResponse } from "next/server";
 
 const { logger } = Sentry;
 
+
+
 export async function GET() {
   // Get the currently signed-in user's ID
  try{
