@@ -1,6 +1,7 @@
 import { Category, Chapter, Course } from "@/prisma/app/generated/prisma/client";
 import { db } from "@/lib/db";
 import { getProgress } from "./get-progress";
+import { REVALIDATE_INSTANT } from "@/server-constants";
 
 type CourseWithProgressWithCategory = Course & {
     category: Category;
@@ -34,6 +35,9 @@ export const getDashboardCourses = async (userId: string): Promise<DashboardCour
                         }
                     },
                 },
+            }, cacheStrategy: {
+                ttl: REVALIDATE_INSTANT,
+                swr: REVALIDATE_INSTANT
             }
         });
 

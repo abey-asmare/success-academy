@@ -1,4 +1,3 @@
-'use client'
 import { CourseWithProgressWithCategory } from "@/types";
 import { CourseCard } from "./course-card";
 

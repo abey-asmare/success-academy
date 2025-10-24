@@ -75,6 +75,7 @@ const CourseLayout = async ({
     },
   });
 
+
   if (!course) {
     return redirect("/");
   }

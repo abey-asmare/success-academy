@@ -1,6 +1,10 @@
-import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
+import { notFound } from "next/navigation";
 import UpdateExamForm from "./updateExamForm";
+
+
+
+
 interface CreateExamPageProps {
   params: Promise<{
     courseId: string;
@@ -8,7 +12,6 @@ interface CreateExamPageProps {
     examId: string;
   }>;
 }
-
 
 export default async function CreateExamPage({ params }: CreateExamPageProps) {
   const { courseId, chapterId, examId } = await params;
@@ -41,3 +44,6 @@ export default async function CreateExamPage({ params }: CreateExamPageProps) {
     </div>
   );
 } 
+
+// export const revalidate = 10800
+

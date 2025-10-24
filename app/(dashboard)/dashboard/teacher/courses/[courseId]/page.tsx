@@ -12,7 +12,6 @@ import PromoCodes from "./PromoCodes";
 import TitleForm from "./title-form";
 
 
-
 const CourseIdPage = async ({
   params,
 }: {

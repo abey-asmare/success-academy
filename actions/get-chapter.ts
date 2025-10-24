@@ -67,7 +67,7 @@ export const getSingleChapter = cache(async (chapterId: string)=> {
 
 
 
-export const getChapter = async ({ 
+export const getChapter = cache(async ({ 
     userId, 
     courseId, 
     chapterId 
@@ -174,4 +174,4 @@ export const getChapter = async ({
             promocodes: null,
         }
     }
-}
+})

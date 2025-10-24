@@ -1,8 +1,7 @@
-import React from 'react'
 import { db } from '@/lib/db';
-import { redirect } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import { redirect } from 'next/navigation';
 
 const alphabets = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
@@ -65,3 +64,6 @@ export default async function ExamDeatilPage({params}: {params: Promise<{examId:
     </div>
   )
 }
+
+export const revalidate = 10800;
+

@@ -24,7 +24,12 @@ const nextConfig: NextConfig = {
     // 'https://vanguard-gules.vercel.app'
 
   ],
-};
+  // to use caching behavior (use cache and unsable_cache) it has to be enabled
+  cacheComponents: true,
+  experimental: {
+    useCache: true,
+  }
+}
 
 export default withSentryConfig(nextConfig, {
   // For all available options, see:

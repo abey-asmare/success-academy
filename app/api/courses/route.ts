@@ -17,7 +17,7 @@ export async function GET() {
             id: true,
             name: true,
             description: true,
-            courseId: true
+            courseId: true  
           },
         },
       },

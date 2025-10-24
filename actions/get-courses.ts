@@ -1,12 +1,11 @@
 
 import { getProgress } from "@/actions/get-progress";
 import { db } from "@/lib/db";
-import { CourseWithProgressWithCategory } from "@/types";
-import { isCoursePaymentVerified } from "./is-course-payment-verified";
 import { Course } from "@/schemas/validationSchemas";
+import { REVALIDATE_INSTANT, REVALIDATE_RARELY } from "@/server-constants";
+import { CourseWithProgressWithCategory } from "@/types";
 import { cache } from "react";
-import { REVALIDATE_RARELY } from "@/server-constants";
-
+import { isCoursePaymentVerified } from "./is-course-payment-verified";
 type GetCourses = {
   userId: string;
   title?: string;
@@ -46,7 +45,10 @@ export const getCourses = async ({
       },
       orderBy: {
         createdAt: "desc",
-      }
+      }, cacheStrategy: {
+        ttl: REVALIDATE_INSTANT,
+            swr: REVALIDATE_INSTANT
+      } 
     });
     
     const coursesWithProgress: CourseWithProgressWithCategory[] = await Promise.all(

@@ -11,7 +11,7 @@ import ChapterTitleForm from "./components/chapter-title-form";
 import ChapterVideoForm from "./components/chapter-video-form";
 import DeleteExamButton from "./exam/components/DeleteExamButton";
 import ChapterCategoryForm from "./components/chapter-category-form";
-// import ChapterCategoryForm from "./components/chapter-category-form";
+
 
 export default async function ChapterDetails({
   params,
@@ -171,3 +171,6 @@ export default async function ChapterDetails({
     </>
   );
 }
+
+
+export const revalidate = 10800 // 3 hours;

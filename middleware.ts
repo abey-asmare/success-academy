@@ -13,6 +13,9 @@ const isPublicRoute = createRouteMatcher([
   "/terms-of-use(.*)",
   "/telegram-bot(.*)",
   "/courses/:courseId",
+  // exam is protected in the layout but the page is generated 
+  // statically, so that it will be fetched only once
+  "/courses/:courseId/chapters/:chapterId/exams/:examId",
 
   "/api/uploadthing",
   "/api/courses(.*)",

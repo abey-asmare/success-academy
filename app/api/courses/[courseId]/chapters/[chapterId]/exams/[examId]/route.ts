@@ -146,3 +146,26 @@ export async function PUT(
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }
+
+export async function GET(req: NextRequest,
+  { params }: { params: Promise<{ courseId: string; chapterId: string; examId: string }> }
+ ){
+  const {examId} = await params
+  try{
+     const exam = await db.exam.findUnique({
+          where: {
+              id: examId,
+          },
+          include: {
+              questions: {
+                  include: {
+                      answers: true,
+                  },
+              },
+          },
+      })
+      return NextResponse.json(exam, {status: 200})
+  }catch{
+    return new NextResponse("Internal Server Error", { status: 500 });
+  }
+ }
