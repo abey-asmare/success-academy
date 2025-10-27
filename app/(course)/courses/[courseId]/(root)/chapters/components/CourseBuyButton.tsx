@@ -1,4 +1,4 @@
-//////////////////"use client";
+"use client";
 import { telegramLink } from "@/app/constants";
 import { REVALIDATE_INSTANT } from "@/server-constants";
 import { useQuery } from "@tanstack/react-query";

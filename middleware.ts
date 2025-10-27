@@ -17,6 +17,7 @@ const isPublicRoute = createRouteMatcher([
   // statically, so that it will be fetched only once
   "/courses/:courseId/chapters/:chapterId/exams/:examId",
 
+  // Protected rest api's
   "/api/uploadthing",
   "/api/courses(.*)",
   "/api/telegram-bot(.*)",

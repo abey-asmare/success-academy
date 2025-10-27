@@ -10,7 +10,10 @@ import { NextRequest, NextResponse } from "next/server"
 
 type Props = {params: Promise<{courseId: string}>}
 
-
+/**
+ * 
+ * @returns course with associated chapters and exams 
+ */
 export async function GET(req: NextRequest, {params}: Props){
     const {courseId} = await params
     try{
@@ -19,6 +22,7 @@ export async function GET(req: NextRequest, {params}: Props){
                 id: courseId,
             },
             include: {
+                exams: true, 
                 chapters: {
                     where: {
                         isPublished: true,

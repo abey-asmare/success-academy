@@ -1,42 +1,66 @@
 import { db } from "@/lib/db";
+import { logger, Sentry } from "@/lib/sentryLogger";
 import { getAdminInfo } from "@/utils/roles";
 import { NextResponse } from "next/server";
-import { logger, Sentry } from "@/lib/sentryLogger";
 
+// export async function GET(){
+//   try {
+//     const courses = await db.course.findMany({
+//       where: {
+//         isPublished: true,
+//       },
+//       include: {
+//         exams: {
+//           select: {
+//             id: true,
+//             name: true,
+//             description: true,
+//             courseId: true  
+//           },
+//         },
+//       },
+//       orderBy: {
+//         createdAt: "desc",
+//       },
+//     });
+//     logger.info(`[COURSE_GET]: OK: Courses fetched successfully`)
+//     return NextResponse.json(courses);
+//   } catch (error) {
+//     logger.error(`[COURSE_GET]: Internal Error: Failed to fetch courses ${error}`)
+//     Sentry.captureException(error)
+//     return NextResponse.json(
+//       { error: "Internal server error" },
+//       { status: 500 }
+//     );
+//   }
+// }
 
-// fetch all courses if needed
-export async function GET() {
-  try {
+/**
+ * 
+ * @returns get courses with exams
+ */
+export async function GET(){
+  try{
     const courses = await db.course.findMany({
       where: {
         isPublished: true,
+
       },
       include: {
-        exams: {
-          select: {
-            id: true,
-            name: true,
-            description: true,
-            courseId: true  
-          },
-        },
+          exams: true,
       },
       orderBy: {
         createdAt: "desc",
       },
     });
-    logger.info(`[COURSE_GET]: OK: Courses fetched successfully`)
     return NextResponse.json(courses);
-  } catch (error) {
-    logger.error(`[COURSE_GET]: Internal Error: Failed to fetch courses ${error}`)
-    Sentry.captureException(error)
+  }catch{
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
     );
   }
 }
-
 export async function POST(req: Request) {
   const { title } = await req.json();
   try {

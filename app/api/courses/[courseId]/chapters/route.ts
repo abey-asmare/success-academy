@@ -4,6 +4,35 @@ import * as Sentry from "@sentry/nextjs"
 import { NextResponse } from "next/server"
 
 
+/**
+ * 
+ * @returns chapters with exams and category 
+ */
+
+export async function GET(req: Request, {params}: {params: Promise<{courseId: string}>}) {
+    const {courseId} = await params
+    try{
+        const chapters = await db.chapter.findMany({
+            where: {
+                courseId, 
+                isPublished: true,
+            },
+            include: {
+                exams: true, 
+                category: true,
+            },
+            orderBy: {
+                position: "asc"
+            }
+        })
+        return NextResponse.json(chapters)
+    }catch(error){
+        Sentry.captureException(error)
+        return NextResponse.json({error: "Internal server error"}, {status: 500})
+    }
+}
+
+
 export async function POST(req: Request, {params}: {params: Promise<{courseId: string}>}) {
     const {logger} = Sentry
     const {courseId} = await params
