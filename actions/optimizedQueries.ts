@@ -1,5 +1,5 @@
 import { db } from "@/lib/db"
-import { UserProgress } from "@/prisma/app/generated/prisma/client"
+import { CoursePromocode, MuxData, Attachment, UserProgress, Chapter } from "@/prisma/app/generated/prisma/client"
 import { ChaptersGenericViewType, CourseGenericViewType } from "@/types"
 import { cacheLife } from "next/dist/server/use-cache/cache-life"
 import { cacheTag } from "next/dist/server/use-cache/cache-tag"
@@ -31,8 +31,59 @@ export const getChapters = async (courseId: string): Promise<ChaptersGenericView
     return  await response.json()
 }
 
+export const getPromoCodes = async (courseId: string): Promise<CoursePromocode[]> => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/courses/${courseId}/promocodes`, {
+        next: {
+            revalidate: 60 * 60 * 24 * 30 // REVALIDATE_MONTHLY
+        }
+    })
+    return  await response.json()
+}
 
-export const getPurchasedCourse = async (userId: string, courseId: string)=> {
+
+
+export const getAttachments = async (courseId: string): Promise<Attachment[]> => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/courses/${courseId}/attachments`, {
+        next: {
+            revalidate: 60 * 60 * 24 * 30 // REVALIDATE_MONTHLY
+        }
+    })
+    return  await response.json()
+}
+
+export const getMuxData = async (courseId: string, chapterId: string): Promise<MuxData> => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/courses/${courseId}/chapters/${chapterId}/muxData`, {
+        next: {
+            revalidate: 60 * 60 * 24 * 30 // REVALIDATE_MONTHLY
+        }
+    })
+    return  await response.json()
+}
+
+
+
+export const getChapter = async ( courseId: string, chapterId: string): Promise<ChaptersGenericViewType> => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/courses/${courseId}/chapters/${chapterId}`, {
+        next: {
+            revalidate: 60 * 60 * 24 * 30 // REVALIDATE_MONTHLY
+        }
+    })
+    return  await response.json()
+}
+
+
+export const getNextChapter = async (courseId: string, chapterId: string, chapterPosition: number): Promise<Chapter> => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/courses/${courseId}/chapters/${chapterId}/nextChapter?position=${chapterPosition}`, {
+        next: {
+            revalidate: 60 * 60 * 24 * 30 // REVALIDATE_MONTHLY
+        }
+    })
+    return  await response.json()
+}
+
+
+// personalized routes
+export const getPurchase = async (userId: string, courseId: string)=> {
     'use cache'
     cacheLife('weeks')
     cacheTag(`${userId}/purchase/${courseId}`)
@@ -45,6 +96,8 @@ export const getPurchasedCourse = async (userId: string, courseId: string)=> {
           }
         });
 }
+
+
 
 export const getUserProgress = async (userId: string, chapterId: string): Promise<UserProgress | null>=> {
     'use cache'

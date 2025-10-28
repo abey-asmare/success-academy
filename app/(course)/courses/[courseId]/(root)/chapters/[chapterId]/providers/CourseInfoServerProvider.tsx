@@ -1,4 +1,4 @@
-import { getChapters, getCourse, getPurchasedCourse, getUserProgress } from '@/actions/optimizedQueries'
+import { getChapters, getCourse, getPurchase, getUserProgress } from '@/actions/optimizedQueries'
 import { redirect } from 'next/navigation'
 import React from 'react'
 import CourseInfoProvider from './CourseInfoProvider'
@@ -14,7 +14,7 @@ async function CourseInfoServerProvider({children,userId, courseId}: {children: 
         return redirect("/");
       }
     
-    const purchase = await getPurchasedCourse(userId, courseId)
+    const purchase = await getPurchase(userId, courseId)
     let progress = null
     if(purchase && purchase.approved){
         progress = await getUserProgress(userId, courseId)

@@ -15,6 +15,30 @@ const mux = new Mux(
 const Video = mux.video
 
 
+export async function GET(
+  req: Request,
+  { params }: { params: Promise<{chapterId: string }> }
+){
+
+  const {chapterId} = await params
+  try{
+     const chapter = await db.chapter.findUnique({
+            where: {
+                id: chapterId,
+                isPublished: true,
+            },
+            include: {
+                exams: true,
+            }
+        });
+
+        return NextResponse.json(chapter)
+  } catch (error) {
+    console.log("error", error)
+    return NextResponse.json({error: "Internal Error"}, { status: 500 });
+  }
+    
+}
 
 
 export async function DELETE(

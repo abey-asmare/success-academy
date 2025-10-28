@@ -51,15 +51,7 @@ export const getSingleChapter = cache(async (chapterId: string)=> {
             isPublished: true,
         },
         include: {
-            exams: {
-                include: {
-                    questions: {    
-                        include: {
-                            answers: true,
-                        },
-                    },
-                }
-            }
+            exams: true
         }
     });
     return chapter

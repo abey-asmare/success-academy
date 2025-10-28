@@ -52,27 +52,16 @@ export type CourseExamPreview = Prisma.CourseGetPayload<{
 }>;
 
 
-export type CourseGenericViewType = Prisma.CourseGetPayload<
-{
+export type CourseGenericViewType = Prisma.CourseGetPayload<{
   include: {
-    exams: true, 
-  }
-}> & {
-  chapters?: NonNullable<
-  Prisma.CourseGetPayload<{
-    include: {
-      chapters: true
-    }
-  }>['chapters']
-  >
-}
+    chapters: true;
+    exams: true;
+  };
+}>;
 
-
-export type ChaptersGenericViewType = Prisma.ChapterGetPayload<
-{
+export type ChaptersGenericViewType = Prisma.ChapterGetPayload<{
   include: {
-    exams: true, 
-    category: true, 
-  }
-}
->
+    exams: true;
+    category: true;
+  };
+}>;

@@ -1,7 +1,22 @@
 import { NextResponse } from "next/server"
 import { db } from "@/lib/db"
 import { getAdminInfo} from "@/utils/roles"
-import Sentry from "@sentry/nextjs"    
+import Sentry from "@sentry/nextjs"  
+
+
+export async function GET(req: Request, {params}: {params: Promise<{courseId: string}>}){
+    const {courseId } = await params
+    try{
+        const attachments = await db.attachment.findMany({
+            where: {
+                courseId: courseId,
+            },
+        })
+        return NextResponse.json(attachments)
+    }catch{
+        return NextResponse.json({error: "can't find attachments"}, {status: 404})
+    }
+}
 
 export async function POST(req: Request, {params}: {params: Promise<{courseId: string}>}){
     const { courseId } = await params
