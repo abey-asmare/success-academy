@@ -1,3 +1,4 @@
+'use cache'
 import { db } from "@/lib/db";
 import { Metadata } from "next";
 import { columns } from "./components/columns";

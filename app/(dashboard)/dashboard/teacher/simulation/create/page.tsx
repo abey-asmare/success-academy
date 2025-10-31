@@ -1,3 +1,4 @@
+'use cache'
 import CreateSimulationForm from '../components/CreateSimulationForm';
 import { db } from '@/lib/db';
 

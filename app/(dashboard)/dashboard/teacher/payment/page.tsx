@@ -1,3 +1,4 @@
+'use cache'
 import { db } from '@/lib/db';
 import { columns } from './components/columns';
 import { DataTable } from './components/data-table';

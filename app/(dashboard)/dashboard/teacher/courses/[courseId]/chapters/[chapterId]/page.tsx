@@ -173,4 +173,4 @@ export default async function ChapterDetails({
 }
 
 
-export const revalidate = 10800 // 3 hours;
+// export const revalidate = 10800 // 3 hours;

@@ -45,7 +45,7 @@ export default clerkMiddleware(async (auth, req) => {
     await auth.protect();
   }
 
-  // 2. Admin-only protectionj
+  // 2. Admin-only protection
   if (isAdminRoute(req) && authData.sessionClaims?.metadata?.role !== "admin") {
     const url = new URL("/", req.url);
     return NextResponse.redirect(url);

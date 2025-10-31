@@ -18,14 +18,17 @@ const getCourses = cache(async (courseId: string)=> {
 })
 
 
-export async function generateStaticParams() {
-  return []
-}
+// export async function generateStaticParams() {
+//   return [{courseId: '__placeholder__'}]
+// }
 
 
 export async function generateMetadata({ params }: Props): Promise<Metadata>{
   const {courseId} = await params;
   const course = await getCourses(courseId)
+
+    // if(courseId === '__placeholder__')
+    //   return notFound()
   return {
     title: course?.title || "Success Academy", 
     description: course?.description || "Success Academy",
@@ -44,8 +47,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata>{
   }
 
 }
-export const dynamic = 'force-static'
-export const revalidate = 2592000 // REVALIDATE_MONTHLY
+// export const dynamic = 'force-static'
+// export const revalidate = 2592000 // REVALIDATE_MONTHLY
 
 
 

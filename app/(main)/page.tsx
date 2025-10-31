@@ -1,3 +1,4 @@
+'use cache'
 import CourseList from "@/components/CourseList";
 import FeatureSection from "@/components/FeatureSection";
 import Footer from "@/components/Footer";
@@ -6,8 +7,12 @@ import TestimonialSlider from "@/components/TestimonialSlider";
 import HeroOrange from "./components/HeroOrange";
 import SectionFeature from "./components/SectionFeature";
 import Head from 'next/head';
+import { cacheLife, cacheTag } from "next/cache";
+
 
 async function Home() {
+  cacheLife('max')
+  cacheTag('home')
 
   return (
    <>

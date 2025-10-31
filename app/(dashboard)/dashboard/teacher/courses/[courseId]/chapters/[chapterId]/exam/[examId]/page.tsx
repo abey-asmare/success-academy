@@ -65,5 +65,6 @@ export default async function ExamDeatilPage({params}: {params: Promise<{examId:
   )
 }
 
-export const revalidate = 10800;
+
+// export const revalidate = 10800;
 

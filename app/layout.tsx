@@ -7,6 +7,8 @@ import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "./api/uploadthing/core";
 import "./globals.css";
 import QueryProvider from "./providers/QueryProvider";
+import { connection } from "next/server";
+import { Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,13 +20,13 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-
 export const metadata: Metadata = {
   title: {
     template: "%s - Success Academy",
     default: "Success Academy",
   },
-  description: "Explore Success Academy’s online courses.Flexible, engaging learning for University and pre-university students to achieve your academic success.",
+  description:
+    "Explore Success Academy’s online courses.Flexible, engaging learning for University and pre-university students to achieve your academic success.",
 };
 
 export default function RootLayout({
@@ -33,21 +35,26 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
-      <html lang="en" className="scroll-smooth md:scroll-auto">
-       
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased `}
-        >
-          <main>
-            <ToasterProvider />
-          <NextSSRPlugin
-          routerConfig={extractRouterConfig(ourFileRouter)}
-        />
-            <QueryProvider>{children}</QueryProvider>
-          </main>
-        </body>
-      </html>
-    </ClerkProvider>
+    <Suspense>
+      <ClerkProvider>
+        <html lang="en" className="scroll-smooth md:scroll-auto">
+          <body
+            className={`${geistSans.variable} ${geistMono.variable} antialiased `}
+          >
+            <main>
+              <ToasterProvider />
+              <UTSSR />
+
+              <QueryProvider>{children}</QueryProvider>
+            </main>
+          </body>
+        </html>
+      </ClerkProvider>
+    </Suspense>
   );
+}
+
+async function UTSSR() {
+  await connection();
+  return <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />;
 }
