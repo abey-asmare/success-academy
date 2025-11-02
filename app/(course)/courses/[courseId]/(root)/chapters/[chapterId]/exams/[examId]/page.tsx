@@ -1,16 +1,11 @@
-'use cache'
-
 import { getExamById } from "@/optimizedQueries/otherOptimizedQueries";
 import InteractiveExam from "./InteractiveExam";
-import { cacheLife, cacheTag } from "next/cache";
 import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 
 
 export async function generateStaticParams(){
   const exams = await db.exam.findMany()
-  cacheLife('max')
-  cacheTag('exams')
   return exams.map((exam) => ({
     examId: exam.id,
     courseId: exam.courseId,
@@ -24,8 +19,6 @@ export default async function ExamDetailPage({
 }) {
   const { examId, courseId } = await params;
   const exam = await getExamById(examId)
-  cacheLife('max')
-  cacheTag(`page/exams/${examId}`)
   
   if(!exam){
     return notFound()
