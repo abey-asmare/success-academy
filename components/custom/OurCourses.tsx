@@ -1,13 +1,12 @@
-import { getCoursesForHomePage } from '@/actions/get-courses';
-import { CourseMinimized } from '@/types';
+import { getCourses } from '@/optimizedQueries/CourseQueries';
 import Link from 'next/link';
 
 export default async function OurCourses() {
-  const courses = await getCoursesForHomePage()
+  const courses = await getCourses()
   return (
     <ul className="space-y-2">
               {
-                courses?.map((course: CourseMinimized) => (
+                courses.map((course) => (
                     <li key={course.id}>
                         <Link href={`/courses/${course.id}`} className="text-gray-300 hover:text-white transition-colors">
                             {course.title}

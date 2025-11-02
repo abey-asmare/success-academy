@@ -35,22 +35,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <Suspense>
-      <ClerkProvider>
-        <html lang="en" className="scroll-smooth md:scroll-auto">
-          <body
-            className={`${geistSans.variable} ${geistMono.variable} antialiased `}
-          >
+    <html lang="en" className="scroll-smooth md:scroll-auto">
+      <body
+        className=
+        {`${geistSans.variable} ${geistMono.variable} antialiased `}
+      >
+        <Suspense>
+          <ClerkProvider>
             <main>
               <ToasterProvider />
               <UTSSR />
 
               <QueryProvider>{children}</QueryProvider>
             </main>
-          </body>
-        </html>
-      </ClerkProvider>
-    </Suspense>
+          </ClerkProvider>
+        </Suspense>
+      </body>
+    </html>
   );
 }
 

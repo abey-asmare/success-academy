@@ -7,6 +7,7 @@ import { Stream } from "@/prisma/app/generated/prisma/client";
 import { clerkClient } from "@clerk/nextjs/server";
 import { sendPurchaseRequestToTelegram } from "@/lib/telegram-api";
 import { logger } from "@/lib/sentryLogger";
+import { connection } from "next/server";
 
 const formSchema = profileFormSchema.extend({
   courseId: z.string().min(1, { message: "Course is required" }),
@@ -33,7 +34,7 @@ export async function handleTelegramRegistration(data: formType) {
     } else {
       const newUser = await client.users.createUser({
         emailAddress: [data.email],
-        password: crypto.randomUUID().toString(),
+        password: await crypto.randomUUID().toString(),
       });
       userId = newUser.id;
     }

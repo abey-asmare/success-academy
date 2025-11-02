@@ -1,47 +1,29 @@
-"use client";
 import { telegramLink } from "@/app/constants";
-import { REVALIDATE_INSTANT } from "@/server-constants";
-import { useQuery } from "@tanstack/react-query";
+import { getPurchase } from "@/optimizedQueries/personalizedQueries";
+import { auth } from "@clerk/nextjs/server";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 
-function CourseBuyButton({
+async function CourseBuyButton({
   courseId,
   redirectChapterId,
 }: {
   courseId: string;
   redirectChapterId: string;
 }) {
-  const { data, isLoading } = useQuery({
-    queryKey: ["purchase", courseId],
-    queryFn: async () => {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL!}/api/courses/${courseId}/purchase`
-      );
-      return response.json();
-    },
-    staleTime: REVALIDATE_INSTANT,
-  });
+  await connection();
+  const {userId} = await auth()
+  if(!userId) return redirect('/sign-in')
+const purchase = await getPurchase(userId, courseId)
 
-  if (isLoading) {
-    return (
-      <div className="ml-[12%] md:ml-[20%] space-y-2">
-        <div className="bg-sky-500/70 hover:bg-sky-700 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200 text-base w-fit flex items-center">
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          Loading
-        </div>
-      </div>
-    );
-  }
-
-  if (data?.approved) {
+    if (purchase?.approved) {
     return redirect(`/courses/${courseId}/chapters/${redirectChapterId}`);
   }
-
   return (
     <div>
-      {data.id ? (
+      {purchase?.approved ? (
         <div className="ml-[12%] md:ml-[20%] space-y-2">
           <div className="bg-sky-500/70 hover:bg-sky-700 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200 text-base w-fit flex items-center">
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />

@@ -103,24 +103,9 @@ try{
 }
   
 }
-
-
-export const getCoursesInProduction = async () => {
-   
-  try{
-    const courses = await fetch(
-      `https://successacademy.et/api/courses`
-    ).then((res) => res.json());
-  
-    return courses.map((course: Course) => ({ courseId: course.id }))
-  }catch(error){
-    console.log("there is error", error)
-    return []
-  }
-}
-
-export const getCoursesForHomePage = cache(async()=> await fetch(`${process.env.NEXT_PUBLIC_BASE_URL!}/api/courses`, {
-  next: {
-    revalidate: REVALIDATE_RARELY,
-  },
-}).then((res)=>res.json()))
+export const getCourse = cache(async (courseId: string)=> {
+  return await db.course.findUnique({
+    where: { id: courseId, isPublished: true },
+    include: { chapters: true },
+  });
+})

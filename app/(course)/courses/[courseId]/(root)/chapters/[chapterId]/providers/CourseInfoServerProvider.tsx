@@ -1,7 +1,9 @@
-import { getChapters, getCourse, getPurchase, getUserProgress } from '@/actions/optimizedQueries'
 import { redirect } from 'next/navigation'
 import React from 'react'
 import CourseInfoProvider from './CourseInfoProvider'
+import { getChapters } from '@/optimizedQueries/chapterQueries';
+import { getCourse } from '@/optimizedQueries/CourseQueries';
+import { getPurchase, getUserProgress } from '@/optimizedQueries/personalizedQueries';
 
 async function CourseInfoServerProvider({children,userId, courseId}: {children: React.ReactNode, userId: string, courseId: string}) {
 
@@ -23,7 +25,7 @@ async function CourseInfoServerProvider({children,userId, courseId}: {children: 
     const isLocked = !purchase || !purchase.approved
 
   return (
-    <CourseInfoProvider chapters={chapters} course={course!} purchase={purchase} isLocked={isLocked} progress={progress}>
+    <CourseInfoProvider chapters={chapters!} course={course!} purchase={purchase} isLocked={isLocked} progress={progress}>
         {children}
     </CourseInfoProvider>
   )

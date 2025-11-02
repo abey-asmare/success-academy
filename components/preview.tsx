@@ -53,35 +53,35 @@ export const Preview = ({ value }: PreviewProps) => {
               </div>
             );
           },
-          p: ({ node, children }) => (
+          p: ({ children }) => (
             <p className="mb-4 leading-7 text-gray-800">{children}</p>
           ),
-          h1: ({ node, children }) => (
+          h1: ({ children }) => (
             <h1 className="text-2xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
               {children}
             </h1>
           ),
-          h2: ({ node, children }) => (
+          h2: ({ children }) => (
             <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold mb-3">
               {children}
             </h2>
           ),
-          h3: ({ node, children }) => (
+          h3: ({ children }) => (
             <h3 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold mb-2">
               {children}
             </h3>
           ),
-          h4: ({ node, children }) => (
+          h4: ({ children }) => (
             <h4 className="text-base sm:text-lg md:text-xl lg:text-2xl font-medium mb-2">
               {children}
             </h4>
           ),
-          h5: ({ node, children }) => (
+          h5: ({ children }) => (
             <h5 className="text-sm sm:text-base md:text-lg lg:text-xl font-medium mb-1">
               {children}
             </h5>
           ),
-          h6: ({ node, children }) => (
+          h6: ({ children }) => (
             <h6 className="text-xs sm:text-sm md:text-base lg:text-lg font-medium mb-1">
               {children}
             </h6>

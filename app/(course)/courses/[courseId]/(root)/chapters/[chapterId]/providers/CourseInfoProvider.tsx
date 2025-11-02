@@ -1,6 +1,8 @@
 "use client";
+import { ChaptersGenericViewType } from "@/optimizedQueries/chapterQueries";
+import { CourseGenericViewType } from "@/optimizedQueries/CourseQueries";
 import { Purchase, UserProgress } from "@/prisma/app/generated/prisma/client";
-import { ChaptersGenericViewType, CourseGenericViewType } from "@/types";
+import { notFound } from "next/navigation";
 import React, { createContext, useContext } from "react";
 
 const CourseInfoContext = createContext<
@@ -27,6 +29,9 @@ function CourseInfoProvider({ children, course, chapters, purchase, progress, is
         purchase,
         progress,
         isLocked
+    }
+    if(!course){
+      return notFound()
     }
   return <CourseInfoContext.Provider value={value}> {children}</CourseInfoContext.Provider>;
 }

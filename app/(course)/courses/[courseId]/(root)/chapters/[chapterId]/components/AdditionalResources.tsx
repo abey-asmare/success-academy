@@ -16,19 +16,23 @@ import { ChaptersGenericViewType } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 import { useCourseInfo } from "../providers/CourseInfoProvider";
+import { CourseGenericViewType } from "@/optimizedQueries/CourseQueries";
 
 function AdditionalResources({
+  course,
   chapter,
   nextChapter,
   promocodes,
   attachments,
 }: {
+  course: CourseGenericViewType;
   chapter: ChaptersGenericViewType;
-  nextChapter: Chapter;
+  nextChapter: Chapter | null;
   promocodes: CoursePromocode[];
   attachments: Attachment[];
 }) {
-  const { purchase, course, progress: userProgress } = useCourseInfo();
+  const { purchase, progress: userProgress } = useCourseInfo();
+  
   return (
     <div>
       <div className="p-4 flex flex-col md:flex-row items-center justify-between">

@@ -68,7 +68,7 @@ export const getPromoCodes = async (courseId: string): Promise<CoursePromocode[]
 
 
 export const getAttachments = async (courseId: string): Promise<Attachment[]> => {
-       cacheLife('months')
+       cacheLife('max')
     cacheTag(`${courseId}/attachments`)
     const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/courses/${courseId}/attachments`, {
         next: {
@@ -77,3 +77,14 @@ export const getAttachments = async (courseId: string): Promise<Attachment[]> =>
     })
     return  await response.json()
 }
+        
+
+
+export const getAttachment = async(attachmentId: string): Promise<Attachment | null> => {
+    cacheLife('max')
+    cacheTag(`attachments/${attachmentId}`)
+ return db.attachment.findUnique({
+    where: {
+      id: attachmentId,
+    },
+  })}

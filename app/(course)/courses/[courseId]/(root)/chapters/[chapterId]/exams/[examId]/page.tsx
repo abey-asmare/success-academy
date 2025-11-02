@@ -1,32 +1,35 @@
-import { notFound } from "next/navigation";
+'use cache'
+
+import { getExamById } from "@/optimizedQueries/otherOptimizedQueries";
 import InteractiveExam from "./InteractiveExam";
+import { cacheLife, cacheTag } from "next/cache";
+import { notFound } from "next/navigation";
+import { db } from "@/lib/db";
+
+
+export async function generateStaticParams(){
+  const exams = await db.exam.findMany()
+  cacheLife('max')
+  cacheTag('exams')
+  return exams.map((exam) => ({
+    examId: exam.id,
+    courseId: exam.courseId,
+  }))
+}
 
 export default async function ExamDetailPage({
   params,
 }: {
-  params: Promise<{ examId: string; courseId: string; chapterId: string }>;
+  params: Promise<{ examId: string; courseId: string }>;
 }) {
-  const { examId, courseId, chapterId } = await params;
-  // const exam = await db.exam.findUnique({
-  //     where: {
-  //         id: examId,
-  //     },
-  //     include: {
-  //         questions: {
-  //             include: {
-  //                 answers: true,
-  //             },
-  //         },
-  //     },
-  // })
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/courses/${courseId}/chapters/${chapterId}/exams/${examId}`,
-    { next: { revalidate: 86400 } } // REVALIDATE_RARELY
-  );
-  if (!response.ok) {
-    return notFound();
+  const { examId, courseId } = await params;
+  const exam = await getExamById(examId)
+  cacheLife('max')
+  cacheTag(`page/exams/${examId}`)
+  
+  if(!exam){
+    return notFound()
   }
-  const exam = await response.json();
 
   return <InteractiveExam exam={exam} courseId={courseId} />;
 }

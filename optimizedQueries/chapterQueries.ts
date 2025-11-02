@@ -53,7 +53,6 @@ export const getChapter = async (
 
 export const getNextChapter = async (
   courseId: string,
-  chapterId: string,
   chapterPosition: number
 ): Promise<Chapter | null> => {
   cacheLife("weeks");
