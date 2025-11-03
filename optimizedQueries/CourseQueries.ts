@@ -2,6 +2,7 @@
 
 import { db } from "@/lib/db"
 import {Attachment, CoursePromocode, Prisma } from "@/prisma/app/generated/prisma/client/client";
+import { PrismaCacheStrategy } from "@prisma/extension-accelerate";
 import { cacheLife, cacheTag } from "next/cache"
 
 
@@ -12,9 +13,11 @@ Prisma.CourseGetPayload<{
   include: {
     chapters: true;
     exams: true;
+    category: true
   };
-}>, 'chapters'> & {
+}>, 'chapters' | 'category'> & {
     chapters?: Prisma.CourseGetPayload<{include: {chapters: true}}>['chapters']
+    category?: Prisma.CourseGetPayload<{include: {category: true}}>['category']
 } 
 
 export const getCourses = async():Promise<CourseGenericViewType[]>=> {
@@ -27,6 +30,7 @@ export const getCourses = async():Promise<CourseGenericViewType[]>=> {
       },
       include: {
           exams: true,
+          category: true, 
       },
       orderBy: {
         createdAt: "desc",

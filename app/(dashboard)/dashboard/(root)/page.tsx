@@ -1,18 +1,25 @@
 import { auth } from "@clerk/nextjs/server";
+import { CheckCircle, Clock } from "lucide-react";
 import { redirect } from "next/navigation";
-import { CheckCircle, Clock} from "lucide-react";
 
-import { CoursesList } from "@/components/courses-list";
 import { getDashboardCourses } from "@/actions/get-dashboard-courses";
+import { CoursesList } from "@/components/courses-list";
 import InfoCard from "./components/info-card";
+import { cacheLife, cacheTag } from "next/cache";
 
 export default async function Dashboard() {
   const { userId } = await auth();
-
   if (!userId) {
     return redirect("/");
   }
+return <DashboardCourses userId={userId}/>
+}
 
+
+async function DashboardCourses({userId}: {userId: string}){
+   "use cache";
+    cacheTag(`page/${userId}/dashboard`);
+    cacheLife({ stale: 60 * 10 });
   const {
     completedCourses,
     coursesInProgress,

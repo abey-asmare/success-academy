@@ -14,7 +14,6 @@ interface CourseCardProps {
   chaptersLength: number;
   price: number;
   progress: number | null;
-  category: string;
   isVerified: boolean;
 }
 
@@ -25,7 +24,6 @@ export const CourseCard = ({
   chaptersLength,
   price,
   progress,
-  category,
   isVerified,
 }: CourseCardProps) => {
   return (
@@ -44,7 +42,7 @@ export const CourseCard = ({
           <div className="text-lg md:text-base font-medium group-hover:text-sky-700 transition  dark:group-hover:text-sky-500 line-clamp-2">
             {title}
           </div>
-          <p className="text-xs text-muted-foreground -py-2">{category}</p>
+          {/* <p className="text-xs text-muted-foreground -py-2">{category}</p> */}
           <div className="my-3 flex items-center gap-x-2 text-sm md:text-xs">
             <div className="flex items-center gap-x-1 text-slate-500">
               <IconBadge size="sm" icon={BookOpen} />

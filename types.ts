@@ -19,7 +19,6 @@ export type CourseMinimized = {
 };
 
 export type CourseWithProgressWithCategory = Course & {
-  category: Category | null;
   chapters: { id: string }[];
   progress: number | null;
   isVerified: boolean;

@@ -10,13 +10,24 @@ export const getPurchase = async (userId: string, courseId: string)=> {
     cacheLife('weeks')
     cacheTag(`${userId}/purchase/${courseId}`)
     return  await db.purchase.findUnique({
-          where: {
+      where: {
             userId_courseId: {
               userId,
               courseId,
             }
           }
         });
+      }
+  
+  export const getAllPurchaseCourses = async(userId: string) => {
+    cacheLife('weeks')
+    cacheTag(`${userId}/purchase`)
+    return  await db.purchase.findMany({
+      where: {
+              userId: userId
+          }
+        });
+
 }
 
 

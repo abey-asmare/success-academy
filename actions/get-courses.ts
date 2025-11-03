@@ -1,34 +1,22 @@
 
 import { getProgress } from "@/actions/get-progress";
 import { db } from "@/lib/db";
-import { Course } from "@/schemas/validationSchemas";
-import { REVALIDATE_INSTANT, REVALIDATE_RARELY } from "@/server-constants";
+import { REVALIDATE_INSTANT } from "@/server-constants";
 import { CourseWithProgressWithCategory } from "@/types";
 import { cache } from "react";
 import { isCoursePaymentVerified } from "./is-course-payment-verified";
 type GetCourses = {
   userId: string;
-  title?: string;
-  categoryId?: string;
 };
 
-export const getCourses = async ({
-  userId,
-  title,
-  categoryId
-}: GetCourses): Promise<CourseWithProgressWithCategory[]> => {
+export const getCoursesForUser = async (userId: string): Promise<CourseWithProgressWithCategory[]> => {
+    
   try {
     const courses = await db.course.findMany({
       where: {
         isPublished: true,
-        title: {
-                    contains: title,
-                    mode: "insensitive",
-        },
-        categoryId,
       },
       include: {
-        category: true,
         chapters: {
           where: {
             isPublished: true,
@@ -51,7 +39,7 @@ export const getCourses = async ({
       } 
     });
     
-    const coursesWithProgress: CourseWithProgressWithCategory[] = await Promise.all(
+    const coursesWithProgress = await Promise.all(
       courses.map(async (course) => {
         if (course.purchases.length === 0) {
           return {
@@ -65,7 +53,7 @@ export const getCourses = async ({
 
         const isVerified = await isCoursePaymentVerified(course.id, userId);
     
-        const progressPercentage = await getProgress(userId, course.id);
+        const progressPercentage = await getProgress(userId, course.id, course.chapters);
     
         return {
           ...course,

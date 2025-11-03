@@ -46,7 +46,7 @@ export const getChapter = async (
     },
     include: {
       exams: true,
-      category: true,
+      category: true, 
     },
   });
 };
