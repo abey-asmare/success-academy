@@ -8,12 +8,6 @@ import { cache } from "react";
 
 
 
-export const getProfileCount =  cache(async () => {       
-    cacheLife('weeks')
-    return await db.profile.count()
-})
-
-
 export type ExamGenericType = Prisma.ExamGetPayload<{
     include: {
         questions: {
@@ -23,6 +17,20 @@ export type ExamGenericType = Prisma.ExamGetPayload<{
         }
     }
 }>
+
+
+export const getProfileCount =  cache(async () => {       
+    cacheLife('weeks')
+    return await db.profile.count()
+})
+
+
+
+export const getProfile = cache(async ()=> {
+    cacheTag('profile')
+    cacheLife('days')
+    return await db.profile.findMany()
+})
 
 
 export const getExamById = cache(async(examId: string)=> {

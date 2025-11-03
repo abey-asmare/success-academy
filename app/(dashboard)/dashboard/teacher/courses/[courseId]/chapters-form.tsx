@@ -25,20 +25,15 @@ const formSchema = z.object({
 });
 
 
-type CourseWithRelations = Prisma.CourseGetPayload<{
-  include: {
-    chapters: {
+type ChapterWithRelations = Prisma.ChapterGetPayload<{
       include: {
         category: true;
-      };
-    };
-    attachments: true;
   };
 }>;
 
 
 interface ChaptersFormProps {
-  initialData: CourseWithRelations;
+  initialData: ChapterWithRelations[];
   courseId: string;
 }
 
@@ -111,12 +106,12 @@ export default function ChaptersForm({
             </Button>
           </form>
         </Form>
-       <div className={cn('text-sm mt-2', !initialData.chapters.length && 'text-slate-500 italic' )}>
-        {!initialData.chapters.length && "No chapters"}
+       <div className={cn('text-sm mt-2', !initialData.length && 'text-slate-500 italic' )}>
+        {!initialData.length && "No chapters"}
         <ChaptersList
         onEdit ={onEdit}
         onReorder = {onReorder}
-        items = {initialData.chapters}
+        items = {initialData}
         />
         </div>
 
