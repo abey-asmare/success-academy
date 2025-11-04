@@ -1,6 +1,7 @@
 import { db } from "@/lib/db"
 import { getAdminInfo } from "@/utils/roles"
 import * as Sentry from "@sentry/nextjs"
+import { revalidatePath, revalidateTag } from "next/cache"
 import { NextResponse } from "next/server"
 
 
@@ -73,6 +74,9 @@ export async function POST(req: Request, {params}: {params: Promise<{courseId: s
                 courseId
             }
         })
+        revalidatePath(`/courses/${courseId}/chapters/${chapter.id}`)
+        revalidateTag(`courses/${courseId}`, 'max')
+        
         logger.info(`[COURSE_ID_CHAPTERS_POST]: OK: Chapter ${chapter.id} created successfully`)
         return NextResponse.json(chapter)
     }catch(error){

@@ -17,7 +17,8 @@ export type ChaptersGenericViewType = Prisma.ChapterGetPayload<{
 export const getChapters = cache(
   async (courseId: string): Promise<ChaptersGenericViewType[]> => {
     cacheLife("weeks");
-    cacheTag(`chapters`);
+    cacheTag(`chapters`, `courses/${courseId}`);
+
     return await db.chapter.findMany({
       where: {
         courseId,
@@ -39,7 +40,9 @@ export const getChapter = cache(
     chapterId: string
   ): Promise<ChaptersGenericViewType | null> => {
     cacheLife("weeks");
-    cacheTag(`chapters/${chapterId}`);
+    cacheTag(
+      `courses/${courseId}`,
+      `chapters/${chapterId}`);
     return await db.chapter.findUnique({
       where: {
         id: chapterId,

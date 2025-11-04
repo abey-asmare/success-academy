@@ -4,6 +4,7 @@ import { getAdminInfo } from "@/utils/roles";
 import { Sentry, logger } from "@/lib/sentryLogger";
 import { examSchema } from "@/schemas/validationSchemas";
 import { notFound } from "next/navigation";
+import { revalidateTag } from "next/cache";
 
 export async function PUT(
   req: NextRequest,
@@ -137,6 +138,11 @@ export async function PUT(
     logger.info(
       `[COURSE_ID_CHAPTER_ID_EXAM_PUT]: OK: Exam ${examId} updated successfully`
     );
+
+        revalidateTag('chapters', 'max')
+        revalidateTag(`chapters/${chapterId}`, 'max')
+        revalidateTag(`exams/${examId}`, 'max')
+    
     return NextResponse.json(updatedExam);
   } catch (error) {
     logger.error(

@@ -2,6 +2,7 @@
 
 import { db } from "@/lib/db"
 import { UserProgress } from "@/prisma/app/generated/prisma/client"
+import { REVALIDATE_INSTANT } from "@/server-constants"
 import { cacheLife, cacheTag } from "next/cache"
 
 
@@ -32,7 +33,7 @@ export const getPurchase = async (userId: string, courseId: string)=> {
 
 
 export const getUserProgress = async (userId: string, chapterId: string): Promise<UserProgress | null>=> {
-    cacheLife('hours')
+    cacheLife({stale:  REVALIDATE_INSTANT})
     cacheTag(`${userId}/progress/${chapterId}`)
     return await db.userProgress.findUnique({
         where: {

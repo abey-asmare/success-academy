@@ -3,18 +3,15 @@ import { NextResponse } from "next/server";
 import pRetry, { AbortError } from 'p-retry';
 import { db } from "./db";
 import { logger, Sentry } from "./sentryLogger";
+import { getCourse } from "@/optimizedQueries/CourseQueries";
 
 
 const getCourseOr404 = async (id: string) => {
         // get the course 
-            const course = await db.course.findUnique({
-                where: {
-                  id
-                },
-                select: {
-                  title: true,
-                },
-            });
+            const course = await getCourse(id)
+            if (!course) {
+                throw new Error("Course not found");
+            }
             return course
 }
 

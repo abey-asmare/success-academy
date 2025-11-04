@@ -43,7 +43,7 @@ export default async function ResourceDetailPage({
   const { resourceId } = await params;
   const resource = await getAttachment(resourceId)
   cacheLife('max')
-  cacheTag('attachments')
+  cacheTag(`page/attachments/${resourceId}`)
   
   if(!resource){
     return notFound()

@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 import { logger, Sentry } from "@/lib/sentryLogger";
 
@@ -39,6 +39,8 @@ export async function POST(request: NextRequest) {
     revalidatePath("/dashboard/search");
     revalidatePath("/dashboard/teacher/courses");
     revalidatePath(`/courses/${id}`);
+
+    revalidateTag(`${payment.userId}/purchase/${payment.courseId}`, 'max')
 
     logger.info(`[TELEGRAM_BOT_APPROVE_PAYMENT]: OK: Payment ${id} approved successfully`);
     return NextResponse.json({

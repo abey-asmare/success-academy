@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { logger, Sentry } from "@/lib/sentryLogger";
 import { getAdminInfo } from "@/utils/roles";
+import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 
 // export async function GET(){
@@ -75,6 +76,8 @@ export async function POST(req: Request) {
         userId,
       },
     });
+
+    revalidateTag('courses', 'max')
     logger.info(`[COURSE_POST]: OK: Course ${course.id} created successfully by ${userId}`)
     return NextResponse.json(course);
   } catch (error) {

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { db } from "@/lib/db"
 import { getAdminInfo} from "@/utils/roles"
 import Sentry from "@sentry/nextjs"  
+import { revalidateTag } from "next/cache"
 
 
 export async function GET(req: Request, {params}: {params: Promise<{courseId: string}>}){
@@ -47,8 +48,9 @@ export async function POST(req: Request, {params}: {params: Promise<{courseId: s
         const attachments = await db.attachment.createMany({
             data: values
         })
-
+        revalidateTag(`${courseId}/attachments`, 'max');
         logger.info(`[COURSE_ID_ATTACHMENT_POST]: Attachments created for course ${courseId}`)
+        
         return NextResponse.json(attachments)
     }catch(error){
         logger.error(`[COURSE_ID_ATTACHMENT_POST]: Error: failed to create attachments for course ${courseId} ${error}`)

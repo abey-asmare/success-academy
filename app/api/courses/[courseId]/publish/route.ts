@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { getAdminInfo } from "@/utils/roles";
 import * as Sentry from "@sentry/nextjs";
+import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 
@@ -53,6 +54,8 @@ export async function PATCH(
       logger.info(
         `[COURSE_ID_PUBLISH_PATCH]: Bad Request: Course ${courseId} is missing required fields for user ${userId}`
       );
+      revalidateTag(`courses`, "max")
+      revalidateTag(`courses/${courseId}`, "max")
       return new NextResponse("Missing required fields", { status: 400 });
     }
 

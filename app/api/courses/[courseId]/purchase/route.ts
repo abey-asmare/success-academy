@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import { sendPurchaseRequestToTelegram } from "@/lib/telegram-api";
 import { auth } from "@clerk/nextjs/server";
 import * as Sentry from "@sentry/nextjs";
+import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
@@ -61,7 +62,8 @@ export async function POST(
 
   //  fetch for telegram
     await sendPurchaseRequestToTelegram(userId, courseId, imageUrl, newPurchase.id);
-
+    revalidateTag(`courses/${courseId}`, "max")
+    revalidateTag(`${userId}/purchase`, 'max')
     return NextResponse.json(newPurchase);
   } catch (error) {
     logger.error(

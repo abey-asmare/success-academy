@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { getAdminInfo } from "@/utils/roles";
 import * as Sentry from "@sentry/nextjs";
+import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 
@@ -23,7 +24,6 @@ export async function PATCH(
     const course = await db.course.findUnique({
       where: {
         id: courseId,
-        // userId,
       },
     });
 
@@ -37,13 +37,13 @@ export async function PATCH(
     const unpublishedCourse = await db.course.update({
       where: {
         id: courseId,
-        // userId,
       },
       data: {         
         isPublished: false,
       },
     });
-
+    revalidateTag(`courses`, "max")
+    revalidateTag(`courses/${courseId}`, "max")
     return NextResponse.json(unpublishedCourse);
   } catch (error) {
     logger.error(`[COURSE_ID_UNPUBLISH_PATCH]: Internal Error: Failed to unpublish course ${courseId} ${error}`)

@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { getAdminInfo } from "@/utils/roles";
 import * as Sentry from "@sentry/nextjs";
+import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 
 export async function PATCH(
@@ -60,6 +61,9 @@ export async function PATCH(
         isPublished: true,
       },
     });
+        revalidateTag(`courses/${courseId}`, 'max');
+        revalidateTag(`chapters/${chapterId}`, 'max');
+    
 
     logger.info(`[COURSE_ID_CHAPTER_ID_PUBLISH_PATCH]: OK: Chapter ${chapterId} published successfully`)
     return NextResponse.json(publishedChapter);

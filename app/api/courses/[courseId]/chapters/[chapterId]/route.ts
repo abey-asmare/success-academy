@@ -4,7 +4,7 @@ import Mux from "@mux/mux-node";
 import { NextResponse } from "next/server";
 import * as Sentry from "@sentry/nextjs"
 import { utapi } from "@/lib/uploadthing-server";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 const mux = new Mux(
 {
@@ -95,13 +95,16 @@ export async function DELETE(
         }
     }
 
-
+    
     const deletedChapter = await db.chapter.delete({
       where: {
         id: chapterId,
       },
     });
 
+    revalidatePath(`/courses/${courseId}/chapters/${chapterId}`)
+    revalidateTag(`courses/${courseId}`, 'max')
+    revalidateTag(`chapters/${chapterId}`, 'max')
     // const publishedChaptersInCourse = await db.chapter.findMany({
     //   where: {
     //     courseId: courseId,
@@ -202,6 +205,10 @@ export async function PATCH(
       }
     }
     logger.info(`[COURSE_ID_CHAPTER_ID_PATCH]: OK: Chapter ${chapterId} updated successfully`)
+
+    revalidatePath(`/courses/${courseId}/chapters/${chapterId}`)
+    revalidateTag(`courses/${courseId}`, 'max')
+    revalidateTag(`chapters/${chapterId}`, 'max')
     return NextResponse.json(chapter);
   } catch (error) {
     logger.error(`[COURSE_ID_CHAPTER_ID_PATCH]: Internal Error: Failed to update chapter ${chapterId} ${error}`)
