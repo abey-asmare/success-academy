@@ -5,7 +5,7 @@ import { DataTable } from './components/data-table';
 import { cacheLife, cacheTag } from 'next/cache';
 
 export default async function PaymentPage() {
-    cacheTag('teacher/purchases')
+    cacheTag('page/teacher/purchases')
     cacheLife('hours')
     const profile = await db.profile.findMany()
   const courses = await db.course.findMany()

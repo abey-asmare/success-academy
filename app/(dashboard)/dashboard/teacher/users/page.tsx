@@ -5,7 +5,7 @@ import { columns } from "./components/columns";
 import { DataTable } from "./components/data-table";
 
 const UsersPage = async () => {
-  cacheTag("teacher/users");
+  cacheTag("page/teacher/users");
   cacheLife("hours");
   const profiles = await db.profile.findMany();
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from "@/components/ui/button";
-import { deleteSimulation } from "./actions";
+import { deleteSimulation } from "../actions";
 import { useActionState } from "react";
 
 interface DeleteFormColumnProps {

@@ -8,7 +8,7 @@ import { cacheLife, cacheTag } from "next/cache"
 
 // personalized routes
 export const getPurchase = async (userId: string, courseId: string)=> {
-    cacheLife('weeks')
+    cacheLife('hours')
     cacheTag(`${userId}/purchase/${courseId}`)
     return  await db.purchase.findUnique({
       where: {

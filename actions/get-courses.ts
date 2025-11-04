@@ -5,11 +5,8 @@ import { REVALIDATE_INSTANT } from "@/server-constants";
 import { CourseWithProgressWithCategory } from "@/types";
 import { cache } from "react";
 import { isCoursePaymentVerified } from "./is-course-payment-verified";
-type GetCourses = {
-  userId: string;
-};
 
-export const getCoursesForUser = async (userId: string): Promise<CourseWithProgressWithCategory[]> => {
+export const getCoursesForUser = cache(async (userId: string): Promise<CourseWithProgressWithCategory[]> => {
     
   try {
     const courses = await db.course.findMany({
@@ -67,7 +64,7 @@ export const getCoursesForUser = async (userId: string): Promise<CourseWithProgr
   } catch{
     return [];
   }
-}
+})
 
 
 export const getCoursesMini = async () => {
@@ -91,9 +88,3 @@ try{
 }
   
 }
-export const getCourse = cache(async (courseId: string)=> {
-  return await db.course.findUnique({
-    where: { id: courseId, isPublished: true },
-    include: { chapters: true },
-  });
-})

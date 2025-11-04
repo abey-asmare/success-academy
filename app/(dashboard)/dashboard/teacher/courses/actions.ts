@@ -1,7 +1,7 @@
 'use server'
 import { db } from "@/lib/db"
 import { logger, Sentry } from "@/lib/sentryLogger"
-import { revalidatePath } from "next/cache"
+import { revalidatePath, updateTag } from "next/cache"
 import { z } from "zod"
 
 import { getAdminInfo } from "@/utils/roles"
@@ -73,6 +73,8 @@ function toUTCMidnight(date: Date, timeZone: string) {
             `[ADD_PROMOCODE_SERVER_ACTION]: Promocode added successfully: ${promocode}`
         )
         revalidatePath(`/dashboard/teacher/courses/${courseId}`)
+        updateTag(`${courseId}/promocodes`);
+        
     } catch (error) {
         Sentry.captureException(error)
         logger.error(`[ADD_PROMOCODE_SERVER_ACTION]: Internal Error: Failed to add promocode ${error}`)
@@ -94,6 +96,7 @@ export async function deletePromoCode(id: string, courseId: string){
         }
 
         revalidatePath(`/dashboard/teacher/courses/${courseId}`)
+        updateTag(`${courseId}/promocodes`);
     } catch (error) {
         console.log(error)
         Sentry.captureException(error)

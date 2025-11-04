@@ -38,7 +38,7 @@ type ChapterIdProps = Promise<{
 const ChapterIdPage = async ({ params }: { params: ChapterIdProps }) => {
   const { courseId, chapterId } = await params;
 
-  const chapter = await getChapter(courseId, chapterId);
+  const chapter = await getChapter(chapterId);
   const [course, muxData, promocodes, attachments, nextChapter] = await Promise.all([
     getCourse(courseId),
     getMuxData(chapterId),

@@ -36,14 +36,11 @@ export const getChapters = cache(
 );
 export const getChapter = cache(
   async (
-    courseId: string,
     chapterId: string
   ): Promise<ChaptersGenericViewType | null> => {
     cacheLife("weeks");
-    cacheTag(
-      `courses/${courseId}`,
-      `chapters/${chapterId}`);
-    return await db.chapter.findUnique({
+   
+    const chapter = await db.chapter.findUnique({
       where: {
         id: chapterId,
         isPublished: true,
@@ -53,6 +50,13 @@ export const getChapter = cache(
         category: true,
       },
     });
+
+    if(!chapter ) return null;
+     cacheTag(
+      `courses/${chapter.courseId}`,
+      `chapters/${chapterId}`);
+
+      return chapter;
   }
 );
 export const getNextChapter = cache(

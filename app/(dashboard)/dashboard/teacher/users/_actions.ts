@@ -3,7 +3,7 @@
 import { db } from "@/lib/db";
 import { checkRole } from "@/utils/roles";
 import { clerkClient } from "@clerk/nextjs/server";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export async function setRole(userId: string) {
   const client = await clerkClient();
@@ -22,6 +22,8 @@ export async function setRole(userId: string) {
       data: { role: "Admin" },
     });
     revalidatePath("/dashboard/teacher/users");
+    revalidateTag("page/teacher/users", "max");
+
     return { message: res.publicMetadata, status: 200 };
   } catch (err) {
     return { message: err, status: 500 };
@@ -37,12 +39,13 @@ export async function removeRole(userId: string) {
     });
     await db.profile.update({
       where: { userId },
-      data: { role: 'User'},
+      data: { role: "User" },
     });
     revalidatePath("/dashboard/teacher/users");
+    revalidateTag("page/teacher/users", "max");
     return { message: res.publicMetadata, status: 200 };
   } catch (err) {
-    console.log(err, 'action')
+    console.log(err, "action");
     return { message: err, status: 500 };
   }
 }
