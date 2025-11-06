@@ -118,6 +118,7 @@ export async function POST(
 
     revalidateTag('chapters', 'max')
     revalidateTag(`chapters/${chapterId}`, 'max')
+    
 
     return NextResponse.json(exam);
   } catch (error) {

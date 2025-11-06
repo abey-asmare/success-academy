@@ -4,14 +4,14 @@ import { db } from "@/lib/db";
 import * as Sentry from "@sentry/nextjs";
 import axios from "axios";
 import { utapi } from "@/lib/uploadthing-server";
-import { revalidatePath, revalidateTag, updateTag } from "next/cache";
-import { getChapter, getMuxData } from "@/optimizedQueries/chapterQueries";
+import { revalidatePath, updateTag } from "next/cache";
+import { getChapterForAdmin, getMuxData } from "@/optimizedQueries/chapterQueries";
 
 const { logger } = Sentry;
 export async function deleteChapter(id: string) {
   try {
     // get the chapter
-    const chapter= await getChapter(id)
+    const chapter= await getChapterForAdmin(id)
     const muxData = await getMuxData(id)
     
     // const chapter = await db.chapter.findUnique({

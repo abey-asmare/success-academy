@@ -22,7 +22,7 @@ export const getChapters = cache(
     return await db.chapter.findMany({
       where: {
         courseId,
-        isPublished: true,
+        isPublished: true
       },
       include: {
         exams: true,
@@ -34,16 +34,61 @@ export const getChapters = cache(
     });
   }
 );
+export const getChaptersForAdmin = cache(
+  async (courseId: string): Promise<ChaptersGenericViewType[]> => {
+    cacheLife("weeks");
+    cacheTag(`chapters`, `courses/${courseId}`);
+
+    return await db.chapter.findMany({
+      where: {
+        courseId,
+      },
+      include: {
+        exams: true,
+        category: true,
+      },
+      orderBy: {
+        position: "asc",
+      },
+    });
+  }
+);
+
+
 export const getChapter = cache(
   async (
     chapterId: string
   ): Promise<ChaptersGenericViewType | null> => {
     cacheLife("weeks");
    
-    const chapter = await db.chapter.findUnique({
+    const chapter = await db.chapter.findFirst({
       where: {
         id: chapterId,
-        isPublished: true,
+        isPublished: true
+      },
+      include: {
+        exams: true,
+        category: true,
+      },
+    });
+
+    if(!chapter ) return null;
+     cacheTag(
+      `courses/${chapter.courseId}`,
+      `chapters/${chapterId}`);
+
+      return chapter;
+  }
+);
+export const getChapterForAdmin = cache(
+  async (
+    chapterId: string
+  ): Promise<ChaptersGenericViewType | null> => {
+    cacheLife("weeks");
+   
+    const chapter = await db.chapter.findFirst({
+      where: {
+        id: chapterId,
       },
       include: {
         exams: true,

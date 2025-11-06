@@ -33,7 +33,7 @@ export const getPurchase = async (userId: string, courseId: string)=> {
 
 
 export const getUserProgress = async (userId: string, chapterId: string): Promise<UserProgress | null>=> {
-    cacheLife({stale:  REVALIDATE_INSTANT})
+    cacheLife({revalidate: REVALIDATE_INSTANT, stale:  REVALIDATE_INSTANT})
     cacheTag(`${userId}/progress/${chapterId}`)
     return await db.userProgress.findUnique({
         where: {

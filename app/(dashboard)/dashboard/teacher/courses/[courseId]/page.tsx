@@ -1,5 +1,5 @@
 import Banner from "@/components/banner";
-import { getChapters } from "@/optimizedQueries/chapterQueries";
+import { getChapters, getChaptersForAdmin } from "@/optimizedQueries/chapterQueries";
 import {
   getAttachments,
   getCourse,
@@ -24,7 +24,7 @@ const CourseIdPage = async ({
   const { courseId } = await params;
   const [course, chapters, promocodes, attachments] = await Promise.all([
     getCourse(courseId),
-    getChapters(courseId),
+    getChaptersForAdmin(courseId),
     getPromoCodes(courseId),
     getAttachments(courseId),
   ]);
@@ -45,7 +45,6 @@ const CourseIdPage = async ({
   const completionText = `(${completedFields} / ${totalFields})`;
 
   const isComplete = requiredFields.every(Boolean);
-
   return (
     <>
       {!course.isPublished && (

@@ -3,14 +3,13 @@ import {
   CourseGenericViewType,
   getCourses,
 } from "@/optimizedQueries/CourseQueries";
-import { ExamMinimized } from "@/types";
+import { Exam } from "@/prisma/app/generated/prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
-import { Exam } from "@/prisma/app/generated/prisma/client";
 
 export default async function CourseList({ className }: { className: string }) {
   const courses = await getCourses();
@@ -37,8 +36,12 @@ export default async function CourseList({ className }: { className: string }) {
               <CourseCardSkeleton key={index} />
             ))}
           >
-            <CourseCard key={1} data={courses[0]} />
-            <ExamCard key={1} data={examsMinimized[0]} />
+            {courses.map((course) => (
+              <CourseCard key={course.id} data={course} />
+            ))}
+            {examsMinimized.map((exam) => (
+              <ExamCard key={exam.id} data={exam} />
+            ))}
           </Suspense>
         </div>
       </div>

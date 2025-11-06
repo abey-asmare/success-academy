@@ -1,3 +1,4 @@
+'use cache: private';
 import { getCoursesForUser } from "@/actions/get-courses";
 import { CoursesList } from "@/components/courses-list";
 import { auth } from "@clerk/nextjs/server";
@@ -14,6 +15,8 @@ const SearchPage = async () => {
   if (!userId) {
     return redirect("/");
   }
+  cacheTag(`page/${userId}`);
+  cacheLife('hours')
   return <SearchPageCoursesContent userId={userId} />;
 };
 
@@ -22,9 +25,6 @@ async function SearchPageCoursesContent({
 }: {
   userId: string;
 }) {
- "use cache";
-  cacheTag(`page/${userId}/search`);
-  cacheLife({ stale: 60 * 10 });
     const courses = await getCoursesForUser(userId);
   return (
     <div className="p-6 space-y-4">

@@ -22,6 +22,8 @@ export async function cancelPayment(id: string) {
       });
   
       updateTag(`${payment.userId}/purchase/${payment.courseId}`)
+      updateTag(`page/${payment.userId}`)
+
       return { message: "Payment cancelled", status: 200 };
     } catch (err) {
       return { message: err, status: 500 };
@@ -54,6 +56,7 @@ export async function cancelPayment(id: string) {
       });
   
       updateTag(`${payment.userId}/purchase/${payment.courseId}`)
+      updateTag(`page/${payment.userId}`)
       return { message: "Payment approved", status: 200 };
     } catch (err) {
       return { message: err, status: 500 };

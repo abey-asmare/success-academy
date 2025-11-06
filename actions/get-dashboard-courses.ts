@@ -38,9 +38,6 @@ export const getDashboardCourses = async (userId: string): Promise<DashboardCour
                         }
                     },
                 },
-            }, cacheStrategy: {
-                ttl: REVALIDATE_INSTANT,
-                swr: REVALIDATE_INSTANT
             }
         });
 

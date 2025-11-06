@@ -6,8 +6,7 @@ import { CourseWithProgressWithCategory } from "@/types";
 import { cache } from "react";
 import { isCoursePaymentVerified } from "./is-course-payment-verified";
 
-export const getCoursesForUser = cache(async (userId: string): Promise<CourseWithProgressWithCategory[]> => {
-    
+export const getCoursesForUser = async (userId: string): Promise<CourseWithProgressWithCategory[]> => {
   try {
     const courses = await db.course.findMany({
       where: {
@@ -30,10 +29,7 @@ export const getCoursesForUser = cache(async (userId: string): Promise<CourseWit
       },
       orderBy: {
         createdAt: "desc",
-      }, cacheStrategy: {
-        ttl: REVALIDATE_INSTANT,
-            swr: REVALIDATE_INSTANT
-      } 
+      }
     });
     
     const coursesWithProgress = await Promise.all(
@@ -64,8 +60,7 @@ export const getCoursesForUser = cache(async (userId: string): Promise<CourseWit
   } catch{
     return [];
   }
-})
-
+}
 
 export const getCoursesMini = async () => {
 try{

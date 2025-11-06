@@ -1,12 +1,12 @@
 "use cache";
-import { getCourses } from "@/optimizedQueries/CourseQueries";
+import { getCourses, getCoursesForAdmin } from "@/optimizedQueries/CourseQueries";
 import CreateSimulationForm from "../components/CreateSimulationForm";
 import { cacheLife, cacheTag } from "next/cache";
 
 export default async function CreateSimulationPage() {
   cacheTag("teacher/simulations/create");
   cacheLife("weeks");
-  const courses = await getCourses();
+  const courses = await getCoursesForAdmin();
 
   return (
     <div className="max-w-4xl mx-auto p-6">

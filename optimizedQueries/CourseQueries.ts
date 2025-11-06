@@ -8,6 +8,7 @@ import {
 } from "@/prisma/app/generated/prisma/client/client";
 import { cacheLife, cacheTag } from "next/cache";
 import { cache } from "react";
+import { TZDate } from "react-day-picker";
 
 export type CourseGenericViewType = Omit<
   Prisma.CourseGetPayload<{
@@ -32,8 +33,24 @@ export const getCourses = cache(async (): Promise<CourseGenericViewType[]> => {
   cacheTag("courses");
   return await db.course.findMany({
     where: {
-      isPublished: true,
+      isPublished: true
     },
+    include: {
+      exams: true,
+      category: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+});
+
+
+
+export const getCoursesForAdmin = cache(async (): Promise<CourseGenericViewType[]> => {
+  cacheLife("weeks");
+  cacheTag("courses", 'admin/courses');
+  return await db.course.findMany({
     include: {
       exams: true,
       category: true,
@@ -68,14 +85,28 @@ export const getCourse = cache(
   }
 );
 
+
+function todayInUserZone(timeZone: string) {
+  const now = new TZDate(TZDate.now(), timeZone);
+  return new Date(now.toISOString());
+}
 export const getPromoCodes = cache(
   async (courseId: string): Promise<CoursePromocode[]> => {
     cacheLife("weeks");
     cacheTag(`${courseId}/promocodes`, courseId);
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/courses/${courseId}/promocodes`
-    );
-    return await response.json();
+  const today = todayInUserZone("Africa/Addis_Ababa");
+
+    return await db.coursePromocode.findMany({
+      where: {
+        courseId: courseId,
+        startDate: {
+          lte: today,
+        },
+        expiresIn: {
+          gte: today,
+        },
+      },
+    });
   }
 );
 

@@ -4,6 +4,7 @@ import { getAdminInfo } from "@/utils/roles";
 import { Sentry, logger } from "@/lib/sentryLogger";
 import { examSchema } from "@/schemas/validationSchemas";
 import { notFound } from "next/navigation";
+import { revalidateTag } from "next/cache";
 
 export async function PUT(
   req: NextRequest,
@@ -43,7 +44,9 @@ export async function PUT(
     });
 
     if (!simulation) {
-      logger.info(`[SIMULATION_PUT]: Not Found: Simulation ${simulationId} not found`);
+      logger.info(
+        `[SIMULATION_PUT]: Not Found: Simulation ${simulationId} not found`
+      );
       notFound();
     }
 
@@ -59,66 +62,80 @@ export async function PUT(
     );
 
     // Optimized transaction
-    const updatedSimulation = await db.$transaction(async (tx) => {
-      // Remove old questions (cascade deletes answers)
-      await tx.question.deleteMany({ where: { examId: simulationId } });
+    const updatedSimulation = await db.$transaction(
+      async (tx) => {
+        // Remove old questions (cascade deletes answers)
+        await tx.question.deleteMany({ where: { examId: simulationId } });
 
-      // Insert new questions in bulk
-      await tx.question.createMany({
-        data: uniqueQuestions.map((q) => ({
-          question: q.question.trim(),
-          imageUrl: q.imageUrl || null,
-          answerDescription: q.answerDescription || null,
-          examId: simulationId,
-        })),
-      });
+        // Insert new questions in bulk
+        await tx.question.createMany({
+          data: uniqueQuestions.map((q) => ({
+            question: q.question.trim(),
+            imageUrl: q.imageUrl || null,
+            answerDescription: q.answerDescription || null,
+            examId: simulationId,
+          })),
+        });
 
-      // Fetch back inserted questions with IDs
-      const dbQuestions = await tx.question.findMany({
-        where: { examId: simulationId },
-        select: { id: true, question: true, imageUrl: true, answerDescription: true },
-      });
-
-      // Build answers for bulk insert
-      const answersData = uniqueQuestions.flatMap((q) => {
-        const parent = dbQuestions.find(
-          (dq) =>
-            dq.question.trim() === q.question.trim() &&
-            (dq.imageUrl || "") === (q.imageUrl || "")
-        );
-        if (!parent) return [];
-        return q.answers.map((a) => ({
-          text: a.text,
-          isCorrect: a.isCorrect,
-          questionId: parent.id,
-        }));
-      });
-
-      if (answersData.length > 0) {
-        await tx.answer.createMany({ data: answersData });
-      }
-
-      // Update simulation metadata
-      return tx.exam.update({
-        where: { id: simulationId },
-        data: {
-          courseId,
-          name,
-          description,
-          updatedAt: new Date(),
-        },
-        include: {
-          questions: {
-            include: { answers: true },
+        // Fetch back inserted questions with IDs
+        const dbQuestions = await tx.question.findMany({
+          where: { examId: simulationId },
+          select: {
+            id: true,
+            question: true,
+            imageUrl: true,
+            answerDescription: true,
           },
-        },
-      });
-    }, {
-      timeout: 10_000,
-      maxWait: 10_000,
-    });
+        });
 
-    logger.info(`[SIMULATION_PUT]: OK: Simulation ${simulationId} updated successfully`);
+        // Build answers for bulk insert
+        const answersData = uniqueQuestions.flatMap((q) => {
+          const parent = dbQuestions.find(
+            (dq) =>
+              dq.question.trim() === q.question.trim() &&
+              (dq.imageUrl || "") === (q.imageUrl || "")
+          );
+          if (!parent) return [];
+          return q.answers.map((a) => ({
+            text: a.text,
+            isCorrect: a.isCorrect,
+            questionId: parent.id,
+          }));
+        });
+
+        if (answersData.length > 0) {
+          await tx.answer.createMany({ data: answersData });
+        }
+
+        // Update simulation metadata
+        return tx.exam.update({
+          where: { id: simulationId },
+          data: {
+            courseId,
+            name,
+            description,
+            updatedAt: new Date(),
+          },
+          include: {
+            questions: {
+              include: { answers: true },
+            },
+          },
+        });
+      },
+      {
+        timeout: 10_000,
+        maxWait: 10_000,
+      }
+    );
+
+    logger.info(
+      `[SIMULATION_PUT]: OK: Simulation ${simulationId} updated successfully`
+    );
+    revalidateTag("courses", "max");
+    revalidateTag("teacher/simulations", "max");
+    revalidateTag(`courses/${courseId}`, "max");
+
     return NextResponse.json(updatedSimulation);
   } catch (error) {
     logger.error(

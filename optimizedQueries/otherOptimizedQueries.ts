@@ -48,4 +48,14 @@ export const getExamById = cache(async(examId: string)=> {
               },
           },
       })
-})
+});
+export const getAllChapterCategories = cache(async () => {
+    cacheLife('weeks')
+    cacheTag('chapterCategories')
+    return await db.chapterCategory.findMany({
+    orderBy: {
+      name: "asc",
+    },
+  });
+});
+

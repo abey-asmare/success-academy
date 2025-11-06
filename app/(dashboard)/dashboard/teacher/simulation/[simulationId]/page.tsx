@@ -2,7 +2,7 @@
 import UpdateSimulationForm from "../components/UpdateSimulationForm";
 import { notFound } from "next/navigation";
 import { getExamById } from "@/optimizedQueries/otherOptimizedQueries";
-import { getCourses } from "@/optimizedQueries/CourseQueries";
+import { getCoursesForAdmin } from "@/optimizedQueries/CourseQueries";
 import { cacheLife, cacheTag } from "next/cache";
 
 export default async function UpdateSimulationPage({
@@ -14,7 +14,8 @@ export default async function UpdateSimulationPage({
   cacheTag(`teacher/simulations/${simulationId}`);
   cacheLife("hours");
   const exam = await getExamById(simulationId);
-  const courses = await getCourses();
+  const courses = await getCoursesForAdmin();
+  
   if (!exam) {
     return notFound();
   }

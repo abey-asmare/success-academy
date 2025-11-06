@@ -1,4 +1,3 @@
-import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { VideoPlayer } from "./components/video-player";
 import AdditionalResources from "./components/AdditionalResources";
@@ -16,9 +15,9 @@ type ChapterIdProps = Promise<{
 // }: {
 //   params: ChapterIdProps;
 // }): Promise<Metadata> {
-//   const { chapterId, courseId } = await params;
-//   const chapter = await getChapter(courseId, chapterId)
-//   const course = await getCourse(courseId);
+//   const { chapterId } = await params;
+//   const chapter = await getChapter(chapterId)
+//   const course = await getCourse(chapter!.courseId);
 
 //   if (!chapter || !course) {
 //     return {
@@ -39,6 +38,11 @@ const ChapterIdPage = async ({ params }: { params: ChapterIdProps }) => {
   const { courseId, chapterId } = await params;
 
   const chapter = await getChapter(chapterId);
+  
+  
+    if (!chapter) {
+      return redirect("/");
+    }
   const [course, muxData, promocodes, attachments, nextChapter] = await Promise.all([
     getCourse(courseId),
     getMuxData(chapterId),
@@ -48,7 +52,7 @@ const ChapterIdPage = async ({ params }: { params: ChapterIdProps }) => {
   ])
 
 
-  if (!chapter || !course) {
+  if (!course) {
     return redirect("/");
   }
   return (

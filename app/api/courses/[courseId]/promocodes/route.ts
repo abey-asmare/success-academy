@@ -15,7 +15,6 @@ export async function GET(
 
   try {
     const today = todayInUserZone("Africa/Addis_Ababa");
-    console.log("date in get chapt", today);
 
     const promocodes = await db.coursePromocode.findMany({
       where: {

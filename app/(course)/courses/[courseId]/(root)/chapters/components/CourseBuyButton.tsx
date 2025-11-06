@@ -23,7 +23,7 @@ const purchase = await getPurchase(userId, courseId)
   }
   return (
     <div>
-      {purchase?.approved ? (
+      {purchase ? (
         <div className="ml-[12%] md:ml-[20%] space-y-2">
           <div className="bg-sky-500/70 hover:bg-sky-700 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200 text-base w-fit flex items-center">
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />

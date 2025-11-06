@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import { Answer } from "@/prisma/app/generated/prisma/client";
 import { getAdminInfo } from "@/utils/roles";
 import * as Sentry from "@sentry/nextjs";
+import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 const { logger } = Sentry;
@@ -108,6 +109,10 @@ export async function POST(req: NextRequest) {
     logger.info(
       `[COURSE_SIMULATION_POST]: OK: Simulation ${exam.id} created successfully`
     );
+      revalidateTag("courses", 'max');
+      revalidateTag('teacher/simulations', 'max')
+      revalidateTag('home', 'max')
+    
     return NextResponse.json(exam);
   } catch (error) {
     logger.error(
