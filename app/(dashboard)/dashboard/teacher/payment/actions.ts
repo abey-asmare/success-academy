@@ -1,7 +1,7 @@
 'use server'
 
 import { db } from "@/lib/db";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 
 export async function cancelPayment(id: string) {
     try {
@@ -21,6 +21,9 @@ export async function cancelPayment(id: string) {
         },
       });
   
+      updateTag(`${payment.userId}/purchase/${payment.courseId}`)
+      updateTag(`page/${payment.userId}`)
+
       return { message: "Payment cancelled", status: 200 };
     } catch (err) {
       return { message: err, status: 500 };
@@ -29,6 +32,8 @@ export async function cancelPayment(id: string) {
       revalidatePath("/dashboard/search");
       revalidatePath("/dashboard/teacher/courses");
       revalidatePath(`/courses/${id}`);
+
+      
     }   
   }
   
@@ -50,6 +55,8 @@ export async function cancelPayment(id: string) {
         },
       });
   
+      updateTag(`${payment.userId}/purchase/${payment.courseId}`)
+      updateTag(`page/${payment.userId}`)
       return { message: "Payment approved", status: 200 };
     } catch (err) {
       return { message: err, status: 500 };

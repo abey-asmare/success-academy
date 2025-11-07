@@ -1,6 +1,8 @@
-import { DataTable } from "./components/data-table";
-import { columns } from "./components/columns";
+"use cache";
 import { db } from "@/lib/db";
+import { columns } from "./components/columns";
+import { DataTable } from "./components/data-table";
+import { cacheLife, cacheTag } from "next/cache";
 
 export type User = {
   id: string;
@@ -10,6 +12,8 @@ export type User = {
   role: "admin" | "moderator" | "User";
 };
 const SimulationPage = async () => {
+  cacheTag("teacher/simulations");
+  cacheLife("weeks");
   const exams = await db.exam.findMany({
     where: {
       isSimulation: true,

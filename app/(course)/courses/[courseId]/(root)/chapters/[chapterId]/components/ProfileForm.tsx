@@ -19,7 +19,6 @@ import {
 } from "@/components/ui/select";
 import { useUser } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { startTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -52,6 +51,7 @@ import { cn } from "@/lib/utils";
 import { profileFormSchema } from "@/schemas/validationSchemas";
 import { useProfileEnroll } from "@/store";
 import { useMediaQuery } from "@react-hook/media-query";
+import { Loader2 } from "lucide-react";
 import { redirect, useParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { enrollInCourse } from "../actions";
@@ -136,25 +136,8 @@ function ProfileForm({ setOpen }: { setOpen: (open: boolean) => void }) {
       referrer: "Telegram",
     },
   });
-
-
-  // useEffect(() => {
-  //   if (user) {
-  //     form.reset({
-  //       firstName: user.firstName || "",
-  //       lastName: user.lastName || "",
-  //       email: user?.emailAddresses[0].emailAddress || "",
-  //       phoneNumber: "",
-  //       university: "",
-  //       stream: "Natural science",
-  //       referrer: "Telegram",
-  //     });
-  //   }
-  // }, [user, form]);
-
   const params = useParams<{ courseId: string }>();
   const courseId = params?.courseId || "";
-  console.log("courseid", courseId);
 
   return (
     <div className="max-w-2xl m-auto mt-10 px-10">
@@ -162,9 +145,10 @@ function ProfileForm({ setOpen }: { setOpen: (open: boolean) => void }) {
         <form
           className="space-y-4"
           onSubmit={form.handleSubmit(
-            (data) => {
+            async (data) => {
               console.log(data)
-              startTransition(async () => {
+              {console.log(form.formState)}
+
                 try {
                   console.log('data', data)
                   await enrollInCourse(data, courseId, user!.id);
@@ -174,7 +158,6 @@ function ProfileForm({ setOpen }: { setOpen: (open: boolean) => void }) {
                   toast.error("Failed to update profile. Please try again.");
                 }
                 redirect(`/courses/${courseId}/checkout`);
-              });
             },
             (error) => console.log(error)
           )}
@@ -326,11 +309,14 @@ function ProfileForm({ setOpen }: { setOpen: (open: boolean) => void }) {
           <div className="mt-4">
             <Button
               className={cn("bg-sky-600 hover:bg-sky-700", {
-                "bg-sky-600/60": form.formState.isLoading,
+                "bg-sky-600/60": form.formState.isSubmitting,
               })}
               type="submit"
-              disabled={form.formState.isLoading}
+              disabled={form.formState.isSubmitting}
             >
+              {form.formState.isSubmitting && (
+                <Loader2 className="ml-2 h-4 w-4 animate-spin" />
+              )}
               Submit
             </Button>
           </div>

@@ -1,13 +1,12 @@
 "use client";
-
-import React, { useState } from "react";
+import AnswerDescription from "@/app/(course)/courses/[courseId]/components/AnswerDescription";
+import UnDownloadableImage from "@/components/UnDownloadableImage";
 import { cn } from "@/lib/utils";
+import { ExamGenericType } from "@/optimizedQueries/otherOptimizedQueries";
 import { ArrowLeft, Check } from "lucide-react";
 import Image from "next/image";
-import UnDownloadableImage from "@/components/UnDownloadableImage";
-import { Answer, Exam, Question } from "@/prisma/app/generated/prisma/client";
-import AnswerDescription from "@/app/(course)/courses/[courseId]/components/AnswerDescription";
 import Link from "next/link";
+import { useState } from "react";
 
 const alphabets = [
   "A",
@@ -40,11 +39,7 @@ const alphabets = [
 
 type InteractiveExamProps = {
   courseId: string;
-  exam: Exam & {
-    questions: (Question & {
-      answers: Answer[];
-    })[];
-  };
+  exam: ExamGenericType
 };
 
 export default function InteractiveExam({

@@ -13,7 +13,11 @@ const isPublicRoute = createRouteMatcher([
   "/terms-of-use(.*)",
   "/telegram-bot(.*)",
   "/courses/:courseId",
+  // exam is protected in the layout but the page is generated 
+  // statically, so that it will be fetched only once
+  "/courses/:courseId/chapters/:chapterId/exams/:examId",
 
+  // Protected rest api's
   "/api/uploadthing",
   "/api/courses(.*)",
   "/api/telegram-bot(.*)",
@@ -41,7 +45,7 @@ export default clerkMiddleware(async (auth, req) => {
     await auth.protect();
   }
 
-  // 2. Admin-only protectionj
+  // 2. Admin-only protection
   if (isAdminRoute(req) && authData.sessionClaims?.metadata?.role !== "admin") {
     const url = new URL("/", req.url);
     return NextResponse.redirect(url);

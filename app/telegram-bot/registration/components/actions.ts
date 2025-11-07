@@ -7,6 +7,9 @@ import { Stream } from "@/prisma/app/generated/prisma/client";
 import { clerkClient } from "@clerk/nextjs/server";
 import { sendPurchaseRequestToTelegram } from "@/lib/telegram-api";
 import { logger } from "@/lib/sentryLogger";
+import { connection } from "next/server";
+import { getPurchase } from "@/optimizedQueries/personalizedQueries";
+import { revalidateTag } from "next/cache";
 
 const formSchema = profileFormSchema.extend({
   courseId: z.string().min(1, { message: "Course is required" }),
@@ -16,8 +19,7 @@ type formType = z.infer<typeof formSchema>;
 
 export async function handleTelegramRegistration(data: formType) {
   const isSuccessFul = formSchema.safeParse(data);
-  if (!isSuccessFul)
-    return { message: "Validation Error", status: 400 };
+  if (!isSuccessFul) return { message: "Validation Error", status: 400 };
 
   let userId;
   try {
@@ -25,15 +27,15 @@ export async function handleTelegramRegistration(data: formType) {
 
     // check if the user exists
 
-    const user = await client.users.getUserList({emailAddress: [data.email]});
+    const user = await client.users.getUserList({ emailAddress: [data.email] });
 
     if (user.data.length > 0) {
-      console.log(user.data)
+      console.log(user.data);
       userId = user.data[0].id;
     } else {
       const newUser = await client.users.createUser({
         emailAddress: [data.email],
-        password: crypto.randomUUID().toString(),
+        password: await crypto.randomUUID().toString(),
       });
       userId = newUser.id;
     }
@@ -69,42 +71,44 @@ export async function handleTelegramRegistration(data: formType) {
       },
     });
 
-    const purchase = await db.purchase.findUnique({
-      where: {
-        userId_courseId: {
-          userId,
-          courseId: data.courseId,
-        },
-      },
-    });
+    const purchase = await getPurchase(userId, data.courseId);
     if (!purchase || !purchase.approved) {
-    // create a purchase
-    const newPurchase = await db.purchase.upsert({
-      where: {
-        userId_courseId: {
+      // create a purchase
+      const newPurchase = await db.purchase.upsert({
+        where: {
+          userId_courseId: {
+            userId,
+            courseId: data.courseId,
+          },
+        },
+        update: {
+          imageUrl: data.imageUrl,
+        },
+        create: {
           userId,
           courseId: data.courseId,
+          imageUrl: data.imageUrl,
         },
-      },
-      update: {
-        imageUrl: data.imageUrl,
-      },
-      create: {
+      });
+      if (!newPurchase) {
+        return { message: "Registration failed", status: 500 };
+      }
+
+      logger.info(
+        `[COURSE_ID_PURCHASE_POST]: OK: Course ${data.courseId} attempt to send.`
+      );
+      //  fetch for telegram
+      sendPurchaseRequestToTelegram(
         userId,
-        courseId: data.courseId,
-        imageUrl: data.imageUrl,
-      },
-    });
-    if (!newPurchase) {
-      return { message: "Registration failed", status: 500 };
+        data.courseId,
+        data.imageUrl,
+        newPurchase.id
+      );
     }
-  
-    logger.info(`[COURSE_ID_PURCHASE_POST]: OK: Course ${data.courseId} attempt to send.`)
-    //  fetch for telegram
-     sendPurchaseRequestToTelegram(userId, data.courseId, data.imageUrl, newPurchase.id);
-    } 
-      return { message: "Registration successful", status: 200 };
-}catch (error) {
+    revalidateTag("page/teacher/purchases", "max");
+
+    return { message: "Registration successful", status: 200 };
+  } catch (error) {
     console.log(error);
     return { message: "Registration failed", status: 500 };
   }

@@ -1,3 +1,4 @@
+'use cache'
 import {
   instagramLink,
   supportEmail,
@@ -6,16 +7,16 @@ import {
   tiktokLink1,
   tiktokLink2,
 } from "@/app/constants";
-import { Mail, Phone } from "lucide-react";
-import Link from "next/link";
-import OurCourses from "./custom/OurCourses";
 import {
   IconBrandInstagram,
   IconBrandTelegram,
   IconBrandTiktok,
 } from "@tabler/icons-react";
+import { Mail, Phone } from "lucide-react";
+import Link from "next/link";
+import OurCourses from "./custom/OurCourses";
 
-const Footer = () => {
+const Footer = async() => {
   return (
     <footer className="bg-gray-900 text-white py-12 px-4 md:px-10">
       <div className="max-w-7xl mx-auto">

@@ -1,8 +1,11 @@
+'use cache'
+import { cacheLife, cacheTag } from "next/cache";
 import RegistrationForm from "./components/RegistrationForm";
 import { db } from "@/lib/db";
 
 export default async function BotRegisterationPage() {
-
+  cacheTag('courses/telegram-registration')
+  cacheLife('days')
   const courses = await db.course.findMany({
     where: {
     isPublished: true 
@@ -20,4 +23,5 @@ export default async function BotRegisterationPage() {
   );
 }
 
-export const dynamic = 'force-dynamic';
+
+// export const dynamic = 'force-dynamic';

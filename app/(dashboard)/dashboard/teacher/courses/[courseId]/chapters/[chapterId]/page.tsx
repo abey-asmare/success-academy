@@ -1,17 +1,17 @@
 import Banner from "@/components/banner";
 import { Button } from "@/components/ui/button";
-import { db } from "@/lib/db";
+import { getChapterForAdmin, getMuxData } from "@/optimizedQueries/chapterQueries";
+import { getAllChapterCategories } from "@/optimizedQueries/otherOptimizedQueries";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import ChapterAccessForm from "./components/chapter-access-form";
 import ChapterActions from "./components/chapter-actions";
+import ChapterCategoryForm from "./components/chapter-category-form";
 import ChapterDescriptionForm from "./components/chapter-description-form";
 import ChapterTitleForm from "./components/chapter-title-form";
 import ChapterVideoForm from "./components/chapter-video-form";
 import DeleteExamButton from "./exam/components/DeleteExamButton";
-import ChapterCategoryForm from "./components/chapter-category-form";
-// import ChapterCategoryForm from "./components/chapter-category-form";
 
 export default async function ChapterDetails({
   params,
@@ -19,25 +19,13 @@ export default async function ChapterDetails({
   params: Promise<{ chapterId: string; courseId: string }>;
 }) {
   const { chapterId, courseId } = await params;
-
-  const chapter = await db.chapter.findUnique({
-    where: {
-      id: chapterId,
-      courseId,
-    },
-    include: {
-      muxData: true,
-      exams: true,
-    },
-  });
+  const chapter = await getChapterForAdmin(chapterId)
+  const muxData = await getMuxData(chapterId)
+  
   if (!chapter) {
-    return redirect("/");
+    return notFound()
   }
-  const chapterCategories = await db.chapterCategory.findMany({
-    orderBy: {
-      name: "asc",
-    },
-  });
+  const chapterCategories = await getAllChapterCategories()
 
   // description should be optional as requested
   const requiredFields = [
@@ -119,7 +107,7 @@ export default async function ChapterDetails({
               <ChapterVideoForm
                 initialData={{
                   ...chapter,
-                  muxData: chapter.muxData ?? undefined,
+                  muxData: muxData ?? undefined,
                 }}
                 courseId={courseId}
                 chapterId={chapterId}
@@ -171,3 +159,6 @@ export default async function ChapterDetails({
     </>
   );
 }
+
+
+// export const revalidate = 10800 // 3 hours;

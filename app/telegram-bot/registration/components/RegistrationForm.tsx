@@ -38,6 +38,7 @@ import { profileFormSchema } from "@/schemas/validationSchemas";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { handleTelegramRegistration } from "./actions";
+import { register } from "module";
 
 const referrerOptions = [
   { value: "Google", label: "Google" },
@@ -75,7 +76,8 @@ export default function RegistrationForm({ courses }: PropType) {
     },
   });
   const [promo, setPromo] = useState("");
-
+  const [registered, setIsRegistered] = useState(false);
+  const [responseStatus, setResponseStatus] = useState(400);
   const getCurrentPrice = () => {
     const selectedCourse = form.watch("courseId");
     const course = courses.find((course) => course.id === selectedCourse);
@@ -101,13 +103,22 @@ export default function RegistrationForm({ courses }: PropType) {
           onSubmit={form.handleSubmit(
             async (data) => {
                 try {
-                const res = await handleTelegramRegistration(data);
+                  if(!registered){
+                    const res = await handleTelegramRegistration(data);
+                    setResponseStatus(res?.status);
+                  }
                 
                 startTransition(() => {
-                  if (res?.status === 200) {
+                  if(registered){
+                    toast.success(
+                      "Please give us a minute to verify your payment"
+                    );
+                  }
+                  else if (responseStatus === 200) {
                     toast.success(
                       "Payment successful. We are processing your payments"
                     );
+                    setIsRegistered(true);
                   } else {
                     toast.error("Failed to register. Please try again.");
                   }
@@ -346,7 +357,7 @@ export default function RegistrationForm({ courses }: PropType) {
             <Button
               className="bg-sky-600 hover:bg-sky-700 mb-10"
               type="submit"
-              disabled={form.formState.isSubmitting}
+              disabled={form.formState.isSubmitting || registered}
             >
               {form.formState.isSubmitting
                 ? "Submitting..."

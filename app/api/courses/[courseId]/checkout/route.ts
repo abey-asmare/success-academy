@@ -4,6 +4,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import { isAdmin } from "@/utils/roles";
 import * as Sentry from "@sentry/nextjs"
+import { revalidateTag } from "next/cache";
 
 // ready to be deprecate
 export async function POST(
@@ -36,6 +37,7 @@ export async function POST(
       },
     });
 
+
     if (purchase) {
       return new NextResponse("Already Purchased", { status: 400 });
     }
@@ -43,6 +45,9 @@ export async function POST(
     if (!course) {
       return new NextResponse("Not Found", { status: 404 });
     }
+    revalidateTag(`courses/${courseId}`, "max")
+    revalidateTag(`${user.id}/purchase`, 'max')
+    
     return NextResponse.json({ url: "" });
   } catch {
     return new NextResponse("Internal Error", { status: 500 });

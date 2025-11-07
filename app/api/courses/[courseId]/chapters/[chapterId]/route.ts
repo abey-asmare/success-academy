@@ -4,7 +4,7 @@ import Mux from "@mux/mux-node";
 import { NextResponse } from "next/server";
 import * as Sentry from "@sentry/nextjs"
 import { utapi } from "@/lib/uploadthing-server";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 const mux = new Mux(
 {
@@ -15,6 +15,30 @@ const mux = new Mux(
 const Video = mux.video
 
 
+export async function GET(
+  req: Request,
+  { params }: { params: Promise<{chapterId: string }> }
+){
+
+  const {chapterId} = await params
+  try{
+     const chapter = await db.chapter.findUnique({
+            where: {
+                id: chapterId,
+                isPublished: true,
+            },
+            include: {
+                exams: true,
+            }
+        });
+
+        return NextResponse.json(chapter)
+  } catch (error) {
+    console.log("error", error)
+    return NextResponse.json({error: "Internal Error"}, { status: 500 });
+  }
+    
+}
 
 
 export async function DELETE(
@@ -71,12 +95,17 @@ export async function DELETE(
         }
     }
 
-
+    
     const deletedChapter = await db.chapter.delete({
       where: {
         id: chapterId,
       },
     });
+
+    revalidatePath(`/courses/${courseId}/chapters/${chapterId}`)
+    revalidateTag(`courses/${courseId}`, 'max')
+    revalidateTag(`chapters/${chapterId}`, 'max')
+    revalidateTag(`muxData/${chapterId}`, 'max')
 
     // const publishedChaptersInCourse = await db.chapter.findMany({
     //   where: {
@@ -178,6 +207,12 @@ export async function PATCH(
       }
     }
     logger.info(`[COURSE_ID_CHAPTER_ID_PATCH]: OK: Chapter ${chapterId} updated successfully`)
+
+    revalidatePath(`/courses/${courseId}/chapters/${chapterId}`)
+    revalidateTag(`courses/${courseId}`, 'max')
+    revalidateTag(`chapters/${chapterId}`, 'max')
+    revalidateTag(`muxData/${chapterId}`, 'max')
+
     return NextResponse.json(chapter);
   } catch (error) {
     logger.error(`[COURSE_ID_CHAPTER_ID_PATCH]: Internal Error: Failed to update chapter ${chapterId} ${error}`)

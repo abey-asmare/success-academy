@@ -134,6 +134,11 @@ exports.Prisma.ChapterScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.RelationLoadStrategy = {
+  query: 'query',
+  join: 'join'
+};
+
 exports.Prisma.ChapterCategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',

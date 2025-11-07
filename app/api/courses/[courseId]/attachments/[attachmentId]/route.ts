@@ -1,6 +1,7 @@
 import { db } from "@/lib/db"
 import { getAdminInfo } from "@/utils/roles"
 import Sentry from "@sentry/nextjs"
+import { revalidatePath, revalidateTag } from "next/cache"
 import { NextResponse } from "next/server"
 
 export async function DELETE(req: Request, {params}: {params: Promise<{courseId: string, attachmentId: string}>}){
@@ -30,6 +31,10 @@ export async function DELETE(req: Request, {params}: {params: Promise<{courseId:
             }
         })
         logger.info(`[COURSE_ID_ATTACHMENT_DELETE]: OK: Attachment ${attachmentId} deleted successfully`)
+        revalidatePath(`page/attachments/${attachmentId}`)
+        revalidatePath(`/courses/${courseId}`)
+        revalidateTag(`${courseId}/attachments`, 'max');
+        revalidateTag(`attachments/${attachmentId}`, 'max')
         return NextResponse.json(attachment)    
 
     }catch(error){

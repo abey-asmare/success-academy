@@ -2,7 +2,8 @@ import { db } from "@/lib/db";
 import { sendPurchaseRequestToTelegram } from "@/lib/telegram-api";
 import { auth } from "@clerk/nextjs/server";
 import * as Sentry from "@sentry/nextjs";
-import { NextResponse } from "next/server";
+import { revalidatePath, revalidateTag } from "next/cache";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
   req: Request,
@@ -61,7 +62,9 @@ export async function POST(
 
   //  fetch for telegram
     await sendPurchaseRequestToTelegram(userId, courseId, imageUrl, newPurchase.id);
-
+    revalidateTag(`courses/${courseId}`, "max")
+    revalidateTag(`${userId}/purchase/${courseId}`, 'max')
+    revalidateTag(`${userId}/purchase`, 'max')
     return NextResponse.json(newPurchase);
   } catch (error) {
     logger.error(
@@ -71,3 +74,21 @@ export async function POST(
     return new NextResponse("Internal server error", { status: 500 });
   }
 }
+
+
+export async function GET(req: NextRequest, {params}: { params: Promise<{ courseId: string }> }) {
+  const { courseId } = await params;
+  const { userId } = await auth();
+  if (!userId) {
+    return NextResponse.json([])
+  }
+  const purchase = await db.purchase.findUnique({
+    where: {
+      userId_courseId: {
+        courseId,
+        userId,
+      },
+    },
+  });
+  return NextResponse.json(purchase);
+} 

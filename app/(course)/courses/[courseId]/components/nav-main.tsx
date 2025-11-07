@@ -2,6 +2,7 @@
 
 import { ChevronRight } from "lucide-react"
 
+import { Badge } from "@/components/ui/badge"
 import {
   Collapsible,
   CollapsibleContent,
@@ -18,29 +19,25 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
 import { cn } from "@/lib/utils"
+import { ChaptersGenericViewType } from "@/types"
+import { CheckCircle, Lock, NotebookText, PlayCircle } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Badge } from "@/components/ui/badge"
-import { Lock, NotebookText, PlayCircle, CheckCircle } from "lucide-react"
-import { CourseType } from "@/types"
+import { useCourseInfo } from "../(root)/chapters/[chapterId]/providers/CourseInfoProvider"
 
-export function NavMain({
-  course,
-  isLocked,
-}: {
-  course: CourseType
-  isLocked: boolean
-}) {
+export function NavMain() {
   const pathname = usePathname()
   const isActive = (href: string) => pathname === href
 
+  const {course, isLocked, chapters, progress } = useCourseInfo()
+
   // group chapters by category
-  const grouped = course.chapters.reduce((acc, chapter) => {
+  const grouped = chapters.reduce((acc, chapter) => {
     const cat = chapter.category?.name ?? "Uncategorized"
     if (!acc[cat]) acc[cat] = []
     acc[cat].push(chapter)
     return acc
-  }, {} as Record<string, CourseType["chapters"]>)
+  }, {} as Record<string, ChaptersGenericViewType[]>)
 
   return (
     <SidebarGroup>
@@ -78,7 +75,7 @@ export function NavMain({
                             {/* icon logic */}
                             {!chapter.isFree && isLocked ? (
                               <Lock />
-                            ) : chapter.userProgress?.[0]?.isCompleted ? (
+                            ) : progress?.isCompleted ? (
                               <CheckCircle />
                             ) : (
                               <PlayCircle />

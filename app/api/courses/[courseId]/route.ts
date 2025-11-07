@@ -4,13 +4,16 @@ import { utapi } from "@/lib/uploadthing-server"
 import { getAdminInfo, isAdmin } from "@/utils/roles"
 import { auth } from "@clerk/nextjs/server"
 import * as Sentry from "@sentry/nextjs"
-import { revalidatePath } from "next/cache"
+import { revalidatePath, revalidateTag } from "next/cache"
 import { NextRequest, NextResponse } from "next/server"
 
 
 type Props = {params: Promise<{courseId: string}>}
 
-
+/**
+ * 
+ * @returns course with associated chapters and exams 
+ */
 export async function GET(req: NextRequest, {params}: Props){
     const {courseId} = await params
     try{
@@ -19,6 +22,7 @@ export async function GET(req: NextRequest, {params}: Props){
                 id: courseId,
             },
             include: {
+                exams: true, 
                 chapters: {
                     where: {
                         isPublished: true,
@@ -73,6 +77,10 @@ export async function PATCH(req: NextRequest, {params}: Props) {
         })
         revalidatePath(`/courses/${courseId}`)
         revalidatePath(`/dashboard/teacher/courses`)
+        revalidateTag('courses', 'max')
+        revalidateTag(`courses/${courseId}`, 'max')
+        revalidateTag('courses/telegram-registration', 'max')
+        
         
         return NextResponse.json(course)
     }catch(error){
@@ -146,6 +154,11 @@ export async function DELETE(req: NextRequest, {params}: Props) {
         }) 
         revalidatePath(`/dashboard/teacher/courses`)
         revalidatePath(`/courses/${courseId}`)
+        revalidateTag('courses', 'max')
+        revalidateTag(`courses/${courseId}`, 'max')
+        revalidateTag('courses/telegram-registration', 'max')
+
+        
         logger.info(`[COURSE_ID_DELETE_DELETE]: OK: Course ${courseId} deleted successfully`)
         return NextResponse.json(deletedCourse)
     }catch(error){

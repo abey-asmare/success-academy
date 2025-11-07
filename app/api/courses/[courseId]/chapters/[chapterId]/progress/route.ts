@@ -2,6 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import * as Sentry from "@sentry/nextjs";
+import { revalidateTag } from "next/cache";
 
 
 export async function PUT(
@@ -35,6 +36,8 @@ export async function PUT(
         isCompleted,
       },
     });
+
+    revalidateTag(`${userId}/progress/${chapterId}`, 'max')
 
     logger.info(`[COURSE_ID_CHAPTER_ID_PROGRESS_PUT]: OK: Progress for chapter ${chapterId} updated successfully`)
     return NextResponse.json(userProgress);

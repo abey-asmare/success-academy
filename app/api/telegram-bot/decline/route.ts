@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 import { logger, Sentry } from "@/lib/sentryLogger";
 
@@ -9,18 +9,28 @@ export async function POST(request: NextRequest) {
   try {
     // Parse JSON payload
     const { id, signature } = await request.json();
-    console.log("id sig", id, signature, SECRET, signature === SECRET)
+    console.log("id sig", id, signature, SECRET, signature === SECRET);
 
-    if (!signature || signature !== SECRET){
-      logger.info(`[TELEGRAM_BOT_DECLINE_PAYMENT]: Unauthorized: Invalid signature`);
-      return NextResponse.json({message: "Invalid signature"}, { status: 401 });
-    } 
+    if (!signature || signature !== SECRET) {
+      logger.info(
+        `[TELEGRAM_BOT_DECLINE_PAYMENT]: Unauthorized: Invalid signature`
+      );
+      return NextResponse.json(
+        { message: "Invalid signature" },
+        { status: 401 }
+      );
+    }
 
     // Check if payment exists
     const payment = await db.purchase.findUnique({ where: { id } });
-    if (!payment){
-      logger.info(`[TELEGRAM_BOT_DECLINE_PAYMENT]: Not Found: Payment ${id} not found`);
-      return NextResponse.json({ message: "Payment not found" }, {status: 404});
+    if (!payment) {
+      logger.info(
+        `[TELEGRAM_BOT_DECLINE_PAYMENT]: Not Found: Payment ${id} not found`
+      );
+      return NextResponse.json(
+        { message: "Payment not found" },
+        { status: 404 }
+      );
     }
 
     // Update payment
@@ -29,9 +39,14 @@ export async function POST(request: NextRequest) {
       data: { approved: false },
     });
 
-    if (!paymentResponse){
-      logger.info(`[TELEGRAM_BOT_DECLINE_PAYMENT]: Not Found: Payment ${id} not found`);
-      return NextResponse.json({ message: "Payment not found" }, {status: 404});
+    if (!paymentResponse) {
+      logger.info(
+        `[TELEGRAM_BOT_DECLINE_PAYMENT]: Not Found: Payment ${id} not found`
+      );
+      return NextResponse.json(
+        { message: "Payment not found" },
+        { status: 404 }
+      );
     }
 
     // Revalidate relevant paths
@@ -40,15 +55,25 @@ export async function POST(request: NextRequest) {
     revalidatePath("/dashboard/teacher/courses");
     revalidatePath(`/courses/${id}`);
 
-    logger.info(`[TELEGRAM_BOT_DECLINE_PAYMENT]: OK: Payment ${id} declined successfully`);
-    return NextResponse.json({
-      message: "Payment declined successfully",
-    }, {status: 200});
+    revalidateTag(`${payment.userId}/purchase/${payment.courseId}`, "max");
+
+    logger.info(
+      `[TELEGRAM_BOT_DECLINE_PAYMENT]: OK: Payment ${id} declined successfully`
+    );
+    return NextResponse.json(
+      {
+        message: "Payment declined successfully",
+      },
+      { status: 200 }
+    );
   } catch (err) {
     logger.error(
       `[TELEGRAM_BOT_DECLINE_PAYMENT]: Internal Error: Failed to decline payment ${err}`
     );
     Sentry.captureException(err);
-    return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json(
+      { message: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }

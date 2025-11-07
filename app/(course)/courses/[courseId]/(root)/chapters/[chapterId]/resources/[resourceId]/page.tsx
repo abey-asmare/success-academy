@@ -1,7 +1,19 @@
+'use cache'
 import UnDownloadableImage from "@/components/UnDownloadableImage";
 import { db } from "@/lib/db";
 import Image from "next/image";
 import { TextPreview } from "../../components/TextPreview";
+import { getAttachment } from "@/optimizedQueries/CourseQueries";
+import { notFound } from "next/navigation";
+import { cacheLife, cacheTag } from "next/cache";
+
+
+export async function generateStaticParams(){
+  const attachments = await db.attachment.findMany()
+  return attachments.map((attachment) => ({
+    resourceId: attachment.id,
+  }))
+}
 
 function getResourceCategory(
   mimeType: string
@@ -24,15 +36,16 @@ function getResourceCategory(
 export default async function ResourceDetailPage({
   params,
 }: {
-  params: Promise<{ resourceId: string; chapterId: string; courseId: string }>;
+  params: Promise<{ resourceId: string }>;
 }) {
-  const { resourceId, courseId } = await params;
-  const resource = await db.attachment.findUnique({
-    where: {
-      id: resourceId,
-      courseId: courseId,
-    },
-  });
+  const { resourceId } = await params;
+  const resource = await getAttachment(resourceId)
+  cacheLife('max')
+  cacheTag(`page/attachments/${resourceId}`)
+  
+  if(!resource){
+    return notFound()
+  }
 
   const mimeType = resource?.type || "";
   const resourceCategory = getResourceCategory(mimeType);
@@ -41,7 +54,7 @@ export default async function ResourceDetailPage({
     <div>
       <div className="border p-4 rounded shadow-sm space-y-4">
         {resourceCategory === "image" && resource?.url && (
-          <UnDownloadableImage className="w-[300px] h-[400px]">
+          <UnDownloadableImage className="w-[200px] h-[400px]">
             <Image
             className="w-full h-full rounded object-contain"
               src={resource.url}
@@ -85,3 +98,4 @@ export default async function ResourceDetailPage({
     </div>
   );
 }
+

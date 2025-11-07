@@ -4,27 +4,31 @@ import { db } from "@/lib/db";
 import * as Sentry from "@sentry/nextjs";
 import axios from "axios";
 import { utapi } from "@/lib/uploadthing-server";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
+import { getChapterForAdmin, getMuxData } from "@/optimizedQueries/chapterQueries";
 
 const { logger } = Sentry;
 export async function deleteChapter(id: string) {
   try {
     // get the chapter
-    const chapter = await db.chapter.findUnique({
-      where: {
-        id,
-      },
-      include: {
-        muxData: true,
-      },
-    });
-    if (!chapter) {
+    const chapter= await getChapterForAdmin(id)
+    const muxData = await getMuxData(id)
+    
+    // const chapter = await db.chapter.findUnique({
+    //   where: {
+    //     id,
+    //   },
+    //   include: {
+    //     muxData: true,
+    //   },
+    // });
+    if (!chapter || !muxData) {
       return { message: "chapter not found", status: 404 };
     }
     // delete the mux video
     axios
       .delete(
-        `https://api.mux.com/video/v1/assets/${chapter.muxData?.assetId}`,
+        `https://api.mux.com/video/v1/assets/${muxData.assetId}`,
         {
           auth: {
             username: process.env.MUX_TOKEN_ID!,
@@ -70,6 +74,8 @@ export async function deleteChapter(id: string) {
       `[CHAPTER_DELETE_SERVER_ACTION]: Chapter deleted successfully ${id}`
     );
     revalidatePath(`/dashboard/teacher/courses/${id}`)
+    updateTag(`courses/${chapter.courseId}`)
+    updateTag(`muxData/${chapter.id}`)
     return { message: "chapter deleted successfully", status: 200};
   } catch (error) {
     console.log("error deleting the chapter", error);

@@ -1,8 +1,12 @@
+'use cache'
 import { db } from '@/lib/db';
 import { columns } from './components/columns';
 import { DataTable } from './components/data-table';
+import { cacheLife, cacheTag } from 'next/cache';
 
 export default async function PaymentPage() {
+    cacheTag('page/teacher/purchases')
+    cacheLife('hours')
     const profile = await db.profile.findMany()
   const courses = await db.course.findMany()
       const purchases = await db.purchase.findMany({

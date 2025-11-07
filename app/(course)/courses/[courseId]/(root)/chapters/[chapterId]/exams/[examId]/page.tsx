@@ -1,26 +1,29 @@
-import React from 'react'
-import { db } from '@/lib/db';
-import { redirect } from 'next/navigation';
-import InteractiveExam from './InteractiveExam';
+import { getExamById } from "@/optimizedQueries/otherOptimizedQueries";
+import InteractiveExam from "./InteractiveExam";
+import { notFound } from "next/navigation";
+import { db } from "@/lib/db";
 
-export default async function ExamDetailPage({params}: {params: Promise<{examId: string, courseId: string}>}) {
-    const {examId, courseId} = await params;
-    const exam = await db.exam.findUnique({
-        where: {
-            id: examId,
-        },
-        include: {
-            questions: {
-                include: {
-                    answers: true,
-                },
-            },
-        },
-    })
-    
-    if(!exam){
-        return redirect('/dashboard/teacher/courses')
-    }
 
-    return <InteractiveExam exam={exam} courseId={courseId} />
+export async function generateStaticParams(){
+  const exams = await db.exam.findMany()
+  return exams.map((exam) => ({
+    examId: exam.id,
+    courseId: exam.courseId,
+  }))
 }
+
+export default async function ExamDetailPage({
+  params,
+}: {
+  params: Promise<{ examId: string; courseId: string }>;
+}) {
+  const { examId, courseId } = await params;
+  const exam = await getExamById(examId)
+  
+  if(!exam){
+    return notFound()
+  }
+
+  return <InteractiveExam exam={exam} courseId={courseId} />;
+}
+

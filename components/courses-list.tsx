@@ -1,4 +1,3 @@
-'use client'
 import { CourseWithProgressWithCategory } from "@/types";
 import { CourseCard } from "./course-card";
 
@@ -21,8 +20,7 @@ export const CoursesList = ({
                         chaptersLength={item.chapters.length}
                         price={item.price!}
                         progress={item.progress}
-                        category={item.category?.name || ''}
-                        isVerified={item.isVerified}
+                      purchase={item.purchase}
                     />
                 ))}
             </div>

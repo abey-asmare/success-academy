@@ -2,15 +2,14 @@
 import { IconUsers } from "@tabler/icons-react";
 import * as React from "react";
 
-import { NavMain } from "./nav-main";
 import {
   Sidebar,
   SidebarContent,
   SidebarHeader,
 } from "@/components/ui/sidebar";
 import { BookOpen, Compass, Home, Layout, List, WalletCards } from "lucide-react";
+import { NavMain } from "./nav-main";
 import { RouteSwitcher } from "./route-switcher";
-import { CourseType } from "@/types";
 
 const data = {
   routes: [
@@ -55,10 +54,7 @@ const data = {
 export function AppSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar> & {
-  course: CourseType;
-  isLocked: boolean;
 }) {
-
 
   return (
     <Sidebar collapsible="offcanvas" {...props}>
@@ -68,7 +64,7 @@ export function AppSidebar({
         </SidebarHeader>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain course={props.course} isLocked={props.isLocked}/>
+        <NavMain/>
       </SidebarContent>
     </Sidebar>
   );

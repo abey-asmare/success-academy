@@ -2,7 +2,6 @@ import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   images: {
     remotePatterns: [
       {
@@ -24,7 +23,10 @@ const nextConfig: NextConfig = {
     // 'https://vanguard-gules.vercel.app'
 
   ],
-};
+
+  // to use caching behavior (use cache and unsable_cache) it has to be enabled
+  cacheComponents: true,
+}
 
 export default withSentryConfig(nextConfig, {
   // For all available options, see:

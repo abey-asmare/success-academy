@@ -1,26 +1,28 @@
-import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
-import { CheckCircle, Clock} from "lucide-react";
-
-import { CoursesList } from "@/components/courses-list";
 import { getDashboardCourses } from "@/actions/get-dashboard-courses";
+import { CoursesList } from "@/components/courses-list";
+import { auth } from "@clerk/nextjs/server";
+import { CheckCircle, Clock } from "lucide-react";
+import { redirect } from "next/navigation";
 import InfoCard from "./components/info-card";
 
 export default async function Dashboard() {
   const { userId } = await auth();
-
   if (!userId) {
     return redirect("/");
   }
+  
+return <DashboardCourses userId={userId}/>
+}
 
+
+async function DashboardCourses({userId}: {userId: string}){
   const {
     completedCourses,
     coursesInProgress,
-    isVerified
   } = await getDashboardCourses(userId);
   const allCourses = [
-    ...coursesInProgress.map(course => ({ ...course, isVerified })),
-    ...completedCourses.map(course => ({ ...course, isVerified }))
+    ...coursesInProgress.map(course => ({ ...course })),
+    ...completedCourses.map(course => ({ ...course }))
   ];
 
   return (

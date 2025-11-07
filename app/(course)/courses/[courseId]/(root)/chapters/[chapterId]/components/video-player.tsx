@@ -8,15 +8,15 @@ import { useRouter } from "next/navigation";
 import { Loader2, Lock } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { useCourseInfo } from "../providers/CourseInfoProvider";
 
 interface VideoPlayerProps {
     playbackId?: string | null;
     courseId: string;
     chapterId: string;
     nextChapterId?: string;
-    isLocked: boolean;
-    completeOnEnd: boolean;
     title: string;
+    isChapterFree: boolean;
   }
 
 export const VideoPlayer = ({
@@ -24,12 +24,18 @@ export const VideoPlayer = ({
     courseId,
     chapterId,
     nextChapterId,
-    isLocked,
-    completeOnEnd,
     title,
+    isChapterFree
 }: VideoPlayerProps) => {
     const [isReady, setIsReady] = useState(false);
     const router = useRouter();
+
+    const {purchase, progress: userProgress } = useCourseInfo()
+    const isLocked =
+    !isChapterFree && (!purchase || purchase?.approved === false);
+  const completeOnEnd = !!purchase && !userProgress?.isCompleted;
+
+
 
     const onEnd = async () => {
         try {

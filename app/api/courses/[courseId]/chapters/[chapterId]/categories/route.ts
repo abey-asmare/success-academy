@@ -4,7 +4,7 @@ import * as Sentry from "@sentry/nextjs"
 import { logger } from "@/lib/sentryLogger"
 import z from 'zod'
 
-import { revalidatePath } from "next/cache"
+import { revalidatePath, revalidateTag } from "next/cache"
 
 const categorySchema = z.object({
     category: z
@@ -29,6 +29,8 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ cou
         })
         logger.info(`[CHAPTER_CATEGORY_ADD_SERVER_ACTION]: Category added successfully ${newCategory.id}`)
         revalidatePath(`/dashboard/teacher/courses/${courseId}/chapters/${chapterId}`)
+        revalidateTag(`chapters`, 'max')
+        revalidateTag(`chapters/${chapterId}`, 'max')
         return NextResponse.json(newCategory)
     } catch (error) {
         console.log(error)

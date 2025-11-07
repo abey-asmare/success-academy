@@ -21,11 +21,11 @@ const teacherRotues = [
         label: 'Courses',
         href: '/dashboard/teacher/courses',
     }, 
-    {
-        icon: BarChart,
-        label: 'Analytics',
-        href: '/dashboard/teacher/analytics',
-    }, 
+    // {
+    //     icon: BarChart,
+    //     label: 'Analytics',
+    //     href: '/dashboard/teacher/analytics',
+    // }, 
     {
         icon: User,
         label: 'Users',

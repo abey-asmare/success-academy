@@ -2,39 +2,27 @@ import { db } from "@/lib/db";
 
 export const getProgress = async (
   userId: string,
-  courseId: string
+  courseId: string,
+  chapters: { id: string }[]
 ): Promise<number | null> => {
   try {
-    const publishedChapters = await db.chapter.findMany({
-      where: {
-        courseId: courseId,
-        isPublished: true,
-      },
-      select: {
-        id: true,
-      },
-    });
+    if (chapters.length === 0) return null;
 
-    // create an array of chapter ids
-    const publishedChapterIds = publishedChapters.map((chapter) => chapter.id);
+    const chapterIds = chapters.map((chapter) => chapter.id);
 
-    const validCompletedChapters = await db.userProgress.count({
+    const completedCount = await db.userProgress.count({
       where: {
-        userId: userId,
-        chapterId: {
-          in: publishedChapterIds,
-        },
+        userId,
+        chapterId: { in: chapterIds },
         isCompleted: true,
       },
     });
 
-    //calucate progress percentage:
-    // completed chapters / total published chapters
-    const progressPercentage =
-      (validCompletedChapters / publishedChapters.length) * 100;
+    const progressPercentage = (completedCount / chapters.length) * 100;
 
     return progressPercentage;
-  } catch {
+  } catch (error) {
+    console.error("Error calculating progress:", error);
     return 0;
   }
 };

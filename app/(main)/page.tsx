@@ -1,14 +1,18 @@
+'use cache'
 import CourseList from "@/components/CourseList";
 import FeatureSection from "@/components/FeatureSection";
 import Footer from "@/components/Footer";
-import "react-multi-carousel/lib/styles.css";
 import TestimonialSlider from "@/components/TestimonialSlider";
-import CreateProfile from "./components/CreateProfile";
+import { cacheLife, cacheTag } from "next/cache";
+import Head from 'next/head';
+import "react-multi-carousel/lib/styles.css";
 import HeroOrange from "./components/HeroOrange";
 import SectionFeature from "./components/SectionFeature";
-import Head from 'next/head';
+
 
 async function Home() {
+  cacheLife('max')
+  cacheTag('home')
 
   return (
    <>
@@ -53,7 +57,7 @@ async function Home() {
     />
     </Head>
     <div className="">
-      <CreateProfile/>
+      {/* <CreateProfile/> */}
       <HeroOrange className="pt-30 md:pt-16  px-4 md:px-10" />
       
         {/* learn anything section */}

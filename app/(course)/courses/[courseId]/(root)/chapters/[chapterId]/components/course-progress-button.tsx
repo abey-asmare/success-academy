@@ -7,6 +7,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 
 import { Button } from "@/components/ui/button";
+import { useCourseInfo } from "../providers/CourseInfoProvider";
 
 interface CourseProgressButtonProps {
   chapterId: string;
@@ -18,11 +19,13 @@ interface CourseProgressButtonProps {
 export const CourseProgressButton = ({
   chapterId,
   courseId,
-  isCompleted,
   nextChapterId
 }: CourseProgressButtonProps) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+
+  const {progress: userProgress} = useCourseInfo();
+  const isCompleted = !!userProgress?.isCompleted
   const onClick = async () => {
     try {
       setIsLoading(true);

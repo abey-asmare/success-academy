@@ -1,7 +1,38 @@
+import ChapterIdPage from "@/app/(course)/courses/[courseId]/(root)/chapters/[chapterId]/page"
 import { db } from "@/lib/db"
 import { getAdminInfo } from "@/utils/roles"
 import * as Sentry from "@sentry/nextjs"
+import { revalidatePath, revalidateTag } from "next/cache"
 import { NextResponse } from "next/server"
+
+
+/**
+ * 
+ * @returns chapters with exams and category 
+ */
+
+export async function GET(req: Request, {params}: {params: Promise<{courseId: string}>}) {
+    const {courseId} = await params
+    try{
+        const chapters = await db.chapter.findMany({
+            where: {
+                courseId, 
+                isPublished: true,
+            },
+            include: {
+                exams: true, 
+                category: true,
+            },
+            orderBy: {
+                position: "asc"
+            }
+        })
+        return NextResponse.json(chapters)
+    }catch(error){
+        Sentry.captureException(error)
+        return NextResponse.json({error: "Internal server error"}, {status: 500})
+    }
+}
 
 
 export async function POST(req: Request, {params}: {params: Promise<{courseId: string}>}) {
@@ -44,6 +75,11 @@ export async function POST(req: Request, {params}: {params: Promise<{courseId: s
                 courseId
             }
         })
+        
+        revalidatePath(`/courses/${courseId}/chapters/${chapter.id}`)
+        revalidateTag(`courses/${courseId}`, 'max')
+        revalidateTag('courses', 'max')
+        
         logger.info(`[COURSE_ID_CHAPTERS_POST]: OK: Chapter ${chapter.id} created successfully`)
         return NextResponse.json(chapter)
     }catch(error){

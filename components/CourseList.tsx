@@ -1,31 +1,27 @@
-'use client'
+import { placeholderCourseImage } from "@/app/constants";
+import {
+  CourseGenericViewType,
+  getCourses,
+} from "@/optimizedQueries/CourseQueries";
+import { Exam } from "@/prisma/app/generated/prisma/client";
+import Image from "next/image";
+import Link from "next/link";
+import { Suspense } from "react";
+import { Button } from "./ui/button";
+import { Card } from "./ui/card";
+import { Skeleton } from "./ui/skeleton";
 
-import Image from "next/image"
-import { Card } from "./ui/card"
-import { CourseMinimized, ExamMinimized } from "@/types"
-import axios from "axios"
-import { Skeleton } from "./ui/skeleton"
-import { useQuery } from "@tanstack/react-query"
-import { Button } from "./ui/button"
-import Link from "next/link"
-import { placeholderCourseImage } from "@/app/constants"
+export default async function CourseList({ className }: { className: string }) {
+  const courses = await getCourses();
 
-export default function CourseList({ className }: { className: string }) {
-  const { data, isLoading, error } = useQuery<CourseMinimized[], Error>({
-    queryKey: ['courses'],
-    queryFn: () => axios.get('/api/courses').then(res => res.data),
-    staleTime: 60 * 60 * 2 * 1000, // 2 hours
-  })
-
-  const examsMinimized: ExamMinimized[] = (data ?? [])
-    .flatMap((course) =>
-      (course.exams ?? []).map((exam) => ({
-        ...exam,
-        imageUrl: course.imageUrl || placeholderCourseImage,
-      }))
-    )
-
-  if (error) return <p>Error loading courses. Refresh the page.</p>
+  const examsMinimized = (
+    courses ?? []
+  ).flatMap((course) =>
+    (course.exams ?? []).map((exam) => ({
+      ...exam,
+      imageUrl: course.imageUrl || placeholderCourseImage,
+    }))
+  );
 
   return (
     <div className={className}>
@@ -35,34 +31,32 @@ export default function CourseList({ className }: { className: string }) {
         </p>
 
         <div className="courses grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 justify-items-center">
-          {isLoading ? (
-            Array.from({ length: 4 }).map((_, index) => (
+          <Suspense
+            fallback={Array.from({ length: 4 }).map((_, index) => (
               <CourseCardSkeleton key={index} />
-            ))
-          ) : (
-            <>
-              {data?.map((course) => (
-                <CourseCard key={course.id} data={course} />
-              ))}
-              {examsMinimized.map((exam) => (
-                <ExamCard key={exam.id} data={exam} />
-              ))}
-            </>
-          )}
+            ))}
+          >
+            {courses.map((course) => (
+              <CourseCard key={course.id} data={course} />
+            ))}
+            {examsMinimized.map((exam) => (
+              <ExamCard key={exam.id} data={exam} />
+            ))}
+          </Suspense>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export function CourseCard({ data }: { data: CourseMinimized }) {
+export function CourseCard({ data }: { data: CourseGenericViewType }) {
   return (
     <Link href={`/courses/${data.id}`}>
       <Card className="p-4 border-2 border-gray-200 w-full min-w-[260px] max-w-[280px] transition-all duration-300 hover:shadow-lg hover:border-gray-300 hover:-translate-y-1">
         <div className="wrapper rounded-md overflow-hidden w-full h-[180px] object-cover">
           <Image
-            src={data.imageUrl}
-            alt={data.description}
+            src={data.imageUrl!}
+            alt={data.description!}
             width={500}
             height={500}
             className="w-full h-full object-cover"
@@ -77,16 +71,16 @@ export function CourseCard({ data }: { data: CourseMinimized }) {
         </div>
       </Card>
     </Link>
-  )
+  );
 }
 
-export function ExamCard({ data }: { data: ExamMinimized }) {
+export function ExamCard({ data }: { data: Exam & { imageUrl: string } }) {
   return (
     <Card className="p-4 border-2 border-gray-200 w-full min-w-[260px] max-w-[280px] transition-all duration-300 hover:shadow-lg hover:border-gray-300 hover:-translate-y-1">
       <div className="wrapper rounded-md overflow-hidden w-full h-[180px] object-cover">
         <Image
           src={data.imageUrl}
-          alt={data.description}
+          alt={data.description || "Cover Image for the exam" + data.name}
           width={500}
           height={500}
           className="w-full h-full object-cover"
@@ -94,26 +88,27 @@ export function ExamCard({ data }: { data: ExamMinimized }) {
         />
       </div>
       <div className="description">
-       <h3 className="font-semibold">{data.name}</h3>
+        <h3 className="font-semibold">{data.name}</h3>
         <Button className="enroll-in px-4 py-1 font-semibold bg-primary-500 hover:bg-primary-600 rounded-md mt-2">
-          <Link href={`/courses/${data.id}`}>Take Simulation</Link>
+          <Link href={`/courses/${data.courseId}/simulations/${data.id}`}>Take Simulation</Link>
         </Button>
       </div>
     </Card>
-  )
+  );
 }
 
 export function CourseCardSkeleton() {
   return (
     <Card className="p-4 border-2 border-gray-200 w-full max-w-[280px] transition-all duration-300 hover:shadow-lg hover:border-gray-300 hover:-translate-y-1">
       <div className="wrapper rounded-md overflow-hidden w-full">
-        <Skeleton className="w-[280px] h-[220px]" />
+        <Skeleton className="w-[260px] h-[160px]" />
       </div>
       <div className="description space-y-2">
-        <Skeleton className="w-3/4 h-6" />
-        <Skeleton className="w-full h-4" />
-        <Skeleton className="w-20 h-10 rounded-md" />
+        <Skeleton className="w-3/4 h-4" />
+        <Skeleton className="w-full h-2.5" />
+        <Skeleton className="w-full h-2.5" />
+        <Skeleton className="w-16 h-8 rounded-md" />
       </div>
     </Card>
-  )
+  );
 }

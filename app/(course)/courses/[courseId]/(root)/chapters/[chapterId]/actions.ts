@@ -3,6 +3,7 @@
 import { db } from "@/lib/db";
 import { Stream } from "@/prisma/app/generated/prisma/client";
 import { profileFormSchema } from "@/schemas/validationSchemas";
+import { revalidateTag, updateTag } from "next/cache";
 import z from "zod";
 
 
@@ -14,19 +15,6 @@ export async function enrollInCourse(data: z.infer<typeof profileFormSchema>, co
         }
 
         
-        const profile =await  db.profile.findUnique({
-            where: {
-                userId
-            }
-        })
-        if(!profile){
-            return {
-                message: "Profile not found", 
-                status: 404
-            }
-        }
-
-
         await db.profile.upsert({
             where: {
                 userId
@@ -51,42 +39,13 @@ export async function enrollInCourse(data: z.infer<typeof profileFormSchema>, co
                 university: data.university    
                }
         })
-        // if(profile){
-        //     await db.profile.update({
-        //         where: {
-        //             userId
-        //         }, 
-        //         data: {
-        //          firstName: data.firstName,
-        //          lastName: data.lastName,
-        //          phone_number: data.phoneNumber,
-        //          stream: data.stream == 'Natural science' ? Stream.NATURAL_SCIENCE : Stream.SOCIAL_SCIENCE   ,
-        //          referrer: data.referrer,
-        //          university: data.university    
-        //         }
-        //     })
-        //     return {
-        //         message: "Profile updated successfully",
-        //         status: 200
-        //     }
-        // }
-
-        // await db.profile.create({
-        //     data: {
-        //         userId,
-        //         firstName: data.firstName,
-        //         lastName: data.lastName,
-        //         phone_number: data.phoneNumber,
-        //         email: data.email,
-        //         stream: data.stream == 'Natural science' ? Stream.NATURAL_SCIENCE : Stream.SOCIAL_SCIENCE   ,
-        //         referrer: data.referrer,
-        //         university: data.university    
-        //     }
-        // })
+        
         return {
             message: "Profile created successfully", 
             status: 200
         }
+
+        
     } catch (error) {
         console.log(error)
         return {

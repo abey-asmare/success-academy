@@ -6,7 +6,7 @@ export async function isCoursePaymentVerified(courseId: string, userId: string) 
             courseId: courseId,
             userId: userId,
             approved: true
-        }
+        },
     })
     
     return !!purchase;
