@@ -1,6 +1,6 @@
-import { db } from "@/lib/db";
 import { notFound } from "next/navigation";
 import UpdateExamForm from "./updateExamForm";
+import { getExamById } from "@/optimizedQueries/otherOptimizedQueries";
 
 
 
@@ -16,18 +16,7 @@ interface CreateExamPageProps {
 export default async function CreateExamPage({ params }: CreateExamPageProps) {
   const { courseId, chapterId, examId } = await params;
 
-  const exam = await db.exam.findUnique({
-    where: {
-      id: examId,
-    },
-    include: {
-      questions: {
-        include: {
-          answers: true,
-        },
-      },
-    },
-  });
+  const exam = await getExamById(examId)
 
   if (!exam) {
     return notFound()

@@ -79,6 +79,7 @@ export async function PATCH(req: NextRequest, {params}: Props) {
         revalidatePath(`/dashboard/teacher/courses`)
         revalidateTag('courses', 'max')
         revalidateTag(`courses/${courseId}`, 'max')
+        revalidateTag('courses/telegram-registration', 'max')
         
         
         return NextResponse.json(course)
@@ -155,6 +156,8 @@ export async function DELETE(req: NextRequest, {params}: Props) {
         revalidatePath(`/courses/${courseId}`)
         revalidateTag('courses', 'max')
         revalidateTag(`courses/${courseId}`, 'max')
+        revalidateTag('courses/telegram-registration', 'max')
+
         
         logger.info(`[COURSE_ID_DELETE_DELETE]: OK: Course ${courseId} deleted successfully`)
         return NextResponse.json(deletedCourse)

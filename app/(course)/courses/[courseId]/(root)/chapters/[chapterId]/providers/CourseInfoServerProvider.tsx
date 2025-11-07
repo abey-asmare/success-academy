@@ -1,4 +1,4 @@
-import { redirect } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import React from 'react'
 import CourseInfoProvider from './CourseInfoProvider'
 import { getChapters } from '@/optimizedQueries/chapterQueries';
@@ -12,8 +12,8 @@ async function CourseInfoServerProvider({children,userId, courseId}: {children: 
     getChapters(courseId)
   ])
 
-      if (!course) {
-        return redirect("/");
+      if (!course || !course.isPublished) {
+        return notFound()
       }
     
     const purchase = await getPurchase(userId, courseId)

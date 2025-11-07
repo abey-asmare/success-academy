@@ -19,7 +19,7 @@ export const Preview = ({ value }: PreviewProps) => {
   }, [value]);
 
   return (
-    <div className="bg-white p-6 rounded max-w-[90%] md:max-w-[800px] mx-auto prose prose-slate">
+    <div className="bg-white p-4 rounded max-w-[90%] md:max-w-[800px] mx-auto prose prose-slate">
       <ReactMarkdown
         rehypePlugins={[rehypeRaw]}
         components={{

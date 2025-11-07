@@ -90,7 +90,7 @@ export function ExamCard({ data }: { data: Exam & { imageUrl: string } }) {
       <div className="description">
         <h3 className="font-semibold">{data.name}</h3>
         <Button className="enroll-in px-4 py-1 font-semibold bg-primary-500 hover:bg-primary-600 rounded-md mt-2">
-          <Link href={`/courses/${data.id}`}>Take Simulation</Link>
+          <Link href={`/courses/${data.courseId}/simulations/${data.id}`}>Take Simulation</Link>
         </Button>
       </div>
     </Card>

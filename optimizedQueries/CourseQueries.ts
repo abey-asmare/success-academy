@@ -25,7 +25,7 @@ export type CourseGenericViewType = Omit<
   }>["chapters"];
   category?: Prisma.CourseGetPayload<{
     include: { category: true };
-  }>["category"];
+  }>["category"]; 
 };
 
 export const getCourses = cache(async (): Promise<CourseGenericViewType[]> => {
@@ -90,9 +90,10 @@ function todayInUserZone(timeZone: string) {
   const now = new TZDate(TZDate.now(), timeZone);
   return new Date(now.toISOString());
 }
+
 export const getPromoCodes = cache(
   async (courseId: string): Promise<CoursePromocode[]> => {
-    cacheLife("weeks");
+    cacheLife("days");
     cacheTag(`${courseId}/promocodes`, courseId);
   const today = todayInUserZone("Africa/Addis_Ababa");
 
@@ -114,14 +115,7 @@ export const getAttachments = cache(
   async (courseId: string): Promise<Attachment[]> => {
     cacheLife("max");
     cacheTag(`${courseId}/attachments`);
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/courses/${courseId}/attachments`,
-      {
-        next: {
-          revalidate: 60 * 60 * 24 * 30, // REVALIDATE_MONTHLY
-        },
-      }
-    );
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/courses/${courseId}/attachments`);
     return await response.json();
   }
 );

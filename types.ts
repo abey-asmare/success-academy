@@ -1,4 +1,4 @@
-import { Category, Course, Prisma } from "./prisma/app/generated/prisma/client";
+import { Category, Course, Prisma, Purchase } from "./prisma/app/generated/prisma/client";
 
 export type ExamMinimized = {
   id: string;
@@ -20,9 +20,10 @@ export type CourseMinimized = {
 
 export type CourseWithProgressWithCategory = Course & {
   chapters: { id: string }[];
-  progress: number | null;
-  isVerified: boolean;
+  progress: number | null;   // 0–100 or null
+  purchase: Purchase | null
 };
+
 
 export type CourseType = Prisma.CourseGetPayload<{
   include: {

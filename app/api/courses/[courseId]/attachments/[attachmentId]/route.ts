@@ -33,6 +33,7 @@ export async function DELETE(req: Request, {params}: {params: Promise<{courseId:
         logger.info(`[COURSE_ID_ATTACHMENT_DELETE]: OK: Attachment ${attachmentId} deleted successfully`)
         revalidatePath(`page/attachments/${attachmentId}`)
         revalidatePath(`/courses/${courseId}`)
+        revalidateTag(`${courseId}/attachments`, 'max');
         revalidateTag(`attachments/${attachmentId}`, 'max')
         return NextResponse.json(attachment)    
 

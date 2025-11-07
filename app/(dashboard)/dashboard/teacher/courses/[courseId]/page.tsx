@@ -1,14 +1,14 @@
 import Banner from "@/components/banner";
-import { getChapters, getChaptersForAdmin } from "@/optimizedQueries/chapterQueries";
+import { getChaptersForAdmin } from "@/optimizedQueries/chapterQueries";
 import {
   getAttachments,
   getCourse,
   getPromoCodes
 } from "@/optimizedQueries/CourseQueries";
 import { redirect } from "next/navigation";
+import Actions from "./actions";
 import AttachmentForm from "./attachment-form";
 import ChaptersForm from "./chapters-form";
-import Actions from "./chapters/actions";
 import DescriptionForm from "./course-description-form";
 import { ImageForm } from "./image-form";
 import PriceForm from "./price-form";

@@ -1,11 +1,10 @@
-'use cache'
 import Banner from "@/components/banner";
 import { Button } from "@/components/ui/button";
 import { getChapterForAdmin, getMuxData } from "@/optimizedQueries/chapterQueries";
 import { getAllChapterCategories } from "@/optimizedQueries/otherOptimizedQueries";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import ChapterAccessForm from "./components/chapter-access-form";
 import ChapterActions from "./components/chapter-actions";
 import ChapterCategoryForm from "./components/chapter-category-form";
@@ -24,7 +23,7 @@ export default async function ChapterDetails({
   const muxData = await getMuxData(chapterId)
   
   if (!chapter) {
-    return redirect("/");
+    return notFound()
   }
   const chapterCategories = await getAllChapterCategories()
 

@@ -1,66 +1,60 @@
 
 import { getProgress } from "@/actions/get-progress";
 import { db } from "@/lib/db";
+import { getPurchase } from "@/optimizedQueries/personalizedQueries";
 import { REVALIDATE_INSTANT } from "@/server-constants";
 import { CourseWithProgressWithCategory } from "@/types";
-import { cache } from "react";
-import { isCoursePaymentVerified } from "./is-course-payment-verified";
 
-export const getCoursesForUser = async (userId: string): Promise<CourseWithProgressWithCategory[]> => {
+export const getCoursesForUser = async (
+  userId: string
+): Promise<CourseWithProgressWithCategory[]> => {
   try {
     const courses = await db.course.findMany({
-      where: {
-        isPublished: true,
-      },
+      where: { isPublished: true },
       include: {
         chapters: {
-          where: {
-            isPublished: true,
-          },
-          select: {
-            id: true,
-          }
+          where: { isPublished: true },
+          select: { id: true },
         },
         purchases: {
-          where: {
-            userId,
-          }
-        }
+          where: { userId },
+          select: { id: true, approved: true },
+        },
       },
-      orderBy: {
-        createdAt: "desc",
+      orderBy: { createdAt: "desc" },
+    
+      cacheStrategy: {
+        swr: REVALIDATE_INSTANT, 
+        ttl: REVALIDATE_INSTANT, 
+
       }
-    });
+    } );
     
-    const coursesWithProgress = await Promise.all(
+    const coursesWithStatus = await Promise.all(
       courses.map(async (course) => {
-        if (course.purchases.length === 0) {
-          return {
-            ...course,
-            progress: null, // make progress possibly null
-            isVerified: false,
-          };
-        }
+        const purchase = await getPurchase(userId, course.id);
+        console.log("purchase from get-c", purchase)
+        const progress =
+        purchase?.approved && course.chapters.length > 0
+        ? await getProgress(userId, course.id, course.chapters)
+        : null;
 
-        // check for payment verification
 
-        const isVerified = await isCoursePaymentVerified(course.id, userId);
-    
-        const progressPercentage = await getProgress(userId, course.id, course.chapters);
-    
         return {
           ...course,
-          progress: progressPercentage,
-          isVerified,
+          progress,
+          purchase
         };
       })
     );
 
-    return coursesWithProgress;
-  } catch{
+    return coursesWithStatus;
+  } catch (error) {
+    console.error("Error fetching courses for user:", error);
     return [];
   }
-}
+};
+
 
 export const getCoursesMini = async () => {
 try{

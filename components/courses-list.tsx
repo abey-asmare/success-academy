@@ -20,7 +20,7 @@ export const CoursesList = ({
                         chaptersLength={item.chapters.length}
                         price={item.price!}
                         progress={item.progress}
-                        isVerified={item.isVerified}
+                      purchase={item.purchase}
                     />
                 ))}
             </div>

@@ -6,9 +6,41 @@ import { examSchema } from "@/schemas/validationSchemas";
 import { notFound } from "next/navigation";
 import { revalidateTag } from "next/cache";
 
+export async function GET(
+  req: NextRequest,
+  {
+    params,
+  }: {
+    params: Promise<{ courseId: string; chapterId: string; examId: string }>;
+  }
+) {
+  const { examId } = await params;
+  try {
+    const exam = await db.exam.findUnique({
+      where: {
+        id: examId,
+      },
+      include: {
+        questions: {
+          include: {
+            answers: true,
+          },
+        },
+      },
+    });
+    return NextResponse.json(exam, { status: 200 });
+  } catch {
+    return new NextResponse("Internal Server Error", { status: 500 });
+  }
+}
+
 export async function PUT(
   req: NextRequest,
-  { params }: { params: Promise<{ courseId: string; chapterId: string; examId: string }> }
+  {
+    params,
+  }: {
+    params: Promise<{ courseId: string; chapterId: string; examId: string }>;
+  }
 ) {
   const { courseId, chapterId, examId } = await params;
 
@@ -21,7 +53,6 @@ export async function PUT(
       );
       return new NextResponse("Unauthorized", { status: 401 });
     }
-
 
     const body = await req.json();
     const validatedData = examSchema.safeParse(body);
@@ -59,7 +90,7 @@ export async function PUT(
       logger.info(
         `[COURSE_ID_CHAPTER_ID_EXAM_PUT]: Not Found: Chapter ${chapterId} not found for course ${courseId}`
       );
-      notFound()
+      notFound();
       // return new NextResponse("Chapter not found", { status: 404 });
     }
 
@@ -72,77 +103,85 @@ export async function PUT(
       logger.info(
         `[COURSE_ID_CHAPTER_ID_EXAM_PUT]: Not Found: Exam ${examId} not found for chapter ${chapterId}`
       );
-      notFound()
+      notFound();
       // return new NextResponse("Exam not found", { status: 404 });
     }
 
     // atomic transaction
-    const updatedExam = await db.$transaction(async (tx) => {
-      // Remove old questions + answers
-      await tx.question.deleteMany({ where: { examId } });
+    const updatedExam = await db.$transaction(
+      async (tx) => {
+        // Remove old questions + answers
+        await tx.question.deleteMany({ where: { examId } });
 
-      // Insert new questions
-      await tx.question.createMany({
-        data: uniqueQuestions.map((q) => ({
-          question: q.question.trim(),
-          imageUrl: q.imageUrl || null,
-          answerDescription: q.answerDescription || null,
-          examId,
-        })),
-      });
+        // Insert new questions
+        await tx.question.createMany({
+          data: uniqueQuestions.map((q) => ({
+            question: q.question.trim(),
+            imageUrl: q.imageUrl || null,
+            answerDescription: q.answerDescription || null,
+            examId,
+          })),
+        });
 
-      // Fetch back inserted questions
-      const dbQuestions = await tx.question.findMany({
-        where: { examId },
-        select: { id: true, question: true, imageUrl: true, answerDescription: true },
-      });
-
-      // Build answers for bulk insert
-      const answersData = uniqueQuestions.flatMap((q) => {
-        const parent = dbQuestions.find(
-          (dq) =>
-            dq.question.trim() === q.question.trim() &&
-            (dq.imageUrl || "") === (q.imageUrl || "")
-        );
-        if (!parent) return [];
-        return q.answers.map((a) => ({
-          text: a.text,
-          isCorrect: a.isCorrect,
-          questionId: parent.id,
-        }));
-      });
-
-      if (answersData.length > 0) {
-        await tx.answer.createMany({ data: answersData });
-      }
-
-      // Update exam metadata
-      return tx.exam.update({
-        where: { id: examId },
-        data: {
-          name,
-          description,
-          updatedAt: new Date(),
-        },
-        include: {
-          questions: {
-            include: { answers: true },
+        // Fetch back inserted questions
+        const dbQuestions = await tx.question.findMany({
+          where: { examId },
+          select: {
+            id: true,
+            question: true,
+            imageUrl: true,
+            answerDescription: true,
           },
-        },
-      });
-    }, {
-      timeout: 10_000,
-      maxWait: 10_000,
-    });
+        });
+
+        // Build answers for bulk insert
+        const answersData = uniqueQuestions.flatMap((q) => {
+          const parent = dbQuestions.find(
+            (dq) =>
+              dq.question.trim() === q.question.trim() &&
+              (dq.imageUrl || "") === (q.imageUrl || "")
+          );
+          if (!parent) return [];
+          return q.answers.map((a) => ({
+            text: a.text,
+            isCorrect: a.isCorrect,
+            questionId: parent.id,
+          }));
+        });
+
+        if (answersData.length > 0) {
+          await tx.answer.createMany({ data: answersData });
+        }
+
+        // Update exam metadata
+        return tx.exam.update({
+          where: { id: examId },
+          data: {
+            name,
+            description,
+            updatedAt: new Date(),
+          },
+          include: {
+            questions: {
+              include: { answers: true },
+            },
+          },
+        });
+      },
+      {
+        timeout: 10_000,
+        maxWait: 10_000,
+      }
+    );
 
     logger.info(
       `[COURSE_ID_CHAPTER_ID_EXAM_PUT]: OK: Exam ${examId} updated successfully`
     );
 
-        revalidateTag('chapters', 'max')
-        revalidateTag(`chapters/${chapterId}`, 'max')
-        revalidateTag(`exams/${examId}`, 'max')
-    
+    revalidateTag("chapters", "max");
+    revalidateTag(`chapters/${chapterId}`, "max");
+    revalidateTag(`exams/${examId}`, "max");
+
     return NextResponse.json(updatedExam);
   } catch (error) {
     logger.error(
@@ -153,25 +192,33 @@ export async function PUT(
   }
 }
 
-export async function GET(req: NextRequest,
-  { params }: { params: Promise<{ courseId: string; chapterId: string; examId: string }> }
- ){
-  const {examId} = await params
-  try{
-     const exam = await db.exam.findUnique({
-          where: {
-              id: examId,
-          },
-          include: {
-              questions: {
-                  include: {
-                      answers: true,
-                  },
-              },
-          },
-      })
-      return NextResponse.json(exam, {status: 200})
-  }catch{
+export async function DELETE(
+  req: NextRequest,
+  {
+    params,
+  }: {
+    params: Promise<{ courseId: string; chapterId: string; examId: string }>;
+  }
+) {
+  const { courseId, chapterId, examId } = await params;
+  if (!courseId || !chapterId || !examId) {
+    return new NextResponse("Invalid parameters", { status: 400 });
+  }
+  const { userId, isAdmin } = await getAdminInfo();
+  if (!isAdmin) {
+    return new NextResponse("Unauthorized", { status: 401 });
+  }
+
+  try {
+    const exam = await db.exam.delete({
+      where: { id: examId },
+    });
+
+    revalidateTag("chapters", "max");
+    revalidateTag(`chapters/${chapterId}`, "max");
+    revalidateTag(`exams/${examId}`, "max");
+    return NextResponse.json(exam, { status: 200 });
+  } catch {
     return new NextResponse("Internal Server Error", { status: 500 });
   }
- }
+}

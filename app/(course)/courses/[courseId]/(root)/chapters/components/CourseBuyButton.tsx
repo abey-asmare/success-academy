@@ -24,14 +24,14 @@ const purchase = await getPurchase(userId, courseId)
   return (
     <div>
       {purchase ? (
-        <div className="ml-[12%] md:ml-[20%] space-y-2">
+        <div className="mx-[8%] md:mx-[20%] space-y-2">
           <div className="bg-sky-500/70 hover:bg-sky-700 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200 text-base w-fit flex items-center">
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             Pending
           </div>
-          <p className="text-sm  w-[60ch] text-gray-600">
-            Your payment is being processed, The request usually takes a only a
-            few minutes, if the request took longer than expected, please
+          <p className="text-sm  max-w-[60ch] text-gray-600">
+            Your payment is being processed, The request usually takes only a
+            few minutes, if it took longer than expected, please
             contact us through{" "}
             <Link className="text-sky-600 hover:underline" href={telegramLink}>
               Telegram
@@ -41,7 +41,7 @@ const purchase = await getPurchase(userId, courseId)
       ) : (
         <Link
           href={`/courses/${courseId}/chapters/${redirectChapterId}`}
-          className="ml-[12%] md:ml-[20%] bg-sky-600 hover:bg-sky-700 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200 text-base"
+          className="m-[8%] md:ml-[20%] bg-sky-600 hover:bg-sky-700 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200 text-base"
         >
           Enroll Now
         </Link>

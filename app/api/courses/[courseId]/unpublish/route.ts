@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { getCourse } from "@/optimizedQueries/CourseQueries";
 import { getAdminInfo } from "@/utils/roles";
 import * as Sentry from "@sentry/nextjs";
 import { revalidateTag } from "next/cache";
@@ -46,6 +47,7 @@ export async function PATCH(
     revalidateTag("home", "max");
     revalidateTag('page/dashboard', "max");
     revalidateTag('page/search', "max");
+    revalidateTag(`courses/telegram-registration`, "max");
 
     return NextResponse.json(unpublishedCourse);
   } catch (error) {

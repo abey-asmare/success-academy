@@ -1,69 +1,41 @@
-import { Category, Chapter, Course } from "@/prisma/app/generated/prisma/client";
-import { db } from "@/lib/db";
-import { getProgress } from "./get-progress";
-import { REVALIDATE_INSTANT } from "@/server-constants";
-import { cacheTag } from "next/cache";
+import { getCoursesForUser } from "./get-courses";
+import { CourseWithProgressWithCategory } from "@/types";
 
-type CourseWithProgressWithCategory = Course & {
-    category: Category;
-    chapters: Chapter[];
-    progress: number | null;
-}
 
 type DashboardCourses = {
-    completedCourses: CourseWithProgressWithCategory[];
-    coursesInProgress: CourseWithProgressWithCategory[];
-    isVerified: boolean;
-}
+  completedCourses: CourseWithProgressWithCategory[];
+  coursesInProgress: CourseWithProgressWithCategory[];
+};
 
-export const getDashboardCourses = async (userId: string): Promise<DashboardCourses> => {
-    try {
-        const purchasedCourses = await db.purchase.findMany({
-            where: {
-                userId,
-                approved: true,
-                
-            },
-            select: {
-                course: {
-                    include: {
-                        category: true,
-                        chapters: {
-                            where: {
-                                isPublished: true
-                            },
-                            select: {
-                                id: true
-                            }
-                        }
-                    },
-                },
-            }
-        });
+export const getDashboardCourses = async (
+  userId: string
+): Promise<DashboardCourses> => {
+  const completedCourses :CourseWithProgressWithCategory[] =[]
+  const coursesInProgress :CourseWithProgressWithCategory[] =[]
+  try {
+    const purchasedCourses = await getCoursesForUser(userId)
 
-        const courses = purchasedCourses.map((purchase) => purchase.course) as CourseWithProgressWithCategory[];
+    for (const course of purchasedCourses){
+      if (course.progress === null || !course.purchase?.approved)
+        continue
 
-        for (const course of courses) {
-            const progress = await getProgress(userId, course.id, course.chapters);
-            course["progress"] = progress;
-        }
-     
-        // Handle completed and couress in progress
-        const completedCourses = courses.filter((course: CourseWithProgressWithCategory) => course.progress === 100);
-        // Handle null progress
-        const coursesInProgress = courses.filter((course: CourseWithProgressWithCategory) => course.progress ? course.progress < 100 : course.progress === 0);
-
-        return {
-            completedCourses,
-            coursesInProgress,
-            isVerified: true
-        }
-        
-    }catch {
-        return  {
-            completedCourses: [],
-            coursesInProgress: [],
-            isVerified: false
-        }
+      if(course.progress === 100){
+        completedCourses.push(course)
+      }
+      
+      if(course.progress < 100){
+        coursesInProgress.push(course)
+      }
     }
-}
+
+    return {
+      completedCourses,
+      coursesInProgress,
+    };
+  } catch {
+    return {
+      completedCourses,
+      coursesInProgress,
+    };
+  }
+};

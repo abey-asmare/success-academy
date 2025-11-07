@@ -64,8 +64,7 @@ export async function POST(
     await sendPurchaseRequestToTelegram(userId, courseId, imageUrl, newPurchase.id);
     revalidateTag(`courses/${courseId}`, "max")
     revalidateTag(`${userId}/purchase/${courseId}`, 'max')
-    revalidateTag(`page/${userId}`, 'max')
-    
+    revalidateTag(`${userId}/purchase`, 'max')
     return NextResponse.json(newPurchase);
   } catch (error) {
     logger.error(

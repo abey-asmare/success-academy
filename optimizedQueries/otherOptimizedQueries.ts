@@ -2,6 +2,7 @@
 
 import { db } from "@/lib/db";
 import { Prisma } from "@/prisma/app/generated/prisma/client";
+import { REVALIDATE_INSTANT } from "@/server-constants";
 import { cacheLife, cacheTag } from "next/cache";
 import { cache } from "react";
 
@@ -26,10 +27,13 @@ export const getProfileCount =  cache(async () => {
 
 
 
-export const getProfile = cache(async ()=> {
-    cacheTag('profile')
-    cacheLife('days')
-    return await db.profile.findMany()
+export const getProfiles = cache(async ()=> {
+    return await db.profile.findMany({
+        cacheStrategy: {
+            ttl: REVALIDATE_INSTANT, 
+            swr: REVALIDATE_INSTANT
+        }
+    })
 })
 
 

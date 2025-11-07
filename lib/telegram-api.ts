@@ -9,7 +9,7 @@ import { getCourse } from "@/optimizedQueries/CourseQueries";
 const getCourseOr404 = async (id: string) => {
         // get the course 
             const course = await getCourse(id)
-            if (!course) {
+            if (!course || course.isPublished === false) {
                 throw new Error("Course not found");
             }
             return course

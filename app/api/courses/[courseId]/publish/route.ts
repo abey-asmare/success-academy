@@ -70,6 +70,8 @@ export async function PATCH(
     revalidateTag('page/dashboard', "max");
     revalidateTag('page/search', "max");
     revalidateTag(`courses/${courseId}`, "max");
+    revalidateTag(`courses/telegram-registration`, "max");
+    
     return NextResponse.json(publishedCourse);
   } catch (error) {
     logger.error(

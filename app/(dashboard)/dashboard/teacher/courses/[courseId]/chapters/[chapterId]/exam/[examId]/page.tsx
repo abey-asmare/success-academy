@@ -1,24 +1,17 @@
-import { db } from '@/lib/db';
+'use cache'
 import { cn } from '@/lib/utils';
+import { getExamById } from '@/optimizedQueries/otherOptimizedQueries';
+import { cacheLife } from 'next/cache';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
 
 const alphabets = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
+
 export default async function ExamDeatilPage({params}: {params: Promise<{examId: string}>}) {
+    cacheLife('weeks')
     const {examId} = await params;
-    const exam = await db.exam.findUnique({
-        where: {
-            id: examId,
-        },
-        include: {
-            questions: {
-                include: {
-                    answers: true,
-                },
-            },
-        },
-    })
+    const exam = await getExamById(examId)
     console.log('exam', exam)
     if(!exam){
         return redirect('/dashboard/teacher/courses')

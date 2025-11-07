@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { VideoPlayer } from "./components/video-player";
 import AdditionalResources from "./components/AdditionalResources";
 import UserStatusBanner from "./components/UserStatusBanner";
@@ -41,7 +41,7 @@ const ChapterIdPage = async ({ params }: { params: ChapterIdProps }) => {
   
   
     if (!chapter) {
-      return redirect("/");
+      return notFound()
     }
   const [course, muxData, promocodes, attachments, nextChapter] = await Promise.all([
     getCourse(courseId),
@@ -52,7 +52,7 @@ const ChapterIdPage = async ({ params }: { params: ChapterIdProps }) => {
   ])
 
 
-  if (!course) {
+  if (!course || !course.isPublished) {
     return redirect("/");
   }
   return (

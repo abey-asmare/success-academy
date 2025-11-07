@@ -3,8 +3,8 @@ import { withAccelerate } from "@prisma/extension-accelerate";
 const prismaClientSingleton = () => {
   return new PrismaClient({
     log: 
-    ["query", "error", "warn"] ,
-      // process.env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
+    // ["query", "error", "warn"] ,
+      process.env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
   }).$extends(withAccelerate());
 };
 

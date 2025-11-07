@@ -1,42 +1,28 @@
 import { db } from "@/lib/db";
-import { REVALIDATE_INSTANT } from "@/server-constants";
 
 export const getProgress = async (
   userId: string,
   courseId: string,
-  chapters: {id: string}[]
+  chapters: { id: string }[]
 ): Promise<number | null> => {
   try {
-    // create an array of chapter ids
-    const publishedChapterIds = chapters.map((chapter) => chapter.id);
+    if (chapters.length === 0) return null;
 
-    const validCompletedChapters = await validCompletedChaptersForUser(
-      userId,
-      publishedChapterIds
-    );
-    const progressPercentage = (validCompletedChapters / chapters.length) * 100;
+    const chapterIds = chapters.map((chapter) => chapter.id);
+
+    const completedCount = await db.userProgress.count({
+      where: {
+        userId,
+        chapterId: { in: chapterIds },
+        isCompleted: true,
+      },
+    });
+
+    const progressPercentage = (completedCount / chapters.length) * 100;
 
     return progressPercentage;
-  } catch {
+  } catch (error) {
+    console.error("Error calculating progress:", error);
     return 0;
   }
 };
-
-async function validCompletedChaptersForUser(
-  userId: string,
-  publishedChapterIds: string[]
-) {
-  return await db.userProgress.count({
-    where: {
-      userId: userId,
-      chapterId: {
-        in: publishedChapterIds,
-      },
-      isCompleted: true,
-    },
-    cacheStrategy: {
-      ttl: REVALIDATE_INSTANT,
-      swr: REVALIDATE_INSTANT
-    }
-  });
-}

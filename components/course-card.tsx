@@ -6,6 +6,7 @@ import { formatPrice } from "@/lib/format";
 import IconBadge from "@/components/icon-badge";
 import { CourseProgress } from "@/components/course-progress";
 import { Button } from "@/components/ui/button";
+import { Purchase } from "@/prisma/app/generated/prisma/client";
 
 interface CourseCardProps {
   id: string;
@@ -14,20 +15,19 @@ interface CourseCardProps {
   chaptersLength: number;
   price: number;
   progress: number | null;
-  isVerified: boolean;
+  purchase: Purchase | null;
 }
 
-export const CourseCard = async ({
+export const CourseCard = ({
   id,
   title,
   imageUrl,
   chaptersLength,
   price,
   progress,
-  isVerified,
+  purchase,
 }: CourseCardProps) => {
-  const hasProgress = progress !== null;
-
+  console.log('purchase', purchase)
   return (
     <Link href={`/courses/${id}`} className="block">
       <div className="group hover:shadow-sm transition overflow-hidden border rounded-2xl p-3 h-full">
@@ -40,6 +40,8 @@ export const CourseCard = async ({
             priority
           />
         </div>
+        <div className="">
+        </div>
 
         <div className="flex flex-col pt-2">
           <div className="text-lg md:text-base font-medium group-hover:text-sky-700 transition dark:group-hover:text-sky-500 line-clamp-2">
@@ -50,34 +52,13 @@ export const CourseCard = async ({
             <div className="flex items-center gap-x-1 text-slate-500">
               <IconBadge size="sm" icon={BookOpen} />
               <span>
-                {chaptersLength}{" "}
-                {chaptersLength === 1 ? "Chapter" : "Chapters"}
+                {chaptersLength} {chaptersLength === 1 ? "Chapter" : "Chapters"}
               </span>
             </div>
           </div>
 
           {/* Render logic */}
-          {hasProgress ? (
-            isVerified ? (
-              <CourseProgress
-                variant={progress === 100 ? "success" : "default"}
-                size="sm"
-                value={progress}
-              />
-            ) : (
-              <>
-                <p className="text-md md:text-sm h-4 font-medium text-slate-700"></p>
-                <Button
-                  disabled
-                  className="w-full mt-2 bg-sky-600 hover:bg-sky-700"
-                  size="sm"
-                >
-                  <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
-                  Processing Payment
-                </Button>
-              </>
-            )
-          ) : (
+          {!purchase ? (
             <>
               <p className="text-md md:text-sm font-medium text-slate-700">
                 {formatPrice(price)}
@@ -87,6 +68,24 @@ export const CourseCard = async ({
                 size="sm"
               >
                 Enroll
+              </Button>
+            </>
+          ) : purchase.approved ? (
+            <CourseProgress
+              variant={progress === 100 ? "success" : "default"}
+              size="sm"
+              value={progress ?? 0}
+            />
+          ) : (
+            <>
+              <p className="text-md md:text-sm h-4 font-medium text-slate-700"></p>
+              <Button
+                disabled
+                className="w-full mt-2 bg-sky-600 hover:bg-sky-700"
+                size="sm"
+              >
+                <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+                Processing Payment
               </Button>
             </>
           )}

@@ -41,7 +41,9 @@ export async function POST(request: NextRequest) {
     revalidatePath(`/courses/${id}`);
 
     revalidateTag(`${payment.userId}/purchase/${payment.courseId}`, 'max')
-
+    revalidateTag(`${payment.userId}/purchase`, 'max')
+    revalidateTag(`page/${payment.userId}`, 'max')
+    
     logger.info(`[TELEGRAM_BOT_APPROVE_PAYMENT]: OK: Payment ${id} approved successfully`);
     return NextResponse.json({
       message: "Payment approved successfully",

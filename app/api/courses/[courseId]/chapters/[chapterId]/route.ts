@@ -105,6 +105,8 @@ export async function DELETE(
     revalidatePath(`/courses/${courseId}/chapters/${chapterId}`)
     revalidateTag(`courses/${courseId}`, 'max')
     revalidateTag(`chapters/${chapterId}`, 'max')
+    revalidateTag(`muxData/${chapterId}`, 'max')
+
     // const publishedChaptersInCourse = await db.chapter.findMany({
     //   where: {
     //     courseId: courseId,
@@ -209,6 +211,8 @@ export async function PATCH(
     revalidatePath(`/courses/${courseId}/chapters/${chapterId}`)
     revalidateTag(`courses/${courseId}`, 'max')
     revalidateTag(`chapters/${chapterId}`, 'max')
+    revalidateTag(`muxData/${chapterId}`, 'max')
+
     return NextResponse.json(chapter);
   } catch (error) {
     logger.error(`[COURSE_ID_CHAPTER_ID_PATCH]: Internal Error: Failed to update chapter ${chapterId} ${error}`)

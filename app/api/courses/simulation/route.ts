@@ -110,6 +110,7 @@ export async function POST(req: NextRequest) {
       `[COURSE_SIMULATION_POST]: OK: Simulation ${exam.id} created successfully`
     );
       revalidateTag("courses", 'max');
+      revalidateTag(`courses/${courseId}`, 'max')
       revalidateTag('teacher/simulations', 'max')
       revalidateTag('home', 'max')
     

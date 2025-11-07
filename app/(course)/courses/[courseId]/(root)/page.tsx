@@ -44,7 +44,7 @@ export default async function CourseDetail({ params }: Props) {
   
   const course = await getCourse(courseId);
 
-  if (!course) return notFound();
+  if (!course || !course.isPublished) return notFound();
 
   return (
     <div>

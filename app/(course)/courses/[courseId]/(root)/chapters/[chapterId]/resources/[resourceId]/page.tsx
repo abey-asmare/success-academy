@@ -10,8 +10,6 @@ import { cacheLife, cacheTag } from "next/cache";
 
 export async function generateStaticParams(){
   const attachments = await db.attachment.findMany()
-  cacheLife('max')
-  cacheTag('attachments')
   return attachments.map((attachment) => ({
     resourceId: attachment.id,
   }))
@@ -56,7 +54,7 @@ export default async function ResourceDetailPage({
     <div>
       <div className="border p-4 rounded shadow-sm space-y-4">
         {resourceCategory === "image" && resource?.url && (
-          <UnDownloadableImage className="w-[300px] h-[400px]">
+          <UnDownloadableImage className="w-[200px] h-[400px]">
             <Image
             className="w-full h-full rounded object-contain"
               src={resource.url}
