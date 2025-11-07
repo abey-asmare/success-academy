@@ -49,6 +49,7 @@
     "@tabler/icons-react": "^3.34.1",
     "@tanstack/react-query": "^5.83.1",
     "@tanstack/react-table": "^8.21.3",
+    "@twa-dev/sdk": "^8.0.2",
     "@uploadthing/react": "^7.3.3",
     "axios": "^1.11.0",
     "chrono-node": "^2.8.4",

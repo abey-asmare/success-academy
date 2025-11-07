@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { startTransition, useState } from "react";
+import { startTransition, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -38,7 +38,13 @@ import { profileFormSchema } from "@/schemas/validationSchemas";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { handleTelegramRegistration } from "./actions";
-import { register } from "module";
+
+
+import dynamic from 'next/dynamic'
+import WebApp from "@twa-dev/sdk";
+
+// This ensures it’s only imported client-side
+// const WebApp = dynamic(() => import('@twa-dev/sdk'), { ssr: false })
 
 const referrerOptions = [
   { value: "Google", label: "Google" },
@@ -61,6 +67,25 @@ type PropType = {
 };
 
 export default function RegistrationForm({ courses }: PropType) {
+    const [WebApp, setWebApp] = useState<any>(null)
+      const [info, setInfo] = useState('Loading...')
+
+
+
+  useEffect(()=> {
+    import('@twa-dev/sdk').then((mod) => {
+  const wa = mod.default as typeof WebApp
+  wa.ready()
+  wa.expand()
+  setWebApp(wa)
+       setInfo(JSON.stringify(wa.initDataUnsafe, null, 2))
+})
+  }, [])
+
+// WebApp.expand()
+
+// console.log(WebApp)
+// console.log(WebApp.initData)
   const form = useForm<formType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -98,6 +123,9 @@ export default function RegistrationForm({ courses }: PropType) {
   return (
     <div className="max-w-2xl m-auto my-10 px-6 transition-all">
       <Form {...form}>
+        <p>
+          info: {info}
+        </p>
         <form
           className="space-y-4"
           onSubmit={form.handleSubmit(
