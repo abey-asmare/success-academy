@@ -18,21 +18,9 @@ export const getChapters = cache(
   async (courseId: string): Promise<ChaptersGenericViewType[]> => {
     cacheLife("weeks");
     cacheTag(`chapters`, `courses/${courseId}`);
-
-    return await db.chapter.findMany({
-      where: {
-        courseId,
-        isPublished: true
-      },
-      include: {
-        exams: true,
-        category: true,
-      },
-      orderBy: {
-        position: "asc",
-      },
-    });
-  }
+const chapters  = await  getChaptersForAdmin(courseId)
+return chapters.filter((chapter) => chapter.isPublished)
+}
 );
 export const getChaptersForAdmin = cache(
   async (courseId: string): Promise<ChaptersGenericViewType[]> => {
@@ -61,17 +49,7 @@ export const getChapter = cache(
   ): Promise<ChaptersGenericViewType | null> => {
     cacheLife("weeks");
    
-    const chapter = await db.chapter.findFirst({
-      where: {
-        id: chapterId,
-        isPublished: true
-      },
-      include: {
-        exams: true,
-        category: true,
-      },
-    });
-
+    const chapter = await getChapterForAdmin(chapterId)
     if(!chapter ) return null;
      cacheTag(
       `courses/${chapter.courseId}`,

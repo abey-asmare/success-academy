@@ -1,8 +1,8 @@
-import { getCoursesForAdmin } from "@/optimizedQueries/CourseQueries";
+import { getCourses } from "@/optimizedQueries/CourseQueries";
 import CreateSimulationForm from "../components/CreateSimulationForm";
 
 export default async function CreateSimulationPage() {
-  const courses = await getCoursesForAdmin();
+  const courses = await getCourses();
 
   return (
     <div className="max-w-4xl mx-auto p-6">

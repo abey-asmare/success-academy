@@ -15,27 +15,27 @@ export async function generateStaticParams() {
 }
 
 
-// export async function generateMetadata({ params }: Props): Promise<Metadata>{
-//   const {courseId} = await params;
-//   const course = await getCourse(courseId)
-//   return {
-//     title: course?.title || "Success Academy", 
-//     description: course?.description || "Success Academy",
-//     openGraph: {
-//       title: course?.title || "Success Academy",
-//       description: course?.description || "Success Academy",
-//       images: [
-//         {
-//           url: course?.bgImageUrl || "/bg/defaultbackground.webp",
-//           width: 1200,
-//           height: 630,
-//           alt: course?.title,
-//         },
-//       ],
-//     },
-//   }
+export async function generateMetadata({ params }: Props): Promise<Metadata>{
+  const {courseId} = await params;
+  const course = await getCourse(courseId)
+  return {
+    title: course?.title || "Success Academy", 
+    description: course?.description || "Success Academy",
+    openGraph: {
+      title: course?.title || "Success Academy",
+      description: course?.description || "Success Academy",
+      images: [
+        {
+          url: course?.bgImageUrl || "/bg/defaultbackground.webp",
+          width: 1200,
+          height: 630,
+          alt: course?.title,
+        },
+      ],
+    },
+  }
 
-// }
+}
 
 
 export default async function CourseDetail({ params }: Props) {

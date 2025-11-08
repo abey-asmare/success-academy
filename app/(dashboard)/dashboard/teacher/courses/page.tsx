@@ -1,4 +1,4 @@
-import { getCoursesForAdmin } from "@/optimizedQueries/CourseQueries";
+import { getCourses } from "@/optimizedQueries/CourseQueries";
 import { Metadata } from "next";
 import { columns } from "./components/columns";
 import { DataTable } from "./components/data-table";
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 const CoursesPage = async () => {
 
-    const courses = await getCoursesForAdmin();
+    const courses = await getCourses();
 
 
     return (

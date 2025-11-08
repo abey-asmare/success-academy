@@ -2,7 +2,9 @@ import { getCourses } from '@/optimizedQueries/CourseQueries';
 import Link from 'next/link';
 
 export default async function OurCourses() {
-  const courses = await getCourses()
+  const allCourses = await getCourses()
+  const courses = allCourses.filter((course) => course.isPublished)
+
   return (
     <ul className="space-y-2">
               {

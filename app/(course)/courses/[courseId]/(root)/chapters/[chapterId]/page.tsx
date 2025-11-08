@@ -4,35 +4,36 @@ import AdditionalResources from "./components/AdditionalResources";
 import UserStatusBanner from "./components/UserStatusBanner";
 import { getChapter, getMuxData, getNextChapter } from "@/optimizedQueries/chapterQueries";
 import { getAttachments, getCourse, getPromoCodes } from "@/optimizedQueries/CourseQueries";
+import { Metadata } from "next";
 
 type ChapterIdProps = Promise<{
   courseId: string;
   chapterId: string;
 }>;
 
-// export async function generateMetadata({
-//   params,
-// }: {
-//   params: ChapterIdProps;
-// }): Promise<Metadata> {
-//   const { chapterId } = await params;
-//   const chapter = await getChapter(chapterId)
-//   const course = await getCourse(chapter!.courseId);
+export async function generateMetadata({
+  params,
+}: {
+  params: ChapterIdProps;
+}): Promise<Metadata> {
+  const { chapterId } = await params;
+  const chapter = await getChapter(chapterId)
+  const course = await getCourse(chapter!.courseId);
 
-//   if (!chapter || !course) {
-//     return {
-//       title: "Resourse not found",
-//     };
-//   }
+  if (!chapter || !course) {
+    return {
+      title: "Resourse not found",
+    };
+  }
 
-//   return {
-//     title: chapter.title,
-//     description: chapter.description ? chapter.description : course.description,
-//     openGraph: {
-//       images: [course.imageUrl!],
-//     },
-//   };
-// }
+  return {
+    title: chapter.title,
+    description: chapter.description ? chapter.description : course.description,
+    openGraph: {
+      images: [course.imageUrl!],
+    },
+  };
+}
 
 const ChapterIdPage = async ({ params }: { params: ChapterIdProps }) => {
   const { courseId, chapterId } = await params;
