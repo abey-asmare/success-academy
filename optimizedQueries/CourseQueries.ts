@@ -51,6 +51,8 @@ export type CourseGenericViewType = Omit<
 export const getCourses = cache(async (): Promise<CourseGenericViewType[]> => {
   cacheTag("courses");
   cacheLife("weeks");
+  cacheTag("courses", 'admin/courses');
+  cacheTag("courses");
   return await db.course.findMany({
     include: {
       exams: true,
