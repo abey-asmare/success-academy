@@ -12,7 +12,9 @@ import { Card } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
 
 export default async function CourseList({ className }: { className: string }) {
-  const courses = await getCourses();
+  const allCourses = await getCourses();
+  const courses = allCourses.filter((course) => course.isPublished)
+
 
   const examsMinimized = (
     courses ?? []

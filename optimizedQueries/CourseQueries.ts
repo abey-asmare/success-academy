@@ -28,28 +28,28 @@ export type CourseGenericViewType = Omit<
   }>["category"]; 
 };
 
+// export const getCourses = cache(async (): Promise<CourseGenericViewType[]> => {
+//   cacheLife("weeks");
+//   cacheTag("courses");
+//   return await db.course.findMany({
+//     where: {
+//       isPublished: true
+//     },
+//     include: {
+//       exams: true,
+//       category: true,
+//     },
+//     orderBy: {
+//       createdAt: "desc",
+//     },
+//   });
+// });
+
+
+
 export const getCourses = cache(async (): Promise<CourseGenericViewType[]> => {
   cacheLife("weeks");
   cacheTag("courses");
-  return await db.course.findMany({
-    where: {
-      isPublished: true
-    },
-    include: {
-      exams: true,
-      category: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-});
-
-
-
-export const getCoursesForAdmin = cache(async (): Promise<CourseGenericViewType[]> => {
-  cacheLife("weeks");
-  cacheTag("courses", 'admin/courses');
   return await db.course.findMany({
     include: {
       exams: true,
