@@ -40,8 +40,8 @@ import toast from "react-hot-toast";
 import { handleTelegramRegistration } from "./actions";
 
 
-import dynamic from 'next/dynamic'
-import WebApp from "@twa-dev/sdk";
+// import dynamic from 'next/dynamic'
+// import WebApp from "@twa-dev/sdk";
 import { Sentry } from "@/lib/sentryLogger";
 
 // This ensures it’s only imported client-side
@@ -121,9 +121,9 @@ export default function RegistrationForm({ courses }: PropType) {
   return (
     <div className="max-w-2xl m-auto my-10 px-6 transition-all">
       <Form {...form}>
-        <p>
+        {/* <p>
           info: {info}
-        </p>
+        </p> */}
         <form
           className="space-y-4"
           onSubmit={form.handleSubmit(
@@ -145,6 +145,9 @@ export default function RegistrationForm({ courses }: PropType) {
                       "Payment successful. We are processing your payments"
                     );
                     setIsRegistered(true);
+                    setTimeout(() => {
+                      WebApp.close()
+                    }, 1000);
                   } else {
                     toast.error("Failed to register. Please try again.");
                   }
