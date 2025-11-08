@@ -5,7 +5,7 @@ import Sentry from "@sentry/nextjs";
 import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
-const BATCH_SIZE = 100; // Adjust for DB payload limits
+const BATCH_SIZE = 100;
 
 export async function POST(
   req: NextRequest,
@@ -14,9 +14,9 @@ export async function POST(
   const { courseId, chapterId } = await params;
 
   try {
-    const { userId, isAdmin } = await getAdminInfo();
+    const { isAdmin } = await getAdminInfo();
     if (!isAdmin) {
-      return new NextResponse("Unauthorized", { status: 401 });
+      return NextResponse.json({error: "Unauthorized"}, { status: 401 });
     }
 
     const body = await req.json();
@@ -31,7 +31,7 @@ export async function POST(
     const { name, description, questions } = validatedData.data;
 
     if (!name || !questions || questions.length === 0) {
-      return new NextResponse("Missing required fields", { status: 400 });
+      return NextResponse.json({error: "Missing required fields"}, { status: 400 });
     }
 
     // Ensure chapter exists
@@ -39,7 +39,7 @@ export async function POST(
       where: { id: chapterId, courseId },
     });
     if (!chapter) {
-      return new NextResponse("Chapter not found", { status: 404 });
+      return NextResponse.json({error: "Chapter not found"}, { status: 404 });
     }
 
     // Check for existing exam name in this chapter
@@ -47,9 +47,7 @@ export async function POST(
       where: { name, chapterId },
     });
     if (existingExam) {
-      return new NextResponse("An exam with this name already exists", {
-        status: 409,
-      });
+      return NextResponse.json({error: "An exam with this name already exists"}, { status: 409 });
     }
 
     // Deduplicate questions before DB
@@ -123,7 +121,7 @@ export async function POST(
     return NextResponse.json(exam);
   } catch (error) {
     Sentry.captureException(error);
-    return new NextResponse("Internal Server Error", { status: 500 });
+    return NextResponse.json({error: "Internal Server Error"}, { status: 500 });
   }
 }
 
@@ -131,30 +129,13 @@ export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ courseId: string; chapterId: string }> }
 ) {
-  const { logger } = Sentry;
   const { courseId, chapterId } = await params;
   try {
-    const { userId, isAdmin } = await getAdminInfo();
+    const { isAdmin } = await getAdminInfo();
 
     if (!isAdmin) {
-      logger.warn(
-        `[COURSE_ID_CHAPTER_ID_EXAM_GET]: Unauthorized: User ${userId} is not authorized to get exams for a course ${courseId}`
-      );
-      return new NextResponse("Unauthorized", { status: 401 });
+      return NextResponse.json({error: "Unauthorized"}, { status: 401 });
     }
-
-    // Check if user owns the course
-    // const course = await db.course.findUnique({
-    //   where: {
-    //     id: courseId,
-    //     userId: userId,
-    //   },
-    // });
-
-    // if (!course) {
-    //   logger.info(`[COURSE_ID_CHAPTER_ID_EXAM_GET]: Not Found: Course ${courseId} not found for user ${userId}`)
-    //   return new NextResponse("Course not found", { status: 404 });
-    // }
 
     // Check if the chapter exists and belongs to the course
     const chapter = await db.chapter.findUnique({
@@ -165,10 +146,7 @@ export async function GET(
     });
 
     if (!chapter) {
-      logger.info(
-        `[COURSE_ID_CHAPTER_ID_EXAM_GET]: Not Found: Chapter ${chapterId} not found for course ${courseId}`
-      );
-      return new NextResponse("Chapter not found", { status: 404 });
+      return  NextResponse.json({error: "Chapter not found"}, { status: 404 });
     }
 
     // Get all exams for this specific chapter
@@ -188,14 +166,9 @@ export async function GET(
       },
     });
 
-    logger.info(
-      `[COURSE_ID_CHAPTER_ID_EXAM_GET]: OK: Exams for chapter ${chapterId} retrieved successfully`
-    );
     return NextResponse.json(exams);
   } catch (error) {
-    logger.error(
-      `[COURSE_ID_CHAPTER_ID_EXAM_GET]: Internal Error: Failed to get exams for chapter ${chapterId} ${error}`
-    );
-    return new NextResponse("Internal Error", { status: 500 });
+    Sentry.captureException(error)
+    return  NextResponse.json({error: "Internal Error"}, { status: 500 });
   }
 }

@@ -42,6 +42,7 @@ import { handleTelegramRegistration } from "./actions";
 
 import dynamic from 'next/dynamic'
 import WebApp from "@twa-dev/sdk";
+import { Sentry } from "@/lib/sentryLogger";
 
 // This ensures it’s only imported client-side
 // const WebApp = dynamic(() => import('@twa-dev/sdk'), { ssr: false })
@@ -82,10 +83,7 @@ export default function RegistrationForm({ courses }: PropType) {
 })
   }, [])
 
-// WebApp.expand()
 
-// console.log(WebApp)
-// console.log(WebApp.initData)
   const form = useForm<formType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -159,7 +157,7 @@ export default function RegistrationForm({ courses }: PropType) {
               }
             },
             (errors) => {
-              console.log(errors);
+              Sentry.captureException(errors);
             }
           )}
         >

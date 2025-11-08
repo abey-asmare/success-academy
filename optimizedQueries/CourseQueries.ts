@@ -7,6 +7,7 @@ import {
   Prisma,
 } from "@/prisma/app/generated/prisma/client/client";
 import { cacheLife, cacheTag } from "next/cache";
+import { connection } from "next/server";
 import { cache } from "react";
 import { TZDate } from "react-day-picker";
 
@@ -48,8 +49,8 @@ export type CourseGenericViewType = Omit<
 
 
 export const getCourses = cache(async (): Promise<CourseGenericViewType[]> => {
-  cacheLife("weeks");
   cacheTag("courses");
+  cacheLife("weeks");
   return await db.course.findMany({
     include: {
       exams: true,
@@ -95,7 +96,7 @@ export const getPromoCodes = cache(
   async (courseId: string): Promise<CoursePromocode[]> => {
     cacheLife("days");
     cacheTag(`${courseId}/promocodes`, courseId);
-  const today = todayInUserZone("Africa/Addis_Ababa");
+  const today =  todayInUserZone("Africa/Addis_Ababa");
 
     return await db.coursePromocode.findMany({
       where: {

@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 import { TZDate } from "react-day-picker";
+import { Sentry } from "@/lib/sentryLogger"
 
 function todayInUserZone(timeZone: string) {
   const now = new TZDate(TZDate.now(), timeZone);
@@ -29,7 +30,7 @@ export async function GET(
     });
     return NextResponse.json({ promocodes });
   } catch (error) {
-    console.log(error);
+    Sentry.captureException(error)
     return NextResponse.json(
       { error: "Failed to fetch promocodes" },
       { status: 500 }

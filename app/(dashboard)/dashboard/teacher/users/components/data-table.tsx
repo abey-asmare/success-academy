@@ -40,7 +40,6 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
 
   const sidebar = useSidebar()
-  console.log(sidebar)
 
 
     const [globalFilter, setGlobalFilter] = React.useState("")

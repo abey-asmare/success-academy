@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { Sentry } from "@/lib/sentryLogger";
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request, {params }: {params: Promise<{chapterId: string}>}){
@@ -12,7 +13,7 @@ export async function GET(req: Request, {params }: {params: Promise<{chapterId: 
         });
         return NextResponse.json({muxData})
     } catch (error) {
-        console.log(error)
+        Sentry.captureException(error)
         return NextResponse.json({error: "Failed to fetch muxData"}, {status: 500})
     }
 }

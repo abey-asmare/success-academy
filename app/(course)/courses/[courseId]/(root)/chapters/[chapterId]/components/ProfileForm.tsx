@@ -55,6 +55,7 @@ import { Loader2 } from "lucide-react";
 import { redirect, useParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { enrollInCourse } from "../actions";
+import { Sentry } from "@/lib/sentryLogger";
 
 const referrerOptions = [
   { value: "Google", label: "Google" },
@@ -146,11 +147,8 @@ function ProfileForm({ setOpen }: { setOpen: (open: boolean) => void }) {
           className="space-y-4"
           onSubmit={form.handleSubmit(
             async (data) => {
-              console.log(data)
-              {console.log(form.formState)}
 
                 try {
-                  console.log('data', data)
                   await enrollInCourse(data, courseId, user!.id);
                   toast.success("Profile updated successfully!");
                   setOpen(false);
@@ -159,7 +157,7 @@ function ProfileForm({ setOpen }: { setOpen: (open: boolean) => void }) {
                 }
                 redirect(`/courses/${courseId}/checkout`);
             },
-            (error) => console.log(error)
+            (error) =>Sentry.captureException(error)
           )}
         >
           <div className="flex space-between gap-4">

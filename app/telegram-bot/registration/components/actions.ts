@@ -1,15 +1,15 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { profileFormSchema } from "@/schemas/validationSchemas";
-import z from "zod";
-import { Stream } from "@/prisma/app/generated/prisma/client";
-import { clerkClient } from "@clerk/nextjs/server";
+import { Sentry } from "@/lib/sentryLogger";
 import { sendPurchaseRequestToTelegram } from "@/lib/telegram-api";
-import { logger } from "@/lib/sentryLogger";
-import { connection } from "next/server";
 import { getPurchase } from "@/optimizedQueries/personalizedQueries";
+import { Stream } from "@/prisma/app/generated/prisma/client";
+import { profileFormSchema } from "@/schemas/validationSchemas";
+import { clerkClient } from "@clerk/nextjs/server";
 import { revalidateTag } from "next/cache";
+import { connection } from "next/server";
+import z from "zod";
 
 const formSchema = profileFormSchema.extend({
   courseId: z.string().min(1, { message: "Course is required" }),
@@ -18,6 +18,7 @@ const formSchema = profileFormSchema.extend({
 type formType = z.infer<typeof formSchema>;
 
 export async function handleTelegramRegistration(data: formType) {
+  await connection()
   const isSuccessFul = formSchema.safeParse(data);
   if (!isSuccessFul) return { message: "Validation Error", status: 400 };
 
@@ -30,7 +31,6 @@ export async function handleTelegramRegistration(data: formType) {
     const user = await client.users.getUserList({ emailAddress: [data.email] });
 
     if (user.data.length > 0) {
-      console.log(user.data);
       userId = user.data[0].id;
     } else {
       const newUser = await client.users.createUser({
@@ -39,8 +39,6 @@ export async function handleTelegramRegistration(data: formType) {
       });
       userId = newUser.id;
     }
-    console.log(userId);
-
     // create a profile
     await db.profile.upsert({
       where: { userId },
@@ -93,10 +91,6 @@ export async function handleTelegramRegistration(data: formType) {
       if (!newPurchase) {
         return { message: "Registration failed", status: 500 };
       }
-
-      logger.info(
-        `[COURSE_ID_PURCHASE_POST]: OK: Course ${data.courseId} attempt to send.`
-      );
       //  fetch for telegram
       sendPurchaseRequestToTelegram(
         userId,
@@ -109,7 +103,7 @@ export async function handleTelegramRegistration(data: formType) {
 
     return { message: "Registration successful", status: 200 };
   } catch (error) {
-    console.log(error);
+    Sentry.captureException(error);
     return { message: "Registration failed", status: 500 };
   }
 }

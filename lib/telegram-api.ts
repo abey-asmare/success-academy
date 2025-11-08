@@ -2,7 +2,7 @@
 import { NextResponse } from "next/server";
 import pRetry, { AbortError } from 'p-retry';
 import { db } from "./db";
-import { logger, Sentry } from "./sentryLogger";
+import { Sentry } from "./sentryLogger";
 import { getCourse } from "@/optimizedQueries/CourseQueries";
 
 
@@ -49,8 +49,6 @@ export async function sendPurchaseRequestToTelegram(userId: string, courseId: st
     };
 
     const sendRequest = async () => {
-      logger.info(`[TELEGRAM_SEND]: Attempting to send purchaseId ${purchaseId}...`);
-
       const response = await fetch(process.env.API_APPROVE_REQUEST_ENDPOINT!, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -77,19 +75,14 @@ export async function sendPurchaseRequestToTelegram(userId: string, courseId: st
       factor: 2,  //  exponential backoff factor
       minTimeout: 1000, // minimum timeout 1s
       onFailedAttempt: (error) => {
-        // executed on each failed attempt
-        logger.warn(
-          `[TELEGRAM_SEND]: Attempt ${error.attemptNumber} failed for purchaseId ${purchaseId}. There are ${error.retriesLeft} retries left. Reason: ${error}`
-        );
+     Sentry.captureException(error);
       },
     });
 
-    logger.info(`[TELEGRAM_SEND]: Successfully sent purchaseId ${purchaseId} after retries.`);
 
   } catch (error) {
-    logger.error(`[COURSE_ID_PURCHASE_POST]: Final Error: Failed to send purchase request to telegram for ${purchaseId}. ${error}`);
     Sentry.captureException(error);
-    return new NextResponse("Internal server error", { status: 500 });
+    return NextResponse.json({error: "Internal server error"}, { status: 500 });
   }
 }
 

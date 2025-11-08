@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminInfo } from "@/utils/roles";
-import { Sentry, logger } from "@/lib/sentryLogger";
+import { Sentry } from "@/lib/sentryLogger";
 import { examSchema } from "@/schemas/validationSchemas";
 import { notFound } from "next/navigation";
 import { revalidateTag } from "next/cache";
@@ -16,10 +16,7 @@ export async function PUT(
     const { userId, isAdmin } = await getAdminInfo();
 
     if (!isAdmin) {
-      logger.warn(
-        `[SIMULATION_PUT]: Unauthorized: User ${userId} is not an admin to update simulation ${simulationId}`
-      );
-      return new NextResponse("Unauthorized", { status: 401 });
+      return NextResponse.json({error: "Unauthorized"}, { status: 401 });
     }
 
     const body = await req.json();
@@ -35,7 +32,7 @@ export async function PUT(
     const { courseId, name, description, questions } = validatedData.data;
 
     if (!courseId || !name || !questions || questions.length === 0) {
-      return new NextResponse("Missing required fields", { status: 400 });
+      return NextResponse.json({error: "Missing required fields"}, { status: 400 });
     }
 
     // Ensure simulation exists
@@ -44,9 +41,6 @@ export async function PUT(
     });
 
     if (!simulation) {
-      logger.info(
-        `[SIMULATION_PUT]: Not Found: Simulation ${simulationId} not found`
-      );
       notFound();
     }
 
@@ -128,20 +122,13 @@ export async function PUT(
         maxWait: 10_000,
       }
     );
-
-    logger.info(
-      `[SIMULATION_PUT]: OK: Simulation ${simulationId} updated successfully`
-    );
     revalidateTag("courses", "max");
     revalidateTag("teacher/simulations", "max");
     revalidateTag(`courses/${courseId}`, "max");
 
     return NextResponse.json(updatedSimulation);
   } catch (error) {
-    logger.error(
-      `[SIMULATION_PUT]: Internal Error: Failed to update simulation ${simulationId}, ${error}`
-    );
     Sentry.captureException(error);
-    return new NextResponse("Internal Server Error", { status: 500 });
+    return NextResponse.json({error: "Internal Server Error"}, { status: 500 });
   }
 }

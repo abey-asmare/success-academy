@@ -20,13 +20,6 @@ export type ExamGenericType = Prisma.ExamGetPayload<{
 }>
 
 
-export const getProfileCount =  cache(async () => {       
-    cacheLife('weeks')
-    return await db.profile.count()
-})
-
-
-
 export const getProfiles = cache(async ()=> {
     return await db.profile.findMany({
         cacheStrategy: {
@@ -34,6 +27,12 @@ export const getProfiles = cache(async ()=> {
             swr: REVALIDATE_INSTANT
         }
     })
+})
+
+export const getProfileCount =  cache(async () => {       
+    cacheLife('weeks')
+    const profiles = await getProfiles()
+    return profiles.length
 })
 
 

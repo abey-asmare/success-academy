@@ -1,9 +1,9 @@
 'use client'
 import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
@@ -16,7 +16,6 @@ const [desc, setDesc] = useState<string>()
     const getDescription = (): Promise<string> => {
         return new Promise(resolve =>{
            setTimeout(() => {
-            console.log("resolving to ", description || "Description not available")
             resolve(description || "Description not available")
            }, Math.random() * 1000 + 1000)
         })

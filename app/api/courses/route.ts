@@ -1,40 +1,8 @@
 import { db } from "@/lib/db";
-import { logger, Sentry } from "@/lib/sentryLogger";
+import { Sentry } from "@/lib/sentryLogger";
 import { getAdminInfo } from "@/utils/roles";
 import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
-
-// export async function GET(){
-//   try {
-//     const courses = await db.course.findMany({
-//       where: {
-//         isPublished: true,
-//       },
-//       include: {
-//         exams: {
-//           select: {
-//             id: true,
-//             name: true,
-//             description: true,
-//             courseId: true  
-//           },
-//         },
-//       },
-//       orderBy: {
-//         createdAt: "desc",
-//       },
-//     });
-//     logger.info(`[COURSE_GET]: OK: Courses fetched successfully`)
-//     return NextResponse.json(courses);
-//   } catch (error) {
-//     logger.error(`[COURSE_GET]: Internal Error: Failed to fetch courses ${error}`)
-//     Sentry.captureException(error)
-//     return NextResponse.json(
-//       { error: "Internal server error" },
-//       { status: 500 }
-//     );
-//   }
-// }
 
 /**
  * 
@@ -55,7 +23,8 @@ export async function GET(){
       },
     });
     return NextResponse.json(courses);
-  }catch{
+  }catch(error){
+    Sentry.captureException(error)
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
@@ -78,10 +47,8 @@ export async function POST(req: Request) {
     });
 
     revalidateTag('courses', 'max')
-    logger.info(`[COURSE_POST]: OK: Course ${course.id} created successfully by ${userId}`)
     return NextResponse.json(course);
   } catch (error) {
-    logger.error(`[COURSE_POST]: Internal Error: Failed to create course ${error}`)
     Sentry.captureException(error)
     return NextResponse.json(
       { error: "Internal server error" },

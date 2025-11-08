@@ -12,7 +12,6 @@ export default async function ExamDeatilPage({params}: {params: Promise<{examId:
     cacheLife('weeks')
     const {examId} = await params;
     const exam = await getExamById(examId)
-    console.log('exam', exam)
     if(!exam){
         return redirect('/dashboard/teacher/courses')
     }

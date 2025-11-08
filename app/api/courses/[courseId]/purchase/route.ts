@@ -1,24 +1,20 @@
 import { db } from "@/lib/db";
+import { Sentry } from "@/lib/sentryLogger";
 import { sendPurchaseRequestToTelegram } from "@/lib/telegram-api";
 import { auth } from "@clerk/nextjs/server";
-import * as Sentry from "@sentry/nextjs";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
   req: Request,
   { params }: { params: Promise<{ courseId: string }> }
 ) {
-  const { logger } = Sentry;
   const { courseId } = await params;
-  const { imageUrl } = await req.json();
+  const { imageUrl } = await req.json();  
   try {
     const {userId} = await auth() 
     if (!userId) {
-      logger.warn(
-        `[COURSE_ID_PURCHASE_POST]: Unauthorized: User ${userId} is not authorized yet to purchase course ${courseId}`
-      );
-      return new NextResponse("Unauthorized", { status: 401 });
+      return NextResponse.json({error: "Unauthorized"}, { status: 401 });
     }
 
     const purchase = await db.purchase.findUnique({
@@ -49,29 +45,15 @@ export async function POST(
       },
     });
 
-    if (!newPurchase) {
-      logger.error(
-        `[COURSE_ID_PURCHASE_POST]: Internal Error: Failed to purchase course ${courseId}`
-      );
-      return new NextResponse("Internal server error", { status: 500 });
-    }
-    logger.info(
-      `[COURSE_ID_PURCHASE_POST]: OK: Course ${courseId} purchased successfully`
-    );
-    logger.info(`[COURSE_ID_PURCHASE_POST]: OK: Course ${courseId} attempt to send.`)
 
-  //  fetch for telegram
     await sendPurchaseRequestToTelegram(userId, courseId, imageUrl, newPurchase.id);
     revalidateTag(`courses/${courseId}`, "max")
     revalidateTag(`${userId}/purchase/${courseId}`, 'max')
     revalidateTag(`${userId}/purchase`, 'max')
-    return NextResponse.json(newPurchase);
+    return NextResponse.json(newPurchase, { status: 200 });
   } catch (error) {
-    logger.error(
-      `[COURSE_ID_PURCHASE_POST]: Internal Error: Failed to purchase course ${courseId} ${error}`
-    );
     Sentry.captureException(error);
-    return new NextResponse("Internal server error", { status: 500 });
+    return NextResponse.json({error: "Internal server error"}, { status: 500 });
   }
 }
 

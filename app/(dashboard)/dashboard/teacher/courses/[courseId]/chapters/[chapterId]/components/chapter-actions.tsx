@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import DeleteAlert from "../../../../components/DeleteAlert";
+import { Sentry } from "@/lib/sentryLogger";
 
 interface ChapterActionsProps {
   disabled: boolean;
@@ -41,7 +42,7 @@ export default function ChapterActions({
       }
       router.refresh();
     } catch (error){
-      console.log(error)
+      Sentry.captureException(error)
       toast.error("Something went wrong");
     } finally {
       setIsLoading(false);

@@ -1,6 +1,6 @@
 'use server'
 import { db } from "@/lib/db"
-import { logger, Sentry } from "@/lib/sentryLogger"
+import { Sentry } from "@/lib/sentryLogger"
 import { revalidatePath, updateTag } from "next/cache"
 import { z } from "zod"
 
@@ -40,17 +40,11 @@ function toUTCMidnight(date: Date, timeZone: string) {
         })
 
         if(!isValid.success){
-            logger.warn(
-                `[ADD_PROMOCODE_SERVER_ACTION]: Invalid promocode: ${isValid.error}`
-            )
             return {message: "Invalid promocode", status: 400}
         }
         // validate if user is an admin
         const {userId, isAdmin} = await getAdminInfo()
         if(!isAdmin){
-            logger.warn(
-                `[ADD_PROMOCODE_SERVER_ACTION]: Unauthorized: User ${userId} is not authorized yet to add promocode`
-            )
             return {message: "Unauthorized", status: 401}
         }
 
@@ -64,20 +58,13 @@ function toUTCMidnight(date: Date, timeZone: string) {
             }
         })
         if(!promocode){
-            logger.warn(
-                `[ADD_PROMOCODE_SERVER_ACTION]: Failed to add promocode: ${promocode}`
-            )
             return {message: "Failed to add promocode", status: 500}
         }
-        logger.info(
-            `[ADD_PROMOCODE_SERVER_ACTION]: Promocode added successfully: ${promocode}`
-        )
         revalidatePath(`/dashboard/teacher/courses/${courseId}`)
         updateTag(`${courseId}/promocodes`);
         
     } catch (error) {
         Sentry.captureException(error)
-        logger.error(`[ADD_PROMOCODE_SERVER_ACTION]: Internal Error: Failed to add promocode ${error}`)
     }
 }
 
@@ -89,17 +76,12 @@ export async function deletePromoCode(id: string, courseId: string){
             }
         })
         if(!promocode){
-            logger.warn(
-                `[DELETE_PROMOCODE_SERVER_ACTION]: Failed to delete promocode: ${promocode}`
-            )
             return {}
         }
 
         revalidatePath(`/dashboard/teacher/courses/${courseId}`)
         updateTag(`${courseId}/promocodes`);
     } catch (error) {
-        console.log(error)
         Sentry.captureException(error)
-        logger.error(`[DELETE_PROMOCODE_SERVER_ACTION]: Internal Error: Failed to delete promocode ${error}`)
     }
 }

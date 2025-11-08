@@ -1,3 +1,4 @@
+'use client'
 import Image from "next/image";
 import Link from "next/link";
 import { BookOpen, LoaderCircle } from "lucide-react";
@@ -27,7 +28,6 @@ export const CourseCard = ({
   progress,
   purchase,
 }: CourseCardProps) => {
-  console.log('purchase', purchase)
   return (
     <Link href={`/courses/${id}`} className="block">
       <div className="group hover:shadow-sm transition overflow-hidden border rounded-2xl p-3 h-full">

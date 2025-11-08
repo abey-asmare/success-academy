@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { Sentry } from "@/lib/sentryLogger";
 import { NextRequest, NextResponse } from "next/server";
 import z from "zod";
 
@@ -30,7 +31,8 @@ export async function GET(req: NextRequest, {params}: {params: Promise<{courseId
                     });
         
         return NextResponse.json(nextChapter)
-    }catch{
+    }catch(error){
+        Sentry.captureException(error)  
         return NextResponse.json({error: "can't find nextChapter"}, {status: 404})
     }
 }

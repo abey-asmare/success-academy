@@ -1,10 +1,10 @@
 import { db } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminInfo } from "@/utils/roles";
-import { Sentry, logger } from "@/lib/sentryLogger";
 import { examSchema } from "@/schemas/validationSchemas";
 import { notFound } from "next/navigation";
 import { revalidateTag } from "next/cache";
+import { Sentry } from "@/lib/sentryLogger";
 
 export async function GET(
   req: NextRequest,
@@ -29,8 +29,9 @@ export async function GET(
       },
     });
     return NextResponse.json(exam, { status: 200 });
-  } catch {
-    return new NextResponse("Internal Server Error", { status: 500 });
+  } catch(error) {
+      Sentry.captureException(error)
+    return NextResponse.json({error: "Internal Server Error"}, { status: 500 });
   }
 }
 
@@ -45,13 +46,10 @@ export async function PUT(
   const { courseId, chapterId, examId } = await params;
 
   try {
-    const { userId, isAdmin } = await getAdminInfo();
+    const { isAdmin } = await getAdminInfo();
 
     if (!isAdmin) {
-      logger.info(
-        `[COURSE_ID_CHAPTER_ID_EXAM_PUT]: Unauthorized: User ${userId} is not an admin to update exam ${examId}`
-      );
-      return new NextResponse("Unauthorized", { status: 401 });
+      return NextResponse.json({error: "Unauthorized"}, { status: 401 });
     }
 
     const body = await req.json();
@@ -67,7 +65,7 @@ export async function PUT(
     const { name, description, questions } = validatedData.data;
 
     if (!name || !questions || questions.length === 0) {
-      return new NextResponse("Missing required fields", { status: 400 });
+      return NextResponse.json({error: "Missing required fields"}, { status: 400 });
     }
 
     // delete duplicate if any
@@ -81,30 +79,13 @@ export async function PUT(
         )
     );
 
-    // Ensure chapter exists
-    const chapter = await db.chapter.findUnique({
-      where: { id: chapterId, courseId },
-    });
-
-    if (!chapter) {
-      logger.info(
-        `[COURSE_ID_CHAPTER_ID_EXAM_PUT]: Not Found: Chapter ${chapterId} not found for course ${courseId}`
-      );
-      notFound();
-      // return new NextResponse("Chapter not found", { status: 404 });
-    }
-
     // Ensure exam exists
     const existingExam = await db.exam.findUnique({
       where: { id: examId, chapterId },
     });
 
     if (!existingExam) {
-      logger.info(
-        `[COURSE_ID_CHAPTER_ID_EXAM_PUT]: Not Found: Exam ${examId} not found for chapter ${chapterId}`
-      );
       notFound();
-      // return new NextResponse("Exam not found", { status: 404 });
     }
 
     // atomic transaction
@@ -173,22 +154,14 @@ export async function PUT(
         maxWait: 10_000,
       }
     );
-
-    logger.info(
-      `[COURSE_ID_CHAPTER_ID_EXAM_PUT]: OK: Exam ${examId} updated successfully`
-    );
-
     revalidateTag("chapters", "max");
     revalidateTag(`chapters/${chapterId}`, "max");
     revalidateTag(`exams/${examId}`, "max");
 
     return NextResponse.json(updatedExam);
   } catch (error) {
-    logger.error(
-      `[COURSE_ID_CHAPTER_ID_EXAM_PUT]: Internal Error: Failed to update exam ${examId}, ${error}`
-    );
-    Sentry.captureException(error);
-    return new NextResponse("Internal Server Error", { status: 500 });
+    Sentry.captureException(error)
+    return NextResponse.json({error: "Internal Server Error"}, { status: 500 });
   }
 }
 
@@ -202,11 +175,11 @@ export async function DELETE(
 ) {
   const { courseId, chapterId, examId } = await params;
   if (!courseId || !chapterId || !examId) {
-    return new NextResponse("Invalid parameters", { status: 400 });
+    return NextResponse.json({error: "Invalid parameters"}, { status: 400 });
   }
-  const { userId, isAdmin } = await getAdminInfo();
+  const { isAdmin } = await getAdminInfo();
   if (!isAdmin) {
-    return new NextResponse("Unauthorized", { status: 401 });
+    return NextResponse.json({error: "Unauthorized"}, { status: 401 });
   }
 
   try {
@@ -218,7 +191,8 @@ export async function DELETE(
     revalidateTag(`chapters/${chapterId}`, "max");
     revalidateTag(`exams/${examId}`, "max");
     return NextResponse.json(exam, { status: 200 });
-  } catch {
-    return new NextResponse("Internal Server Error", { status: 500 });
+  } catch (error) {
+    Sentry.captureException(error)
+    return NextResponse.json({error: "Internal Server Error"}, { status: 500 });
   }
 }

@@ -16,14 +16,14 @@ export async function POST(req: NextRequest) {
       logger.warn(
         `[COURSE_SIMULATION_POST]: Unauthorized: User is not an admin to create a simulation`
       );
-      return new NextResponse("Unauthorized", { status: 401 });
+      return NextResponse.json({error: "Unauthorized"}, { status: 401 });
     }
     const body = await req.json();
     const { courseId, name, description, questions } = body;
 
     // Validate required fields
     if ((!courseId && !name) || !questions || questions.length === 0) {
-      return new NextResponse("Missing required fields", { status: 400 });
+      return NextResponse.json({error: "Missing required fields"}, { status: 400 });
     }
 
     // Process questions and check for duplicates within this chapter
@@ -120,6 +120,6 @@ export async function POST(req: NextRequest) {
       `[COURSE_SIMULATION_POST]: Internal Error: Failed to create simulation ${error}`
     );
     Sentry.captureException(error);
-    return new NextResponse("Internal server error", { status: 500 });
+    return NextResponse.json({error: "Internal server error"}, { status: 500 });
   }
 }

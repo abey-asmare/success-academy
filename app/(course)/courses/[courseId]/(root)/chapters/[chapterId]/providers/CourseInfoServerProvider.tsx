@@ -1,9 +1,9 @@
-import { notFound, redirect } from 'next/navigation'
-import React from 'react'
-import CourseInfoProvider from './CourseInfoProvider'
 import { getChapters } from '@/optimizedQueries/chapterQueries';
 import { getCourse } from '@/optimizedQueries/CourseQueries';
 import { getPurchase, getUserProgress } from '@/optimizedQueries/personalizedQueries';
+import { notFound } from 'next/navigation';
+import React from 'react';
+import CourseInfoProvider from './CourseInfoProvider';
 
 async function CourseInfoServerProvider({children,userId, courseId}: {children: React.ReactNode, userId: string, courseId: string}) {
 

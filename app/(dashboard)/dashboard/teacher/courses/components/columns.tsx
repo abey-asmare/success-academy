@@ -17,6 +17,7 @@ import { Course } from "@/prisma/app/generated/prisma/client";
 import DeleteAlert from "./DeleteAlert";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { Sentry } from "@/lib/sentryLogger";
 
 
 export const columns: ColumnDef<Course>[] = [
@@ -91,7 +92,7 @@ export const columns: ColumnDef<Course>[] = [
         try {
           await axios.delete(`/api/courses/${id}`)
         } catch (error) {
-          console.log(error)
+          Sentry.captureException(error)
         }
       }
 

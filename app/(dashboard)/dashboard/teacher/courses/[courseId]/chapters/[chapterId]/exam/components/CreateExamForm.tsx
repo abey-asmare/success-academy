@@ -315,7 +315,7 @@ export default function CreateExamForm({
           <Button type="button" variant="outline" onClick={() => router.back()}>
             Cancel
           </Button>
-          <Button type="submit" disabled={isSubmitting} onClick={()=> console.log(form.getValues())}>
+          <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? "Creating..." : "Create Exam"}
           </Button>
         </div>

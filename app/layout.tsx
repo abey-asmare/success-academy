@@ -46,7 +46,9 @@ export default function RootLayout({
               <ToasterProvider />
               <UTSSR />
 
-              <QueryProvider>{children}</QueryProvider>
+              <QueryProvider>
+                {children}
+                </QueryProvider>
             </main>
           </ClerkProvider>
         </Suspense>

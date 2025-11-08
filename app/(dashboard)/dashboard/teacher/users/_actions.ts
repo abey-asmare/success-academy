@@ -45,7 +45,6 @@ export async function removeRole(userId: string) {
     revalidateTag("page/teacher/users", "max");
     return { message: res.publicMetadata, status: 200 };
   } catch (err) {
-    console.log(err, "action");
     return { message: err, status: 500 };
   }
 }

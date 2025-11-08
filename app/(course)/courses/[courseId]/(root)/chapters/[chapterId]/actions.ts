@@ -1,15 +1,14 @@
 'use server'
 
 import { db } from "@/lib/db";
+import { Sentry } from "@/lib/sentryLogger";
 import { Stream } from "@/prisma/app/generated/prisma/client";
 import { profileFormSchema } from "@/schemas/validationSchemas";
-import { revalidateTag, updateTag } from "next/cache";
 import z from "zod";
 
 
 export async function enrollInCourse(data: z.infer<typeof profileFormSchema>, courseId: string, userId: string) {
     try {
-        console.log("userId", userId)
         if (!userId) {
             throw new Error("Unauthorized")
         }
@@ -47,7 +46,7 @@ export async function enrollInCourse(data: z.infer<typeof profileFormSchema>, co
 
         
     } catch (error) {
-        console.log(error)
+        Sentry.captureException(error)
         return {
             message: "Something went wrong",
             status: 500,

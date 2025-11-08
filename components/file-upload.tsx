@@ -14,9 +14,6 @@ export const FileUpload= ({
 }: FileUploadProps) => {
     return <UploadDropzone
     endpoint={endpoint}
-    onUploadProgress={(progress)=> {
-        if(endpoint === "chapterVideo") console.log('video updating progress', progress)
-    }}
     onClientUploadComplete={(res)=> {
         onChange(res?.[0].ufsUrl)
     }}

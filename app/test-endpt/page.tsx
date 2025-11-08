@@ -1,10 +1,10 @@
 import { Button } from '@/components/ui/button';
+import { Sentry } from '@/lib/sentryLogger';
 
 export default function SendRequest() {
     const sendRequest = async (formData: FormData) => {
         'use server'
         try {
-            console.log(process.env.API_APPROVE_REQUEST_ENDPOINT);
             const response = await fetch(process.env.API_APPROVE_REQUEST_ENDPOINT!, {
                 method: "POST",
                 headers: {
@@ -20,9 +20,8 @@ export default function SendRequest() {
                     date: new Date().toLocaleString('en-US'),
                 }),
             });
-            console.log(await response.json());
         } catch (error) {
-            console.error(error);
+            Sentry.captureException(error);
         }
     }
     

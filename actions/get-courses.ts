@@ -1,6 +1,7 @@
 
 import { getProgress } from "@/actions/get-progress";
 import { db } from "@/lib/db";
+import { Sentry } from "@/lib/sentryLogger";
 import { getPurchase } from "@/optimizedQueries/personalizedQueries";
 import { REVALIDATE_INSTANT } from "@/server-constants";
 import { CourseWithProgressWithCategory } from "@/types";
@@ -33,7 +34,6 @@ export const getCoursesForUser = async (
     const coursesWithStatus = await Promise.all(
       courses.map(async (course) => {
         const purchase = await getPurchase(userId, course.id);
-        console.log("purchase from get-c", purchase)
         const progress =
         purchase?.approved && course.chapters.length > 0
         ? await getProgress(userId, course.id, course.chapters)
@@ -72,7 +72,7 @@ try{
   })
   return courses
 }catch(error){
-  console.log(error)
+    Sentry.captureException(error)
   return []
 }
   
