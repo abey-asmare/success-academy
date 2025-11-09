@@ -92,18 +92,18 @@ export async function handleTelegramRegistration(data: formType) {
         return { message: "Registration failed", status: 500 };
       }
       //  fetch for telegram
-      sendPurchaseRequestToTelegram(
-        userId,
-        data.courseId,
-        data.imageUrl,
-        newPurchase.id
-      );
+      // sendPurchaseRequestToTelegram(
+      //   userId,
+      //   data.courseId,
+      //   data.imageUrl,
+      //   newPurchase.id
+      // );
     }
     revalidateTag("page/teacher/purchases", "max");
 
-    return { message: "Registration successful", status: 200 };
+    return { message: "Registration successful", status: 200, imageUrl: purchase?.imageUrl };
   } catch (error) {
     Sentry.captureException(error);
-    return { message: "Registration failed", status: 500 };
+    return { message: "Registration failed", status: 500, imageUrl: '' };
   }
 }
