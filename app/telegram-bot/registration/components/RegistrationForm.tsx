@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { startTransition, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -38,7 +38,8 @@ import { profileFormSchema } from "@/schemas/validationSchemas";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { handleTelegramRegistration } from "./actions";
-import { Sentry } from "@/lib/sentryLogger";
+
+import type WebApp from "@twa-dev/sdk";
 
 const referrerOptions = [
   { value: "Google", label: "Google" },
@@ -61,6 +62,11 @@ type PropType = {
 };
 
 export default function RegistrationForm({ courses }: PropType) {
+ const telegramAppRef = useRef<typeof WebApp | null>(null)
+
+
+
+  
   const form = useForm<formType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -75,9 +81,26 @@ export default function RegistrationForm({ courses }: PropType) {
       imageUrl: "",
     },
   });
+
+ useEffect(() => {
+    (async () => {
+      const { default: WebApp } = await import('@twa-dev/sdk');      
+      const tWebapp = WebApp as typeof WebApp
+      telegramAppRef.current = tWebapp
+      if(telegramAppRef.current?.initDataUnsafe.user){
+        form.setValue("firstName", telegramAppRef.current.initDataUnsafe.user.first_name || "")
+        form.setValue("lastName", telegramAppRef.current.initDataUnsafe.user.last_name || "")
+      }
+      if(telegramAppRef.current){
+        telegramAppRef.current.requestFullscreen()
+        telegramAppRef.current.ready();
+      }
+
+    })();
+  }, []);
+
+
   const [promo, setPromo] = useState("");
-  const [registered, setIsRegistered] = useState(false);
-  const [responseStatus, setResponseStatus] = useState(400);
   const getCurrentPrice = () => {
     const selectedCourse = form.watch("courseId");
     const course = courses.find((course) => course.id === selectedCourse);
@@ -103,35 +126,22 @@ export default function RegistrationForm({ courses }: PropType) {
           onSubmit={form.handleSubmit(
             async (data) => {
                 try {
-                  if(!registered){
                     const res = await handleTelegramRegistration(data);
-                    setResponseStatus(res?.status);
-                  }
                 
-                startTransition(() => {
-                  if(registered){
+                  if(res.status === 200){
                     toast.success(
                       "Please give us a minute to verify your payment"
                     );
-                  }
-                  else if (responseStatus === 200) {
-                    toast.success(
-                      "Payment successful. We are processing your payments"
-                    );
-                    setIsRegistered(true);
+                    telegramAppRef.current?.showAlert("Payment successful. We are processing your payments")
+                    setTimeout(() => telegramAppRef.current?.close(), 1000);
+
                   } else {
                     toast.error("Failed to register. Please try again.");
                   }
-                });
               } catch (error) {
                 console.error(error);
-                startTransition(() => {
                   toast.error("Something went wrong. Please try again.");
-                });
               }
-            },
-            (errors) => {
-              Sentry.captureException(errors);
             }
           )}
         >
@@ -342,6 +352,8 @@ export default function RegistrationForm({ courses }: PropType) {
                     <TelegramFileUpload
                       endpoint="purchaseImageTelegram"
                       onChange={(url) => {
+                        console.log(url)
+                        console.log('on change called')
                         if (url) {
                           form.setValue("imageUrl", url);
                         }
@@ -357,10 +369,10 @@ export default function RegistrationForm({ courses }: PropType) {
             <Button
               className="bg-sky-600 hover:bg-sky-700 mb-10"
               type="submit"
-              disabled={form.formState.isSubmitting || registered}
+              disabled={form.formState.isSubmitting}
             >
               {form.formState.isSubmitting
-                ? "Submitting..."
+                ? "Submitting"
                 : `${getCurrentPrice()?.finalPrice ? `I Paid ${formatPrice(getCurrentPrice()?.finalPrice || 0)}` : "Submit"}`}
             </Button>
           </div>
