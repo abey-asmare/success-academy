@@ -92,12 +92,12 @@ export async function handleTelegramRegistration(data: formType) {
         return { message: "Registration failed", status: 500 };
       }
       //  fetch for telegram
-      // sendPurchaseRequestToTelegram(
-      //   userId,
-      //   data.courseId,
-      //   data.imageUrl,
-      //   newPurchase.id
-      // );
+      sendPurchaseRequestToTelegram(
+        userId,
+        data.courseId,
+        data.imageUrl,
+        newPurchase.id
+      );
     }
     revalidateTag("page/teacher/purchases", "max");
 
