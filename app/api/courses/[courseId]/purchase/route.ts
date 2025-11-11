@@ -2,7 +2,7 @@ import { db } from "@/lib/db";
 import { Sentry } from "@/lib/sentryLogger";
 import { sendPurchaseRequestToTelegram } from "@/lib/telegram-api";
 import { auth } from "@clerk/nextjs/server";
-import { revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
@@ -47,9 +47,11 @@ export async function POST(
 
 
     await sendPurchaseRequestToTelegram(userId, courseId, imageUrl, newPurchase.id);
+    revalidatePath('page/teacher/purchases')
     revalidateTag(`courses/${courseId}`, "max")
     revalidateTag(`${userId}/purchase/${courseId}`, 'max')
     revalidateTag(`${userId}/purchase`, 'max')
+    
     return NextResponse.json(newPurchase, { status: 200 });
   } catch (error) {
     Sentry.captureException(error);
