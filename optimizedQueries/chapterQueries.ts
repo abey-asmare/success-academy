@@ -103,14 +103,14 @@ export const getNextChapter = cache(
   }
 );
 
-export const getMuxData = cache(
-  async (chapterId: string): Promise<MuxData | null> => {
-    cacheLife("weeks");
-    cacheTag(`muxData/${chapterId}`);
-    return await db.muxData.findUnique({
-      where: {
-        chapterId: chapterId,
-      },
-    });
-  }
-);
+// export const getMuxData = cache(
+//   async (chapterId: string): Promise<MuxData | null> => {
+//     cacheLife("weeks");
+//     cacheTag(`muxData/${chapterId}`);
+//     return await db.muxData.findUnique({
+//       where: {
+//         chapterId: chapterId,
+//       },
+//     });
+//   }
+// );

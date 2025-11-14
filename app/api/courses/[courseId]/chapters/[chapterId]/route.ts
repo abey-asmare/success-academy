@@ -1,18 +1,19 @@
 import { db } from "@/lib/db";
 import { getAdminInfo } from "@/utils/roles";
-import Mux from "@mux/mux-node";
+// import Mux from "@mux/mux-node";
 import { NextResponse } from "next/server";
 import { Sentry } from "@/lib/sentryLogger"
 import { utapi } from "@/lib/uploadthing-server";
 import { revalidatePath, revalidateTag } from "next/cache";
+import { deleteFile } from "@/lib/s3/query";
 
-const mux = new Mux(
-{
-    tokenId: process.env.MUX_TOKEN_ID!,
-    tokenSecret: process.env.MUX_TOKEN_SECRET!
-  }
-);
-const Video = mux.video
+// const mux = new Mux(
+// {
+//     tokenId: process.env.MUX_TOKEN_ID!,
+//     tokenSecret: process.env.MUX_TOKEN_SECRET!
+//   }
+// );
+// const Video = mux.video
 
 
 export async function GET(
@@ -66,25 +67,26 @@ export async function DELETE(
     }
     // if video delete the asset in the mux
     if (chapter.videoUrl) {
-      const existingMuxData = await db.muxData.findFirst({
-        where: {
-          chapterId: chapterId,
-        },
-      });
+      // const existingMuxData = await db.muxData.findFirst({
+      //   where: {
+      //     chapterId: chapterId,
+      //   },
+      // });
 
-      if (existingMuxData) {
-        await Video.assets.delete(existingMuxData.assetId);
-        await db.muxData.delete({
-          where: {
-            id: existingMuxData.id,
-          },
-        });
-      }
+      // if (existingMuxData) {
+      //   await Video.assets.delete(existingMuxData.assetId);
+      //   await db.muxData.delete({
+      //     where: {
+      //       id: existingMuxData.id,
+      //     },
+      //   });
+      // }
 
     // delete the asset in uploadthing
-     const deletedFile = chapter.videoUrl.split("/")?.pop();
+    //  const deletedFile = chapter.videoUrl.split("/")?.pop();
         // delete the uploadthing using utApi
-      await utapi.deleteFiles(deletedFile!);
+      // await utapi.deleteFiles(deletedFile!);
+      await deleteFile(chapter.videoUrl)
     const deletedChapter = await db.chapter.delete({
       where: {
         id: chapterId,
@@ -121,6 +123,7 @@ export async function PATCH(
       return NextResponse.json({error: "Unauthorized"}, { status: 401 });
     }
 
+
     const chapter = await db.chapter.update({
       where: {
         id: chapterId,
@@ -131,53 +134,55 @@ export async function PATCH(
       },
     });
 
-    if (values.videoUrl) {
-      const existingMuxData = await db.muxData.findFirst({
-        where: {
-          chapterId: chapterId,
-        },
-      });
+    // if (values.videoUrl) {
+    //   const existingMuxData = await db.muxData.findFirst({
+    //     where: {
+    //       chapterId: chapterId,
+    //     },
+    //   });
 
-      if (existingMuxData) {
-        try {
-          await Video.assets.delete(existingMuxData.assetId);
-        } catch(error) {
-          Sentry.captureException(error)
+    //   if (existingMuxData) {
+    //     try {
+    //       await Video.assets.delete(existingMuxData.assetId);
+    //     } catch(error) {
+    //       Sentry.captureException(error)
       
-        }
-        await db.muxData.delete({
-          where: {
-            id: existingMuxData.id,
-          },
-        });
-      }
+    //     }
+    //     await db.muxData.delete({
+    //       where: {
+    //         id: existingMuxData.id,
+    //       },
+    //     });
+    //   }
 
-      try {
-        const asset = await Video.assets.create({
-          inputs: [{ url: values.videoUrl }],
-          playback_policies: ["public"],
-          test: false,
-        });
-        if (asset) {
-          await db.muxData.create({
-            data: {
-              chapterId: chapterId,
-              assetId: asset.id,
-              playbackId: asset.playback_ids?.[0]?.id,
-            },
-          });
-        }
-      } catch(error) {
-        Sentry.captureException(error)
-        return NextResponse.json({error: "Internal Error"}, {status: 500})
-      }
-    }
+    //   try {
+    //     const asset = await Video.assets.create({
+    //       inputs: [{ url: values.videoUrl }],
+    //       playback_policies: ["public"],
+    //       test: false,
+    //     });
+    //     if (asset) {
+    //       await db.muxData.create({
+    //         data: {
+    //           chapterId: chapterId,
+    //           assetId: asset.id,
+    //           playbackId: asset.playback_ids?.[0]?.id,
+    //         },
+    //       });
+    //     }
+    //   } catch(error) {
+    //     Sentry.captureException(error)
+    //     return NextResponse.json({error: "Internal Error"}, {status: 500})
+    //   }
+    // }
+
+
 
 
     revalidatePath(`/courses/${courseId}/chapters/${chapterId}`)
     revalidateTag(`courses/${courseId}`, 'max')
     revalidateTag(`chapters/${chapterId}`, 'max')
-    revalidateTag(`muxData/${chapterId}`, 'max')
+    // revalidateTag(`muxData/${chapterId}`, 'max')
     return NextResponse.json(chapter);
   } catch (error) {
     Sentry.captureException(error)

@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
-import { utapi } from "@/lib/uploadthing-server";
+import { bulkDeleteFiles, deleteFile } from "@/lib/s3/query";
+// import { utapi } from "@/lib/uploadthing-server";
 import { getAdminInfo, isAdmin } from "@/utils/roles";
 import { auth } from "@clerk/nextjs/server";
 import * as Sentry from "@sentry/nextjs";
@@ -82,7 +83,7 @@ export async function PATCH(req: NextRequest, { params }: Props) {
 export async function DELETE(req: NextRequest, { params }: Props) {
   const { courseId } = await params;
   try {
-    const { userId, isAdmin } = await getAdminInfo();
+    const { isAdmin } = await getAdminInfo();
     if (!isAdmin) {
       return NextResponse.json({error: "Unauthorized"}, { status: 401 });
     }
@@ -94,11 +95,12 @@ export async function DELETE(req: NextRequest, { params }: Props) {
         // userId
       },
       include: {
-        chapters: {
-          include: {
-            muxData: true,
-          },
-        },
+        chapters: true
+        //  {
+        //   include: {
+        //     muxData: true,
+        //   },
+        // },
       },
     });
 
@@ -108,21 +110,29 @@ export async function DELETE(req: NextRequest, { params }: Props) {
     }
 
     // delete mux data
-    for (const chapter of course.chapters) {
-      await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/courses/${courseId}/chapters/${chapter.id}`,
-        {
-          method: "DELETE",
-        }
-      );
-    }
+    // for (const chapter of course.chapters) {
+    //   await fetch(
+    //     `${process.env.NEXT_PUBLIC_BASE_URL}/api/courses/${courseId}/chapters/${chapter.id}`,
+    //     {
+    //       method: "DELETE",
+    //     }
+    //   );
+    // }
 
+    // delete all chapter video assets first
+    const chapterVideoKeys = course.chapters.map((chapter) => chapter.videoUrl).filter((url) => url !== null);
+    if(chapterVideoKeys.length > 0){
+      await bulkDeleteFiles(chapterVideoKeys);
+    }
+    
     if (course.imageUrl) {
       // delete the course image from uploadthing
-      const deletedFile = course.imageUrl?.split("/")?.pop();
+      // const deletedFile = course.imageUrl?.split("/")?.pop();
       // delete the uploadthing using utApi
-      await utapi.deleteFiles(deletedFile!);
+      // await utapi.deleteFiles(deletedFile!);
 
+      await deleteFile(course.imageUrl)
+    }
       // delete course
       const deletedCourse = await db.course.delete({
         where: {
@@ -137,9 +147,8 @@ export async function DELETE(req: NextRequest, { params }: Props) {
       revalidateTag("courses/telegram-registration", "max");
 
       return NextResponse.json(deletedCourse);
+    } catch (error) {
+      Sentry.captureException(error);
+      return NextResponse.json({error: "Internal server error"}, { status: 500 });
     }
-  } catch (error) {
-    Sentry.captureException(error);
-    return NextResponse.json({error: "Internal server error"}, { status: 500 });
-  }
 }

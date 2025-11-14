@@ -2,7 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import { VideoPlayer } from "./components/video-player";
 import AdditionalResources from "./components/AdditionalResources";
 import UserStatusBanner from "./components/UserStatusBanner";
-import { getChapter, getMuxData, getNextChapter } from "@/optimizedQueries/chapterQueries";
+import { getChapter, getNextChapter } from "@/optimizedQueries/chapterQueries";
 import { getAttachments, getCourse, getPromoCodes } from "@/optimizedQueries/CourseQueries";
 import { Metadata } from "next";
 
@@ -11,29 +11,30 @@ type ChapterIdProps = Promise<{
   chapterId: string;
 }>;
 
-export async function generateMetadata({
-  params,
-}: {
-  params: ChapterIdProps;
-}): Promise<Metadata> {
-  const { chapterId } = await params;
-  const chapter = await getChapter(chapterId)
-  const course = await getCourse(chapter!.courseId);
+// export async function generateMetadata({
+//   params,
+// }: {
+//   params: ChapterIdProps;
+// }): Promise<Metadata> {
+//   'use cache'
+//   const { chapterId } = await params;
+//   const chapter = await getChapter(chapterId)
+//   const course = await getCourse(chapter!.courseId);
 
-  if (!chapter || !course) {
-    return {
-      title: "Resourse not found",
-    };
-  }
+//   if (!chapter || !course) {
+//     return {
+//       title: "Resourse not found",
+//     };
+//   }
 
-  return {
-    title: chapter.title,
-    description: chapter.description ? chapter.description : course.description,
-    openGraph: {
-      images: [course.imageUrl!],
-    },
-  };
-}
+//   return {
+//     title: chapter.title,
+//     description: chapter.description ? chapter.description : course.description,
+//     openGraph: {
+//       images: [course.imageUrl!],
+//     },
+//   };
+// }
 
 const ChapterIdPage = async ({ params }: { params: ChapterIdProps }) => {
   const { courseId, chapterId } = await params;
@@ -44,16 +45,16 @@ const ChapterIdPage = async ({ params }: { params: ChapterIdProps }) => {
     if (!chapter) {
       return notFound()
     }
-  const [course, muxData, promocodes, attachments, nextChapter] = await Promise.all([
+  const [course,promocodes, attachments, nextChapter] = await Promise.all([
     getCourse(courseId),
-    getMuxData(chapterId),
+    // getMuxData(chapterId),
     getPromoCodes(courseId),
     getAttachments(courseId),
     getNextChapter(courseId, chapter!.position),
   ])
 
 
-  if (!course || !course.isPublished) {
+  if (!course || !course.isPublished || !chapter || !chapter.isPublished || !chapter.videoUrl ) {
     return redirect("/");
   }
   return (
@@ -66,8 +67,9 @@ const ChapterIdPage = async ({ params }: { params: ChapterIdProps }) => {
             title={chapter.title}
             courseId={courseId}
             nextChapterId={nextChapter?.id}
-            playbackId={muxData?.playbackId}
+            // playbackId={muxData?.playbackId}
             isChapterFree={chapter.isFree}
+            url={`${process.env.R2_EXPOSE_CONTENT_THROUGH}/${chapter.videoUrl}`}
           />
         </div>
        <AdditionalResources course={course!}  chapter={chapter} nextChapter={nextChapter} promocodes={promocodes} attachments={attachments}/>

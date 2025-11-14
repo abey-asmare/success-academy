@@ -5,6 +5,9 @@
 /* uploadthing config */
 @import "uploadthing/tw/v4";
 
+:root{
+  --media-accent-color: #00b3ff;
+}
 @custom-variant dark (&:is(.dark *));
 @source "../node_modules/@uploadthing/react/dist";
 

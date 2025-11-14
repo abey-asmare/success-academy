@@ -22,13 +22,14 @@ export async function PATCH(
       },
     });
 
-    const muxData = await db.muxData.findUnique({
-      where: {
-        chapterId,
-      },
-    });
+    // const muxData = await db.muxData.findUnique({
+    //   where: {
+    //     chapterId,
+    //   },
+    // });
 
-    if (!chapter || !muxData || !chapter.title || !chapter.videoUrl) {
+    // if (!chapter || !muxData || !chapter.title || !chapter.videoUrl) {
+    if (!chapter || !chapter.title || !chapter.videoUrl) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }

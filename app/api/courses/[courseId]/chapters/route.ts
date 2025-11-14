@@ -33,7 +33,7 @@ export async function POST(req: Request, {params}: {params: Promise<{courseId: s
     const {courseId} = await params
     const {title} = await req.json()
     try{
-        const {userId, isAdmin} = await getAdminInfo()
+        const { isAdmin } = await getAdminInfo()
         if(!isAdmin){
             return NextResponse.json({error: "Unauthorized"}, {status: 401})
         }

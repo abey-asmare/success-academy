@@ -4,6 +4,21 @@ import { sendPurchaseRequestToTelegram } from "@/lib/telegram-api";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
+import { deleteFile } from "@/lib/s3/query";
+
+const deletePurchase = async (purchaseId: string, purchaseImageUrl: string) => {
+  try {
+    await deleteFile(purchaseImageUrl);
+    await db.purchase.delete({
+      where: {
+        id: purchaseId,
+      },
+    });
+  } catch (error) {
+    Sentry.captureException(error);
+    return NextResponse.json({error: "Internal server error"}, { status: 500 });
+  }
+}
 
 export async function POST(
   req: Request,
@@ -27,14 +42,7 @@ export async function POST(
     });
 
     if (purchase) {
-      await db.purchase.delete({
-        where: {
-          userId_courseId: {
-            courseId,
-            userId,
-          },
-        },
-      });
+      await deletePurchase(purchase.id, purchase.imageUrl);
     }
 
     const newPurchase = await db.purchase.create({

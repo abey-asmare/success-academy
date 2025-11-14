@@ -16,6 +16,7 @@ export async function generateStaticParams() {
 
 
 export async function generateMetadata({ params }: Props): Promise<Metadata>{
+  'use cache'
   const {courseId} = await params;
   const course = await getCourse(courseId)
   return {

@@ -18,7 +18,7 @@ const formSchema = profileFormSchema.extend({
 type formType = z.infer<typeof formSchema>;
 
 export async function handleTelegramRegistration(data: formType) {
-  await connection()
+  // await connection()
   const isSuccessFul = formSchema.safeParse(data);
   if (!isSuccessFul) return { message: "Validation Error", status: 400 };
 
@@ -40,7 +40,7 @@ export async function handleTelegramRegistration(data: formType) {
       userId = newUser.id;
     }
     // create a profile
-    await db.profile.upsert({
+    const profile = await db.profile.upsert({
       where: { userId },
       update: {
         firstName: data.firstName,
@@ -96,7 +96,8 @@ export async function handleTelegramRegistration(data: formType) {
         userId,
         data.courseId,
         data.imageUrl,
-        newPurchase.id
+        newPurchase.id,
+        profile
       );
     }
     revalidateTag("page/teacher/purchases", "max");

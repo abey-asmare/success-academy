@@ -23,7 +23,7 @@ export default async function PaymentPage() {
             id: purchase.id,
             email: email || purchase.userId,
             course: course!,
-            imageUrl: purchase.imageUrl,
+            imageUrl: `${process.env.NEXT_PUBLIC_R2_EXPOSE_CONTENT_THROUGH}/${purchase.imageUrl}`,
             approved: purchase.approved,
             date: purchase.createdAt,
         }

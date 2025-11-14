@@ -18,7 +18,9 @@ const progressVariants = cva(
   }
 )
 
-export interface CourseProgressProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof progressVariants> {}
+export interface CourseProgressProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof progressVariants>{
+    indicatorClassName?: string
+}
 
 type CombinedProgressProps = CourseProgressProps & React.ComponentPropsWithRef<typeof ProgressPrimitive.Root>
 
@@ -26,6 +28,7 @@ function Progress({
   className,
   value,
   variant, 
+  indicatorClassName, 
   ...props
 }: CombinedProgressProps) {
   return (
@@ -39,7 +42,7 @@ function Progress({
     >
       <ProgressPrimitive.Indicator
         data-slot="progress-indicator"
-        className={cn(progressVariants({ variant }))}
+        className={cn(progressVariants({ variant }), indicatorClassName)}
         style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
       />
     </ProgressPrimitive.Root>

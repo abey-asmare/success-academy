@@ -1,3 +1,4 @@
+import { withNextVideo } from "next-video/process";
 import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
 
@@ -11,6 +12,11 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "439a0p1xyg.ufs.sh",
+      },
+      {
+        protocol: "https",
+        hostname: "pub-5003e166ab054884be0f1b060d950153.r2.dev",
+
       },
     ],
   },
@@ -28,7 +34,7 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
 }
 
-export default withSentryConfig(nextConfig, {
+export default withNextVideo(withSentryConfig(nextConfig, {
   // For all available options, see:
   // https://www.npmjs.com/package/@sentry/webpack-plugin#options
 
@@ -59,4 +65,4 @@ export default withSentryConfig(nextConfig, {
   // https://docs.sentry.io/product/crons/
   // https://vercel.com/docs/cron-jobs
   automaticVercelMonitors: true,
-});
+}));

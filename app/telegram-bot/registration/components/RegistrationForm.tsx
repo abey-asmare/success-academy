@@ -20,7 +20,6 @@ import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { TelegramFileUpload } from "@/components/file-upload";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -38,6 +37,9 @@ import { profileFormSchema } from "@/schemas/validationSchemas";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { handleTelegramRegistration } from "./actions";
+
+import { useUploadFiles } from "@better-upload/client";
+import { UploadPurchaseDropzoneProgress } from "@/components/UploadPurchaseDropzoneProgress";
 
 import type WebApp from "@twa-dev/sdk";
 
@@ -65,6 +67,9 @@ export default function RegistrationForm({ courses }: PropType) {
  const telegramAppRef = useRef<typeof WebApp | null>(null)
 
 
+    const { control} = useUploadFiles({
+      route: "coursePurchaseTelegram",
+    });
 
   
   const form = useForm<formType>({
@@ -348,8 +353,10 @@ export default function RegistrationForm({ courses }: PropType) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Payment Info</FormLabel>
+
                   <FormControl>
-                    <TelegramFileUpload
+                    <UploadPurchaseDropzoneProgress control={control} accept="image/*" />
+                    {/* <TelegramFileUpload
                       endpoint="purchaseImageTelegram"
                       onChange={(url) => {
                         console.log(url)
@@ -358,7 +365,7 @@ export default function RegistrationForm({ courses }: PropType) {
                           form.setValue("imageUrl", url);
                         }
                       }}
-                    />
+                    /> */}
                   </FormControl>
                   <FormMessage />
                 </FormItem>

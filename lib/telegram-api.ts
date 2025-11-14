@@ -4,6 +4,7 @@ import pRetry, { AbortError } from 'p-retry';
 import { db } from "./db";
 import { Sentry } from "./sentryLogger";
 import { getCourse } from "@/optimizedQueries/CourseQueries";
+import { Profile } from "@/prisma/app/generated/prisma/client";
 
 
 const getCourseOr404 = async (id: string) => {
@@ -30,18 +31,24 @@ async function getProfileOr404(userId: string) {
 }
 
 
-export async function sendPurchaseRequestToTelegram(userId: string, courseId: string, imageUrl: string, purchaseId: string) {
+export async function sendPurchaseRequestToTelegram(userId: string, courseId: string, imageUrl: string, purchaseId: string, profile?: Profile) {
   try {
     const course = await getCourseOr404(courseId);
-    const profile = await getProfileOr404(userId);
+    let profile_;
+    if(!profile){
+      profile_ = await getProfileOr404(userId);
+    }
+    if(!profile_){
+      throw new Error("Profile not found");
+    }
 
     const telegramPayload = {
-      firstName: profile?.firstName,
-      lastName: profile?.lastName,
-      email: profile?.email,
-      phone_number: profile?.phone_number,
+      firstName: profile?.firstName || profile_.firstName,
+      lastName: profile?.lastName || profile_.lastName,
+      email: profile?.email || profile_.email,
+      phone_number: profile?.phone_number || profile_.phone_number,
       imageUrl,
-      courseName: course?.title,
+      courseName: course.title,
       purchaseId,
       date: new Date().toLocaleString("en-US", {
         timeZone: "Africa/Addis_Ababa",

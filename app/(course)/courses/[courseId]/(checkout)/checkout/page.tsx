@@ -1,6 +1,7 @@
 "use client";
-import { FileUpload } from "@/components/file-upload";
+import { UploadPurchaseDropzoneProgress } from "@/components/UploadPurchaseDropzoneProgress";
 import { accounts } from "@/lib/constants";
+import { useUploadFiles } from "@better-upload/client";
 import axios from "axios";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
@@ -9,6 +10,13 @@ import toast from "react-hot-toast";
 export default function CheckoutPage() {
   const { courseId } = useParams();
   const router = useRouter();
+
+    const { control} = useUploadFiles({
+      route: "coursePurchase",
+      onUploadComplete: (data)=> {
+        onSubmit({imageUrl: data.files[0].objectInfo.key})
+      }
+    });
   const onSubmit = async ({ imageUrl }: { imageUrl: string }) => {
     try {
       await axios.post(`/api/courses/${courseId}/purchase`, { imageUrl });
@@ -39,14 +47,17 @@ export default function CheckoutPage() {
           {/* <FileUpload/> */}
           <div className="mt-6 ">
             <div>
-              <FileUpload
+              {/* <FileUpload
                 endpoint="purchaseImage"
                 onChange={(url) => {
                   if (url) {
                     onSubmit({ imageUrl: url });
                   }
                 }}
-              />
+              /> */}
+
+                {/* <UploadDropzoneProgress control={control} accept="image/*" /> */}
+                <UploadPurchaseDropzoneProgress control={control} accept="image/*" />
             </div>
           </div>
         </div>

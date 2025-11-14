@@ -6,10 +6,13 @@ import { db } from "@/lib/db";
 
 export async function generateStaticParams(){
   const exams = await db.exam.findMany()
-  return exams.map((exam) => ({
+   return exams.length > 0  ?  exams.map((exam) => ({
     examId: exam.id,
     courseId: exam.courseId,
-  }))
+  })) : [ {
+        examId: "__placeholder__",
+        courseId: "__placeholder__",
+      }]
 }
 
 export default async function ExamDetailPage({
@@ -19,7 +22,9 @@ export default async function ExamDetailPage({
 }) {
   const { examId, courseId } = await params;
   const exam = await getExamById(examId)
-  
+  if(examId === '__placeholder__'){
+    return notFound()
+  }
   if(!exam){
     return notFound()
   }

@@ -1,9 +1,10 @@
 "use client"
 
-import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal, Pencil, Trash } from "lucide-react"
+import { ColumnDef } from "@tanstack/react-table";
+import { ArrowUpDown, MoreHorizontal, Pencil, Trash } from "lucide-react";
 import Link from "next/link";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -11,13 +12,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { Badge } from "@/components/ui/badge";
+import { Sentry } from "@/lib/sentryLogger";
 import { cn } from "@/lib/utils";
 import { Course } from "@/prisma/app/generated/prisma/client";
-import DeleteAlert from "./DeleteAlert";
-import toast from "react-hot-toast";
 import axios from "axios";
-import { Sentry } from "@/lib/sentryLogger";
+import toast from "react-hot-toast";
+import DeleteAlert from "./DeleteAlert";
 
 
 export const columns: ColumnDef<Course>[] = [
@@ -98,37 +98,44 @@ export const columns: ColumnDef<Course>[] = [
 
       return (
         (<DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-4 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <Link href={`/dashboard/teacher/courses/${id}`}>
-              <DropdownMenuItem>
-                <Pencil className="h-4 w-4 mr-2" />
-                Edit
-              </DropdownMenuItem>
-            </Link>
-          <DeleteAlert 
-          title="Are you sure you want to delete this course?"
-          onContinue={()=> 
-            toast.promise(deleteCourse(), {
-              loading: "Deleting course...",
-              success: "Course deleted successfully",
-              error: "Failed to delete course. try again later.",
-            })
-          }
-          >
-          <Button variant="destructive" className="!px-2 flex items-center justify-start gap-x-2 w-full h-full bg-transparent text-red-500 hover:text-red-600 hover:bg-red-100">
-          <span className="sr-only">Delete</span>
-          <Trash className="w-4 h-4 hover:text-gray-700" />
+  <DropdownMenuTrigger asChild>
+    <Button variant="ghost" className="h-4 w-8 p-0">
+      <span className="sr-only">Open menu</span>
+      <MoreHorizontal className="h-4 w-4" />
+    </Button>
+  </DropdownMenuTrigger>
+
+  <DropdownMenuContent align="end">
+    <Link href={`/dashboard/teacher/courses/${id}`}>
+      <DropdownMenuItem>
+        <Pencil className="h-4 w-4 mr-2" />
+        Edit
+      </DropdownMenuItem>
+    </Link>
+
+    <DropdownMenuItem asChild>
+      <DeleteAlert
+        title="Are you sure you want to delete this course?"
+        onContinue={() =>
+          toast.promise(deleteCourse(), {
+            loading: "Deleting course...",
+            success: "Course deleted successfully",
+            error: "Failed to delete course. try again later.",
+          })
+        }
+      >
+        <Button
+          variant="destructive"
+          className="!px-2 flex items-center justify-start gap-x-2 w-full h-full bg-transparent text-red-500 hover:text-red-600 hover:bg-red-100"
+        >
+          <Trash className="w-4 h-4" />
           Delete
-      </Button>
-          </DeleteAlert>
-          </DropdownMenuContent>
-        </DropdownMenu>)
+        </Button>
+      </DeleteAlert>
+    </DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>
+)
       );
     },
   },
