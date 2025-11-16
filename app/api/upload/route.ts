@@ -6,7 +6,7 @@ import { auth } from '@clerk/nextjs/server';
 
 const router: Router = {
   client: cloudflare(),
-  bucketName: 'my-first-bucket', 
+  bucketName: process.env.CLOUDFLARE_BUCKET!, 
   routes: {
     chapterVideo: route({
       fileTypes: ['video/*'],
