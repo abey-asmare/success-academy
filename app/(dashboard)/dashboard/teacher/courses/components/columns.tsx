@@ -21,6 +21,14 @@ import DeleteAlert from "./DeleteAlert";
 
 
 export const columns: ColumnDef<Course>[] = [
+
+  {
+    accessorKey: "id",
+    header: () => null,
+    cell: () => null,
+    enableSorting: false,
+    enableColumnFilter: false,
+  },
   {
     accessorKey: "title",
     header: ({ column }) => {
@@ -106,12 +114,12 @@ export const columns: ColumnDef<Course>[] = [
   </DropdownMenuTrigger>
 
   <DropdownMenuContent align="end">
-    <Link href={`/dashboard/teacher/courses/${id}`}>
+    {/* <Link href={`/dashboard/teacher/courses/${id}`}>
       <DropdownMenuItem>
         <Pencil className="h-4 w-4 mr-2" />
         Edit
       </DropdownMenuItem>
-    </Link>
+    </Link> */}
 
     <DropdownMenuItem asChild>
       <DeleteAlert

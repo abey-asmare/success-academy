@@ -88,32 +88,34 @@ export const columns: ColumnDef<ExamCourse>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>
-              <Button
-                variant="link"
-                className="text-sky-600 hover:text-sky-700 bg-transparent hover:bg-transparent w-full h-full"
-                size='sm'
-              >
                 <Link
                   href={`/courses/${row.getValue("courseId")}#simulations`}
-                >
+                  >
+                  <DropdownMenuItem>
+              <Button
+                variant="link"
+                className="text-sky-600 hover:text-sky-700 bg-transparent hover:bg-transparent w-full h-full"
+                size='sm'
+              >
+              
                   View
-                </Link>
               </Button>
             </DropdownMenuItem>
+                </Link>
+                 <Link
+                  href={`/dashboard/teacher/simulation/${row.getValue("id")}`}
+                >
             <DropdownMenuItem>
               <Button
                 variant="link"
                 className="text-sky-600 hover:text-sky-700 bg-transparent hover:bg-transparent w-full h-full"
                 size='sm'
               >
-                <Link
-                  href={`/dashboard/teacher/simulation/${row.getValue("id")}`}
-                >
+               
                   Update
-                </Link>
               </Button>
             </DropdownMenuItem>
+                </Link>
             <DropdownMenuItem>
               <DeleteFormColumn
                 examId={row.getValue("id")}
