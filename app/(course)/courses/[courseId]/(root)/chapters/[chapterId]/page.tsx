@@ -1,11 +1,10 @@
-import { notFound, redirect } from "next/navigation";
-import { VideoPlayer } from "./components/video-player";
-import AdditionalResources from "./components/AdditionalResources";
-import UserStatusBanner from "./components/UserStatusBanner";
+import { getResourceURL } from "@/lib/s3/getChapterVideoUrl";
 import { getChapter, getNextChapter } from "@/optimizedQueries/chapterQueries";
 import { getAttachments, getCourse, getPromoCodes } from "@/optimizedQueries/CourseQueries";
-import { Metadata } from "next";
-import { getResourceURL } from "@/lib/s3/getChapterVideoUrl";
+import { notFound, redirect } from "next/navigation";
+import AdditionalResources from "./components/AdditionalResources";
+import UserStatusBanner from "./components/UserStatusBanner";
+import { VideoPlayer } from "./components/video-player";
 
 type ChapterIdProps = Promise<{
   courseId: string;
