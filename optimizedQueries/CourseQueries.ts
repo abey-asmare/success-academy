@@ -27,7 +27,7 @@ export type CourseGenericViewType = Omit<
   category?: Prisma.CourseGetPayload<{
     include: { category: true };
   }>["category"]; 
-};
+};  
 
 // export const getCourses = cache(async (): Promise<CourseGenericViewType[]> => {
 //   cacheLife("weeks");
@@ -118,8 +118,13 @@ export const getAttachments = cache(
   async (courseId: string): Promise<Attachment[]> => {
     cacheLife("max");
     cacheTag(`${courseId}/attachments`);
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/courses/${courseId}/attachments`);
-    return await response.json();
+    // const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/courses/${courseId}/attachments`);
+    // return response.json()
+   return await db.attachment.findMany({
+            where: {
+                courseId: courseId,
+            },
+        })
   }
 );
 
