@@ -61,21 +61,21 @@ export default async  function HeroOrange({
         </div>
 
         {/* Right illustration */}
-        <div className="relative mx-auto h-screen h-[280px] w-full max-w-[420px]">
+        <div className="md:relative mx-auto h-full w-full max-w-[420px]">
           {/* Ensure parent is relative when using fill, per Next.js recommendations */}
                       <Image
                         src="/images/hero-image.webp"
                         alt="Student working on laptop"
                         width={601}
                         height={1077}
-                        className="w-full h-[640px] lg:h-full object-cover object-top"
+                        className="w-full h-full object-cover object-top"
                         priority
                         fetchPriority="high"
                       />
         </div>
 
         {/* Stats strip on mobile */}
-        <div className="md:hidden -mt-4 grid grid-cols-3 gap-4 py-4">
+        <div className="md:hidden absolute bottom-0 -mt-4 grid grid-cols-3 gap-4 py-4">
           <Stat label="Courses" value="600+" />
           <Stat label="Exams" value="300+" />
           <Stat label="Students" value={`${allUsers.toString()}+`} />
