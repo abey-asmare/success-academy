@@ -5,7 +5,11 @@ import { cloudflare } from '@better-upload/server/clients';
 import { auth } from '@clerk/nextjs/server';
 
 const router: Router = {
-  client: cloudflare(),
+  client: cloudflare({
+    accessKeyId: process.env.CLOUDFLARE_ACCESS_KEY!,
+    secretAccessKey: process.env.CLOUDFLARE_SECRET_KEY!,
+    accountId: process.env.CLOUDFLARE_ACCOUNT_ID!
+  }),
   bucketName: process.env.CLOUDFLARE_BUCKET!, 
   routes: {
     chapterVideo: route({
