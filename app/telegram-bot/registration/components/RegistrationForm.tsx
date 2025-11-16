@@ -92,20 +92,16 @@ export default function RegistrationForm({ courses }: PropType) {
 
   const { control } = useUploadFiles({
     route: "coursePurchaseTelegram",
-    onBeforeUpload: (data) => {
-      console.log(data)
-    },
     onUploadComplete: (data) => {
         const uploadedFileKey = data.files[0].objectInfo.key;
 
-  const fullUrl = `${process.env.NEXT_PUBLIC_R2_EXPOSE_CONTENT_THROUGH}/${uploadedFileKey}`;
+  const fullUrl = `${process.env.NEXT_PUBLIC_EXPOSE_CONTENT_THROUGH}/${uploadedFileKey}`;
       setImgUrl(fullUrl);
       setEditImage(false);
       form.setValue("imageUrl", uploadedFileKey);
     },
     onError: (error) => {
       Sentry.captureException(error);
-      console.log(error)
       setError(error.message.toString())
     },
   });

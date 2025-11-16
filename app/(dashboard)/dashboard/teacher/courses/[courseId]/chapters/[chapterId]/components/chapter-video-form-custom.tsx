@@ -41,7 +41,6 @@ export default function ChapterVideoFormCustom({
       setChapter(data)
      })
   }, [chapterId])
-  console.log(chapter)
   const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
   const onSubmit = async(values: formSchemaType) => {
@@ -57,7 +56,6 @@ export default function ChapterVideoFormCustom({
       router.refresh();
     })
   }
-            {console.log(initialData.videoUrl, process.env.PUBLIC_R2_EXPOSE_CONTENT_THROUGH)}
 
   return (
     <div className="mt-6">
