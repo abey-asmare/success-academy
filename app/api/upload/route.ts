@@ -1,4 +1,4 @@
-import { checkRole, isAdmin } from '@/utils/roles';
+import { isAdmin } from '@/utils/roles';
 import { RejectUpload, route, type Router } from '@better-upload/server';
 import { toRouteHandler } from '@better-upload/server/adapters/next';
 import { cloudflare } from '@better-upload/server/clients';

@@ -84,7 +84,6 @@ export default function RegistrationForm({ courses }: PropType) {
       imageUrl: "",
     },
   });
-  const [error, setError] = useState("");
 
     const [promo, setPromo] = useState("");
   const [editImage, setEditImage] = useState(false);
@@ -93,16 +92,17 @@ export default function RegistrationForm({ courses }: PropType) {
   const { control } = useUploadFiles({
     route: "coursePurchaseTelegram",
     onUploadComplete: (data) => {
+      console.log("uploading", data)
         const uploadedFileKey = data.files[0].objectInfo.key;
 
   const fullUrl = `${process.env.NEXT_PUBLIC_EXPOSE_CONTENT_THROUGH}/${uploadedFileKey}`;
       setImgUrl(fullUrl);
       setEditImage(false);
+      console.log("uploaded", uploadedFileKey)
       form.setValue("imageUrl", uploadedFileKey);
     },
     onError: (error) => {
       Sentry.captureException(error);
-      setError(error.message.toString())
     },
   });
 
@@ -147,7 +147,6 @@ export default function RegistrationForm({ courses }: PropType) {
 
   return (
     <div className="max-w-2xl m-auto my-10 px-6 transition-all">
-      <p className="text-red-500">error: {error}</p>
       <Form {...form}>
         <form
           className="space-y-4"
