@@ -5,6 +5,7 @@ import UserStatusBanner from "./components/UserStatusBanner";
 import { getChapter, getNextChapter } from "@/optimizedQueries/chapterQueries";
 import { getAttachments, getCourse, getPromoCodes } from "@/optimizedQueries/CourseQueries";
 import { Metadata } from "next";
+import { getResourceURL } from "@/lib/s3/getChapterVideoUrl";
 
 type ChapterIdProps = Promise<{
   courseId: string;
@@ -69,13 +70,13 @@ const ChapterIdPage = async ({ params }: { params: ChapterIdProps }) => {
             nextChapterId={nextChapter?.id}
             // playbackId={muxData?.playbackId}
             isChapterFree={chapter.isFree}
-            url={`${process.env.R2_EXPOSE_CONTENT_THROUGH}/${chapter.videoUrl}`}
+            url={getResourceURL(chapter.videoUrl)}
           />
         </div>
        <AdditionalResources course={course!}  chapter={chapter} nextChapter={nextChapter} promocodes={promocodes} attachments={attachments}/>
       </div>
     </div>
-  );
+  );  
 };
 
 export default ChapterIdPage;

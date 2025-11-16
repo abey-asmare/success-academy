@@ -11,3 +11,16 @@ export const useProfileEnroll = create<ProfileEnrollType>()(set => ({
    setOpen: ()=>set((prev) => ({open: !prev.open})), 
 
 }))
+
+
+
+
+type VideoPlayerType = {
+  shouldCurrentlyPlaying: string
+  setShouldCurrentlyPlay: (value: string) => void
+}
+
+export const useVideoPlayer = create<VideoPlayerType>(set => ({
+  shouldCurrentlyPlaying: '', 
+  setShouldCurrentlyPlay: (value) => set({ shouldCurrentlyPlaying: value }),
+}))

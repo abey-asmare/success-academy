@@ -57,7 +57,7 @@ export default async function CourseDetail({ params }: Props) {
               <Image
                 className="w-full h-full"
                 src={course.bgImageUrl || "/bg/defaultbackground.webp"}
-                alt={course.title}
+                alt={course.title || "image background"}
                 fill
                 objectFit="cover"
                 priority

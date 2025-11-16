@@ -1,6 +1,7 @@
 "use server";
 
 import { db } from "@/lib/db";
+import { getResourceURL } from "@/lib/s3/getChapterVideoUrl";
 import { Sentry } from "@/lib/sentryLogger";
 import { sendPurchaseRequestToTelegram } from "@/lib/telegram-api";
 import { getPurchase } from "@/optimizedQueries/personalizedQueries";
@@ -95,7 +96,7 @@ export async function handleTelegramRegistration(data: formType) {
       sendPurchaseRequestToTelegram(
         userId,
         data.courseId,
-        data.imageUrl,
+        getResourceURL(data.imageUrl),
         newPurchase.id,
         profile
       );

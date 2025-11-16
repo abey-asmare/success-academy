@@ -23,7 +23,6 @@ type UploadDropzoneProgressProps = {
     ...args: Parameters<UploadHookControl<true>["upload"]>
   ) => void;
 
-  // Add any additional props you need.
 };
 
 export function UploadDropzoneProgress({
@@ -116,7 +115,7 @@ export function UploadDropzoneProgress({
                 onClick={open}
                 disabled={isPending}
                 >
-                <span className="relative z-10">{isPending ? <Ban className="size-5 font-bold text-white/80" /> : "Upload"}</span>
+                <span className="relative z-10">{isPending ? <Ban className="font-bold text-white/80" /> : "Upload"}</span>
               </Button>
                 </div>
           </div>

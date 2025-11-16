@@ -18,15 +18,19 @@ export default function CheckoutPage() {
       }
     });
   const onSubmit = async ({ imageUrl }: { imageUrl: string }) => {
-    try {
-      await axios.post(`/api/courses/${courseId}/purchase`, { imageUrl });
-      toast.success("Payment successful. We are processing your payments");
+
+    toast.promise(
+      axios.post(`/api/courses/${courseId}/purchase`, { imageUrl }),
+      {
+        loading: "Processing your payment...",
+        success: "Payment successful. We are processing your payments",
+        error: "Something went wrong",
+      }
+    ).then(()=> {
       setTimeout(() => {
         router.push(`/courses/${courseId}`);
       }, 600);
-    } catch {
-      toast.error("Something went wrong");
-    }
+    })
   };
 
   return (

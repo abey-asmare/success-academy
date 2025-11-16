@@ -3,6 +3,7 @@ import { db } from '@/lib/db';
 import { columns } from './components/columns';
 import { DataTable } from './components/data-table';
 import { cacheLife, cacheTag } from 'next/cache';
+import { getResourceURL } from '@/lib/s3/getChapterVideoUrl';
 
 export default async function PaymentPage() {
     cacheTag('page/teacher/purchases')
@@ -23,7 +24,7 @@ export default async function PaymentPage() {
             id: purchase.id,
             email: email || purchase.userId,
             course: course!,
-            imageUrl: `${process.env.NEXT_PUBLIC_R2_EXPOSE_CONTENT_THROUGH}/${purchase.imageUrl}`,
+            imageUrl:  getResourceURL(purchase.imageUrl),
             approved: purchase.approved,
             date: purchase.createdAt,
         }
@@ -34,3 +35,5 @@ export default async function PaymentPage() {
           </div>
       );
 }
+
+

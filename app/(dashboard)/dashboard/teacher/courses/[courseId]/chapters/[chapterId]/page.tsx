@@ -12,6 +12,7 @@ import ChapterDescriptionForm from "./components/chapter-description-form";
 import ChapterTitleForm from "./components/chapter-title-form";
 import ChapterVideoFormCustom from "./components/chapter-video-form-custom";
 import DeleteExamButton from "./exam/components/DeleteExamButton";
+import ChapterVideoForm from "./components/chapter-video-form";
 export default async function ChapterDetails({
   params,
 }: {
@@ -111,6 +112,14 @@ export default async function ChapterDetails({
                 courseId={courseId}
                 chapterId={chapterId}
               />
+
+              {/* <ChapterVideoForm
+                initialData={chapter}
+                courseId={courseId}
+                chapterId={chapterId}
+              /> */}
+
+
             </div>
         </div>
         {chapter.exams.length > 0 && (

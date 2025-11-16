@@ -13,6 +13,7 @@ import { getChapter } from "@/optimizedQueries/chapterQueries";
 
 import Player from 'next-video/player';
 import YT from 'player.style/yt/react';
+import { getResourceURL } from "@/lib/s3/getChapterVideoUrl";
 
 
 interface ChapterVideoFormProps {
@@ -43,19 +44,19 @@ export default function ChapterVideoFormCustom({
   console.log(chapter)
   const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
-  const onSubmit = async (values: formSchemaType) => {
-    try {
-      await axios.patch(
-        `/api/courses/${courseId}/chapters/${chapterId}`,
-        values
-      );
-      toast.success("Chapter video updated successfully");
+  const onSubmit = async(values: formSchemaType) => {
+    toast.promise(
+      axios.patch(`/api/courses/${courseId}/chapters/${chapterId}`, values),
+      {
+        loading: "Updating chapter video...",
+        success: "Chapter video updated successfully",
+        error: "Something went wrong",
+      }
+    ).then(()=>{
       setIsEditing(!isEditing);
       router.refresh();
-    } catch {
-      toast.error("Something went wrong");
-    }
-  };
+    })
+  }
             {console.log(initialData.videoUrl, process.env.PUBLIC_R2_EXPOSE_CONTENT_THROUGH)}
 
   return (
@@ -89,7 +90,7 @@ export default function ChapterVideoFormCustom({
               playbackId={initialData.muxData?.playbackId || ""}
               className="rounded-md"
             /> */}
-            <Player src={`${process.env.NEXT_PUBLIC_R2_EXPOSE_CONTENT_THROUGH}/${initialData.videoUrl}`} theme={YT} className="h-full"/>
+            <Player src={getResourceURL(initialData.videoUrl)} theme={YT} className="h-full"/>
           </div>
         ))}
       {isEditing && (

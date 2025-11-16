@@ -2,7 +2,7 @@ import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import type { UploadHookControl } from "@better-upload/client";
 import { formatBytes } from "@better-upload/client/helpers";
-import { Ban, Dot, File, Upload } from "lucide-react";
+import { Ban, File, Upload } from "lucide-react";
 import { useId } from "react";
 import { useDropzone } from "react-dropzone";
 import { Button } from "./ui/button";
@@ -19,11 +19,10 @@ type UploadDropzoneProgressProps = {
         maxFiles?: number;
       }
     | string;
+  // onChange?: (url: string) => void;
   uploadOverride?: (
     ...args: Parameters<UploadHookControl<true>["upload"]>
   ) => void;
-
-  // Add any additional props you need.
 };
 
 export function UploadPurchaseDropzoneProgress({
@@ -33,6 +32,7 @@ export function UploadPurchaseDropzoneProgress({
   metadata,
   description,
   uploadOverride,
+  // onChange,
 }: UploadDropzoneProgressProps) {
   const id = useId();
 
@@ -99,8 +99,11 @@ export function UploadPurchaseDropzoneProgress({
               )}
             </p>
             <div className="w-fit relative rounded-md overflow-hidden">
-                            {progresses.map((progress) => (
-                <div key={progress.objectInfo.key} className="absolute inset-0 pointer-events-none">
+              {progresses.map((progress) => (
+                <div
+                  key={progress.objectInfo.key}
+                  className="absolute inset-0 pointer-events-none"
+                >
                   {progress.progress < 1 && progress.status !== "failed" && (
                     <Progress
                       className="h-full w-full rounded-md bg-transparent"
@@ -112,13 +115,20 @@ export function UploadPurchaseDropzoneProgress({
               ))}
 
               <Button
+                type="button"
                 className="bg-blue-500 px-8 py-4 hover:bg-blue-500/90 min-w-28 relative"
                 onClick={open}
                 disabled={isPending}
-                >
-                <span className="relative z-10">{isPending ? <Ban className="size-5 font-bold text-white/80" /> : "Upload"}</span>
+              >
+                <span className="relative z-10">
+                  {isPending ? (
+                    <Ban className="font-bold text-white/80" />
+                  ) : (
+                    "Upload"
+                  )}
+                </span>
               </Button>
-                </div>
+            </div>
           </div>
 
           <input
@@ -128,7 +138,18 @@ export function UploadPurchaseDropzoneProgress({
             id={_id || id}
             accept={accept}
             disabled={isPending}
-          />
+            // onChange={(e) => {
+             
+            //   const originalOnChange = getInputProps().onChange;
+            //   if (originalOnChange) {
+            //     originalOnChange(e);
+            //   }
+            //    if (e.target.files) {
+            //     onChange?.(e.target.files[0].name);
+            //   }
+            // }}
+
+/>
         </label>
 
         {isDragActive && (
@@ -143,8 +164,8 @@ export function UploadPurchaseDropzoneProgress({
           </div>
         )}
       </div>
-{/* 
-      <div className="grid gap-2">
+
+      {/* <div className="grid gap-2">
         {progresses.map((progress) => (
           <div
             key={progress.objectInfo.key}

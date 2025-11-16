@@ -15,14 +15,14 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "pub-5003e166ab054884be0f1b060d950153.r2.dev",
-
+        hostname: "successacademy.et"
       },
     ],
   },
   allowedDevOrigins: [
     "http://localhost:3000",
     "https://success-academy.vercel.app",
+    "https://success-academy.trycloudflare.com",
     "https://unified-mole-badly.ngrok-free.app",
     "unified-mole-badly.ngrok-free.app",
     "passage-knee-keywords-comedy.trycloudflare.com",
