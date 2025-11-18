@@ -405,6 +405,8 @@ export default function RegistrationForm({ courses }: PropType) {
                     : <UploadPurchaseDropzoneProgress
                       control={control}
                       accept="image/*"
+                      isSubmitting={form.formState.isSubmitting}
+
                       // onChange={(url) => {
                       //   if (url) {
                       //     form.setValue("imageUrl", url);

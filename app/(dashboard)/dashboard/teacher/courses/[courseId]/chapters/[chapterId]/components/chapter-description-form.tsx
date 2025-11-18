@@ -55,7 +55,7 @@ export default function ChapterDescriptionForm({initialData, courseId, chapterId
 
 
   return (      
-    <div className="mt-1">
+    <div className="mt-1 self-center">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mt-8">
                     <FormField

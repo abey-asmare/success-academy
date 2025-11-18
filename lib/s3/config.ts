@@ -12,6 +12,3 @@ export const s3Client = new S3Client({
     secretAccessKey: process.env.CLOUDFLARE_SECRET_KEY!,
   },
 });
-
-
-

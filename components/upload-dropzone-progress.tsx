@@ -77,7 +77,7 @@ export function UploadDropzoneProgress({
           </div>
 
           <div className="mt-3 space-y-1 text-center flex flex-col items-center">
-            <p className="text-sm font-semibold">Drag and drop files here</p>
+            <p className="text-sm font-semibold">Drag and drop file here (mp4) </p>
 
             <p className="text-muted-foreground max-w-64 text-xs">
               {typeof description === "string" ? (
@@ -141,45 +141,6 @@ export function UploadDropzoneProgress({
             </div>
           </div>
         )}
-      </div>
-
-      <div className="grid gap-2">
-        {progresses.map((progress) => (
-          <div
-            key={progress.objectInfo.key}
-            className={cn(
-              "dark:bg-input/10 flex items-center gap-2 rounded-lg border bg-transparent p-3",
-              {
-                "bg-red-500/[0.04]! border-red-500/60":
-                  progress.status === "failed",
-              }
-            )}
-          >
-            <FileIcon type={progress.type} />
-
-            <div className="grid grow gap-1">
-              <div className="flex items-center gap-0.5">
-                <p className="max-w-40 truncate text-sm font-medium">
-                  {progress.name}
-                </p>
-                <Dot className="text-muted-foreground size-4" />
-                <p className="text-muted-foreground text-xs">
-                  {formatBytes(progress.size)}
-                </p>
-              </div>
-
-              <div className="flex h-4 items-center">
-                {progress.progress < 1 && progress.status !== "failed" ? (
-                  <Progress className="h-1.5" value={progress.progress * 100} />
-                ) : progress.status === "failed" ? (
-                  <p className="text-xs text-red-500">Failed</p>
-                ) : (
-                  <p className="text-muted-foreground text-xs">Completed</p>
-                )}
-              </div>
-            </div>
-          </div>
-        ))}
       </div>
     </div>
   );

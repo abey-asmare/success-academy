@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Chapter, MuxData } from "@/prisma/app/generated/prisma/client";
+import { ButtonGroup } from "@/components/ui/button-group";
+import { Chapter } from "@/prisma/app/generated/prisma/client";
 import axios from "axios";
 import { Pencil, PlusCircle, VideoIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -8,12 +9,13 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 import { UploadDropzoneProgress } from "@/components/upload-dropzone-progress";
-import { useUploadFiles } from "@better-upload/client";
 import { getChapter } from "@/optimizedQueries/chapterQueries";
+import { useUploadFiles } from "@better-upload/client";
 
+import UploadHLSDropzoneProgress from "@/components/upload-dropzond-progress-hls";
+import { getResourceURL } from "@/lib/s3/getChapterVideoUrl";
 import Player from 'next-video/player';
 import YT from 'player.style/yt/react';
-import { getResourceURL } from "@/lib/s3/getChapterVideoUrl";
 
 
 interface ChapterVideoFormProps {
@@ -28,8 +30,11 @@ export default function ChapterVideoFormCustom({
   courseId,
   chapterId,
 }: ChapterVideoFormProps) {
+  const [videoType, setVideoType] = useState<'mp4' | 'streamed'>('mp4')
+
+
   const { control} = useUploadFiles({
-    route: "chapterVideo",
+    route: videoType === 'mp4' ? "chapterVideo" : "chapterVideoHLS",
     onUploadComplete: (data)=> {
       onSubmit({videoUrl: data.files[0].objectInfo.key})
     }
@@ -92,9 +97,18 @@ export default function ChapterVideoFormCustom({
           </div>
         ))}
       {isEditing && (
-        <div>
-
-          <UploadDropzoneProgress control={control} accept="video/*" />
+        <div className="space-y-4">
+         <ButtonGroup >
+        <Button variant="outline" onClick={()=> setVideoType('mp4')} className={videoType === 'mp4' ? 'bg-sky-600/80 text-primary-foreground' : ''}>mp4</Button>
+        <Button variant="outline" onClick={()=> setVideoType('streamed')} className={videoType === 'streamed' ? 'bg-sky-600/80 text-primary-foreground' : ''}>Streamed</Button>
+      </ButtonGroup>
+          {
+            videoType === 'mp4' ? (
+              <UploadDropzoneProgress control={control} accept="video/*" />
+            ) : (
+              <UploadHLSDropzoneProgress control={control} metadata={{chapterId}}/>
+            )
+          }
           {/* <FileUpload
             endpoint="chapterVideo"
             onChange={(url)=> {

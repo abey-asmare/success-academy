@@ -1,12 +1,13 @@
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import type { UploadHookControl } from "@better-upload/client";
-import { Ban, File, Upload } from "lucide-react";
+import { Ban, Upload } from "lucide-react";
 import { useId } from "react";
 import { useDropzone } from "react-dropzone";
 import { Button } from "./ui/button";
 
-type UploadDropzoneProgressProps = {
+
+type UploadHLSDropzoneProgressProps = {
   control: UploadHookControl<true>;
   id?: string;
   accept?: string;
@@ -18,23 +19,19 @@ type UploadDropzoneProgressProps = {
         maxFiles?: number;
       }
     | string;
-  // onChange?: (url: string) => void;
-    isSubmitting?: boolean;
   uploadOverride?: (
     ...args: Parameters<UploadHookControl<true>["upload"]>
   ) => void;
 };
 
-export function UploadPurchaseDropzoneProgress({
-  control: { upload, isPending, progresses },
+export default function UploadHLSDropzoneProgress({
+  control: { upload, isPending, progresses, averageProgress },
   id: _id,
   accept,
   metadata,
   description,
   uploadOverride,
-  isSubmitting,
-  // onChange,
-}: UploadDropzoneProgressProps) {
+}: UploadHLSDropzoneProgressProps) {
   const id = useId();
 
   const { getRootProps, getInputProps, isDragActive, inputRef, open } =
@@ -46,10 +43,11 @@ export function UploadPurchaseDropzoneProgress({
           } else {
             upload(files, { metadata });
           }
+          inputRef.current.value = "";
         }
-        inputRef.current.value = "";
       },
       noClick: true,
+      multiple: true,
     });
 
   return (
@@ -67,7 +65,7 @@ export function UploadPurchaseDropzoneProgress({
           className={cn(
             "dark:bg-input/10 flex w-full min-w-72 cursor-pointer flex-col items-center justify-center rounded-lg bg-transparent px-2 py-6 transition-colors h-full",
             {
-              "text-muted-foreground cursor-not-allowed": isPending || isSubmitting,
+              "text-muted-foreground cursor-not-allowed": isPending,
               "hover:bg-accent dark:hover:bg-accent/40": !isPending,
               "opacity-0": isDragActive,
             }
@@ -79,7 +77,7 @@ export function UploadPurchaseDropzoneProgress({
           </div>
 
           <div className="mt-3 space-y-1 text-center flex flex-col items-center">
-            <p className="text-sm font-semibold">Drag and drop files here</p>
+            <p className="text-sm font-semibold">Drag and drop files here (.m3u8 & .ts)</p>
 
             <p className="text-muted-foreground max-w-64 text-xs">
               {typeof description === "string" ? (
@@ -107,22 +105,21 @@ export function UploadPurchaseDropzoneProgress({
                 >
                   {progress.progress < 1 && progress.status !== "failed" && (
                     <Progress
-                      className="h-full w-full rounded-md bg-transparent"
+                      className="h-full w-full rounded-md rounded-r-none bg-transparent"
                       indicatorClassName="bg-blue-500"
-                      value={progress.progress * 100}
+                      value={averageProgress * 100}
                     />
                   )}
                 </div>
               ))}
 
               <Button
-                type="button"
                 className="bg-blue-500 px-8 py-4 hover:bg-blue-500/90 min-w-28 relative"
                 onClick={open}
-                disabled={isPending || isSubmitting}
+                disabled={isPending}
               >
                 <span className="relative z-10">
-                  {isPending || isSubmitting ? (
+                  {isPending ? (
                     <Ban className="font-bold text-white/80" />
                   ) : (
                     "Upload"
@@ -138,19 +135,8 @@ export function UploadPurchaseDropzoneProgress({
             multiple
             id={_id || id}
             accept={accept}
-            disabled={isPending || isSubmitting}
-            // onChange={(e) => {
-             
-            //   const originalOnChange = getInputProps().onChange;
-            //   if (originalOnChange) {
-            //     originalOnChange(e);
-            //   }
-            //    if (e.target.files) {
-            //     onChange?.(e.target.files[0].name);
-            //   }
-            // }}
-
-/>
+            disabled={isPending}
+          />
         </label>
 
         {isDragActive && (
@@ -165,85 +151,6 @@ export function UploadPurchaseDropzoneProgress({
           </div>
         )}
       </div>
-
-      {/* <div className="grid gap-2">
-        {progresses.map((progress) => (
-          <div
-            key={progress.objectInfo.key}
-            className={cn(
-              "dark:bg-input/10 flex items-center gap-2 rounded-lg border bg-transparent p-3",
-              {
-                "bg-red-500/[0.04]! border-red-500/60":
-                  progress.status === "failed",
-              }
-            )}
-          >
-            <FileIcon type={progress.type} />
-
-            <div className="grid grow gap-1">
-              <div className="flex items-center gap-0.5">
-                <p className="max-w-40 truncate text-sm font-medium">
-                  {progress.name}
-                </p>
-                <Dot className="text-muted-foreground size-4" />
-                <p className="text-muted-foreground text-xs">
-                  {formatBytes(progress.size)}
-                </p>
-              </div>
-
-              <div className="flex h-4 items-center">
-                {progress.progress < 1 && progress.status !== "failed" ? (
-                  <Progress className="h-1.5" value={progress.progress * 100} />
-                ) : progress.status === "failed" ? (
-                  <p className="text-xs text-red-500">Failed</p>
-                ) : (
-                  <p className="text-muted-foreground text-xs">Completed</p>
-                )}
-              </div>
-            </div>
-          </div>
-        ))}
-      </div> */}
-    </div>
-  );
-}
-
-const iconCaptions = {
-  "image/": "IMG",
-  "video/": "VID",
-  "audio/": "AUD",
-  "application/pdf": "PDF",
-  "application/zip": "ZIP",
-  "application/x-rar-compressed": "RAR",
-  "application/x-7z-compressed": "7Z",
-  "application/x-tar": "TAR",
-  "application/json": "JSON",
-  "application/javascript": "JS",
-  "text/plain": "TXT",
-  "text/csv": "CSV",
-  "text/html": "HTML",
-  "text/css": "CSS",
-  "application/xml": "XML",
-  "application/x-sh": "SH",
-  "application/x-python-code": "PY",
-  "application/x-executable": "EXE",
-  "application/x-disk-image": "ISO",
-};
-
-function FileIcon({ type }: { type: string }) {
-  const caption = Object.entries(iconCaptions).find(([key]) =>
-    type.startsWith(key)
-  )?.[1];
-
-  return (
-    <div className="relative shrink-0">
-      <File className="text-muted-foreground size-12" strokeWidth={1} />
-
-      {caption && (
-        <span className="bg-primary text-primary-foreground absolute bottom-2.5 left-0.5 select-none rounded px-1 py-px text-xs font-semibold">
-          {caption}
-        </span>
-      )}
     </div>
   );
 }

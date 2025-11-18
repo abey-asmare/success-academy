@@ -5,32 +5,33 @@ import { useUploadFiles } from "@better-upload/client";
 import axios from "axios";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
+import { useState } from "react";
 import toast from "react-hot-toast";
 
 export default function CheckoutPage() {
   const { courseId } = useParams();
   const router = useRouter();
+  const [isSubmitting, setisSubmitting] = useState<boolean>(false)
 
-    const { control} = useUploadFiles({
-      route: "coursePurchase",
-      onUploadComplete: (data)=> {
-        onSubmit({imageUrl: data.files[0].objectInfo.key})
-      }
-    });
+  const { control } = useUploadFiles({
+    route: "coursePurchase",
+    onUploadComplete: (data) => {
+      onSubmit({ imageUrl: data.files[0].objectInfo.key });
+    },
+  });
   const onSubmit = async ({ imageUrl }: { imageUrl: string }) => {
-
-    toast.promise(
-      axios.post(`/api/courses/${courseId}/purchase`, { imageUrl }),
-      {
+    setisSubmitting(true)
+      await toast.promise(axios.post(`/api/courses/${courseId}/purchase`, { imageUrl }), {
         loading: "Processing your payment...",
         success: "Payment successful. We are processing your payments",
         error: "Something went wrong",
-      }
-    ).then(()=> {
-      setTimeout(() => {
-        router.push(`/courses/${courseId}`);
-      }, 600);
-    })
+      })
+      .then(() => {
+        setTimeout(() => {
+          router.push(`/courses/${courseId}`);
+        }, 600);
+      });
+      setisSubmitting(false)
   };
 
   return (
@@ -60,8 +61,12 @@ export default function CheckoutPage() {
                 }}
               /> */}
 
-                {/* <UploadDropzoneProgress control={control} accept="image/*" /> */}
-                <UploadPurchaseDropzoneProgress control={control} accept="image/*" />
+              {/* <UploadDropzoneProgress control={control} accept="image/*" /> */}
+              <UploadPurchaseDropzoneProgress
+              isSubmitting = {isSubmitting}
+                control={control}
+                accept="image/*"
+              />
             </div>
           </div>
         </div>

@@ -1,16 +1,15 @@
 "use client";
 
 import axios from "axios";
-import { ChartNoAxesColumnDecreasing, Loader2, Lock } from "lucide-react";
+import { Loader2, Lock } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { toast } from "react-hot-toast";
 
 import { cn } from "@/lib/utils";
 import Player from "next-video/player";
 import YT from "player.style/yt/react";
 import { useCourseInfo } from "../providers/CourseInfoProvider";
-import { useVideoPlayer } from "@/store";
 
 interface VideoPlayerProps {
   playbackId?: string | null;

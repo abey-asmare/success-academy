@@ -55,7 +55,7 @@ export async function POST(
 
 
     await sendPurchaseRequestToTelegram(userId, courseId, imageUrl, newPurchase.id);
-    revalidatePath('page/teacher/purchases')
+    revalidateTag('page/teacher/purchases','max')
     revalidateTag(`courses/${courseId}`, "max")
     revalidateTag(`${userId}/purchase/${courseId}`, 'max')
     revalidateTag(`${userId}/purchase`, 'max')

@@ -3,6 +3,9 @@ import { RejectUpload, route, type Router } from '@better-upload/server';
 import { toRouteHandler } from '@better-upload/server/adapters/next';
 import { cloudflare } from '@better-upload/server/clients';
 import { auth } from '@clerk/nextjs/server';
+import { error } from 'console';
+import z from 'zod';
+
 
 const router: Router = {
   client: cloudflare({
@@ -28,10 +31,27 @@ const router: Router = {
         }
       }
     }),
+    chapterVideoHLS: route({
+      maxFiles: 1000,
+      clientMetadataSchema: z.object({
+        chapterId: z.string({error: "chapterId is requireed"})
+      }),
+     onBeforeUpload({clientMetadata}) {
+      return {
+        generateObjectInfo: ({file }) => ({
+          key: `v/${clientMetadata.chapterId}/${file.name}`
+        })
+      }
+       
+     },
+      fileTypes: ['text/*', 'video/*', 'application/*'],
+      multipleFiles: true,
+      maxFileSize: 1024 * 1024 * 1024, // 1GB
+    }),
     coursePurchase: route({
       fileTypes: ['image/*'],
       multipleFiles: false,
-      maxFileSize: 1024 * 1024 * 5, // 5MB
+      maxFileSize: 1024 * 1024 * 10, // 10MB
       onBeforeUpload: async ({ file }) => {
         const user = await auth();
         if (!user) {
@@ -48,7 +68,7 @@ const router: Router = {
     coursePurchaseTelegram: route({
       fileTypes: ['image/*'],
       multipleFiles: false,
-      maxFileSize: 1024 * 1024 * 5, // 5MB
+      maxFileSize: 1024 * 1024 * 10, // 10MB
       onBeforeUpload: ({file})=> {
         return {
           objectInfo: {
