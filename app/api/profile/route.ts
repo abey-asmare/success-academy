@@ -4,7 +4,7 @@ import * as Sentry from "@sentry/nextjs";
 import { NextResponse } from "next/server";
 
 
-
+// ready to be depricated
 
 export async function GET() {
   // Get the currently signed-in user's ID
@@ -19,22 +19,23 @@ export async function GET() {
       return new Response(JSON.stringify({ error: "User not found" }), { status: 404 });
     }
   
-    // check if the profile exists
-    const isExist = await db.profile.findUnique({
-        where: {
-            userId
-        }
-    })
-    if(isExist){
-        return NextResponse.json({message: "Profile already exists"})
-    }
-    // Create or update the Profile in Prisma
-    await db.profile.upsert({
+    // // check if the profile exists
+    // const isExist = await db.profile.findUnique({
+    //     where: {
+    //         userId
+    //     }
+    // })
+    // if(isExist){
+    //     return NextResponse.json({message: "Profile already exists"})
+    // }
+
+    // using upsert as findOrCreate method 
+    const profile = await db.profile.upsert({
       where: { userId },
       update: {
-        firstName: user.firstName || "",
-        lastName: user.lastName || "",
-        email: user.emailAddresses[0]?.emailAddress || "",
+        // firstName: user.firstName || "",
+        // lastName: user.lastName || "",
+        // email: user.emailAddresses[0]?.emailAddress || "",
       },
       create: {
         userId,
@@ -44,9 +45,9 @@ export async function GET() {
       },
     });
   
-    return NextResponse.json({message: "Profile created successfully"})
+    return NextResponse.json(profile)
  }catch(error){
     Sentry.captureException(error)
-    return NextResponse.json({message: "Something went wrong"})
+    return NextResponse.json({error: "Something went wrong"})
  }
 }

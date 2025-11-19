@@ -17,9 +17,6 @@ async function Home() {
   return (
    <>
     <Head>
-    <title>Success Academy Ethiopia – Online Courses & UAT Programs</title>
-    <meta name="description" content="Explore online courses, UAT programs, and university prep with Success Academy Ethiopia. Flexible, engaging education for Ethiopian learners." />
-
     <script
       type="application/ld+json"
       dangerouslySetInnerHTML={{

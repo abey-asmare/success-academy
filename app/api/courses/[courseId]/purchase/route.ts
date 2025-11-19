@@ -20,6 +20,20 @@ const deletePurchase = async (purchaseId: string, purchaseImageUrl: string) => {
   }
 }
 
+async function getProfile(userId: string) {
+    return await db.profile.findUnique({
+        where: {
+            userId,
+        },
+        select: {
+            firstName: true,
+            lastName: true,
+            email: true,
+            phone_number: true,
+        }
+    });
+}
+
 export async function POST(
   req: Request,
   { params }: { params: Promise<{ courseId: string }> }
@@ -32,35 +46,52 @@ export async function POST(
       return NextResponse.json({error: "Unauthorized"}, { status: 401 });
     }
 
-    const purchase = await db.purchase.findUnique({
+    // const purchase = await db.purchase.findUnique({
+    //   where: {
+    //     userId_courseId: {
+    //       courseId,
+    //       userId,
+    //     },
+    //   },
+    // });
+
+    // if (purchase) {
+    //   await deletePurchase(purchase.id, purchase.imageUrl);
+    // }
+
+    // const newPurchase = await db.purchase.create({
+    //   data: {
+    //     courseId,
+    //     userId,
+    //     imageUrl,
+    //   },
+    // });
+
+
+    const purchase = await db.purchase.upsert({
       where: {
         userId_courseId: {
           courseId,
           userId,
         },
       },
-    });
-
-    if (purchase) {
-      await deletePurchase(purchase.id, purchase.imageUrl);
-    }
-
-    const newPurchase = await db.purchase.create({
-      data: {
+      update: {
+        imageUrl,
+      },
+      create: {
         courseId,
         userId,
         imageUrl,
       },
-    });
+    })
 
-
-    await sendPurchaseRequestToTelegram(userId, courseId, imageUrl, newPurchase.id);
+    await sendPurchaseRequestToTelegram(userId, courseId, imageUrl, purchase.id);
     revalidateTag('page/teacher/purchases','max')
     revalidateTag(`courses/${courseId}`, "max")
     revalidateTag(`${userId}/purchase/${courseId}`, 'max')
     revalidateTag(`${userId}/purchase`, 'max')
     
-    return NextResponse.json(newPurchase, { status: 200 });
+    return NextResponse.json(purchase, { status: 200 });
   } catch (error) {
     Sentry.captureException(error);
     return NextResponse.json({error: "Internal server error"}, { status: 500 });

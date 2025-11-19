@@ -23,10 +23,10 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: {
     template: "%s - Success Academy",
-    default: "Success Academy",
+    default: "Success Academy : Your shortcut to success.",
   },
   description:
-    "Explore Success Academy’s online courses.Flexible, engaging learning for University and pre-university students to achieve your academic success.",
+    "Explore Success Academy’s online courses, The Leading Learning platform in Ethiopa. Flexible, engaging courses for University and pre-university students to achieve their academic success.",
 };
 
 export default function RootLayout({
