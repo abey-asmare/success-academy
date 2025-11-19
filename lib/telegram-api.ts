@@ -31,22 +31,15 @@ async function getProfileOr404(userId: string) {
 }
 
 
-export async function sendPurchaseRequestToTelegram(userId: string, courseId: string, imageUrl: string, purchaseId: string, profile?: Profile) {
+export async function sendPurchaseRequestToTelegram(userId: string, courseId: string, imageUrl: string, purchaseId: string, profile: Profile) {
   try {
     const course = await getCourseOr404(courseId);
-    let profile_;
-    if(!profile){
-      profile_ = await getProfileOr404(userId);
-    }
-    if(!profile_){
-      throw new Error("Profile not found");
-    }
 
     const telegramPayload = {
-      firstName: profile?.firstName || profile_.firstName,
-      lastName: profile?.lastName || profile_.lastName,
-      email: profile?.email || profile_.email,
-      phone_number: profile?.phone_number || profile_.phone_number,
+      firstName: profile.firstName,
+      lastName: profile.lastName,
+      email: profile.email,
+      phone_number: profile.phone_number,
       imageUrl,
       courseName: course.title,
       purchaseId,

@@ -7,6 +7,9 @@ import * as Sentry from "@sentry/nextjs";
 
 Sentry.init({
   dsn: "https://0d546529358ba261870b6a1ef77df406@o4509848777064448.ingest.us.sentry.io/4510328788418560",
+  integrations: [
+    Sentry.consoleLoggingIntegration({ levels: ["log", "warn", "error"] }),
+  ],
   enabled: process.env.NODE_ENV === "production",
   enableLogs: true,
 

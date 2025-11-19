@@ -151,7 +151,7 @@ export default function RegistrationForm({ courses }: PropType) {
         <form
           className="space-y-4"
           onSubmit={form.handleSubmit(async (data) => {
-            toast
+            await toast
               .promise(handleTelegramRegistration(data), {
                 loading: "Processing your payment...",
                 success: "Payment successful. We are processing your payments",
