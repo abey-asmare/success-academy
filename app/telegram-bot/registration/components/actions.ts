@@ -100,8 +100,9 @@ export async function handleTelegramRegistration(data: formType) {
         newPurchase.id,
         profile
       );
+      
+      revalidateTag("page/teacher/purchases", "max");
     }
-    revalidateTag("page/teacher/purchases", "max");
     
     Sentry.logger.info("[INFO: TELEGRAM_REGISTRATION_ACTION]: registration successful", {userId, courseId: data.courseId})
     return { message: "Registration successful", status: 200, imageUrl: purchase?.imageUrl };

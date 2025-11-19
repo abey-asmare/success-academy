@@ -15,7 +15,7 @@ export default async function PaymentPage() {
       course: true,
     },
     orderBy: {
-      updatedAt: "desc",
+      createdAt: "desc",
     },
   });
 
@@ -31,7 +31,7 @@ export default async function PaymentPage() {
       course: course!,
       imageUrl: getResourceURL(purchase.imageUrl),
       approved: purchase.approved,
-      date: purchase.updatedAt,
+      date: purchase.createdAt,
     };
   });
   return (
