@@ -14,7 +14,7 @@ export default function SendRequest() {
                     firstName: "John",
                     lastName: "Doe",
                     email: "john.doe@example.com",
-                    imageUrl: "https://d46msoxdbl.ufs.sh/f/cYFF9DOgoq3QOsglWrJpXIvT43zDus2b1wftkgV60iEjLKyA",
+                    imageUrl: "https://assets.dev.successacademy.et/0b027945-3f5b-4fb3-bed9-6901f2f83c54-img20251107184618541.jpg",
                     purchaseId: "1",
                     courseName: 'some course',
                     date: new Date().toLocaleString('en-US'),

@@ -159,7 +159,7 @@ export default function RegistrationForm({ courses }: PropType) {
               })
               .then(() => {
                 telegramAppRef.current?.showAlert(
-                  "Payment successful. We are processing your payments"
+                  "Payment successful. The admin will approve your payment in less than a 2 minutes."
                 );
                 setTimeout(() => telegramAppRef.current?.close(), 1000);
               });

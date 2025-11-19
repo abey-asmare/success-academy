@@ -64,30 +64,36 @@ export async function sendPurchaseRequestToTelegram(userId: string, courseId: st
 
       // If the request fails with a client error (4xx), we should not retry.
       if (response.status >= 400 && response.status < 500) {
-        // Throwing AbortError tells p-retry to stop and not try again.
-        throw new AbortError(`Request failed with client error ${response.status}. Aborting.`);
-      }
-
-      // For any other non-successful response, throw a regular error to trigger a retry.
-      if (!response.ok) {
+      Sentry.logger.error("[ERROR: TELEGRAM_SEND_PURCHASE_REQUEST]: error", {response, telegramPayload})
+      
+      // Throwing AbortError tells p-retry to stop and not try again.
+      throw new AbortError(`Request failed with client error ${response.status}. Aborting.`);
+    }
+    
+    // For any other non-successful response, throw a regular error to trigger a retry.
+    if (!response.ok) {
+        Sentry.logger.error("[ERROR: TELEGRAM_SEND_PURCHASE_REQUEST]: error", {response, telegramPayload})
         throw new Error(`Telegram API responded with status ${response.status}`);
       }
       
       // If successful, return the result (or true)
+      Sentry.logger.info("[INFO: TELEGRAM_SEND_PURCHASE_REQUEST]: success", {response, telegramPayload})
       return true;
     };
 
     await pRetry(sendRequest, {
-      retries: 3, // retries
+      retries: 4, // retries
       factor: 2,  //  exponential backoff factor
-      minTimeout: 1000, // minimum timeout 1s
+      minTimeout: 2000, // minimum timeout 2s
       onFailedAttempt: (error) => {
-     Sentry.captureException(error);
+        Sentry.logger.error("[ERROR: TELEGRAM_SEND_PURCHASE_REQUEST_FAILED_ATTEMPT]: error", {error})
+        Sentry.captureException(error);
       },
     });
 
 
   } catch (error) {
+    Sentry.logger.info("[INFO: TELEGRAM_SEND_PURCHASE_REQUEST]: unexpected thing happened", {error})
     Sentry.captureException(error);
     return NextResponse.json({error: "Internal server error"}, { status: 500 });
   }

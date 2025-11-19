@@ -19,15 +19,12 @@ const formSchema = profileFormSchema.extend({
 type formType = z.infer<typeof formSchema>;
 
 export async function handleTelegramRegistration(data: formType) {
-  // await connection()
   const isSuccessFul = formSchema.safeParse(data);
   if (!isSuccessFul) return { message: "Validation Error", status: 400 };
 
   let userId;
   try {
     const client = await clerkClient();
-
-    // check if the user exists
 
     const user = await client.users.getUserList({ emailAddress: [data.email] });
 
@@ -40,7 +37,6 @@ export async function handleTelegramRegistration(data: formType) {
       });
       userId = newUser.id;
     }
-    // create a profile
     const profile = await db.profile.upsert({
       where: { userId },
       update: {
@@ -69,6 +65,8 @@ export async function handleTelegramRegistration(data: formType) {
         referrer: data.referrer,
       },
     });
+    
+    Sentry.logger.info("[INFO: TELEGRAM_REGISTRATION_ACTION]: new profile has been made", profile)
 
     const purchase = await getPurchase(userId, data.courseId);
     if (!purchase || !purchase.approved) {
@@ -92,8 +90,10 @@ export async function handleTelegramRegistration(data: formType) {
       if (!newPurchase) {
         return { message: "Registration failed", status: 500 };
       }
+
+      Sentry.logger.info("[INFO: TELEGRAM_REGISTRATION_ACTION]: new purchase has been made", newPurchase)
       //  fetch for telegram
-      sendPurchaseRequestToTelegram(
+      await sendPurchaseRequestToTelegram(
         userId,
         data.courseId,
         getResourceURL(data.imageUrl),
@@ -102,10 +102,12 @@ export async function handleTelegramRegistration(data: formType) {
       );
     }
     revalidateTag("page/teacher/purchases", "max");
-
+    
+    Sentry.logger.info("[INFO: TELEGRAM_REGISTRATION_ACTION]: registration successful", {userId, courseId: data.courseId})
     return { message: "Registration successful", status: 200, imageUrl: purchase?.imageUrl };
   } catch (error) {
     Sentry.captureException(error);
+    Sentry.logger.error("[ERROR: TELEGRAM_REGISTRATION_ACTION]: registration failed", {userId, courseId: data.courseId})
     return { message: "Registration failed", status: 500, imageUrl: '' };
   }
 }

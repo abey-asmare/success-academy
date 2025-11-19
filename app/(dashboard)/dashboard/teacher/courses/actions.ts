@@ -43,7 +43,7 @@ function toUTCMidnight(date: Date, timeZone: string) {
             return {message: "Invalid promocode", status: 400}
         }
         // validate if user is an admin
-        const {userId, isAdmin} = await getAdminInfo()
+        const { isAdmin} = await getAdminInfo()
         if(!isAdmin){
             return {message: "Unauthorized", status: 401}
         }
@@ -61,6 +61,7 @@ function toUTCMidnight(date: Date, timeZone: string) {
             return {message: "Failed to add promocode", status: 500}
         }
         revalidatePath(`/dashboard/teacher/courses/${courseId}`)
+        updateTag('courses/telegram-registration')
         updateTag(`${courseId}/promocodes`);
         
     } catch (error) {

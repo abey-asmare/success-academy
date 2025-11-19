@@ -22,6 +22,3 @@ export default async function BotRegisterationPage() {
     </div>
   );
 }
-
-
-// export const dynamic = 'force-dynamic';
